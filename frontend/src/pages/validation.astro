@@ -1,0 +1,20 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Form from "../components/Form.astro";
+
+import "../styles/validation.css";
+---
+
+<Layout title="Validation">
+    <div class="container">
+        <img class="icon" src="/assets/images/OpenLedger_Hub.png" alt="OpenLedger Hub" />
+        <Form title="Validating token in OpenLedger Hub">
+            <div class="content">
+                <p id="pMessage">Please wait while we validate your token...</p>
+            </div>
+            <button id="btnValidating" class="button is-primary is-fullwidth is-loading" disabled>Login</button>
+        </Form>
+    </div>
+
+    <script type="module" src="/src/scripts/validation.ts"></script>
+</Layout>

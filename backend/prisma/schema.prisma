@@ -1,0 +1,59 @@
+generator client {
+    provider = "prisma-client-js"
+    previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource storage {
+    provider = "postgresql"
+    url = env("DATABASE_URL")
+}
+
+model User {
+    id String @id @default(uuid()) @storage.Uuid
+    name String
+    email String @unique
+    password String
+    createAt DateTime @default(now())
+    lastUpdate DateTime?
+    profile String?
+    config String?
+
+    transactions Transaction[]
+    accounts Account[]
+    categories Category[]
+
+    @@map("users")
+}
+model Transaction {
+    id String @id @default(uuid()) @storage.Uuid
+    idUser String @storage.Uuid
+    date DateTime @default(now())
+    type Boolean
+    account String
+    value Decimal @storage.Decimal(12, 2)
+    category String?
+    description String?
+
+    user User @relation(fields: [idUser], references: [id])
+
+    @@map("transactions")
+}
+model Account {
+    id String @id @default(uuid()) @storage.Uuid
+    idUser String @storage.Uuid
+    name String
+    balance Decimal @storage.Decimal(12, 2)
+
+    user User @relation(fields: [idUser], references: [id])
+
+    @@map("accounts")
+}
+model Category {
+    id String @id @default(uuid()) @storage.Uuid
+    idUser String @storage.Uuid
+    name String
+
+    user User @relation(fields: [idUser], references: [id])
+
+    @@map("categories")
+}

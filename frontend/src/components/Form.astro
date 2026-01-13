@@ -1,0 +1,28 @@
+---
+const { title = "SYSMA" } = Astro.props;
+---
+
+<style>
+    .form {
+        width: 50%;
+    }
+    .form .title {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    @media screen and (max-width: 1024px) {
+        .form {
+            width: 90%;
+        }
+        .form .title {
+            font-size: 1.3rem;
+        }
+    }
+</style>
+<div class="form">
+    <p class="title">{title}</p>
+    <div class="content">
+        <slot />
+    </div>
+</div>

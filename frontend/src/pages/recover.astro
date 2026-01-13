@@ -1,0 +1,48 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+import Form from "../components/Form.astro";
+import Alert from "../components/modals/Alert.astro";
+
+import "../styles/recover.css";
+---
+
+<Layout title="Recover">
+    <div class="container">
+        <img class="icon" src="/assets/images/OpenLedger_Hub.png" alt="OpenLedger Hub" />
+        <Form title="Recover in OpenLedger Hub">
+            <div id="dEmail" class="field">
+                <label class="label">Enter your email with the registered account to recover it.</label>
+                <div class="control">
+                    <input id="inEmail" class="input" type="email" placeholder="Email" />
+                </div>
+            </div>
+            <div id="dPassword" class="field" style="display: none">
+                <label class="label">New password:</label>
+                <div class="control">
+                    <input id="inPassword" class="input" type="password" />
+                </div>
+            </div>
+            <div id="dConfirmPassword" class="field" style="display: none;">
+                <label class="label">Confirm password:</label>
+                <div class="control">
+                    <input id="inConfirmPassword" class="input" type="password" />
+                </div>
+            </div>
+            
+            <div class="info">
+                <label>Back to <a href="/login">Login</a>.</label>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <button id="btnRecover" class="button is-primary is-fullwidth">Send</button>
+                </div>
+            </div>
+        </Form>
+    </div>
+
+    <Alert />
+
+    <script type="module" src="/src/scripts/recover.ts"></script>
+</Layout>

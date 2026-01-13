@@ -1,0 +1,35 @@
+---
+import { Sprite } from "astro-iconify"
+
+import Layout from "../layouts/Layout.astro";
+import Menu from "../layouts/Menu.astro";
+
+import Alert from "../components/modals/Alert.astro";
+import Prompt from "../components/modals/Prompt.astro";
+import Confirm from "../components/modals/Confirm.astro";
+
+import { List } from "../components/categories/List";
+
+import "../styles/categories/index.css";
+---
+
+<Layout title="Categories">
+    <Menu />
+
+    <div class="categories">
+        <div class="categoriesContent">
+            <List client:load />
+        </div>
+    </div>
+
+    <button id="btnAdd" class="button is-primary">
+        <Sprite.Provider>
+            <Sprite name="material-symbols:add-2-rounded" width="24" height="24" />
+        </Sprite.Provider>
+    </button>
+
+    <Prompt />
+    <Confirm />
+    <Alert />
+    <script type="module" src="/src/scripts/categories.ts"></script>
+</Layout>

@@ -1,0 +1,22 @@
+.transactionsList {
+    width: 100%;
+}
+.transactionsList .content {
+    width: 100%;
+}
+.transactionsList .content .noContent {
+    text-align: center;
+}
+.transactionsList .content .fiftyPercent {
+    width: 50%;
+}
+.transactionsList .content .oneHundredPercent {
+    width: 100%;
+}
+.transactionsList .content table tbody td .options {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3rem;
+}

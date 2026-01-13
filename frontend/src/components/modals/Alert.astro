@@ -1,0 +1,39 @@
+---
+import Base from "./Base.astro";
+
+const { title = "Warning" } = Astro.props;
+---
+
+<Base id="alert" title={title}>
+    <section class="modal-card-body">
+        <p id="alertMessage"></p>
+    </section>
+    <footer class="modal-card-foot" style="gap: 0.5rem;">
+        <button id="alertOk" class="button is-primary is-fullwidth">Ok</button>
+    </footer>
+</Base>
+
+<script>
+    const modal = document.getElementById("alert") as HTMLDivElement;
+    const modalClose = modal.querySelector('.delete') as HTMLButtonElement;
+    const modalMessage = document.getElementById("alertMessage") as HTMLParagraphElement;
+    const modalOk = document.getElementById("alertOk") as HTMLButtonElement;
+
+    modalOk!.onclick = () => modal!.classList.remove('is-active');
+
+    window.showAlert = (message: string, title: string = "Warning", okAction?: () => void) => {
+        if (modalMessage) modalMessage.innerHTML = message;
+        if (modal!.querySelector('.modal-card-title')) 
+            modal!.querySelector('.modal-card-title')!.textContent = title;
+        modal!.classList.add('is-active');
+
+        modalClose!.onclick = () => {
+            modal!.classList.remove("is-active");
+            if (okAction) okAction();
+        }
+        modalOk!.onclick = () => {
+            modal!.classList.remove('is-active');
+            if (okAction) okAction();
+        };
+    };
+</script>

@@ -1,0 +1,43 @@
+---
+import Base from "./Base.astro";
+
+const { title = "Warning" } = Astro.props;
+---
+
+<Base id="confirm" title={title}>
+    <section class="modal-card-body">
+        <p id="confirmMessage"></p>
+    </section>
+    <footer class="modal-card-foot" style="gap: 0.5rem;">
+        <button id="confirmNo" class="button is-danger is-fullwidth">No</button>
+        <button id="confirmYes" class="button is-primary is-fullwidth">Yes</button>
+    </footer>
+</Base>
+
+<script>
+    const modal = document.getElementById("confirm") as HTMLDivElement;
+    const modalClose = modal.querySelector('.delete') as HTMLButtonElement;
+    const modalMessage = document.getElementById("confirmMessage") as HTMLParagraphElement;
+    const modalNo = document.getElementById("confirmNo") as HTMLButtonElement;
+    const modalYes = document.getElementById("confirmYes") as HTMLButtonElement;
+
+    modalNo!.onclick = () => modal!.classList.remove('is-active');
+
+    window.showConfirm = (message: string, title: string = "Warning", yesAction?: () => void) => {
+        if (modalMessage) modalMessage.innerHTML = message;
+        if (modal!.querySelector('.modal-card-title')) 
+            modal!.querySelector('.modal-card-title')!.textContent = title;
+        modal!.classList.add('is-active');
+
+        modalClose!.onclick = () => {
+            modal!.classList.remove("is-active");
+        }
+        modalNo!.onclick = () => {
+            modal!.classList.remove('is-active');
+        }
+        modalYes!.onclick = () => {
+            modal!.classList.remove('is-active');
+            if (yesAction) yesAction();
+        };
+    };
+</script>

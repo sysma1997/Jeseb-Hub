@@ -1,0 +1,67 @@
+<style>
+    .navbar {
+        background-color: #131b21;
+    }
+</style>
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+            <img src="/assets/images/OpenLedger_Hub.png" alt="OpenLedger Hub" />
+            <b>OpenLedger Hub</b>
+        </a>
+        <a id="navbarBurger" role="button" class="navbar-burger" 
+            aria-label="menu" aria-expanded="false" data-target="navbarMenu">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+
+    <div id="navbarMenu" class="navbar-menu">
+        <div class="navbar-start">
+            <a class="navbar-item" href="/">Home</a>
+            <a class="navbar-item" href="/accounts">Accounts</a>
+            <a class="navbar-item" href="/categories">Categories</a>
+        </div>
+        <div class="navbar-end">
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a id="nmUserName" class="navbar-link">Name</a>
+                <div class="navbar-dropdown">
+                    <a class="navbar-item" href="/profile">Profile</a>
+                    <a id="nmUserLogout" class="navbar-item">Log out</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<script>
+    import { User } from "../core/user/domain/User";
+    import type { UserRepository } from "../core/user/domain/UserRepository";
+    import { UserApiRepository } from "../core/user/infrastructure/UserApiRepository";
+
+    const userRepository: UserRepository = new UserApiRepository();
+
+    const navbarBurger = document.getElementById("navbarBurger") as HTMLAnchorElement;
+    const navbarMenu = document.getElementById("navbarMenu") as HTMLDivElement;
+    const nmUserName = document.getElementById("nmUserName") as HTMLAnchorElement;
+    const nmUserLogout = document.getElementById("nmUserLogout") as HTMLAnchorElement;
+
+    const user: User | undefined = await userRepository.get();
+    if (!user) window.location.href = "/login";
+    nmUserName.textContent = user!.name;
+
+    navbarBurger.onclick = () => {
+        if (navbarBurger.classList.contains("is-active")) {
+            navbarBurger.classList.remove("is-active");
+            navbarMenu.classList.remove("is-active");
+            return;
+        }
+        navbarBurger.classList.add("is-active");
+        navbarMenu.classList.add("is-active");
+    };
+    nmUserLogout.onclick = () => {
+        window.localStorage.removeItem("token");
+        window.location.href = "/login";
+    };
+</script>

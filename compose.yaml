@@ -1,0 +1,98 @@
+name: finaces-app
+
+services:
+  storage:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_NAME}
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4:9.10
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "5433:80"
+    depends_on:
+      - storage
+
+  mailpit:
+    image: axllent/mailpit
+    restart: always
+    volumes: 
+      - mailpit_data:/data
+    ports:
+      - 8025:8025
+      - 1025:1025
+    environment:
+      MP_MAX_MESSAGES: 100
+      MP_DATABASE: /data/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
+  backend:
+    build:
+      context: ./
+      target: backend
+    restart: always
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    environment:
+      PORT: ${BACKEND_PORT}
+      JWT_SECRET: ${BACKEND_JWT_SECRET}
+      DATABASE_PROVIDER: postgresql
+      DATABASE_URL: postgresql://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@storage:5432/${POSTGRES_NAME}
+    depends_on:
+      - storage
+      - mailpit
+    volumes:
+      - uploads:/usr/local/app/uploads
+    develop:
+      watch:
+        - path: ./backend/src
+          action: sync
+          target: /usr/local/app/src
+        - path: ./backend/package.json
+          action: rebuild
+        - path: ./backend/prisma/
+          action: rebuild
+        - path: ./Dockerfile
+          action: rebuild
+  
+  frontend:
+    build:
+      context: ./
+      target: frontend
+    restart: always
+    ports:
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    environment:
+      PORT: ${FRONTEND_PORT}
+    depends_on:
+      - backend
+    develop:
+      watch:
+        - path: ./frontend/src
+          action: sync
+          target: /usr/local/app/src
+        - path: ./frontend/public
+          action: sync
+          target: /usr/local/app/public
+        - path: ./frontend/package.json
+          action: rebuild
+        - path: ./frontend/tsconfig.json
+          action: rebuild
+        - path: ./frontend/astro.config.mjs
+          action: rebuild
+
+volumes:
+  postgres_data:
+  mailpit_data:
+  uploads:

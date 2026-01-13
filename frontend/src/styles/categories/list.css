@@ -1,0 +1,15 @@
+.categoriesList {
+    width: 100%;
+}
+.categoriesList .content {
+    width: 100%;
+}
+.categoriesList .content .noContent {
+    text-align: center;
+}
+.categoriesList .content .fiftyPercent {
+    width: 50%;
+}
+.categoriesList .content .oneHundredPercent {
+    width: 100%;
+}

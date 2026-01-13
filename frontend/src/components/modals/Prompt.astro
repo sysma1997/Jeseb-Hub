@@ -1,0 +1,72 @@
+---
+import Base from "./Base.astro";
+
+const { title = "Warning" } = Astro.props;
+---
+
+<Base id="prompt" title={title}>
+    <section class="modal-card-body">
+        <div class="field">
+            <label id="promptMessage" class="label" />
+            <div class="control">
+                <input id="promptInput" class="input" type="text" />
+            </div>
+            <p id="promptSpan" class="help is-danger" style="display: none;" />
+        </div>
+    </section>
+    <footer class="modal-card-foot" style="gap: 0.5rem;">
+        <button id="promptCancel" class="button is-danger is-fullwidth">Cancel</button>
+        <button id="promptAccept" class="button is-primary is-fullwidth">Accept</button>
+    </footer>
+</Base>
+
+<script>
+    const modal = document.getElementById("prompt") as HTMLDivElement;
+    const modalClose = modal.querySelector('.delete') as HTMLButtonElement;
+    const modalMessage = document.getElementById("promptMessage") as HTMLParagraphElement;
+    const modalInput = document.getElementById("promptInput") as HTMLInputElement;
+    const modalSpan = document.getElementById("promptSpan") as HTMLParagraphElement;
+    const modalCancel = document.getElementById("promptCancel") as HTMLButtonElement;
+    const modalAccept = document.getElementById("promptAccept") as HTMLButtonElement;
+
+    modalCancel!.onclick = () => modal!.classList.remove('is-active');
+
+    window.showPrompt = (message: string, title: string = "Warning", acceptAction?: (value: string) => void) => {
+        if (modalMessage) modalMessage.innerHTML = message;
+        if (modal!.querySelector('.modal-card-title')) 
+            modal!.querySelector('.modal-card-title')!.textContent = title;
+        modal!.classList.add('is-active');
+
+        modalInput.classList.remove("is-danger");
+        modalSpan.style.display = "none";
+
+        modalClose!.onclick = () => {
+            modal!.classList.remove("is-active");
+            modalInput.value = "";
+        }
+        modalInput.addEventListener("keydown", (event: KeyboardEvent) => {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                modalAccept.click();
+            }
+        });
+        modalCancel!.onclick = () => {
+            modal!.classList.remove('is-active');
+            modalInput.value = "";
+        }
+        modalAccept!.onclick = () => {
+            if (!modalInput.value) {
+                modalInput.classList.add("is-danger");
+                modalSpan.style.display = "block";
+                modalSpan.innerHTML = "The input cannot be empty.";
+                return;
+            }
+            modalInput.classList.remove("is-danger");
+            modalSpan.style.display = "none";
+
+            modal!.classList.remove('is-active');
+            if (acceptAction) acceptAction(modalInput.value);
+            modalInput.value = "";
+        };
+    };
+</script>

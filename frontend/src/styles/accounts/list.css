@@ -1,0 +1,15 @@
+.accountsList {
+    width: 100%;
+}
+.accountsList .content {
+    width: 100%;
+}
+.accountsList .content .noContent {
+    text-align: center;
+}
+.accountsList .content .fiftyPercent {
+    width: 50%;
+}
+.accountsList .content .oneHundredPercent {
+    width: 100%;
+}

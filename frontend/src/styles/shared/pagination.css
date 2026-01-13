@@ -1,0 +1,25 @@
+.cPagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    gap: 1rem;
+}
+.cPagination .item {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+.cPagination .item p {
+    margin: 0 !important;
+    padding: 0 !important;
+    font-weight: bold;
+}
+
+@media screen and (max-width: 368px) {
+    .cPagination {
+        flex-direction: column;
+        align-items: start;
+    }   
+}

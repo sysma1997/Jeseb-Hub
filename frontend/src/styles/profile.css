@@ -1,0 +1,86 @@
+@import "bulma-switch-control/css/main.min.css";
+@import "bulma/css/bulma.min.css";
+
+.profile {
+    padding: 2rem;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.profile .profile-content {
+    width: 75%;
+
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+.profile .profile-content .menu .menu-list li a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+}
+.profile .profile-content .menu .menu-list .is-active {
+    color: black;
+    background-color: #00d1b2;
+}
+
+#dItems {
+    flex: 1;
+}
+#dInformation .dInformationPhoto {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#dInformation .dInformationPhoto .dInformationPhotoProfile {
+    position: relative;
+}
+#dInformation .dInformationPhoto #iIPPhoto {
+    background-color: #00d1b2;
+    border-radius: 50%;
+    object-fit: cover;
+    width: 130px;
+    height: 130px;
+}
+#dInformation .dInformationPhoto #btnIPPhotoEdit {
+    font-size: 1rem;
+    object-fit: cover;
+    border-radius: 50%;
+    padding: 0.5rem;
+    
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+#dInformation .dInformationPhoto #lIPName {
+    margin-top: 0.5rem;
+}
+
+#dInformation .dInformationElement {
+    margin-bottom: 1rem;
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#dInformation #dInformationEditName, 
+#dInformation #dInformationEditEmail {
+    margin-bottom: 1rem;
+    
+    display: none;
+}
+
+#dItems .card .option, 
+#mUpdateTwoStep .option {
+    margin-bottom: 1rem;
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}

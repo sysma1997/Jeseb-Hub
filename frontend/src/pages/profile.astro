@@ -1,0 +1,185 @@
+---
+import { Icon, Sprite } from "astro-iconify";
+import Layout from "../layouts/Layout.astro";
+
+import Menu from "../layouts/Menu.astro";
+import Base from "../components/modals/Base.astro";
+import Alert from "../components/modals/Alert.astro";
+import Confirm from "../components/modals/Confirm.astro";
+
+import "../styles/profile.css";
+---
+
+<Layout title="Profile">
+    <Menu />
+
+    <div class="profile">
+        <div class="profile-content">
+            <div class="menu">
+                <div class="box">
+                    <aside class="menu">
+                        <p class="menu-label">Menu</p>
+                        <ul id="uMenuList" class="menu-list">
+                            <li><a id="aMenuInformation" class="menu-item is-active">
+                                <Icon name="solar:user-bold" width="24" height="24" />
+                                <label>Information</label>
+                            </a></li>
+                            <li><a id="aMenuSecurity" class="menu-item">
+                                <Icon name="solar:shield-keyhole-bold" width="24" height="24" />
+                                <label>Security</label>
+                            </a></li>
+                        </ul>
+                    </aside>
+                </div>
+            </div>
+            <div id="dItems" class="content">
+                <div id="dInformation" class="card">
+                    <div class="card-content">
+                        <div class="content">
+                            <div class="dInformationPhoto">
+                                <div class="dInformationPhotoProfile">
+                                    <img id="iIPPhoto" src="/assets/images/profile.png" alt="profile" />
+                                    <button id="btnIPPhotoEdit" class="button is-primary">
+                                        <Sprite.Provider>
+                                            <Sprite name="material-symbols:edit-rounded" width="24" height="24" />
+                                        </Sprite.Provider>
+                                    </button>
+                                    <input id="iIPPhotoEdit" type="file" 
+                                        accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                                        style="display: none" />
+                                </div>
+                                <h4 id="lIPName">Name</h4>
+                            </div>
+                            <div id="dInformationShow">
+                                <div class="dInformationElement">
+                                    <label><b>Email</b></label>
+                                    <label id="dIEEmail">email</label>
+                                </div>
+                            </div>
+
+                            <div id="dInformationEditName">
+                                <div class="field">
+                                    <label class="label">Name</label>
+                                    <div class="control">
+                                        <input id="iIENInput" class="input" type="text" />
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="control" style="display: flex; flex-direction: row; gap: 0.3rem">
+                                        <button id="btnIENCancel" style="flex: 1" class="button is-danger is-fullwidth">Cancel</button>
+                                        <button id="btnIENUpdate" style="flex: 1" class="button is-primary is-fullwidth">Update</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="dInformationEditEmail">
+                                <div class="field">
+                                    <label class="label">Email</label>
+                                </div>
+                                <div class="field has-addons">
+                                    <div class="control is-expanded">
+                                        <input id="iIEEInput" class="input" type="email" />
+                                    </div>
+                                    <div class="control">
+                                        <button id="btnIEEVerificate" class="button is-primary">Verificate</button>
+                                    </div>
+                                </div>
+                                <div id="dIEECodeVerification" class="field" style="display: none;">
+                                    <label class="label">Code verification</label>
+                                    <div class="control">
+                                        <input id="iIEECVInput" class="input" type="number" />
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="control" style="display: flex; flex-direction: row; gap: 0.3rem">
+                                        <button id="btnIEECancel" style="flex: 1" class="button is-danger is-fullwidth">Cancel</button>
+                                        <button id="btnIEEUpdate" style="flex: 1" class="button is-primary is-fullwidth" disabled>Update</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="dInformationOptions" class="field">
+                                <div class="control" style="display: flex; flex-direction: column; gap: 0.5rem">
+                                    <button id="btnIOUpdateName" class="button is-primary is-fullwidth">Update name</button>
+                                    <button id="btnIOUpdateEmail" class="button is-primary is-fullwidth">Update email</button>
+                                </div>
+                            </div>
+
+                            <div><span id="sICreatedAt">Created at: ...</span></div>
+                            <div><span id="sILastUpdate" style="display: none">Last update: ...</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="dSecurity" class="card" style="display: none">
+                    <div class="card-content">
+                        <div class="content">
+                            <div class="option">
+                                <label class="label">Password</label>
+                                <button id="btnSUpdatePassword" class="button is-primary">Update</button>
+                            </div>
+                            <div class="option">
+                                <label class="label">Two-Step</label>
+                                <button id="btnSUpdateTwoStep" class="button is-primary">Admin</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <Base id="mUpdatePassword" title="Update password">
+        <section class="modal-card-body">
+            <div class="field">
+                <label class="label">Current password</label>
+                <div class="control">
+                    <input id="iMUPCurrentPassword" class="input" type="password" />
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">New password</label>
+                <div class="control">
+                    <input id="iMUPNewPassword" class="input" type="password" />
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Confirm password</label>
+                <div class="control">
+                    <input id="iMUPConfirmPassword" class="input" type="password" />
+                </div>
+            </div>
+        </section>
+        <footer class="modal-card-foot" style="gap: 0.5rem;">
+            <button id="btnMUPCancel" class="button is-danger is-fullwidth">Cancel</button>
+            <button id="btnMUPAccept" class="button is-primary is-fullwidth">Accept</button>
+        </footer>
+    </Base>
+    <Base id="mUpdateTwoStep" title="Two step">
+        <section class="modal-card-body">
+            <div class="option">
+                <label class="label">Active</label>
+                <label class="switch is-rounded">
+                    <input id="iMUTSActive" type="checkbox" />
+                    <span class="check"></span>
+                    <span class="control-label">On</span>
+                </label>
+            </div>
+            <div class="option">
+                <label class="label">Type</label>
+                <div class="control">
+                    <div class="select">
+                        <select id="sMUTSType">
+                            <option>Email</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer class="modal-card-foot" style="gap: 0.5rem;">
+            <button id="btnMUTSCancel" class="button is-danger is-fullwidth">Cancel</button>
+            <button id="btnMUTSAccept" class="button is-primary is-fullwidth">Accept</button>
+        </footer>
+    </Base>
+    <Confirm />
+    <Alert />
+    <script type="module" src="/src/scripts/profile/index.ts"></script>
+</Layout>
