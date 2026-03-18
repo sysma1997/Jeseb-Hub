@@ -1,5 +1,5 @@
 ---
-import { Icon, Sprite } from "astro-iconify";
+import { Icon } from "astro-icon/components";
 import Layout from "../layouts/Layout.astro";
 
 import Menu from "../layouts/Menu.astro";
@@ -21,15 +21,15 @@ import "../styles/profile.css";
                         <p class="menu-label">Menu</p>
                         <ul id="uMenuList" class="menu-list">
                             <li><a id="aMenuInformation" class="menu-item is-active">
-                                <Icon name="solar:user-bold" width="24" height="24" />
+                                <Icon name="solar:user-bold" width={24} height={24} />
                                 <label>Information</label>
                             </a></li>
                             <li><a id="aMenuSecurity" class="menu-item">
-                                <Icon name="solar:shield-keyhole-bold" width="24" height="24" />
+                                <Icon name="solar:shield-keyhole-bold" width={24} height={24} />
                                 <label>Security</label>
                             </a></li>
                             <li><a id="aMenuData" class="menu-item">
-                                <Icon name="solar:database-bold-duotone" width="24" height="24" />
+                                <Icon name="solar:database-bold-duotone" width={24} height={24} />
                                 <label>Data</label>
                             </a></li>
                         </ul>
@@ -44,9 +44,10 @@ import "../styles/profile.css";
                                 <div class="dInformationPhotoProfile">
                                     <img id="iIPPhoto" src="/assets/images/profile.png" alt="profile" />
                                     <button id="btnIPPhotoEdit" class="button is-primary">
-                                        <Sprite.Provider>
+                                        <Icon name="material-symbols:edit-rounded" width={24} height={24} />
+                                        <!-- <Sprite.Provider>
                                             <Sprite name="material-symbols:edit-rounded" width="24" height="24" />
-                                        </Sprite.Provider>
+                                        </Sprite.Provider> -->
                                     </button>
                                     <input id="iIPPhotoEdit" type="file" 
                                         accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
@@ -200,5 +201,5 @@ import "../styles/profile.css";
     </Base>
     <Confirm />
     <Alert />
-    <script type="module" src="/src/scripts/profile/index.ts"></script>
+    <script>import "../scripts/profile";</script>
 </Layout>

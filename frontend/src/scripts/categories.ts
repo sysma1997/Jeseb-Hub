@@ -11,11 +11,6 @@ const repository: CategoryRepository = new CategoryApiRepository();
 
 add.onclick = async () => {
     window.showPrompt("Enter the name for the category", "Add category", (value: string) => {
-        if (value.indexOf(" ") !== -1) {
-            window.showAlert("Phrases are not allowed.");
-            return;
-        }
-
         window.showConfirm(`Create category with the name '${value}'?`, "Add category", async () => {
             const category: Category = new Category(value, Uuid());
             try {

@@ -1,5 +1,5 @@
 ---
-import { Sprite } from "astro-iconify";
+import { Icon } from "astro-icon/components";
 
 import Layout from "../layouts/Layout.astro";
 import Menu from "../layouts/Menu.astro";
@@ -23,9 +23,7 @@ import "../styles/index/index.css";
     </div>
 
 	<button id="btnAddTransaction" class="button is-primary">
-        <Sprite.Provider>
-            <Sprite name="material-symbols:add-2-rounded" width="24" height="24" />
-        </Sprite.Provider>
+		<Icon name="material-symbols:add-2-rounded" width={24} height={24} />
     </button>
 
 	<Base id="modalAddTransaction" title="Add transaction">
@@ -150,5 +148,5 @@ import "../styles/index/index.css";
 	</Base>
 	<Confirm />
 	<Alert />
-	<script type="module" src="/src/scripts/index.ts"></script>
+	<script>import "../scripts/index";</script>
 </Layout>

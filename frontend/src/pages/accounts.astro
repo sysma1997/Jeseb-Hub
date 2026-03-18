@@ -1,5 +1,5 @@
 ---
-import { Sprite } from "astro-iconify"
+import { Icon } from "astro-icon/components";
 
 import Layout from "../layouts/Layout.astro";
 import Menu from "../layouts/Menu.astro";
@@ -23,13 +23,11 @@ import "../styles/accounts/index.css";
     </div>
 
     <button id="btnAdd" class="button is-primary">
-        <Sprite.Provider>
-            <Sprite name="material-symbols:add-2-rounded" width="24" height="24" />
-        </Sprite.Provider>
+        <Icon name="material-symbols:add-2-rounded" width={24} height={24} />
     </button>
 
     <Prompt />
     <Confirm />
     <Alert />
-    <script type="module" src="/src/scripts/accounts.ts"></script>
+    <script>import "../scripts/accounts";</script>
 </Layout>

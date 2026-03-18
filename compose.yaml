@@ -64,7 +64,7 @@ services:
       target: frontend
     restart: always
     ports:
-      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+      - "${FRONTEND_PORT}:80"
     environment:
       PORT: ${FRONTEND_PORT}
     depends_on:
