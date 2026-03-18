@@ -50,4 +50,50 @@ export class TransactionApiRepository extends Api implements TransactionReposito
         pagination.list = list;
         return pagination;
     }
+
+    async import(transactions: Transaction[]): Promise<void> {
+        const params: TransactionDto[] = transactions.map(t => t.toDto());
+        const response: ApiResponse = await this.fetch(ApiMethods.POST, "transaction/import", params);
+        if (response.status >= 400) 
+            throw new Error(response.data);
+    }
+    async export(action: (chunk: any, progress: number) => void): Promise<void> {
+        const token: string | undefined = window.localStorage.getItem("token") ?? undefined;
+        const response = await fetch(`${Api.ApiUrl}/transaction/export`, {
+            headers: {
+                "Authorization": (token) ? `Bearer ${token}` : "", 
+            }
+        });
+        if (response.status >= 400) throw Error(await response.text());
+
+        const reader = response.body?.getReader();
+        const decoder = new TextDecoder();
+
+        let buffer = '';
+        let receiveChunks: number = 0;
+
+        while (true) {
+            const { done, value } = await reader!.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+
+            for (const line of lines) {
+                if (line.trim() === '') continue;
+
+                try {
+                    const chunkData = JSON.parse(line);
+                    receiveChunks++;
+
+                    const progress = Math.round((receiveChunks / chunkData.chunks) * 100);
+                    action(chunkData, progress);
+                } catch (err: any) {
+                    if (err instanceof Error) throw Error(`Error parsing chunk: ${err.message}`);
+                }
+            }
+        }
+    }
 }

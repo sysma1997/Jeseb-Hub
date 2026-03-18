@@ -9,4 +9,7 @@ export interface TransactionRepository {
     get(id: string): Promise<Transaction>;
 
     getList(limit?: number, page?: number): Promise<Pagination<Transaction>>;
+
+    import(transactions: Transaction[]): Promise<void>;
+    export(action: (chunk: any, progress: number) => void): Promise<void>;
 }

@@ -28,6 +28,10 @@ import "../styles/profile.css";
                                 <Icon name="solar:shield-keyhole-bold" width="24" height="24" />
                                 <label>Security</label>
                             </a></li>
+                            <li><a id="aMenuData" class="menu-item">
+                                <Icon name="solar:database-bold-duotone" width="24" height="24" />
+                                <label>Data</label>
+                            </a></li>
                         </ul>
                     </aside>
                 </div>
@@ -120,6 +124,21 @@ import "../styles/profile.css";
                                 <label class="label">Two-Step</label>
                                 <button id="btnSUpdateTwoStep" class="button is-primary">Admin</button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="dData" class="card" style="display: none">
+                    <div class="card-content">
+                        <div class="content">
+                            <div class="option">
+                                <label class="label">Import from file</label>
+                                <button id="btnDImportCsv" class="button is-primary">CSV</button>
+                            </div>
+                            <div class="option">
+                                <label class="label">Export to file</label>
+                                <button id="btnDExportCsv" class="button is-primary">CSV</button>
+                            </div>
+                            <progress id="pDProgress" class="progress is-primary" max="100" style="display: none"></progress>
                         </div>
                     </div>
                 </div>

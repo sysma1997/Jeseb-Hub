@@ -1,3 +1,4 @@
+import { Readable } from "stream";
 import { v4 as Uuid } from "uuid";
 import dayjs from "dayjs";
 import "dayjs/plugin/utc";
@@ -173,6 +174,75 @@ export class TransactionController extends ControllerBase {
                 const pages = transactions.pages;
 
                 res.json({ list, pages });
+            } catch (err: any) {
+                if (err instanceof Error) res.status(400).send(err.message);
+            }
+        });
+
+        this.router.post("/import", UserAuthenticate, async (req, res) => {
+            try {
+                const idUser: string = req.user!.id;
+                const array: any[] = req.body;
+
+                if (!array || !Array.isArray(array)) 
+                    return res.status(400).send("Invalid transactions format.");
+                if (array.length > 500) 
+                    return res.status(400).send("The number of transactions entered in chunks cannot exceed 500.");
+
+                const transactions: Transaction[] = [];
+                for (let i = 0; i < array.length; i++) {
+                    const item = array[i];
+
+                    const id: string = item.id ?? Uuid();
+                    const date: Date = dayjs.utc(item.date).toDate();
+                    const type: boolean = item.type;
+                    const account: string = item.account;
+                    const value: number = item.value;
+                    const category: string | undefined = item.category ?? undefined;
+                    const description: string | undefined = item.description ?? undefined;
+
+                    const transaction = new Transaction(date, type, account, 
+                        value, 
+                        id, idUser, 
+                        category, description);
+                    transactions.push(transaction);
+                }
+
+                await this.service.addRange(idUser, transactions);
+                res.status(201).send("Transactions add successfully.");
+            } catch (err: any) {
+                if (err instanceof Error) res.status(400).send(err.message);
+            }
+        });
+        this.router.get("/export", UserAuthenticate, async (req, res) => {
+            try {
+                const idUser: string = req.user!.id;
+                const limit: number = 500;
+
+                const totalTransactions = await this.repository.getCount(idUser);
+                if (totalTransactions === 0) return res.status(400).send("There are no transactions to export.");
+
+                res.setHeader("Content-Type", "application/json");
+                res.setHeader("Transfer-Encoding", "chunked");
+
+                const totalChunks = Math.ceil(totalTransactions / limit);
+                let page: number = 1;
+
+                while (true) {
+                    const transactions = await this.repository.getList(idUser, limit, page);
+                    if (transactions.list.length === 0) break;
+                    
+                    const chunkData = {
+                        chunk: page, 
+                        chunks: totalChunks, 
+                        list: transactions.list.map(t => t.toDto())
+                    };
+                    res.write(JSON.stringify(chunkData) + "\n");
+
+                    page++;
+                }
+
+                res.end();
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }

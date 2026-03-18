@@ -27,6 +27,21 @@ export class TransactionPrismaRepository implements TransactionRepository {
             }
         });
     }
+    async addRange(transactions: Transaction[]): Promise<void> {
+        await this.prisma.$transaction(transactions.map(transaction => this.prisma.transaction.create({
+            data: {
+                id: transaction.id ?? Uuid(), 
+                idUser: transaction.idUser!, 
+                date: transaction.date, 
+                type: transaction.type, 
+                account: transaction.account, 
+                value: transaction.value,
+
+                category: transaction.category ?? null, 
+                description: transaction.description ?? null
+            }
+        })));
+    }
     async update(transaction: Transaction): Promise<void> {
         await this.prisma.transaction.update({
             where: { id: transaction.id!, idUser: transaction.idUser! }, 
@@ -90,5 +105,8 @@ export class TransactionPrismaRepository implements TransactionRepository {
         ));
         pagination.pages = (limit) ? Pagination.PageLength(total, limit) : 1;
         return pagination;
+    }
+    async getCount(idUser: string): Promise<number> {
+        return await this.prisma.transaction.count({ where: { idUser } });
     }
 }

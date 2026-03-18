@@ -28,6 +28,15 @@ export class CategoryPrismaRepository implements CategoryRepository {
             }
         });
     }
+    async addRange(categories: Category[]): Promise<void> {
+        await this.prisma.$transaction(categories.map(category => this.prisma.category.create({
+            data: {
+                id: category.id ?? Uuid(), 
+                idUser: category.idUser!, 
+                name: category.name
+            }
+        })));
+    }
     async update(category: Category): Promise<void> {
         await this.prisma.category.update({
             where: { idUser: category.idUser!, id: category.id! }, 

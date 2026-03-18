@@ -14,14 +14,15 @@ export abstract class Api {
 
     protected async fetch(method: ApiMethods, endpoint: string, body: any | undefined = undefined): Promise<ApiResponse> {
         try {
-            const token: string | undefined = window.localStorage.getItem("token") ?? undefined;    
+            const token: string | undefined = window.localStorage.getItem("token") ?? undefined;
+            const fBody: string | undefined = (body) ? JSON.stringify(body) : undefined;
             const response: Response = await fetch(`${Api.ApiUrl}/${endpoint}`, {
                 method,
                 headers: {
                     "Authorization": (token) ? `Bearer ${token}` : "", 
                     "Content-Type": "application/json", 
                 }, 
-                body: (body) ? JSON.stringify(body) : undefined
+                body: fBody
             });
 
             const data: string = await response.text();
@@ -34,7 +35,7 @@ export abstract class Api {
     }
     protected async fetchFile(method: ApiMethods, endpoint: string, body: FormData): Promise<ApiResponse> {
         try {
-            const token: string | undefined = window.localStorage.getItem("token") ?? undefined;    
+            const token: string | undefined = window.localStorage.getItem("token") ?? undefined;
             const response: Response = await fetch(`${Api.ApiUrl}/${endpoint}`, {
                 method,
                 headers: {

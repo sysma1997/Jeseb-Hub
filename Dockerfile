@@ -5,7 +5,7 @@ FROM base AS backend
 COPY backend/. ./
 RUN mkdir -p /usr/local/app/uploads
 RUN npm install
-CMD ["sh", "-c", "npx prisma generate && npm run dev"]
+CMD ["sh", "-c", "npx prisma migrate dev && npm run dev"]
 
 FROM base AS frontend
 COPY frontend/. ./

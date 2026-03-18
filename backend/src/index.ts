@@ -50,7 +50,7 @@ const accountRepository: AccountRepository = new AccountPrismaRepository(prisma)
 const accountController: ControllerBase = new AccountController(accountRepository);
 const categoryRepository: CategoryRepository = new CategoryPrismaRepository(prisma);
 const categoryController: ControllerBase = new CategoryController(categoryRepository);
-const transactionService: TransactionService = new TransactionService(transactionRepository, accountRepository);
+const transactionService: TransactionService = new TransactionService(transactionRepository, accountRepository, categoryRepository);
 const transactionController: ControllerBase = new TransactionController(transactionRepository, transactionService);
 
 userController.setup();

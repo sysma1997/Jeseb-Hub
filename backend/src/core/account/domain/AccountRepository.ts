@@ -3,6 +3,7 @@ import { Pagination } from "../../shared/domain/Pagination";
 
 export interface AccountRepository {
     add(account: Account): Promise<void>;
+    addRange(accounts: Account[]): Promise<void>;
     update(account: Account): Promise<void>;
     delete(idUser: string, id: string): Promise<void>;
 

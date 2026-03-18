@@ -3,6 +3,7 @@ import { Pagination } from "../../shared/domain/Pagination";
 
 export interface CategoryRepository {
     add(category: Category): Promise<void>;
+    addRange(categories: Category[]): Promise<void>;
     update(category: Category): Promise<void>;
     delete(idUser: string, id: string): Promise<void>;
 

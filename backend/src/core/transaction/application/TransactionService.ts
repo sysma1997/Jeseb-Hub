@@ -1,16 +1,24 @@
+import { v4 as Uuid } from "uuid";
+
 import { Transaction } from "../domain/Transaction";
 import { TransactionRepository } from "../domain/TransactionRepository";
 import { Account } from "../../account/domain/Account";
 import { AccountRepository } from "../../account/domain/AccountRepository";
+import { Category } from "../../category/domain/Category";
+import { CategoryRepository } from "../../category/domain/CategoryRepository";
+import { Pagination } from "../../shared/domain/Pagination";
 
 export class TransactionService {
     private repository: TransactionRepository;
     private accountRepository: AccountRepository;
+    private categoryRepository: CategoryRepository;
 
     constructor(repository: TransactionRepository, 
-        accountRepository: AccountRepository) {
+        accountRepository: AccountRepository, 
+        categoryRepository: CategoryRepository) {
         this.repository = repository;
         this.accountRepository = accountRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     async add(transaction: Transaction): Promise<void> {
@@ -22,6 +30,45 @@ export class TransactionService {
         
         await this.repository.add(transaction);
         await this.accountRepository.update(account);
+    }
+    async addRange(idUser: string, transactions: Transaction[]): Promise<void> {
+        const pAccounts: Pagination<Account> = await this.accountRepository.getList(idUser);
+        const pCategories: Pagination<Category> = await this.categoryRepository.getList(idUser);
+        const newCategories: Category[] = [];
+
+        for (let i = 0; i < transactions.length; i++) {
+            const transaction: Transaction | undefined = transactions[i];
+            if (!transaction) continue;
+
+            let account = pAccounts.list.find(a => a.name === transaction.account);
+            if (!account) {
+                account = new Account(transaction.account, 
+                    (transaction.type) ? transaction.value : -transaction.value, 
+                Uuid(), transaction.idUser!);
+                pAccounts.list.push(account);
+            }
+            else {
+                account = (transaction.type) ? account.ingressBalance(transaction.value) : 
+                    account.egressBalance(transaction.value);
+                pAccounts.list = pAccounts.list.map(a => {
+                    if (a.id === account!.id) return account!;
+                    return a;
+                });
+            }
+
+            if (transaction.category) {
+                let category = pCategories.list.find(c => c.name === transaction.category!);
+                if (!category) {
+                    const category = new Category(transaction.category, undefined, transaction.idUser!);
+                    pCategories.list.push(category);
+                    newCategories.push(category);
+                }
+            }
+        }
+
+        await this.categoryRepository.addRange(newCategories);
+        await this.accountRepository.addRange(pAccounts.list);
+        await this.repository.addRange(transactions);
     }
     async update(transaction: Transaction): Promise<void> {
         let lastTransaction: Transaction = await this.repository.get(transaction.idUser!, transaction.id!);

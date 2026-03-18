@@ -4,12 +4,12 @@ generator client {
 }
 
 datasource storage {
-    provider = "postgresql"
+    provider = "sqlite"
     url = env("DATABASE_URL")
 }
 
 model User {
-    id String @id @default(uuid()) @storage.Uuid
+    id String @id @default(uuid())
     name String
     email String @unique
     password String
@@ -25,12 +25,12 @@ model User {
     @@map("users")
 }
 model Transaction {
-    id String @id @default(uuid()) @storage.Uuid
-    idUser String @storage.Uuid
+    id String @id @default(uuid())
+    idUser String
     date DateTime @default(now())
     type Boolean
     account String
-    value Decimal @storage.Decimal(12, 2)
+    value Decimal
     category String?
     description String?
 
@@ -39,18 +39,18 @@ model Transaction {
     @@map("transactions")
 }
 model Account {
-    id String @id @default(uuid()) @storage.Uuid
-    idUser String @storage.Uuid
+    id String @id @default(uuid())
+    idUser String
     name String
-    balance Decimal @storage.Decimal(12, 2)
+    balance Decimal
 
     user User @relation(fields: [idUser], references: [id])
 
     @@map("accounts")
 }
 model Category {
-    id String @id @default(uuid()) @storage.Uuid
-    idUser String @storage.Uuid
+    id String @id @default(uuid())
+    idUser String
     name String
 
     user User @relation(fields: [idUser], references: [id])

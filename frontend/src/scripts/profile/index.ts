@@ -1,11 +1,15 @@
 import { User } from "../../core/user/domain/User";
 import type { UserRepository } from "../../core/user/domain/UserRepository";
 import { UserApiRepository } from "../../core/user/infrastructure/UserApiRepository";
+import type { TransactionRepository } from "../../core/transaction/domain/TransactionRepository";
+import { TransactionApiRepository } from "../../core/transaction/infrastructure/TransactionApiRepository";
 
 import { setup as informationSetup } from "./information";
 import { setup as securitySetup } from "./security";
+import { setup as dataSetup } from "./data";
 
 const repository: UserRepository = new UserApiRepository();
+const transactionRepository: TransactionRepository = new TransactionApiRepository();
 
 const menuList = document.getElementById("uMenuList") as HTMLUListElement;
 const items = document.getElementById("dItems") as HTMLDivElement;
@@ -20,6 +24,7 @@ const user: User | undefined = await repository.get();
 if (user) {
     informationSetup(user, repository);
     securitySetup(user, repository);
+    dataSetup(transactionRepository);
 }
 
 const clickMenuItem = (menuItem: HTMLAnchorElement) => {

@@ -30,6 +30,20 @@ export class AccountPrismaRepository implements AccountRepository {
             }
         });
     }
+    async addRange(accounts: Account[]): Promise<void> {
+        await this.prisma.$transaction(accounts.map(account => this.prisma.account.upsert({
+            where: { idUser: account.idUser!, id: account.id! },
+            update: {
+                balance: account.balance
+            },
+            create: {
+                id: account.id ?? Uuid(), 
+                idUser: account.idUser!, 
+                name: account.name, 
+                balance: account.balance
+            }
+        })));
+    }
     async update(account: Account): Promise<void> {
         await this.prisma.account.update({
             where: { idUser: account.idUser!, id: account.id! }, 
