@@ -9,7 +9,8 @@ export interface ApiResponse {
     data: string;
 }
 export abstract class Api {
-    public static BackendUrl: string = "http://localhost:3000";
+    public static BackendUrl: string = (import.meta.env.PUBLIC_BACKEND_URL) ? 
+        import.meta.env.PUBLIC_BACKEND_URL : "http://localhost:3000";
     public static ApiUrl: string = `${Api.BackendUrl}/api`;
 
     protected async fetch(method: ApiMethods, endpoint: string, body: any | undefined = undefined): Promise<ApiResponse> {

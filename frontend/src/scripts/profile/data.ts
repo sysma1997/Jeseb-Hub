@@ -61,7 +61,7 @@ export const setup = (repository: TransactionRepository) => {
                 const text = await file.text();
                 const results = await importParseCsv(text);
 
-                const limit: number = 10;
+                const limit: number = 500;
                 const totalTransactions: number = results.length;
                 const totalChunks: number = Math.ceil(totalTransactions / limit);
                 let transactionsProcessed = 0;

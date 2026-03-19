@@ -39,6 +39,7 @@ services:
       PORT: ${BACKEND_PORT}
       JWT_SECRET: ${BACKEND_JWT_SECRET}
       DATABASE_URL: file:/usr/local/app/data/sqlite.db
+      FRONTEND_URL: ${BACKEND_FRONTEND_URL}
     depends_on:
       - mailpit
     volumes:
@@ -64,9 +65,10 @@ services:
       target: frontend
     restart: always
     ports:
-      - "${FRONTEND_PORT}:80"
+      - "${FRONTEND_PORT}:${FRONTEND_PORT_CONTAINER}"
     environment:
       PORT: ${FRONTEND_PORT}
+      PUBLIC_BACKEND_URL: ${FRONTEND_BACKEND_URL}
     depends_on:
       - backend
     develop:

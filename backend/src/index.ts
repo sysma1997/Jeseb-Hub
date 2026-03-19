@@ -22,13 +22,16 @@ import { CategoryPrismaRepository } from "./core/category/infrastructure/Categor
 import { CategoryController } from "./core/category/infrastructure/CategoryController";
 
 const PORT = process.env.PORT;
+const FRONTEND_URL = (process.env.FRONTEND_URL) ? 
+    process.env.FRONTEND_URL : "http://localhost:8000";
 
 dayjs.extend(dayjsUtc);
 
 const allowedOrigins = [
-    "http://localhost:8000",
     "http://localhost:5678",
+    FRONTEND_URL,
 ];
+
 const corsOptions = {
     origin: (origin: any, callback: any) => {
         if (!origin || allowedOrigins.indexOf(origin) !== -1) 

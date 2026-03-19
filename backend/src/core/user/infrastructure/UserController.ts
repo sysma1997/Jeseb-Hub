@@ -239,9 +239,9 @@ export class UserController extends ControllerBase {
 
         this.router.get("/request/update/email/:email", UserAuthenticate, async (req, res) => {
             const { pEmail } = req.params;
-            const email: string = this.getQueryString(pEmail);
-            if (!email) 
+            if (!pEmail) 
                 return res.status(400).send("The email is required.");
+            const email: string = this.getQueryString(pEmail);
             if (!User.IsValidEmail(email)) 
                 return res.status(400).send(`The email '${email}' is not valid.`);
 
