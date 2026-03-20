@@ -261,8 +261,9 @@ export class UserController extends ControllerBase {
                 return res.status(400).send("The email is required.");
 
             const { email } = req.params;
-            if (!User.IsValidEmail(email)) 
-                return res.status(400).send(`The email '${email}' is not valid.`);
+            const _email: string = this.getQueryString(email);
+            if (!User.IsValidEmail(_email)) 
+                return res.status(400).send(`The email '${_email}' is not valid.`);
 
             try {
                 const code = this.generateCodeVerification(req.user!.id);
@@ -270,13 +271,13 @@ export class UserController extends ControllerBase {
                 const { data, error } = await resend.emails.send({
                     //from: "no-reply@openledgerhub.com", 
                     from: "no-reply@resend.dev", 
-                    to: [email], 
+                    to: [_email], 
                     subject: "OpenLedger Hub - Updating email", 
-                    html: EmailTemplates.TwoFactorCodeEmail(email, code.toString())
+                    html: EmailTemplates.TwoFactorCodeEmail(_email, code.toString())
                 });
                 if (error) return res.status(400).json({ error });
 
-                res.send(`We have sent an email to ${email} to update to your new email address.`);
+                res.send(`We have sent an email to ${_email} to update to your new email address.`);
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
