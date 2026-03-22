@@ -15,8 +15,6 @@ services:
       DATABASE_URL: file:/usr/local/app/data/sqlite.db
       FRONTEND_URL: ${BACKEND_FRONTEND_URL}
       RESEND_API_KEY: ${BACKEND_RESEND_API_KEY}
-    depends_on:
-      - mailpit
     volumes:
       - uploads:/usr/local/app/uploads
       - sqlite_data:/usr/local/app/data
