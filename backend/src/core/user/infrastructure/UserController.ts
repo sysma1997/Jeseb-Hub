@@ -102,8 +102,7 @@ export class UserController extends ControllerBase {
                     expiresIn: "1d"
                 });
                 const { data, error } = await resend.emails.send({
-                    //from: "no-reply@Jesebhub.com", 
-                    from: "no-reply@resend.dev", 
+                    from: "no-reply@jeseb.com", 
                     to: [email], 
                     subject: "Jeseb Hub - Confirm your registration", 
                     html: EmailTemplates.VerificationEmail(name, `${FRONTEND_URL}/validation?token=${token}`)
@@ -123,8 +122,7 @@ export class UserController extends ControllerBase {
                 
                 await this.repository.register(user);
                 const { data, error } = await resend.emails.send({
-                    //from: "no-reply@Jesebhub.com", 
-                    from: "no-reply@resend.dev", 
+                    from: "no-reply@jeseb.com", 
                     to: [user.email], 
                     subject: "Jeseb Hub - Validate token", 
                     html: EmailTemplates.WelcomeEmail(user.name)
@@ -164,8 +162,7 @@ export class UserController extends ControllerBase {
                         const codeV = this.generateCodeVerification(user.id!);
     
                         const { data, error } = await resend.emails.send({
-                            //from: "no-reply@Jesebhub.com", 
-                            from: "no-reply@resend.dev", 
+                            from: "no-reply@jeseb.com",  
                             to: [user.email], 
                             subject: "Jeseb Hub - Two factor step", 
                             html: EmailTemplates.TwoFactorCodeEmail(user.name, codeV.toString())
@@ -214,8 +211,7 @@ export class UserController extends ControllerBase {
                     });
                 
                 const { data, error } = await resend.emails.send({
-                    //from: "no-reply@Jesebhub.com", 
-                    from: "no-reply@resend.dev", 
+                    from: "no-reply@jeseb.com",  
                     to: [user.email], 
                     subject: "Jeseb Hub - Recover your user", 
                     html: EmailTemplates.PasswordRecoveryEmail(user.name, `${FRONTEND_URL}/recover?token=${token}`)
@@ -269,8 +265,7 @@ export class UserController extends ControllerBase {
                 const code = this.generateCodeVerification(req.user!.id);
                 
                 const { data, error } = await resend.emails.send({
-                    //from: "no-reply@Jesebhub.com", 
-                    from: "no-reply@resend.dev", 
+                    from: "no-reply@jeseb.com", 
                     to: [_email], 
                     subject: "Jeseb Hub - Updating email", 
                     html: EmailTemplates.TwoFactorCodeEmail(_email, code.toString())
