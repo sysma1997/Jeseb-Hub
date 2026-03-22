@@ -67,7 +67,7 @@ app.use(express.urlencoded({ limit: "5mb", extended: true }));
 app.use("/uploads", express.static("uploads"));
 
 app.get("/", (_, res) => {
-    res.send("OpenLedger Hub Api: v1.0.0");
+    res.send("Jeseb Api: v1.0.0");
 });
 
 app.use("/api/user", userController.getRouter());

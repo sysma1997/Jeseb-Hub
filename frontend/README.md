@@ -1,5 +1,5 @@
-# 🎨 OpenLedger Hub | Client Dashboard
-This is the official frontend for OpenLedger Hub, a modern, high-performance financial dashboard. Built with a focus on speed, user experience, and efficient data rendering.
+# 🎨 Jeseb | Client Dashboard
+This is the official frontend for Jeseb, a modern, high-performance financial dashboard. Built with a focus on speed, user experience, and efficient data rendering.
 
 ## 🚀 Performance-First Approach
 The client is built using Astro, leveraging its "Islands Architecture" to deliver a lightning-fast experience.

@@ -4,13 +4,15 @@ import Layout from "../layouts/Layout.astro";
 import Form from "../components/Form.astro";
 import Alert from "../components/modals/Alert.astro";
 
+import jeseb from "../assets/images/jeseb.png";
+
 import "../styles/recover.css";
 ---
 
 <Layout title="Recover">
     <div class="container">
-        <img class="icon" src="/assets/images/OpenLedger_Hub.png" alt="OpenLedger Hub" />
-        <Form title="Recover in OpenLedger Hub">
+        <img class="icon" src={jeseb.src} alt="Jeseb Hub" />
+        <Form title="Recover in Jeseb Hub">
             <div id="dEmail" class="field">
                 <label class="label">Enter your email with the registered account to recover it.</label>
                 <div class="control">

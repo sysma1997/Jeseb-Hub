@@ -1,4 +1,4 @@
-name: finaces-app
+name: jeseb
 
 services:
   mailpit:
@@ -15,7 +15,7 @@ services:
       MP_SMTP_AUTH_ACCEPT_ANY: 1
       MP_SMTP_AUTH_ALLOW_INSECURE: 1
     networks:
-      - openledger_hub-network
+      - jeseb-network
 
   backend:
     build:
@@ -48,7 +48,7 @@ services:
         - path: ./Dockerfile
           action: rebuild
     networks:
-      - openledger_hub-network
+      - jeseb-network
   
   frontend:
     build:
@@ -78,9 +78,24 @@ services:
           action: rebuild
         - path: ./frontend/astro.config.mjs
           action: rebuild
+    networks:
+      - jeseb-network
+  
+  cloudflare:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    restart: always
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TOKEN}
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - jeseb-network
 
 networks:
-  openledger_hub-network:
+  jeseb-network:
     driver: bridge
 
 volumes:

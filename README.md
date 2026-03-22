@@ -1,11 +1,11 @@
-# OpenLedger Hub | Professional Financial Engineering Suite
+# Jeseb | Professional Financial Engineering Suite
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D22.0.0-brightgreen)](https://nodejs.org/)
 
 ## 🚀 Overview
 
-**OpenLedger Hub** is a robust personal finance management system built for developers and power users. Designed with **Hexagonal Architecture (Ports & Adapters)** and **Domain-Driven Design (DDD)**, it provides a highly decoupled environment where business logic is independent of the database, UI, or external services.
+**Jeseb** is a robust personal finance management system built for developers and power users. Designed with **Hexagonal Architecture (Ports & Adapters)** and **Domain-Driven Design (DDD)**, it provides a highly decoupled environment where business logic is independent of the database, UI, or external services.
 
 ## 🏗️ Architectural Design
 

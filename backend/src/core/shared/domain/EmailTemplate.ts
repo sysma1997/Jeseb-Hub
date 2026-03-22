@@ -138,12 +138,12 @@ export class EmailTemplates {
                 <head>
                     <meta charset="utf-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-                    <title>Confirm your account - OpenLedger Hub</title>
+                    <title>Confirm your account - Jeseb Hub</title>
                     <style>${this.Style}</style>
                 </head>
                 <body>
                 <div class="container">
-                    <h1>Welcome to OpenLedger Hub</h1>
+                    <h1>Welcome to Jeseb Hub</h1>
                     <div class="greeting">👋 Hi ${name}!</div>
                     <p>Thanks for signing up. Please confirm your email address to start managing your finances.</p>
                     <div style="text-align: center;">
@@ -156,7 +156,7 @@ export class EmailTemplates {
                     <div class="warning">⚠️ <strong>Security notice:</strong> This link expires in 24 hours.</div>
                     <hr>
                     <div class="footer">
-                        <p>OpenLedger Hub — Your personal finance control</p>
+                        <p>Jeseb Hub — Your personal finance control</p>
                         <p style="margin-top: 8px;">If you didn't create an account, you can safely ignore this email.</p>
                     </div>
                 </div>
@@ -169,14 +169,14 @@ export class EmailTemplates {
                 <head>
                     <meta charset="utf-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Reset password - OpenLedger Hub</title>
+                    <title>Reset password - Jeseb Hub</title>
                     <style>${this.Style}</style>
                 </head>
                 <body>
                 <div class="container">
-                    <h1>Welcome to OpenLedger Hub</h1>
+                    <h1>Welcome to Jeseb Hub</h1>
                     <div class="greeting">👋 Hi ${name}!</div>
-                    <p>Your OpenLedger Hub account has been successfully verified.</p>
+                    <p>Your Jeseb Hub account has been successfully verified.</p>
                     <p>Now you can start to:</p>
                     <ul style="margin: 16px; list-style: none;">
                         <li>📝 Track your income and expenses</li>
@@ -189,7 +189,7 @@ export class EmailTemplates {
                     </div>
                     <hr>
                     <div class="footer">
-                        <p>OpenLedger Hub — Your personal finance control</p>
+                        <p>Jeseb Hub — Your personal finance control</p>
                         <p style="margin-top: 8px;">If you didn't create an account, you can safely ignore this email.</p>
                     </div>
                 </div>
@@ -202,7 +202,7 @@ export class EmailTemplates {
                 <head>
                     <meta charset="utf-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Reset password - OpenLedger Hub</title>
+                    <title>Reset password - Jeseb Hub</title>
                     <style>${this.Style}</style>
                 </head>
                 <body>
@@ -221,7 +221,7 @@ export class EmailTemplates {
                     <hr>
                     <div class="footer">
                         <p>If you didn't request this, ignore this email. Your password will remain unchanged.</p>
-                        <p style="margin-top: 8px;">OpenLedger Hub — Your personal finance control</p>
+                        <p style="margin-top: 8px;">Jeseb Hub — Your personal finance control</p>
                     </div>
                 </div>
                 </body>
@@ -233,7 +233,7 @@ export class EmailTemplates {
                 <head>
                     <meta charset="utf-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>2FA Code - OpenLedger Hub</title>
+                    <title>2FA Code - Jeseb Hub</title>
                     <style>
                         ${this.Style}
                         .code-box {
@@ -268,7 +268,7 @@ export class EmailTemplates {
                         <hr>
                         <div class="footer">
                             <p>Never share this code with anyone.</p>
-                            <p style="margin-top: 8px;">OpenLedger Hub — Your personal finance control</p>
+                            <p style="margin-top: 8px;">Jeseb Hub — Your personal finance control</p>
                         </div>
                     </div>
                 </body>

@@ -5,13 +5,15 @@ import Form from "../components/Form.astro";
 import Base from "../components/modals/Base.astro";
 import Alert from "../components/modals/Alert.astro";
 
+import jeseb from "../assets/images/jeseb.png";
+
 import "../styles/login.css";
 ---
 
 <Layout title="Login">
     <div class="container">
-        <img class="icon" src="/assets/images/OpenLedger_Hub.png" alt="OpenLedger Hub" />
-        <Form title="Login in OpenLedger Hub">
+        <img class="icon" src={jeseb.src} alt="Jeseb Hub" />
+        <Form title="Login in Jeseb Hub">
             <div class="field">
                 <label class="label">Email</label>
                 <div class="control">

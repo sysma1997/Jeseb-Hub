@@ -102,10 +102,10 @@ export class UserController extends ControllerBase {
                     expiresIn: "1d"
                 });
                 const { data, error } = await resend.emails.send({
-                    //from: "no-reply@openledgerhub.com", 
+                    //from: "no-reply@Jesebhub.com", 
                     from: "no-reply@resend.dev", 
                     to: [email], 
-                    subject: "OpenLedger Hub - Confirm your registration", 
+                    subject: "Jeseb Hub - Confirm your registration", 
                     html: EmailTemplates.VerificationEmail(name, `${FRONTEND_URL}/validation?token=${token}`)
                 });
                 if (error) return res.status(400).json({ error });
@@ -123,10 +123,10 @@ export class UserController extends ControllerBase {
                 
                 await this.repository.register(user);
                 const { data, error } = await resend.emails.send({
-                    //from: "no-reply@openledgerhub.com", 
+                    //from: "no-reply@Jesebhub.com", 
                     from: "no-reply@resend.dev", 
                     to: [user.email], 
-                    subject: "OpenLedger Hub - Validate token", 
+                    subject: "Jeseb Hub - Validate token", 
                     html: EmailTemplates.WelcomeEmail(user.name)
                 });
                 if (error) return res.status(400).json({ error });
@@ -164,10 +164,10 @@ export class UserController extends ControllerBase {
                         const codeV = this.generateCodeVerification(user.id!);
     
                         const { data, error } = await resend.emails.send({
-                            //from: "no-reply@openledgerhub.com", 
+                            //from: "no-reply@Jesebhub.com", 
                             from: "no-reply@resend.dev", 
                             to: [user.email], 
-                            subject: "OpenLedger Hub - Two factor step", 
+                            subject: "Jeseb Hub - Two factor step", 
                             html: EmailTemplates.TwoFactorCodeEmail(user.name, codeV.toString())
                         });
                         if (error) return res.status(400).json({ error });
@@ -214,10 +214,10 @@ export class UserController extends ControllerBase {
                     });
                 
                 const { data, error } = await resend.emails.send({
-                    //from: "no-reply@openledgerhub.com", 
+                    //from: "no-reply@Jesebhub.com", 
                     from: "no-reply@resend.dev", 
                     to: [user.email], 
-                    subject: "OpenLedger Hub - Recover your user", 
+                    subject: "Jeseb Hub - Recover your user", 
                     html: EmailTemplates.PasswordRecoveryEmail(user.name, `${FRONTEND_URL}/recover?token=${token}`)
                 });
                 if (error) return res.status(400).json({ error });
@@ -269,10 +269,10 @@ export class UserController extends ControllerBase {
                 const code = this.generateCodeVerification(req.user!.id);
                 
                 const { data, error } = await resend.emails.send({
-                    //from: "no-reply@openledgerhub.com", 
+                    //from: "no-reply@Jesebhub.com", 
                     from: "no-reply@resend.dev", 
                     to: [_email], 
-                    subject: "OpenLedger Hub - Updating email", 
+                    subject: "Jeseb Hub - Updating email", 
                     html: EmailTemplates.TwoFactorCodeEmail(_email, code.toString())
                 });
                 if (error) return res.status(400).json({ error });

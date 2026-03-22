@@ -1,6 +1,6 @@
-# ⚙️ OpenLedger Hub | Core API
+# ⚙️ Jeseb | Core API
 
-This is the central engine of the **OpenLedger Hub**, a high-performance RESTful API built with Node.js and TypeScript. It handles business logic, secure persistence, and financial orchestrations for the entire ecosystem.
+This is the central engine of the **Jeseb**, a high-performance RESTful API built with Node.js and TypeScript. It handles business logic, secure persistence, and financial orchestrations for the entire ecosystem.
 
 ## 🧠 Business Logic & Domain
 

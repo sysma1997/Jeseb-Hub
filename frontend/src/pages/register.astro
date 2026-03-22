@@ -4,13 +4,15 @@ import Layout from "../layouts/Layout.astro";
 import Form from "../components/Form.astro";
 import Alert from "../components/modals/Alert.astro";
 
+import jeseb from "../assets/images/jeseb.png";
+
 import "../styles/register.css";
 ---
 
 <Layout title="Register">
     <div class="container">
-        <img class="icon" src="/assets/images/OpenLedger_Hub.png" alt="OpenLedger Hub" />
-        <Form title="Register">
+        <img class="icon" src={jeseb.src} alt="Jeseb Hub" />
+        <Form title="Register in Jeseb Hub">
             <div class="field">
                 <label class="label">Name</label>
                 <div class="control">
