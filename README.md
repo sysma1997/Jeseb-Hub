@@ -12,12 +12,12 @@
 The project is structured to enforce a strict separation of concerns:
 - **Domain Layer:** Pure business entities and domain services (Accounting logic, Balance validation).
 - **Application Layer:** Orchestrates use cases and defines input/output ports.
-- **Infrastructure Layer:** Implements adapters for Express.js, Prisma ORM (Postgres), and Mailpit.
+- **Infrastructure Layer:** Implements adapters for Express.js, Prisma ORM.
 
 ## 🛠️ Tech Stack
 
 - **Backend:** Node.js, TypeScript, Express.js.
-- **Database:** PostgreSQL with Prisma ORM.
+- **Database:** SQLite with Prisma ORM.
 - **Frontend:** Astro (SSR/Static), React (Interactive Dashboards), Bulma CSS.
 - **DevOps:** Docker & Docker Compose (Full containerized local workflow).
 - **Security:** JWT-based Auth, 2FA (Email-based), and Secure Session Management.

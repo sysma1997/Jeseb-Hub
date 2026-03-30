@@ -18,7 +18,7 @@ This backend follows **Hexagonal Architecture (Ports & Adapters)** to ensure the
 
 * **Language:** TypeScript (Strict Type Checking).
 * **Framework:** Express.js (as the primary Input Adapter).
-* **ORM:** Prisma with PostgreSQL (as the Persistence Adapter).
+* **ORM:** Prisma with SQLite (as the Persistence Adapter).
 * **Security:** JWT (JSON Web Tokens) for stateless sessions + 2FA (Email-based) for high-risk actions.
 * **Testing:** Jest & Supertest for quality assurance.
 
@@ -28,7 +28,7 @@ As a senior-grade project, reliability is enforced through a multi-layered testi
 
 1.  **Unit Tests (Jest):** Validates domain entities and business rules in total isolation. 
     * *Example:* Ensuring an account cannot process a transaction that results in an invalid state.
-2.  **Integration Tests (Jest + Prisma):** Verifies the correct communication between the application layer and the PostgreSQL database.
+2.  **Integration Tests (Jest + Prisma):** Verifies the correct communication between the application layer and the SQLite database.
     * *Example:* Testing the complete flow of creating a transaction and verifying the balance reflection in the database.
 
 ```bash
