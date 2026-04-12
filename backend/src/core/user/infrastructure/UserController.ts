@@ -12,6 +12,8 @@ import { UserRepository } from "../domain/UserRepository";
 import { UserAuthenticate } from "./UserAuthenticate";
 import { FileStorage } from "../../shared/infrastructure/FileStorage";
 import { EmailTemplates } from "../../shared/domain/EmailTemplate";
+import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
+import { MessageBuilder } from "../../shared/domain/MessageBuilder";
 
 const FRONTEND_URL = (process.env.FRONTEND_URL) ? 
     process.env.FRONTEND_URL : "http://localhost:8000";
@@ -21,15 +23,17 @@ const resend = new Resend(RESEND_API_KEY);
 
 export class UserController extends ControllerBase {
     private readonly repository: UserRepository;
+    private readonly translator: TranslatorRepository;
 
     private static CodesVerifications: Map<string, {
         code: number, 
         expires: number
     }> = new Map();
 
-    constructor(repository: UserRepository) {
+    constructor(repository: UserRepository, translator: TranslatorRepository) {
         super();
         this.repository = repository;
+        this.translator = translator;
     }
 
     private cleanExpiresCodesVerificatons() {
@@ -54,9 +58,9 @@ export class UserController extends ControllerBase {
     private validateCodeVerification(id: string, code: number): boolean {
         this.cleanExpiresCodesVerificatons();
         const item = UserController.CodesVerifications.get(id);
-        if (!item) throw new Error("Verification code not found or not exists.");
+        if (!item) throw new Error(this.translator.translate("users.errors.codeNotFound"));
         if (code !== item.code) 
-            throw new Error("The code entered does not match the verification code.");
+            throw new Error(this.translator.translate("users.errors.codeNotMatch"));
 
         UserController.CodesVerifications.delete(id);
         return true;
@@ -67,31 +71,25 @@ export class UserController extends ControllerBase {
             if (!req.body.name || 
                 !req.body.email || 
                 !req.body.password) {
-                let message = "";
-                let lineBreak = 0;
+                const message = new MessageBuilder(true);
 
-                if (!req.body.name) {
-                    message += "Name is required.";
-                    lineBreak++;
-                }
-                if (!req.body.email) message += ((lineBreak++ > 0) ? "\n" : "") + 
-                    "Email is required.";
-                if (!req.body.password) message += ((lineBreak > 0) ? "\n" : "") + 
-                    "Password is required.";
-                
-                return res.status(400).send(message);
+                if (!req.body.name) message.add(this.translator.translate("users.errors.nameRequired"));
+                if (!req.body.email) message.add(this.translator.translate("users.errors.emailRequired"));
+                if (!req.body.password) message.add(this.translator.translate("users.errors.passwordRequired"));
+
+                return res.status(400).send(message.toString());
             }
             if (!User.IsValidEmail(req.body.email)) 
-                return res.status(400).send(`The '${req.body.email}' is not a valid email.`);
+                return res.status(400).send(this.translator.translate("users.errors.emailNotValid", { email: req.body.email }));
 
             
             const { name, email, password, id } = req.body;
             try {
                 const userExists = await this.repository.getWithEmail(email);
-                if (userExists) return res.status(400).send("The user already exists with this email address.");
+                if (userExists) return res.status(400).send(this.translator.translate("users.errors.emailAlreadyExists", { email }));
 
                 const cryptoPassword = User.ConvertPassword(password);
-                const user = new User(name, email, cryptoPassword, dayjs.utc().toDate(), id ?? Uuid());
+                const user = new User(this.translator, name, email, cryptoPassword, dayjs.utc().toDate(), id ?? Uuid());
                 const jwtParams: any = {
                     id: user.id,
                     name: user.name,
@@ -104,12 +102,13 @@ export class UserController extends ControllerBase {
                 const { data, error } = await resend.emails.send({
                     from: "no-reply@jeseb.com", 
                     to: [email], 
-                    subject: "Jeseb Hub - Confirm your registration", 
-                    html: EmailTemplates.VerificationEmail(name, `${FRONTEND_URL}/validation?token=${token}`)
+                    subject: `Jeseb Hub - ${this.translator.translate("users.email.confirmRegister")}`, 
+                    html: EmailTemplates.VerificationEmail(this.translator, name, 
+                        `${FRONTEND_URL}/${this.translator.getLocale()}/validation?token=${token}`)
                 });
                 if (error) return res.status(400).json({ error });
 
-                res.send(`We have sent an email to ${email} to confirm your registration.`);
+                res.send(this.translator.translate("users.success.registrationSend", { email }));
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
@@ -118,18 +117,18 @@ export class UserController extends ControllerBase {
             const { token } = req.params;
             try {
                 const payload = jwt.verify(token, process.env.JWT_SECRET!) as any;
-                const user = new User(payload.name, payload.email, payload.password, dayjs.utc().toDate());
+                const user = new User(this.translator, payload.name, payload.email, payload.password, dayjs.utc().toDate());
                 
                 await this.repository.register(user);
                 const { data, error } = await resend.emails.send({
                     from: "no-reply@jeseb.com", 
                     to: [user.email], 
-                    subject: "Jeseb Hub - Validate token", 
-                    html: EmailTemplates.WelcomeEmail(user.name)
+                    subject: `Jeseb Hub - ${this.translator.translate("users.email.validateToken")}`, 
+                    html: EmailTemplates.WelcomeEmail(this.translator, user.name)
                 });
                 if (error) return res.status(400).json({ error });
 
-                res.status(201).send("User register success.");
+                res.status(201).send(this.translator.translate("users.success.userAdded"));
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
@@ -137,20 +136,15 @@ export class UserController extends ControllerBase {
         this.router.post("/login", async (req, res) => {
             if (!req.body.email || 
                 !req.body.password) {
-                let message = "";
-                let lineBreak = 0;
+                const message = new MessageBuilder(true);
 
-                if (!req.body.email) {
-                    message += "Email is required.";
-                    lineBreak++;
-                }
-                if (!req.body.password) message += ((lineBreak > 0) ? "\n" : "") + 
-                    "Password is required.";
+                if (!req.body.email) message.add(this.translator.translate("users.errors.emailRequired"));
+                if (!req.body.password) message.add(this.translator.translate("users.errors.passwordRequired"));
 
-                return res.status(400).send(message);
+                return res.status(400).send(message.toString());
             }
             if (!User.IsValidEmail(req.body.email)) 
-                return res.status(400).send(`The '${req.body.email}' is not a valid email.`);
+                return res.status(400).send(this.translator.translate("users.errors.emailInvalid", { email: req.body.email }));
             
             const { email, password, code } = req.body;
             try {
@@ -164,14 +158,14 @@ export class UserController extends ControllerBase {
                         const { data, error } = await resend.emails.send({
                             from: "no-reply@jeseb.com",  
                             to: [user.email], 
-                            subject: "Jeseb Hub - Two factor step", 
-                            html: EmailTemplates.TwoFactorCodeEmail(user.name, codeV.toString())
+                            subject: `Jeseb Hub - ${this.translator.translate("users.email.twoFactor")}`, 
+                            html: EmailTemplates.TwoFactorCodeEmail(this.translator, user.name, codeV.toString())
                         });
                         if (error) return res.status(400).json({ error });
                         
                         return res.json({ 
                             token: undefined, 
-                            message: `We have sent an email to ${email} to update to your new email address.` 
+                            message: this.translator.translate("users.success.loginTwoFactor", { email: email }) 
                         });
                     }
                 }
@@ -197,12 +191,12 @@ export class UserController extends ControllerBase {
             const { email } = req.params;
             
             if (!User.IsValidEmail(email)) 
-                return res.status(400).send(`The '${email}' is not a valid email.`);
+                return res.status(400).send(this.translator.translate("users.errors.emailInvalid", { email }));
 
             try {
                 const user: User | undefined = await this.repository.getWithEmail(email);
                 if (!user) 
-                    return res.status(400).send(`The user with the email '${email}' doesn't exist.`);
+                    return res.status(400).send(this.translator.translate("users.errors.emailNotFound", { email }));
 
                 const token = jwt.sign({ 
                     id: user.id 
@@ -213,12 +207,13 @@ export class UserController extends ControllerBase {
                 const { data, error } = await resend.emails.send({
                     from: "no-reply@jeseb.com",  
                     to: [user.email], 
-                    subject: "Jeseb Hub - Recover your user", 
-                    html: EmailTemplates.PasswordRecoveryEmail(user.name, `${FRONTEND_URL}/recover?token=${token}`)
+                    subject: `Jeseb Hub - ${this.translator.translate("users.email.passwordRecovery")}`, 
+                    html: EmailTemplates.PasswordRecoveryEmail(this.translator, user.name, 
+                        `${FRONTEND_URL}/${this.translator.getLocale()}/recover?token=${token}`)
                 });
                 if (error) return res.status(400).json({ error });
 
-                res.send(`We have sent an email to ${email} to recover your user.`);
+                res.send(this.translator.translate("users.success.passwordRecovery", { email: email }));
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
@@ -226,17 +221,12 @@ export class UserController extends ControllerBase {
         this.router.put("/recover/password", async (req, res) => {
             if (!req.body.token || 
                 !req.body.password) {
-                let message = "";
-                let lineBreak = 0;
+                const message = new MessageBuilder(true);
 
-                if (!req.body.token) {
-                    message += "Token is required.";
-                    lineBreak++;
-                }
-                if (!req.body.password) message += ((lineBreak > 0) ? "\n" : "") + 
-                    "Password is required.";
+                if (!req.body.token) message.add(this.translator.translate("users.errors.tokenRequired"));
+                if (!req.body.password) message.add(this.translator.translate("users.errors.passwordRequired"));
 
-                return res.status(400).send(message);
+                return res.status(400).send(message.toString());
             }
             
             const { token, password } = req.body;
@@ -246,7 +236,7 @@ export class UserController extends ControllerBase {
                 const id: string = payload.id;
                 
                 await this.repository.recoverPassword(id, cryptoPassword);
-                res.status(201).send("User updating password success.");
+                res.status(201).send(this.translator.translate("users.success.passwordUpdated"));
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
@@ -254,12 +244,12 @@ export class UserController extends ControllerBase {
 
         this.router.get("/request/update/email/:email", UserAuthenticate, async (req, res) => {
             if (!req.params.email) 
-                return res.status(400).send("The email is required.");
+                return res.status(400).send(this.translator.translate("users.errors.emailRequired"));
 
             const { email } = req.params;
             const _email: string = this.getQueryString(email);
             if (!User.IsValidEmail(_email)) 
-                return res.status(400).send(`The email '${_email}' is not valid.`);
+                return res.status(400).send(this.translator.translate("users.errors.emailInvalid", { email: _email }));
 
             try {
                 const code = this.generateCodeVerification(req.user!.id);
@@ -267,12 +257,12 @@ export class UserController extends ControllerBase {
                 const { data, error } = await resend.emails.send({
                     from: "no-reply@jeseb.com", 
                     to: [_email], 
-                    subject: "Jeseb Hub - Updating email", 
-                    html: EmailTemplates.TwoFactorCodeEmail(_email, code.toString())
+                    subject: `Jeseb Hub - ${this.translator.translate("users.email.updateEmail")}`, 
+                    html: EmailTemplates.TwoFactorCodeEmail(this.translator, _email, code.toString())
                 });
                 if (error) return res.status(400).json({ error });
 
-                res.send(`We have sent an email to ${_email} to update to your new email address.`);
+                res.send(this.translator.translate("users.success.emailUpdated", { email: _email }));
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
@@ -280,7 +270,7 @@ export class UserController extends ControllerBase {
 
         this.router.put("/update/profile", UserAuthenticate, FileStorage.single("image"), async (req, res) => {
             try {
-                if (!req.file) return res.status(400).send("The image file is required.");
+                if (!req.file) return res.status(400).send(this.translator.translate("users.errors.imageRequired"));
 
                 const ext = path.extname(req.file!.originalname).toLocaleLowerCase();
                 const filePath = `/uploads/${req.user!.id}/profile${ext}`;
@@ -293,11 +283,11 @@ export class UserController extends ControllerBase {
         });
         this.router.put("/update/name", UserAuthenticate, async (req, res) => {
             const { name } = req.body;
-            if (!name) res.status(400).send("Name is required");
+            if (!name) res.status(400).send(this.translator.translate("users.errors.nameRequired"));
 
             try {
                 await this.repository.updateName(req.user!.id, name);
-                res.status(201).send("User updating name successful.");
+                res.status(201).send(this.translator.translate("users.success.nameUpdated"));
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
@@ -305,26 +295,21 @@ export class UserController extends ControllerBase {
         this.router.put("/update/email", UserAuthenticate, async (req, res) => {
             const { email, code } = req.body;
             if (!email || !code) {
-                let message = "";
-                let lineBreak = 0;
+                const message = new MessageBuilder(true);
 
-                if (!email) {
-                    message += "The email is required.";
-                    lineBreak++;
-                }
-                if (!code) message += ((lineBreak > 0) ? "\n" : "") + 
-                    "The code verification is required."
+                if (!email) message.add(this.translator.translate("users.errors.emailRequired"));
+                if (!code) message.add(this.translator.translate("users.errors.codeRequired"));
                 
-                return res.status(400).send(message);
+                return res.status(400).send(message.toString());
             }
-            if (!User.IsValidEmail(email)) return res.status(400).send(`The '${email}' is not valid email.`);
-            if (code.toString().length !== 6) return res.status(400).send("The code does not have 6 digits.");
+            if (!User.IsValidEmail(email)) return res.status(400).send(this.translator.translate("users.errors.emailInvalid", { email }));
+            if (code.toString().length !== 6) return res.status(400).send(this.translator.translate("users.errors.codeInvalid"));
             
             try {
                 this.validateCodeVerification(req.user!.id, code);
                 await this.repository.updateEmail(req.user!.id, email);
 
-                res.status(201).send("Email update successful.");
+                res.status(201).send(this.translator.translate("users.success.emailUpdateSuccessful"));
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
@@ -332,15 +317,10 @@ export class UserController extends ControllerBase {
         this.router.put("/update/password", UserAuthenticate, async (req, res) => {
             if (!req.body.currentPassword || 
                 !req.body.newPassword) {
-                let message = "";
-                let lineBreak = 0;
+                const message = new MessageBuilder(true);
 
-                if (!req.body.currentPassword) {
-                    message += "The current password is required.";
-                    lineBreak++;
-                }
-                if (!req.body.newPassword) message += ((lineBreak > 0) ? "\n" : "") + 
-                    "The new password is required.";
+                if (!req.body.currentPassword) message.add(this.translator.translate("users.errors.currentPasswordRequired"));
+                if (!req.body.newPassword) message.add(this.translator.translate("users.errors.newPasswordRequired"));
 
                 return res.status(400).send(message);
             }
@@ -351,7 +331,7 @@ export class UserController extends ControllerBase {
                 const cryptoNewPassword = User.ConvertPassword(newPassword);
                 await this.repository.updatePassword(req.user!.id, cryptoCurrentPassword, cryptoNewPassword);
 
-                res.status(201).send("Password update successful.");
+                res.status(201).send(this.translator.translate("users.success.passwordUpdateSuccessful"));
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
@@ -359,17 +339,13 @@ export class UserController extends ControllerBase {
         this.router.put("/update/two-step", UserAuthenticate, async (req, res) => {
             const { active, type } = req.body;
             if ((active === undefined || active === null) || !type) {
-                let message = "";
-                let lineBreak = 0;
+                const message = new MessageBuilder(true);
 
-                if (active === undefined || active === null) {
-                    message += "Active is required.";
-                    lineBreak++;
-                }
-                if (!type) message += ((lineBreak > 0) ? "\n" : "") + 
-                    "The type is required.";
+                if (active === undefined || active === null) 
+                    message.add(this.translator.translate("users.errors.activeRequired"));
+                if (!type) message.add(this.translator.translate("users.errors.typeRequired"));
 
-                return res.status(400).send(message);
+                return res.status(400).send(message.toString());
             }
 
             try {
@@ -381,7 +357,7 @@ export class UserController extends ControllerBase {
                 };
                 await this.repository.updateTwoStep(req.user!.id, config);
 
-                res.status(201).send("Two step update successful.");
+                res.status(201).send(this.translator.translate("users.success.twoFactorUpdated"));
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
@@ -393,7 +369,7 @@ export class UserController extends ControllerBase {
             const diff = expireIn.diff(current, "days");
             
             const user: User = await this.repository.get(req.user!.id);
-            if (!user) throw new Error("Error to get current user.");
+            if (!user) throw new Error(this.translator.translate("users.errors.currentUserError"));
 
             let token: string | undefined = undefined;
             if (diff <= 3) {

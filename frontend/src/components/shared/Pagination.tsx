@@ -1,5 +1,7 @@
 import { useEffect, useState, type ChangeEvent } from "react";
 
+import { t } from "../../core/shared/infrastructure/i18n";
+
 import "../../styles/shared/pagination.css"
 
 export const Pagination = (props: {
@@ -29,7 +31,7 @@ export const Pagination = (props: {
 
     return <div className="cPagination">
         <div className="item">
-            <p>Limit:</p>
+            <p>{t("shared.limit")}:</p>
             <div className="select">
                 <select value={limit} onChange={onChangeLimit}>
                     {[15, 30, 50, 100].map((limit) => 
@@ -38,7 +40,7 @@ export const Pagination = (props: {
             </div>
         </div>
         <div className="item">
-            <p>Page:</p>
+            <p>{t("shared.page")}:</p>
             <div className="select">
                 <select value={page} onChange={onChangePage}>
                     {Array.from({ length: pages }, (_, i) => i + 1).map((pageNumber) => (

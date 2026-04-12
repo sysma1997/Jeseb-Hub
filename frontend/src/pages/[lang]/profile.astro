@@ -1,36 +1,50 @@
 ---
+import type { GetStaticPaths } from "astro";
+import { getLocaleFromUrl, createTranslations } from "../../core/shared/infrastructure/i18n/server";
+
 import { Icon } from "astro-icon/components";
-import Layout from "../layouts/Layout.astro";
 
-import Menu from "../layouts/Menu.astro";
-import Base from "../components/modals/Base.astro";
-import Alert from "../components/modals/Alert.astro";
-import Confirm from "../components/modals/Confirm.astro";
+import Layout from "../../layouts/Layout.astro";
 
-import "../styles/profile.css";
+import Menu from "../../layouts/Menu.astro";
+import Base from "../../components/modals/Base.astro";
+import Alert from "../../components/modals/Alert.astro";
+import Confirm from "../../components/modals/Confirm.astro";
+
+import "../../styles/profile.css";
+
+export const getStaticPaths = (() => {
+	return [
+		{ params: { lang: "en" } }, 
+		{ params: { lang: "es" } }
+	];
+}) satisfies GetStaticPaths;
+
+const locale = getLocaleFromUrl(Astro.url);
+const t = createTranslations(locale);
 ---
 
-<Layout title="Profile">
-    <Menu />
+<Layout locale={locale} title={t("profile.title")}>
+    <Menu locale={locale} />
 
     <div class="profile">
         <div class="profile-content">
             <div class="menu">
                 <div class="box">
                     <aside class="menu">
-                        <p class="menu-label">Menu</p>
+                        <p class="menu-label">{t("profile.menu.title")}</p>
                         <ul id="uMenuList" class="menu-list">
                             <li><a id="aMenuInformation" class="menu-item is-active">
                                 <Icon name="solar:user-bold" width={24} height={24} />
-                                <label>Information</label>
+                                <label>{t("profile.menu.information")}</label>
                             </a></li>
                             <li><a id="aMenuSecurity" class="menu-item">
                                 <Icon name="solar:shield-keyhole-bold" width={24} height={24} />
-                                <label>Security</label>
+                                <label>{t("profile.menu.security")}</label>
                             </a></li>
                             <li><a id="aMenuData" class="menu-item">
                                 <Icon name="solar:database-bold-duotone" width={24} height={24} />
-                                <label>Data</label>
+                                <label>{t("profile.menu.data")}</label>
                             </a></li>
                         </ul>
                     </aside>
@@ -42,7 +56,8 @@ import "../styles/profile.css";
                         <div class="content">
                             <div class="dInformationPhoto">
                                 <div class="dInformationPhotoProfile">
-                                    <img id="iIPPhoto" src="/assets/images/profile.png" alt="profile" />
+                                    <Icon id="iIPIcon" name="solar:user-bold" width={24} color="white" />
+                                    <img id="iIPPhoto" alt="profile" style="display: none" />
                                     <button id="btnIPPhotoEdit" class="button is-primary">
                                         <Icon name="material-symbols:edit-rounded" width={24} height={24} />
                                     </button>
@@ -50,64 +65,64 @@ import "../styles/profile.css";
                                         accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
                                         style="display: none" />
                                 </div>
-                                <h4 id="lIPName">Name</h4>
+                                <h4 id="lIPName">{t("shared.name")}</h4>
                             </div>
                             <div id="dInformationShow">
                                 <div class="dInformationElement">
-                                    <label><b>Email</b></label>
-                                    <label id="dIEEmail">email</label>
+                                    <label><b>{t("shared.email")}</b></label>
+                                    <label id="dIEEmail">{t("shared.email")}</label>
                                 </div>
                             </div>
 
                             <div id="dInformationEditName">
                                 <div class="field">
-                                    <label class="label">Name</label>
+                                    <label class="label">{t("shared.name")}</label>
                                     <div class="control">
                                         <input id="iIENInput" class="input" type="text" />
                                     </div>
                                 </div>
                                 <div class="field">
                                     <div class="control" style="display: flex; flex-direction: row; gap: 0.3rem">
-                                        <button id="btnIENCancel" style="flex: 1" class="button is-danger is-fullwidth">Cancel</button>
-                                        <button id="btnIENUpdate" style="flex: 1" class="button is-primary is-fullwidth">Update</button>
+                                        <button id="btnIENCancel" style="flex: 1" class="button is-danger is-fullwidth">{t("shared.cancel")}</button>
+                                        <button id="btnIENUpdate" style="flex: 1" class="button is-primary is-fullwidth">{t("shared.update")}</button>
                                     </div>
                                 </div>
                             </div>
                             <div id="dInformationEditEmail">
                                 <div class="field">
-                                    <label class="label">Email</label>
+                                    <label class="label">{t("shared.email")}</label>
                                 </div>
                                 <div class="field has-addons">
                                     <div class="control is-expanded">
                                         <input id="iIEEInput" class="input" type="email" />
                                     </div>
                                     <div class="control">
-                                        <button id="btnIEEVerificate" class="button is-primary">Verificate</button>
+                                        <button id="btnIEEVerify" class="button is-primary">{t("profile.information.updateEmail.verify")}</button>
                                     </div>
                                 </div>
                                 <div id="dIEECodeVerification" class="field" style="display: none;">
-                                    <label class="label">Code verification</label>
+                                    <label class="label">{t("shared.codeVerification")}</label>
                                     <div class="control">
                                         <input id="iIEECVInput" class="input" type="number" />
                                     </div>
                                 </div>
                                 <div class="field">
                                     <div class="control" style="display: flex; flex-direction: row; gap: 0.3rem">
-                                        <button id="btnIEECancel" style="flex: 1" class="button is-danger is-fullwidth">Cancel</button>
-                                        <button id="btnIEEUpdate" style="flex: 1" class="button is-primary is-fullwidth" disabled>Update</button>
+                                        <button id="btnIEECancel" style="flex: 1" class="button is-danger is-fullwidth">{t("shared.cancel")}</button>
+                                        <button id="btnIEEUpdate" style="flex: 1" class="button is-primary is-fullwidth" disabled>{t("shared.update")}</button>
                                     </div>
                                 </div>
                             </div>
                             
                             <div id="dInformationOptions" class="field">
                                 <div class="control" style="display: flex; flex-direction: column; gap: 0.5rem">
-                                    <button id="btnIOUpdateName" class="button is-primary is-fullwidth">Update name</button>
-                                    <button id="btnIOUpdateEmail" class="button is-primary is-fullwidth">Update email</button>
+                                    <button id="btnIOUpdateName" class="button is-primary is-fullwidth">{t("profile.information.updateName.title")}</button>
+                                    <button id="btnIOUpdateEmail" class="button is-primary is-fullwidth">{t("profile.information.updateEmail.title")}</button>
                                 </div>
                             </div>
 
-                            <div><span id="sICreatedAt">Created at: ...</span></div>
-                            <div><span id="sILastUpdate" style="display: none">Last update: ...</span></div>
+                            <div><span id="sICreatedAt">{t("profile.information.createAt", { date: "..." })}</span></div>
+                            <div><span id="sILastUpdate" style="display: none">{t("profile.inforation.lastUpdate", { date: "..." })}</span></div>
                         </div>
                     </div>
                 </div>
@@ -115,12 +130,12 @@ import "../styles/profile.css";
                     <div class="card-content">
                         <div class="content">
                             <div class="option">
-                                <label class="label">Password</label>
-                                <button id="btnSUpdatePassword" class="button is-primary">Update</button>
+                                <label class="label">{t("shared.password")}</label>
+                                <button id="btnSUpdatePassword" class="button is-primary">{t("shared.update")}</button>
                             </div>
                             <div class="option">
-                                <label class="label">Two-Step</label>
-                                <button id="btnSUpdateTwoStep" class="button is-primary">Admin</button>
+                                <label class="label">{t("shared.codeVerification")}</label>
+                                <button id="btnSUpdateTwoStep" class="button is-primary">{t("shared.manage")}</button>
                             </div>
                         </div>
                     </div>
@@ -129,16 +144,16 @@ import "../styles/profile.css";
                     <div class="card-content">
                         <div class="content">
                             <div class="option">
-                                <label class="label">Import from file</label>
+                                <label class="label">{t("profile.data.import.title")}</label>
                                 <button id="btnDImportCsv" class="button is-primary">CSV</button>
                             </div>
                             <div class="option">
-                                <label class="label">Export to file</label>
+                                <label class="label">{t("profile.data.export.title")}</label>
                                 <button id="btnDExportCsv" class="button is-primary">CSV</button>
                             </div>
                             <div class="option">
                                 <label class="label">Backend API</label>
-                                <button id="btnDShowApiUrl" class="button is-primary">Show</button>
+                                <button id="btnDShowApiUrl" class="button is-primary">{t("profile.data.backendShow")}</button>
                             </div>
                             <progress id="pDProgress" class="progress is-primary" max="100" style="display: none"></progress>
                         </div>
@@ -148,59 +163,58 @@ import "../styles/profile.css";
         </div>
     </div>
 
-    <Base id="mUpdatePassword" title="Update password">
+    <Base id="mUpdatePassword" title={t("shared.passwordUpdate")}>
         <section class="modal-card-body">
             <div class="field">
-                <label class="label">Current password</label>
+                <label class="label">{t("shared.passwordCurrent")}</label>
                 <div class="control">
                     <input id="iMUPCurrentPassword" class="input" type="password" />
                 </div>
             </div>
             <div class="field">
-                <label class="label">New password</label>
+                <label class="label">{t("shared.passwordNew")}</label>
                 <div class="control">
                     <input id="iMUPNewPassword" class="input" type="password" />
                 </div>
             </div>
             <div class="field">
-                <label class="label">Confirm password</label>
+                <label class="label">{t("shared.passwordConfirm")}</label>
                 <div class="control">
                     <input id="iMUPConfirmPassword" class="input" type="password" />
                 </div>
             </div>
         </section>
         <footer class="modal-card-foot" style="gap: 0.5rem;">
-            <button id="btnMUPCancel" class="button is-danger is-fullwidth">Cancel</button>
-            <button id="btnMUPAccept" class="button is-primary is-fullwidth">Accept</button>
+            <button id="btnMUPCancel" class="button is-danger is-fullwidth">{t("shared.cancel")}</button>
+            <button id="btnMUPAccept" class="button is-primary is-fullwidth">{t("shared.update")}</button>
         </footer>
     </Base>
-    <Base id="mUpdateTwoStep" title="Two step">
+    <Base id="mUpdateTwoStep" title={t("shared.codeVerification")}>
         <section class="modal-card-body">
             <div class="option">
-                <label class="label">Active</label>
+                <label class="label">{t("profile.security.active")}</label>
                 <label class="switch is-rounded">
                     <input id="iMUTSActive" type="checkbox" />
                     <span class="check"></span>
-                    <span class="control-label">On</span>
                 </label>
             </div>
             <div class="option">
-                <label class="label">Type</label>
+                <label class="label">{t("profile.security.type")}</label>
                 <div class="control">
                     <div class="select">
                         <select id="sMUTSType">
-                            <option>Email</option>
+                            <option>{t("shared.email")}</option>
                         </select>
                     </div>
                 </div>
             </div>
         </section>
         <footer class="modal-card-foot" style="gap: 0.5rem;">
-            <button id="btnMUTSCancel" class="button is-danger is-fullwidth">Cancel</button>
-            <button id="btnMUTSAccept" class="button is-primary is-fullwidth">Accept</button>
+            <button id="btnMUTSCancel" class="button is-danger is-fullwidth">{t("shared.cancel")}</button>
+            <button id="btnMUTSAccept" class="button is-primary is-fullwidth">{t("shared.accept")}</button>
         </footer>
     </Base>
-    <Confirm />
-    <Alert />
-    <script>import "../scripts/profile";</script>
+    <Confirm locale={locale} />
+    <Alert locale={locale} />
+    <script>import "../../scripts/profile";</script>
 </Layout>

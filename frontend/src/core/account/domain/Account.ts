@@ -16,8 +16,6 @@ export class Account implements Base {
         idUser?: string | undefined, 
         user?: User | undefined) {
         if (!name) throw new Error("The name is required.");
-        if (name.includes(" "))
-            throw new Error("The account name cannot contain spaces.");
 
         this.name = name;
         this.balance = balance;

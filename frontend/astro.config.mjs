@@ -11,5 +11,12 @@ export default defineConfig({
       host: true
   },
 
-  integrations: [react(), icon()]
+  integrations: [react(), icon()], 
+  i18n: {
+    defaultLocale: "en", 
+    locales: ["en", "es"], 
+    routing: {
+      prefixDefaultLocale: false
+    }
+  }
 });

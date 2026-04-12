@@ -1,0 +1,46 @@
+---
+import { createTranslations } from "../core/shared/infrastructure/i18n/server";
+
+const locale = Astro.props?.locale || "en";
+const t = createTranslations(locale);
+---
+
+<style>
+    #dLocales {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+
+        position: fixed;
+        right: 10px;
+        top: 10px;
+    }
+</style>
+<div id="dLocales">
+    <label><b>{t("locales.title")}:</b></label>
+    <div class="select">
+        <select id="sLocales" class="select">
+            <option value="en">{t("locales.en")}</option>
+            <option value="es">{t("locales.es")}</option>
+        </select>
+    </div>
+</div>
+<script>
+    import { type Locale, getLocale, setLocale } from "../core/shared/infrastructure/i18n";
+
+    const locales = document.getElementById("sLocales") as HTMLSelectElement;
+    
+    let currentLocale = getLocale();
+    locales.value = currentLocale;
+
+    locales.onchange = (event: Event) => {
+        const locale = (event.target as HTMLSelectElement).value;
+        setLocale(locale as Locale);
+
+        let pathname: string = window.location.pathname;
+        pathname = pathname.replace(currentLocale, locale);
+        window.location.href = pathname;
+    };
+</script>

@@ -1,14 +1,17 @@
 ---
 const { title = "Jeseb Hub" } = Astro.props;
+
+const locale = Astro.props?.locale || "en";
 ---
 
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang={locale} data-theme="dark">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/jeseb.ico" />
 		<meta name="generator" content={Astro.generator} />
+		<meta name="locale" content={locale} />
 		<title>{title}</title>
 		<style>
 			html, body {
@@ -17,6 +20,13 @@ const { title = "Jeseb Hub" } = Astro.props;
 				height: 100%;
 			}
 		</style>
+		<script>
+			import { initTranslations, type Locale } from "../core/shared/infrastructure/i18n";
+
+			const metaLocale = document.querySelector(`meta[name="locale"]`)?.getAttribute("content");
+			if (metaLocale) initTranslations(metaLocale as Locale);
+			else initTranslations();
+		</script>
 	</head>
 	<body>
 		<slot />

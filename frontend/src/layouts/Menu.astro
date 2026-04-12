@@ -1,5 +1,10 @@
 ---
+import { createTranslations } from "../core/shared/infrastructure/i18n/server"; 
+
 import jeseb from "../assets/images/jeseb.png";
+
+const locale = Astro.props?.locale || "en";
+const t = createTranslations(locale);
 ---
 
 <style>
@@ -9,7 +14,7 @@ import jeseb from "../assets/images/jeseb.png";
 </style>
 <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-        <a class="navbar-item" href="/">
+        <a class="navbar-item" href={`/${locale}`}>
             <img src={jeseb.src} alt="Jeseb" />
             <b>Jeseb</b>
         </a>
@@ -24,16 +29,23 @@ import jeseb from "../assets/images/jeseb.png";
 
     <div id="navbarMenu" class="navbar-menu">
         <div class="navbar-start">
-            <a class="navbar-item" href="/">Home</a>
-            <a class="navbar-item" href="/accounts">Accounts</a>
-            <a class="navbar-item" href="/categories">Categories</a>
+            <a class="navbar-item" href={`/${locale}/`}>{t("shared.menu.home")}</a>
+            <a class="navbar-item" href={`/${locale}/accounts`}>{t("shared.menu.accounts")}</a>
+            <a class="navbar-item" href={`/${locale}/categories`}>{t("shared.menu.categories")}</a>
         </div>
         <div class="navbar-end">
             <div class="navbar-item has-dropdown is-hoverable">
-                <a id="nmUserName" class="navbar-link">Name</a>
-                <div class="navbar-dropdown">
-                    <a class="navbar-item" href="/profile">Profile</a>
-                    <a id="nmUserLogout" class="navbar-item">Log out</a>
+                <a class="navbar-link">{t("locales.title")}</a>
+                <div id="nmLocales" class="navbar-dropdown">
+                    <a id="en" class="navbar-item">{t("locales.en")}</option>
+                    <a id="es" class="navbar-item">{t("locales.es")}</option>
+                </div>
+            </div>
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a id="nmUserName" class="navbar-link">{t("shared.name")}</a>
+                <div class="navbar-dropdown is-right">
+                    <a class="navbar-item" href={`/${locale}/profile`}>{t("shared.menu.profile")}</a>
+                    <a id="nmUserLogout" class="navbar-item">{t("shared.menu.logout")}</a>
                 </div>
             </div>
         </div>
@@ -43,17 +55,17 @@ import jeseb from "../assets/images/jeseb.png";
     import { User } from "../core/user/domain/User";
     import type { UserRepository } from "../core/user/domain/UserRepository";
     import { UserApiRepository } from "../core/user/infrastructure/UserApiRepository";
+    import { type Locale, getLocale, setLocale } from "../core/shared/infrastructure/i18n";
 
     const userRepository: UserRepository = new UserApiRepository();
 
     const navbarBurger = document.getElementById("navbarBurger") as HTMLAnchorElement;
     const navbarMenu = document.getElementById("navbarMenu") as HTMLDivElement;
+    const nmLocales = document.getElementById("nmLocales") as HTMLDivElement;
     const nmUserName = document.getElementById("nmUserName") as HTMLAnchorElement;
     const nmUserLogout = document.getElementById("nmUserLogout") as HTMLAnchorElement;
 
-    const user: User | undefined = await userRepository.get();
-    if (!user) window.location.href = "/login";
-    nmUserName.textContent = user!.name;
+    const locale = getLocale();
 
     navbarBurger.onclick = () => {
         if (navbarBurger.classList.contains("is-active")) {
@@ -64,8 +76,25 @@ import jeseb from "../assets/images/jeseb.png";
         navbarBurger.classList.add("is-active");
         navbarMenu.classList.add("is-active");
     };
+
+    const locales = nmLocales.getElementsByClassName("navbar-item");
+    for (let i = 0; i < locales.length; i++) {
+        const aLocale = locales[i] as HTMLAnchorElement;
+        aLocale.onclick = () => {
+            setLocale(aLocale.id as Locale);
+
+            let pathname: string = window.location.pathname;
+            pathname = pathname.replace(locale, aLocale.id);
+            window.location.href = pathname;
+        };
+    }
+    
+    const user: User | undefined = await userRepository.get();
+    if (!user) window.location.href = `/${locale}/login`;
+
+    nmUserName.textContent = user!.name;
     nmUserLogout.onclick = () => {
         window.localStorage.removeItem("token");
-        window.location.href = "/login";
+        window.location.href = `/${locale}/login`;
     };
 </script>

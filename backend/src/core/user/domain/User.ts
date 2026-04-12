@@ -2,8 +2,12 @@ import { createHash } from "crypto";
 import dayjs from "dayjs";
 
 import { Base } from "../../shared/domain/Base";
+import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
+import { MessageBuilder } from "../../shared/domain/MessageBuilder";
 
 export class User implements Base {
+    private readonly translator: TranslatorRepository;
+
     public readonly name: string;
     public readonly email: string;
     public readonly password: string;
@@ -14,32 +18,29 @@ export class User implements Base {
     public readonly profile?: string | undefined;
     public readonly config?: UserConfig | undefined;
 
-    constructor(name: string, 
+    constructor(translator: TranslatorRepository, 
+        name: string, 
         email: string, password: string, 
         createAt: Date, 
         id?: string, 
         lastUpdate?: Date, 
         profile?: string, 
         config?: UserConfig) {
-        if (!name || !email || !password) {
-            let message: string = "";
-            let lineBreak: number = 0;
+        this.translator = translator;
 
-            if (!name) {
-                message += "The name for user is required.";
-                lineBreak++;
-            }
-            if (!email) message += ((lineBreak++ > 0) ? "\n" : "") + 
-                "The email for user is required.";
-            if (!password) message += ((lineBreak++ > 0) ? "\n" : "") + 
-                "The password for user is required.";
+        if (!name || !email || !password) {
+            const message = new MessageBuilder();
+
+            if (!name) message.add(this.translator.translate("users.errors.nameRequired"));
+            if (!email) message.add(this.translator.translate("users.errors.emailRequired"));
+            if (!password) message.add(this.translator.translate("users.errors.passwordRequired"));
             
-            throw new Error(message);
+            throw new Error(message.toString());
         }
         if (!User.IsValidEmail(email)) 
-            throw new Error(`The '${email}' is not a valid email.`);
+            throw new Error(this.translator.translate("users.errors.emailInvalid", { email }));
         if (password.length != 64 && password.length != 60) 
-            throw new Error("The password is not valid, please check that it is in SHA256.");
+            throw new Error(this.translator.translate("users.errors.passwordInvalid"));
         
         this.name = name;
         this.email = email;
@@ -52,13 +53,13 @@ export class User implements Base {
         this.config = config;
     }
 
-    static FromDto(dto: UserDto): User {
+    static FromDto(translator: TranslatorRepository, dto: UserDto): User {
         if (!dto.password) 
-            throw new Error("The password in user is required.");
+            throw new Error(translator.translate("users.errors.passwordRequired"));
 
         const createAt = dayjs.utc(dto.createAt).toDate();
         const lastUpdate = (dto.lastUpdate) ? dayjs.utc(dto.lastUpdate).toDate() : undefined;
-        return new User(dto.name, dto.email, dto.password, createAt, 
+        return new User(translator, dto.name, dto.email, dto.password, createAt, 
             dto.id, lastUpdate, dto.profile, dto.config);
     }
     static ConvertPassword(value: string): string {

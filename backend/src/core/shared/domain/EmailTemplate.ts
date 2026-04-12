@@ -1,3 +1,5 @@
+import { TranslatorRepository } from "./TranslatorRepository";
+
 const FRONTEND_URL = (process.env.FRONTEND_URL) ?
     process.env.FRONTEND_URL : "http://localhost:8000";
 
@@ -131,109 +133,109 @@ export class EmailTemplates {
         }
     }`;
 
-    static VerificationEmail(name: string, link: string): string {
+    static VerificationEmail(translator: TranslatorRepository, name: string, link: string): string {
         return `
             <!DOCTYPE html>
             <html>
                 <head>
                     <meta charset="utf-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-                    <title>Confirm your account - Jeseb Hub</title>
+                    <title>${translator.translate("users.email.confirmRegister")} - Jeseb Hub</title>
                     <style>${this.Style}</style>
                 </head>
                 <body>
                 <div class="container">
-                    <h1>Welcome to Jeseb Hub</h1>
-                    <div class="greeting">👋 Hi ${name}!</div>
-                    <p>Thanks for signing up. Please confirm your email address to start managing your finances.</p>
+                    <h1>${translator.translate("users.email.verificationEmail.welcome")}</h1>
+                    <div class="greeting">👋 ${translator.translate("users.email.shared.hi", { name })}</div>
+                    <p>${translator.translate("users.email.verificationEmail.confirmation")}</p>
                     <div style="text-align: center;">
-                        <a href="${link}" class="btn">Confirm my account</a>
+                        <a href="${link}" class="btn">${translator.translate("users.email.verificationEmail.confirmAccount")}</a>
                     </div>
                     <div class="link-box">
-                        <strong>🔗 Or copy this link:</strong>
+                        <strong>${translator.translate("users.email.shared.copyLink")}</strong>
                         <a href="${link}">${link}</a>
                     </div>
-                    <div class="warning">⚠️ <strong>Security notice:</strong> This link expires in 24 hours.</div>
+                    <div class="warning">${translator.translate("users.email.shared.warning")}</div>
                     <hr>
                     <div class="footer">
-                        <p>Jeseb Hub — Your personal finance control</p>
-                        <p style="margin-top: 8px;">If you didn't create an account, you can safely ignore this email.</p>
+                        <p>${translator.translate("users.email.shared.footer")}</p>
+                        <p style="margin-top: 8px;">${translator.translate("users.email.shared.ignore")}</p>
                     </div>
                 </div>
                 </body>
             </html>`;
     }
-    static WelcomeEmail(name: string): string {
+    static WelcomeEmail(translator: TranslatorRepository, name: string): string {
         return `<!DOCTYPE html>
             <html>
                 <head>
                     <meta charset="utf-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Reset password - Jeseb Hub</title>
+                    <title>${translator.translate("users.email.verificationEmail.welcome")}</title>
                     <style>${this.Style}</style>
                 </head>
                 <body>
                 <div class="container">
-                    <h1>Welcome to Jeseb Hub</h1>
-                    <div class="greeting">👋 Hi ${name}!</div>
-                    <p>Your Jeseb Hub account has been successfully verified.</p>
-                    <p>Now you can start to:</p>
+                    <h1>${translator.translate("users.email.verificationEmail.welcome")}</h1>
+                    <div class="greeting">👋 ${translator.translate("users.email.shared.hi", { name })}</div>
+                    <p>${translator.translate("users.email.welcomeEmail.verification")}</p>
+                    <p>${translator.translate("users.email.welcomeEmail.description")}</p>
                     <ul style="margin: 16px; list-style: none;">
-                        <li>📝 Track your income and expenses</li>
-                        <li>📊 View your financial statistics</li>
-                        <li>🏦 Manage multiple accounts</li>
-                        <li>📤 Export your data to CSV</li>
+                        <li>${translator.translate("users.email.welcomeEmail.track")}</li>
+                        <li>${translator.translate("users.email.welcomeEmail.statistics")}</li>
+                        <li>${translator.translate("users.email.welcomeEmail.manage")}</li>
+                        <li>${translator.translate("users.email.welcomeEmail.export")}</li>
                     </ul>
                     <div style="text-align: center;">
-                        <a href="${FRONTEND_URL}" class="btn">Go to dashboard</a>
+                        <a href="${FRONTEND_URL}" class="btn">${translator.translate("users.email.welcomeEmail.go")}</a>
                     </div>
                     <hr>
                     <div class="footer">
-                        <p>Jeseb Hub — Your personal finance control</p>
-                        <p style="margin-top: 8px;">If you didn't create an account, you can safely ignore this email.</p>
+                        <p>${translator.translate("users.email.shared.footer")}</p>
+                        <p style="margin-top: 8px;">${translator.translate("users.email.shared.ignore")}</p>
                     </div>
                 </div>
                 </body>
             </html>`;
     }
-    static PasswordRecoveryEmail(name: string, link: string): string {
+    static PasswordRecoveryEmail(translator: TranslatorRepository, name: string, link: string): string {
         return `<!DOCTYPE html>
             <html>
                 <head>
                     <meta charset="utf-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Reset password - Jeseb Hub</title>
+                    <title>${translator.translate("users.email.passwordRecoveryEmail.title")}</title>
                     <style>${this.Style}</style>
                 </head>
                 <body>
                 <div class="container">
-                    <h1>Reset your password</h1>
-                    <div class="greeting">🔐 Hi ${name}!</div>
-                    <p>We received a request to reset your password. Click the button below to create a new one.</p>
+                    <h1>${translator.translate("users.email.passwordRecoveryEmail.reset")}</h1>
+                    <div class="greeting">🔐 ${translator.translate("users.email.shared.hi", { name })}</div>
+                    <p>${translator.translate("users.email.passwordRecoveryEmail.description")}</p>
                     <div style="text-align: center;">
-                        <a href="${link}" class="btn">Reset password</a>
+                        <a href="${link}" class="btn">${translator.translate("users.email.passwordRecoveryEmail.reset")}</a>
                     </div>
                     <div class="link-box">
-                        <strong>🔗 Or copy this link:</strong>
+                        <strong>${translator.translate("users.email.shared.copyLink")}</strong>
                         <a href="${link}">${link}</a>
                     </div>
-                    <div class="warning">⚠️ This link expires in 1 hour for security.</div>
+                    <div class="warning">${translator.translate("users.email.shared.warning")}</div>
                     <hr>
                     <div class="footer">
-                        <p>If you didn't request this, ignore this email. Your password will remain unchanged.</p>
-                        <p style="margin-top: 8px;">Jeseb Hub — Your personal finance control</p>
+                        <p>${translator.translate("users.email.shared.footer")}</p>
+                        <p style="margin-top: 8px;">${translator.translate("users.email.shared.ignore")}</p>
                     </div>
                 </div>
                 </body>
             </html>`;
     }
-    static TwoFactorCodeEmail(name: string, code: string): string {
+    static TwoFactorCodeEmail(translator: TranslatorRepository, name: string, code: string): string {
         return `<!DOCTYPE html>
             <html>
                 <head>
                     <meta charset="utf-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>2FA Code - Jeseb Hub</title>
+                    <title>${translator.translate("users.email.twoFactorCode.title")}</title>
                     <style>
                         ${this.Style}
                         .code-box {
@@ -260,15 +262,16 @@ export class EmailTemplates {
                 </head>
                 <body>
                     <div class="container">
-                        <h1>Verification Code</h1>
-                        <div class="greeting">🔑 Hi ${name}!</div>
-                        <p>Use the code below to complete your login. This code is valid for 10 minutes.</p>
+                        <h1>${translator.translate("users.email.twoFactorCode.verification")}</h1>
+                        <div class="greeting">🔑 ${translator.translate("users.email.shared.hi", { name })}</div>
+                        <p>${translator.translate("users.email.twoFactorCode.description")}</p>
                         <div class="code-box">${code}</div>
-                        <div class="warning">🔒 <strong>Security notice:</strong> If you didn't try to log in, change your password immediately.</div>
+                        <div class="warning">${translator.translate("users.email.twoFactorCode.warning")}</div>
                         <hr>
                         <div class="footer">
-                            <p>Never share this code with anyone.</p>
-                            <p style="margin-top: 8px;">Jeseb Hub — Your personal finance control</p>
+                            <p>${translator.translate("users.email.twoFactorCode.footer")}</p>
+                            <p>${translator.translate("users.email.shared.footer")}</p>
+                            <p style="margin-top: 8px;">${translator.translate("users.email.shared.ignore")}</p>
                         </div>
                     </div>
                 </body>

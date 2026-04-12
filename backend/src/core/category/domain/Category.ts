@@ -1,7 +1,11 @@
 import { Base } from "../../shared/domain/Base";
 import { User, UserDto } from "../../user/domain/User";
 
+import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
+
 export class Category implements Base {
+    private readonly translator: TranslatorRepository;
+
     public readonly name: string;
 
     public readonly id?: string | undefined;
@@ -9,12 +13,15 @@ export class Category implements Base {
     
     public readonly user?: User | undefined;
 
-    constructor(name: string, 
+    constructor(translator: TranslatorRepository, 
+        name: string, 
         id?: string | undefined, 
         idUser?: string | undefined, 
         user?: User | undefined) {
+        this.translator = translator;
+
         if (!name) 
-            throw new Error("The name is required.");
+            throw new Error(translator.translate("categories.errors.nameRequired"));
 
         this.name = name;
         
@@ -24,18 +31,18 @@ export class Category implements Base {
         this.user = user;
     }
 
-    static FromDto(dto: CategoryDto): Category {
+    static FromDto(translator: TranslatorRepository, dto: CategoryDto): Category {
         if (!dto.name) 
-            throw new Error("The name is required.");
+            throw new Error(translator.translate("categories.errors.nameRequired"));
 
-        let user: User | undefined = (dto.user) ? User.FromDto(dto.user) : undefined;
-        return new Category(dto.name, 
+        let user: User | undefined = (dto.user) ? User.FromDto(translator, dto.user) : undefined;
+        return new Category(translator, dto.name, 
             dto.id, dto.idUser,
             user);
     }
 
     setName(name: string): Category {
-        return new Category(name, 
+        return new Category(this.translator, name, 
             this.id, this.idUser, 
             this.user);
     }

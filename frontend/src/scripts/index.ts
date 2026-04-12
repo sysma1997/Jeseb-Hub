@@ -15,6 +15,7 @@ import { CategoryApiRepository } from "../core/category/infrastructure/CategoryA
 import { Pagination } from "../core/shared/domain/Pagination";
 import { Attach, Notify } from "../core/shared/domain/Subject";
 import { FormatNumber } from "../core/shared/domain/FormatNumber";
+import { t } from "../core/shared/infrastructure/i18n";
 
 dayjs.extend(dayjsUtc);
 
@@ -78,7 +79,7 @@ try {
             option.innerText = account.name;
             matAccount.appendChild(option);
         });
-        matAccountBalance.innerText = `Balance: ${FormatNumber(accounts[0].balance)}`;
+        matAccountBalance.innerText = `${t("shared.balance")}: ${FormatNumber(accounts[0].balance)}`;
     });
     categoryRepository.getList().then((pagination: Pagination<Category>) => {
         categories = pagination.list;
@@ -87,7 +88,7 @@ try {
         {
             const option = document.createElement("option");
             option.value = "";
-            option.innerText = "Without category";
+            option.innerText = t("index.transactions.categoryNone");
             matCategory.appendChild(option);
         }
         categories.forEach(category => {
@@ -109,11 +110,11 @@ const transactionShowUpdate = (_transaction: Transaction) => {
     const account: Account | undefined = accounts.find(a => a.name === transaction!.account);
     if (account) {
         matAccount.value = account.id!;
-        matAccountBalance.innerText = `Balance: ${FormatNumber(account.balance)}`;
+        matAccountBalance.innerText = `${t("shared.balance")}: ${FormatNumber(account.balance)}`;
     }
     else {
         matAccount.value = accounts[0].id!;
-        matAccountBalance.innerText = `Balance: ${FormatNumber(accounts[0].balance)}`;
+        matAccountBalance.innerText = `${t("shared.balance")}: ${FormatNumber(accounts[0].balance)}`;
     }
     matType.value = transaction.type ? "true" : "false";
     matValue.value = transaction.value.toString();
@@ -127,13 +128,13 @@ const transactionShowUpdate = (_transaction: Transaction) => {
     else matDescription.value = "";
     
     modalAddTransaction.classList.add("is-active");
-    matTitle.innerText = "Update Transaction";
+    matTitle.innerText = t("index.transactions.update");
 };
 const transactionShowView = (_transaction: Transaction) => {
     transaction = _transaction;
     
     mtAccount.innerText = transaction.account;
-    mtType.innerText = (transaction.type) ? "Ingress" : "Egress";
+    mtType.innerText = (transaction.type) ? t("index.transactions.ingress") : t("index.transactions.egress");
     mtValue.innerText = FormatNumber(transaction.value);
     mtDate.innerText = dayjs(transaction.date).format("DD/MM/YYYY HH:mm:ss");
     if (transaction.category) {
@@ -167,10 +168,10 @@ const matClickClose = () => {
     matSection1.style.display = "block";
     if (accounts.length > 0) {
         matAccount.value = accounts[0].id!;
-        matAccountBalance.innerText = `Balance: ${FormatNumber(accounts[0].balance)}`;
+        matAccountBalance.innerText = `${t("shared.balance")}: ${FormatNumber(accounts[0].balance)}`;
     }
-    matCancel.innerText = "Cancel";
-    matAccept.innerText = "Next";
+    matCancel.innerText = t("shared.cancel");
+    matAccept.innerText = t("shared.next");
     matCancel.style.display = "block";
     matClose.style.display = "block";
     modalAddTransaction.classList.remove("is-active");
@@ -181,7 +182,14 @@ const mtClickClose = () => {
 }
 
 addTransaction.onclick = () => {
+    if (accounts.length == 0) {
+        window.showAlert(t("index.transactions.accountsRequired"));
+        return;
+    }
+
     modalAddTransaction.classList.add("is-active");
+    matTitle.innerText = t("index.transactions.add");
+    transaction = undefined;
 };
 matClose.onclick = matClickClose;
 matAccount.onchange = (event: Event) => {
@@ -190,7 +198,7 @@ matAccount.onchange = (event: Event) => {
     const account: Account | undefined = accounts.find(a => a.id === id);
     if (!account) return;
 
-    matAccountBalance.innerText = `Balance: ${FormatNumber(account.balance)}`;
+    matAccountBalance.innerText = `${t("shared.balance")}: ${FormatNumber(account.balance)}`;
 };
 matValue.addEventListener("keydown", (event: KeyboardEvent) => {
     if (event.key === "Enter") {
@@ -209,31 +217,31 @@ matCancel.onclick = () => {
     if (matSection2.style.display === "block") {
         matSection2.style.display = "none";
         matSection1.style.display = "block";
-        matCancel.innerText = "Cancel";
+        matCancel.innerText = t("shared.cancel");
     }
     if (matSection3.style.display === "block") {
         matSection3.style.display = "none";
         matSection2.style.display = "block";
-        matCancel.innerText = "Back";
-        matAccept.innerText = "Next";
+        matCancel.innerText = t("shared.back");
+        matAccept.innerText = t("shared.next");
     }
     if (matSection4.style.display === "block") {
         matSection4.style.display = "none";
         matSection3.style.display = "block";
-        matCancel.innerText = "Back";
-        matAccept.innerText = "Next";
+        matCancel.innerText = t("shared.back");
+        matAccept.innerText = t("shared.next");
     }
 };
 matAccept.onclick = async () => {
     if (matSection1.style.display === "block") {
         matSection1.style.display = "none";
         matSection2.style.display = "block";
-        matCancel.innerText = "Back";
+        matCancel.innerText = t("shared.back");
         return;
     }
     if (matSection2.style.display === "block") {
         if (matValue.value === "" || isNaN(Number(matValue.value)) || Number(matValue.value) <= 0) {
-            window.showAlert("Please enter a valid value for the transaction.");
+            window.showAlert(t("index.transactions.valueInvalid"));
             return;
         }
         const account = accounts.find(a => a.id === matAccount.value)!;
@@ -243,8 +251,8 @@ matAccept.onclick = async () => {
             matDate.value = dayjs.utc(transaction.date).format("YYYY-MM-DD HH:mm:ss");
         matSection2.style.display = "none";
         matSection3.style.display = "block";
-        matCancel.innerText = "Back";
-        matAccept.innerText = "Next";
+        matCancel.innerText = t("shared.back");
+        matAccept.innerText = t("shared.next");
         return;
     }
     if (matSection3.style.display === "block") {
@@ -253,7 +261,7 @@ matAccept.onclick = async () => {
 
         const account = accounts.find(a => a.id === matAccount.value)!;
         matAccountConfirm.innerText = account.name;
-        matTypeConfirm.innerText = matType.value === "true" ? "Ingress" : "Egress";
+        matTypeConfirm.innerText = matType.value === "true" ? t("index.transactions.ingress") : t("index.transactions.egress");
         matValueConfirm.innerText = FormatNumber(Number(matValue.value));
         matDateConfirm.innerText = dayjs(matDate.value).format("DD/MM/YYYY HH:mm:ss");
         if (matCategory.value) {
@@ -266,8 +274,8 @@ matAccept.onclick = async () => {
             matDescriptionConfirm.innerText = matDescription.value;
         }
         else dmatDescriptionConfirm.style.display = "none";
-        matCancel.innerText = "Back";
-        matAccept.innerText = (!transaction) ? "Add" : "Update";
+        matCancel.innerText = t("shared.back");
+        matAccept.innerText = (!transaction) ? t("shared.add") : t("shared.update");
         return;
     }
     if (matSection4.style.display === "block") {
@@ -308,8 +316,8 @@ matAccept.onclick = async () => {
                 return a;
             });
             matMessage.innerText = (!transaction) ? 
-                "The transaction has been created successfully." : 
-                "The transaction has been updated successfully.";
+                t("index.transactions.added") : 
+                t("index.transactions.updated");
 
             matSection4.style.display = "none";
             matSection5.style.display = "block";

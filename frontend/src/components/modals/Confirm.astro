@@ -1,7 +1,12 @@
 ---
+import { createTranslations, type Locale } from "../../core/shared/infrastructure/i18n/server";
+
 import Base from "./Base.astro";
 
-const { title = "Warning" } = Astro.props;
+const locale = Astro.props?.locale ?? "en";
+const t = createTranslations(locale as Locale);
+
+const title = Astro.props?.title ?? t("shared.warning");
 ---
 
 <Base id="confirm" title={title}>
@@ -9,12 +14,14 @@ const { title = "Warning" } = Astro.props;
         <p id="confirmMessage"></p>
     </section>
     <footer class="modal-card-foot" style="gap: 0.5rem;">
-        <button id="confirmNo" class="button is-danger is-fullwidth">No</button>
-        <button id="confirmYes" class="button is-primary is-fullwidth">Yes</button>
+        <button id="confirmNo" class="button is-danger is-fullwidth">{t("shared.no")}</button>
+        <button id="confirmYes" class="button is-primary is-fullwidth">{t("shared.yes")}</button>
     </footer>
 </Base>
 
 <script>
+    import { t } from "../../core/shared/infrastructure/i18n";
+
     const modal = document.getElementById("confirm") as HTMLDivElement;
     const modalClose = modal.querySelector('.delete') as HTMLButtonElement;
     const modalMessage = document.getElementById("confirmMessage") as HTMLParagraphElement;
@@ -23,17 +30,23 @@ const { title = "Warning" } = Astro.props;
 
     modalNo!.onclick = () => modal!.classList.remove('is-active');
 
-    window.showConfirm = (message: string, title: string = "Warning", yesAction?: () => void) => {
+    window.showConfirm = (message: string, title: string = "Warning", 
+        yesAction?: () => void, 
+        noAction?: () => void) => {
         if (modalMessage) modalMessage.innerHTML = message;
-        if (modal!.querySelector('.modal-card-title')) 
-            modal!.querySelector('.modal-card-title')!.textContent = title;
+        if (modal!.querySelector('.modal-card-title')) {
+            const tTitle = (title === "Warning") ? t("shared.warning") : title;
+            modal!.querySelector('.modal-card-title')!.textContent = tTitle;
+        }
         modal!.classList.add('is-active');
 
         modalClose!.onclick = () => {
             modal!.classList.remove("is-active");
+            if (noAction) noAction();
         }
         modalNo!.onclick = () => {
             modal!.classList.remove('is-active');
+            if (noAction) noAction();
         }
         modalYes!.onclick = () => {
             modal!.classList.remove('is-active');

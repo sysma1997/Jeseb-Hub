@@ -3,7 +3,10 @@ import dayjs from "dayjs";
 import { Api } from "../../core/shared/infrastructure/Api";
 import { User } from "../../core/user/domain/User";
 import type { UserRepository } from "../../core/user/domain/UserRepository";
+import { t } from "../../core/shared/infrastructure/i18n";
+import { MessageBuilder } from "../../core/shared/domain/MessageBuilder";
 
+const icon = document.getElementById("iIPIcon") as HTMLElement;
 const photo = document.getElementById("iIPPhoto") as HTMLImageElement;
 const photoEdit = document.getElementById("btnIPPhotoEdit") as HTMLButtonElement;
 const photoFile = document.getElementById("iIPPhotoEdit") as HTMLInputElement;
@@ -19,7 +22,7 @@ const ienUpdate = document.getElementById("btnIENUpdate") as HTMLButtonElement;
 
 const informationEditEmail = document.getElementById("dInformationEditEmail") as HTMLDivElement;
 const ieeInput = document.getElementById("iIEEInput") as HTMLInputElement;
-const ieeiVerificate = document.getElementById("btnIEEVerificate") as HTMLButtonElement;
+const ieeiVerify = document.getElementById("btnIEEVerify") as HTMLButtonElement;
 const ieeCodeVerification = document.getElementById("dIEECodeVerification") as HTMLDivElement;
 const ieecvInput = document.getElementById("iIEECVInput") as HTMLInputElement;
 const ieeCancel = document.getElementById("btnIEECancel") as HTMLButtonElement;
@@ -34,15 +37,26 @@ const lastUpdate = document.getElementById("sILastUpdate") as HTMLSpanElement;
 
 const mimesValid = [ 'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp' ];
 
+const setImageProfile = (profile: string | undefined) => {
+    if (profile) {
+        photo.src = `${Api.BackendUrl}${profile}`;
+        photo.style.display = "block";
+        icon.style.display = "none";
+    }
+    else {
+        icon.style.display = "block";
+        photo.style.display = "none";
+    }
+};
 const setInformation = (user: User) => {
     name.innerText = user.name;
     isEmail.innerText = user.email;
 
-    if (user.profile) photo.src = `${Api.BackendUrl}${user.profile}`;
-    createdAt.innerHTML = `Created at: <small>${dayjs(user.createAt).format("DD/MM/YYYY HH:mm:ss")}</small>`;
+    setImageProfile(user.profile);
+    createdAt.innerHTML = t("profile.information.createAt", { date: dayjs(user.createAt).format("DD/MM/YYYY HH:mm:ss") });
     if (user.lastUpdate) {
         lastUpdate.style.display = "block";
-        lastUpdate.innerHTML = `Last update: <small>${dayjs(user.lastUpdate).format("DD/MM/YYYY HH:mm:ss")}</small>`;
+        lastUpdate.innerHTML = t("profile.information.lastUpdate", { date: dayjs(user.lastUpdate).format("DD/MM/YYYY HH:mm:ss") });
     }
 
     ienInput.placeholder = user.name;
@@ -58,13 +72,10 @@ export const setup = (user: User, repository: UserRepository) => {
     photoFile.addEventListener("change", async () => {
         const file = photoFile.files?.[0];
         if (!file) {
-            photo.src = (user.profile) ? 
-                `${Api.BackendUrl}${user.profile}` : "/assets/images/profile.png";
             return;
         }
         if (!mimesValid.includes(file.type)) {
-            photo.src = (user.profile) ? 
-                `${Api.BackendUrl}${user.profile}` : "/assets/images/profile.png";
+            setImageProfile(user.profile);
             window.showAlert(`Invalid mime, only valid: ${mimesValid.join(", ")}`);
             return;
         }
@@ -72,14 +83,15 @@ export const setup = (user: User, repository: UserRepository) => {
         try {
             await repository.updateProfile(file);
             photo.src = URL.createObjectURL(file);
+            photo.style.display = "block";
+            icon.style.display = "none";
         } catch (err: any) {
             if (err instanceof Error) {
                 console.error(err);
                 window.showAlert(err.message);
             }
 
-            photo.src = (user.profile) ? 
-                `${Api.BackendUrl}${user.profile}` : "/assets/images/profile.png";
+            setImageProfile(user.profile);
         }
     });
     updateName.onclick = () => {
@@ -106,21 +118,21 @@ export const setup = (user: User, repository: UserRepository) => {
     };
     ienUpdate.onclick = () => {
         if (!ienInput.value) {
-            window.showAlert("The name is required.");
+            window.showAlert(t("shared.nameRequired"));
             return;
         }
         if (ienInput.value === user.name) {
-            window.showAlert("The name is the same one you are using on this account.");
+            window.showAlert(t("profile.information.updateName.same"));
             return;
         }
 
         ienUpdate.classList.add("is-loading");
         ienUpdate.disabled = true;
-        window.showConfirm(`Update the name to '${ienInput.value}'?`, "Update name", async () => {
+        window.showConfirm(t("profile.information.updateName.confirm", { name: ienInput.value }), t("profile.information.updateName.title"), async () => {
             try {
                 const result = await repository.updateName(ienInput.value);
 
-                window.showAlert(result, "Update name", () => {
+                window.showAlert(result, t("profile.information.updateName.title"), () => {
                     user = user.setName(ienInput.value)
                         .setLastUpdate(dayjs().toDate());
                     setInformation(user);
@@ -139,34 +151,37 @@ export const setup = (user: User, repository: UserRepository) => {
                 ienUpdate.classList.remove("is-loading");
                 ienUpdate.disabled = false;
             }
+        }, () => {
+            ienUpdate.classList.remove("is-loading");
+            ienUpdate.disabled = false;
         });
     }
 
     ieeInput.addEventListener("keydown", (event: KeyboardEvent) => {
         if (event.key === "Enter") {
             event.preventDefault();
-            ieeiVerificate.click();
+            ieeiVerify.click();
         }
     });
-    ieeiVerificate.onclick = () => {
+    ieeiVerify.onclick = () => {
         if (!ieeInput.value) {
-            window.showAlert("The email is required.");
+            window.showAlert(t("shared.emailRequired"));
             return;
         }
         if (!User.IsValidEmail(ieeInput.value)) {
-            window.showAlert(`The '${ieeInput.value}' is not email valid.`);
+            window.showAlert(t("shared.emailInvalid"));
             return;
         }
         if (ieeInput.value == user.email) {
-            window.showAlert("The email is the same one you are using on this account.");
+            window.showAlert(t("profile.information.updateEmail.same"));
             return;
         }
 
-        window.showConfirm(`Update the email to '${ieeInput.value}'?`, "Update email", async () => {
+        window.showConfirm(t("profile.information.updateEmail.confirm", { email: ieeInput.value }), t("profile.information.updateEmail.title"), async () => {
             try {
                 const result = await repository.requestUpdateEmail(ieeInput.value);
 
-                window.showAlert(result, "Code verification");
+                window.showAlert(result, t("shared.codeVerification"));
                 ieeCodeVerification.style.display = "block";
                 ieeUpdate.disabled = false;
             } catch (err: any) {
@@ -184,25 +199,20 @@ export const setup = (user: User, repository: UserRepository) => {
     };
     ieeUpdate.onclick = async () => {
         if (!ieeInput.value || !ieecvInput.value) {
-            let message = "";
-            let lineBreak = 0;
+            const message = new MessageBuilder(true);
 
-            if (!ieeInput.value) {
-                message += "The email is required.";
-                lineBreak++;
-            }
-            if (!ieecvInput.value) message += ((lineBreak > 0) ? "</br>" : "") + 
-                "The code verification is required.";
+            if (!ieeInput.value) message.add(t("shared.emailRequired"));
+            if (!ieecvInput.value) message.add(t("shared.codeVerificationRequired"));
             
-            window.showAlert(message);
+            window.showAlert(message.toString());
             return;
         }
         if (!User.IsValidEmail(ieeInput.value)) {
-            window.showAlert(`The '${ieeInput.value}' is not email valid.`);
+            window.showAlert(t("shared.emailInvalid"));
             return;
         }
         if (ieecvInput.value.length !== 6) {
-            window.showAlert("The code does not have 6 digits.");
+            window.showAlert(t("shared.codeVerificationInvalid"));
             return
         }
 
@@ -211,7 +221,7 @@ export const setup = (user: User, repository: UserRepository) => {
         try {
             const result = await repository.updateEmail(ieeInput.value, Number(ieecvInput.value));
 
-            window.showAlert(result, "Update email", () => {
+            window.showAlert(result, t("profile.information.updateEmail.title"), () => {
                 user = user.setEmail(ieeInput.value)
                     .setLastUpdate(dayjs().toDate());
                 setInformation(user);

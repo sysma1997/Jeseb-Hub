@@ -1,0 +1,37 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getLocaleFromUrl, createTranslations } from "../../core/shared/infrastructure/i18n/server";
+
+import Layout from "../../layouts/Layout.astro";
+import Locale from "../../layouts/Locale.astro";
+import Form from "../../components/Form.astro";
+
+import jeseb from "../../assets/images/jeseb.png";
+
+import "../../styles/validation.css";
+
+export const getStaticPaths = (() => {
+    return [
+        { params: { lang: "en" } }, 
+		{ params: { lang: "es" } }
+    ];
+}) satisfies GetStaticPaths;
+
+const locale = getLocaleFromUrl(Astro.url);
+const t = createTranslations(locale);
+---
+
+<Layout locale={locale} title={t("validation.title")}>
+    <Locale locale={locale} />
+    <div class="container">
+        <img class="icon" src={jeseb.src} alt="Jeseb Hub" />
+        <Form title={t("validation.title")}>
+            <div class="content">
+                <p id="pMessage">{t("validation.description")}</p>
+            </div>
+            <button id="btnValidating" class="button is-primary is-fullwidth is-loading" disabled>Login</button>
+        </Form>
+    </div>
+
+    <script>import "../../scripts/validation";</script>
+</Layout>

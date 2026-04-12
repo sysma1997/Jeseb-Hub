@@ -1,6 +1,8 @@
 import { User } from "../../core/user/domain/User";
 import type { UserConfig } from "../../core/user/domain/User";
 import type { UserRepository } from "../../core/user/domain/UserRepository";
+import { t } from "../../core/shared/infrastructure/i18n";
+import { MessageBuilder } from "../../core/shared/domain/MessageBuilder";
 
 const updatePassword = document.getElementById("btnSUpdatePassword") as HTMLButtonElement;
 const updateTwoStep = document.getElementById("btnSUpdateTwoStep") as HTMLButtonElement;
@@ -60,23 +62,17 @@ export const setup = (user: User, repository: UserRepository) => {
     mupCancel.onclick = () => mupClickCancel();
     mupAccept.onclick = async () => {
         if (!mupCurrentPassword.value || !mupNewPassword.value || !mupConfirmPassword.value) {
-            let message = "";
-            let lineBreak = 0;
+            const message = new MessageBuilder(true);
 
-            if (!mupCurrentPassword.value) {
-                message += "Current password is required.";
-                lineBreak++;
-            }
-            if (!mupNewPassword.value) message += ((lineBreak++ > 0) ? "</br>" : "") + 
-                "New password is required.";
-            if (!mupConfirmPassword.value) message += ((lineBreak > 0) ? "</br>" : "") + 
-                "Confirm password is required."
+            if (!mupCurrentPassword.value) message.add(t("shared.passwordCurrentRequired"));
+            if (!mupNewPassword.value) message.add(t("shared.passwordNewRequired"));
+            if (!mupConfirmPassword.value) message.add(t("shared.passwordConfirmRequired"));
 
-            window.showAlert(message);
+            window.showAlert(message.toString());
             return;
         }
         if (mupNewPassword.value !== mupConfirmPassword.value) {
-            window.showAlert("New password and confirm password do not match.");
+            window.showAlert(t("shared.passwordNewDontMatch"));
             return;
         }
 
@@ -85,7 +81,7 @@ export const setup = (user: User, repository: UserRepository) => {
         try {
             const result = await repository.updatePassword(mupCurrentPassword.value, mupNewPassword.value);
 
-            window.showAlert(result, "Update password", () => {
+            window.showAlert(result, t("shared.passwordUpdate"), () => {
                 mupAccept.classList.remove("is-loading");
                 mupAccept.disabled = false;
                 mupClickCancel();
@@ -112,9 +108,10 @@ export const setup = (user: User, repository: UserRepository) => {
 
         mutsAccept.classList.add("is-loading");
         mutsAccept.disabled = true;
-        let message =  `${((active) ? "Active" : "Disable")} two step?</br>` + 
-            `Then you can ${((active) ? "activate" : "deactivate")} it again.`
-        window.showConfirm(message, "Update two step", async () => {
+        let message =  `${((active) ? t("profile.security.active") : t("profile.security.deactivate"))} ` + 
+            `${t("shared.codeVerification").toLocaleLowerCase()}?</br>` + 
+            t("profile.security.confirm", { value: ((active) ? t("profile.security.deactivate") : t("profile.security.active")).toLocaleLowerCase() });
+        window.showConfirm(message, t("shared.codeVerification"), async () => {
             try {
                 const config: UserConfig = {
                     twoStep: {
@@ -124,7 +121,7 @@ export const setup = (user: User, repository: UserRepository) => {
                 };
                 const result = await repository.updateTwoStep(config);
 
-                window.showAlert(result, "Update two step", () => {
+                window.showAlert(result, t("shared.codeVerification"), () => {
                     user = user.setConfig(config);
                     mutsActive.checked = config.twoStep.active;
                     mutsAccept.classList.remove("is-loading");
@@ -140,6 +137,9 @@ export const setup = (user: User, repository: UserRepository) => {
                 mutsAccept.classList.remove("is-loading");
                 mutsAccept.disabled = false;
             }
+        }, () => {
+            mutsAccept.classList.remove("is-loading");
+            mutsAccept.disabled = false;
         });
     };
 };

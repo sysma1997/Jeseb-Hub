@@ -1,0 +1,46 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getLocaleFromUrl, createTranslations } from "../../core/shared/infrastructure/i18n/server";
+
+import { Icon } from "astro-icon/components";
+
+import Layout from "../../layouts/Layout.astro";
+import Menu from "../../layouts/Menu.astro";
+
+import Alert from "../../components/modals/Alert.astro";
+import Prompt from "../../components/modals/Prompt.astro";
+import Confirm from "../../components/modals/Confirm.astro";
+
+import { List } from "../../components/accounts/List";
+
+import "../../styles/accounts/index.css";
+
+export const getStaticPaths = (() => {
+    return [
+        { params: { lang: "en" } }, 
+        { params: { lang: "es" } }
+    ];
+}) satisfies GetStaticPaths;
+
+const locale = getLocaleFromUrl(Astro.url);
+const t = createTranslations(locale);
+---
+
+<Layout locale={locale} title={t("account.title")}>
+    <Menu locale={locale} />
+
+    <div class="accounts">
+        <div class="accountsContent">
+            <List client:only="read" />
+        </div>
+    </div>
+
+    <button id="btnAdd" class="button is-primary">
+        <Icon name="material-symbols:add-2-rounded" width={24} height={24} />
+    </button>
+
+    <Prompt locale={locale} />
+    <Confirm locale={locale} />
+    <Alert locale={locale} />
+    <script>import "../../scripts/accounts";</script>
+</Layout>

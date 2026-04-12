@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
+import { t } from "../../core/shared/infrastructure/i18n";
 
 import { Category } from "../../core/category/domain/Category";
 import type { CategoryRepository } from "../../core/category/domain/CategoryRepository";
@@ -49,12 +50,12 @@ export const List = () => {
     };
 
     const clickUpdate = (category: Category) => {
-        window.showPrompt("Enter the new name for this category", "Update category", (value: string) => {
-            window.showConfirm(`Update name category with '${value}'?`, "Update category", async () => {
+        window.showPrompt(t("category.update.description"), t("category.update.title"), (value: string) => {
+            window.showConfirm(t("category.update.confirm", { name: value }), t("category.update.title"), async () => {
                 category = category.setName(value);
                 try {
                     await repository.update(category);
-                    window.showAlert("Update category successfully.", "Update category", () => {
+                    window.showAlert(t("category.update.response"), t("category.update.title"), () => {
                         let cat: Category[] = [...pagination.list!];
 
                         cat = cat.map(ca => {
@@ -78,10 +79,10 @@ export const List = () => {
         });
     };
     const clickDelete = (id: string, name: string) => {
-        window.showConfirm(`Delete this category '${name}'?`, "Delete category", async () => {
+        window.showConfirm(t("category.delete.confirm", { name }), t("category.delete.title"), async () => {
             try {
                 await repository.delete(id);
-                window.showAlert("Delete category successfully.", "Delete category", () => {
+                window.showAlert(t("category.delete.response"), t("category.delete.title"), () => {
                     let cat: Category[] = [...pagination.list!];
 
                     cat = cat.filter(ac => ac.id! !== id);
@@ -114,19 +115,19 @@ export const List = () => {
 
     return <div className="categoriesList card">
         <header className="card-header">
-            <h2 className="card-header-title">Categories</h2>
+            <h2 className="card-header-title">{t("category.title")}</h2>
         </header>
         <div className="card-content">
             <div className="content">
-                {(pagination.list.length === 0) && <p className="noContent">There are not categories to show.</p>}
+                {(pagination.list.length === 0) && <p className="noContent">{t("category.noItems")}</p>}
                 {(pagination.list.length > 0) && <>
                     <div className="table-container">
                         <table className="table is-fullwidth">
                             <thead>
                                 <tr>
-                                    <th className="oneHundredPercent">Name</th>
-                                    <th>Edit</th>
-                                    <th>Remove</th>
+                                    <th className="oneHundredPercent">{t("shared.name")}</th>
+                                    <th>{t("shared.edit")}</th>
+                                    <th>{t("shared.remove")}</th>
                                 </tr>
                             </thead>
                             <tbody>

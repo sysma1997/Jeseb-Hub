@@ -1,7 +1,12 @@
 import { Base } from "../../shared/domain/Base";
 import { User, UserDto } from "../../user/domain/User";
 
+import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
+import { MessageBuilder } from "../../shared/domain/MessageBuilder";
+
 export class Account implements Base {
+    private readonly translator: TranslatorRepository;
+    
     public readonly name: string;
     public readonly balance: number;
 
@@ -10,14 +15,15 @@ export class Account implements Base {
 
     public readonly user?: User | undefined;
 
-    constructor(name: string, balance: number = 0, 
+    constructor(translator: TranslatorRepository, 
+        name: string, balance: number = 0, 
         id?: string | undefined, 
         idUser?: string | undefined, 
         user?: User | undefined) {
+        this.translator = translator;
+
         if (!name) 
-            throw new Error("The name is required.");
-        if (name.includes(" "))
-            throw new Error("The account name cannot contain spaces.");
+            throw new Error(translator.translate("accounts.errors.nameRequired"));
 
         this.name = name;
         this.balance = balance;
@@ -28,41 +34,36 @@ export class Account implements Base {
         this.user = user;
     }
 
-    static FromDto(dto: AccountDto): Account {
+    static FromDto(translator: TranslatorRepository, dto: AccountDto): Account {
         if (!dto.name || 
             !dto.balance) {
-            let message = "";
-            let lineBreak = 0;
+            const message = new MessageBuilder(true);
 
-            if (!dto.name) {
-                message += "The name is required.";
-                lineBreak++;
-            }
-            if (!dto.balance) message += ((lineBreak > 0) ? "\n" : "") + 
-                "The balance is required.";
+            if (!dto.name) message.add(translator.translate("accounts.errors.nameRequired"));
+            if (!dto.balance) message.add(translator.translate("accounts.errors.balanceRequired"));
 
-            throw new Error(message);
+            throw new Error(message.toString());
         }
 
-        let user: User | undefined = (dto.user) ? User.FromDto(dto.user) : undefined;
-        return new Account(dto.name, Number(dto.balance), 
+        let user: User | undefined = (dto.user) ? User.FromDto(translator, dto.user) : undefined;
+        return new Account(translator, dto.name, Number(dto.balance), 
             dto.id, dto.idUser,
             user);
     }
 
     setName(name: string): Account {
-        return new Account(name, Number(this.balance), 
+        return new Account(this.translator, name, Number(this.balance), 
             this.id, this.idUser, 
             this.user);
     }
 
     ingressBalance(value: number): Account {
-        return new Account(this.name, Number(this.balance) + Number(value), 
+        return new Account(this.translator, this.name, Number(this.balance) + Number(value), 
             this.id, this.idUser, 
             this.user);
     }
     egressBalance(value: number): Account {
-        return new Account(this.name, Number(this.balance) - Number(value), 
+        return new Account(this.translator, this.name, Number(this.balance) - Number(value), 
             this.id, this.idUser, 
             this.user);
     }

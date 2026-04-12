@@ -6,6 +6,7 @@ import Papa from "papaparse";
 import { Transaction } from "../../core/transaction/domain/Transaction";
 import type { TransactionDto } from "../../core/transaction/domain/Transaction"; 
 import type { TransactionRepository } from "../../core/transaction/domain/TransactionRepository";
+import { t } from "../../core/shared/infrastructure/i18n";
 
 dayjs.extend(dayjsUtc);
 
@@ -117,12 +118,12 @@ export const setup = (repository: TransactionRepository) => {
 
             progressBar.removeAttribute("value");
             progressBar.style.display = "none";
-            window.showAlert("Transactions add successfully.", "Transactions");
+            window.showAlert(t("profile.data.import.response"), t("profile.data.import.title"));
         };
         input.click();
     };
     exportCsv.onclick = () => {
-        window.showConfirm("Do you want to export your transactions to a CSV file?", "Export transactions", () => {
+        window.showConfirm(t("profile.data.export.confirm"), t("profile.data.export.title"), () => {
             if (progressBar.style.display === "none") progressBar.style.display = "block";
             progressBar.removeAttribute("value");
 
@@ -179,7 +180,7 @@ export const setup = (repository: TransactionRepository) => {
     showApiUrl.onclick = () => {
         try {
             const apiUrl = import.meta.env.PUBLIC_BACKEND_URL;
-            if (apiUrl) window.showAlert(`The current API url is: <a href="${apiUrl}" target="_blank">${apiUrl}</a>`, "API URL");
+            if (apiUrl) window.showAlert(t("profile.data.backend", { url: apiUrl }), "API URL");
         } catch (err: any) {
             if (err instanceof Error) {
                 console.error(err);

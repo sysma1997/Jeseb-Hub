@@ -7,6 +7,8 @@ import multer from "multer";
 
 import { ControllerBase } from "./core/shared/infrastructure/ControllerBase";
 
+import { translateMiddleware } from "./core/shared/infrastructure/express/translate.middleware";
+
 import { UserRepository } from "./core/user/domain/UserRepository";
 import { UserPrismaRepository } from "./core/user/infrastructure/UserPrismaRepository";
 import { UserController } from "./core/user/infrastructure/UserController";
@@ -21,7 +23,10 @@ import { CategoryRepository } from "./core/category/domain/CategoryRepository";
 import { CategoryPrismaRepository } from "./core/category/infrastructure/CategoryPrismaRepository";
 import { CategoryController } from "./core/category/infrastructure/CategoryController";
 
-const PORT = process.env.PORT;
+import { TranslatorRepository } from "./core/shared/domain/TranslatorRepository";
+import { TranslatorI18nRepository } from "./core/shared/infrastructure/i18next/index";
+
+const PORT = process.env.PORT ?? 3000;
 const FRONTEND_URL = (process.env.FRONTEND_URL) ? 
     process.env.FRONTEND_URL : "http://localhost:8000";
 
@@ -43,31 +48,34 @@ const corsOptions = {
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']
 };
 
-const app = express();
+const translator: TranslatorRepository = new TranslatorI18nRepository();
 const prisma = new PrismaClient();
 
-const userRepository: UserRepository = new UserPrismaRepository(prisma);
-const userController: ControllerBase = new UserController(userRepository);
-const transactionRepository: TransactionRepository = new TransactionPrismaRepository(prisma);
-const accountRepository: AccountRepository = new AccountPrismaRepository(prisma);
-const accountController: ControllerBase = new AccountController(accountRepository);
-const categoryRepository: CategoryRepository = new CategoryPrismaRepository(prisma);
-const categoryController: ControllerBase = new CategoryController(categoryRepository);
-const transactionService: TransactionService = new TransactionService(transactionRepository, accountRepository, categoryRepository);
-const transactionController: ControllerBase = new TransactionController(transactionRepository, transactionService);
+const userRepository: UserRepository = new UserPrismaRepository(prisma, translator);
+const userController: ControllerBase = new UserController(userRepository, translator);
+const transactionRepository: TransactionRepository = new TransactionPrismaRepository(prisma, translator);
+const accountRepository: AccountRepository = new AccountPrismaRepository(prisma, translator);
+const accountController: ControllerBase = new AccountController(accountRepository, translator);
+const categoryRepository: CategoryRepository = new CategoryPrismaRepository(prisma, translator);
+const categoryController: ControllerBase = new CategoryController(categoryRepository, translator);
+const transactionService: TransactionService = new TransactionService(transactionRepository, accountRepository, categoryRepository, translator);
+const transactionController: ControllerBase = new TransactionController(transactionRepository, transactionService, translator);
 
 userController.setup();
 transactionController.setup();
 accountController.setup();
 categoryController.setup();
 
+const app = express();
+
+app.use(translateMiddleware);
 app.use(cors(corsOptions));
 app.use(express.json({ limit: "5mb" }));
 app.use(express.urlencoded({ limit: "5mb", extended: true }));
 app.use("/uploads", express.static("uploads"));
 
 app.get("/", (_, res) => {
-    res.send("Jeseb Api: v1.0.0");
+    res.send("Jeseb Api: v1.1.0");
 });
 
 app.use("/api/user", userController.getRouter());

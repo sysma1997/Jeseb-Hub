@@ -10,6 +10,7 @@ import { TransactionApiRepository } from "../../core/transaction/infrastructure/
 import { Pagination } from "../../core/shared/domain/Pagination";
 import { FormatNumber } from "../../core/shared/domain/FormatNumber";
 import { Attach, Detach, Notify } from "../../core/shared/domain/Subject";
+import { t } from "../../core/shared/infrastructure/i18n";
 
 import { Pagination as CPagination } from "../shared/Pagination";
 
@@ -25,7 +26,7 @@ export const TransactionList = () => {
     const [page, setPage] = useState<number>(1);
 
     useEffect(() => {
-        repository.getList(15).then((pagination: Pagination<Transaction>) => {
+        repository.getList(limit).then((pagination: Pagination<Transaction>) => {
             setPagination(pagination);
         });
     }, []);
@@ -72,7 +73,7 @@ export const TransactionList = () => {
         Notify("transaction:showUpdate", transaction);
     };
     const clickDelete = (id: string) => {
-        window.showConfirm("Delete this transaction?", "Delete transaction", async () => {
+        window.showConfirm(t("index.transactions.delete.description"), t("index.transactions.delete.title"), async () => {
             try {
                 await repository.delete(id);
                 let tra: Transaction[] = [...pagination.list!];
@@ -87,7 +88,7 @@ export const TransactionList = () => {
                 newPagination.list = tra;
                 newPagination.pages = pagination.pages;
                 setPagination(newPagination);
-                window.showAlert("Delete transaction successfully.", "Delete transaction");
+                window.showAlert(t("index.transactions.delete.success"), t("index.transactions.delete.title"));
             } catch (err: any) {
                 if (err instanceof Error) {
                     console.error(err);
@@ -107,20 +108,20 @@ export const TransactionList = () => {
 
     return <div className="transactionsList card">
         <header className="card-header">
-            <h2 className="card-header-title">Transactions</h2>
+            <h2 className="card-header-title">{t("index.transactions.title")}</h2>
         </header>
         <div className="card-content">
             <div className="content">
-                {(pagination.list.length === 0) && <p className="noContent">There are not transactions to show.</p>}
+                {(pagination.list.length === 0) && <p className="noContent">{t("index.transactions.noItems")}</p>}
                 {(pagination.list.length > 0) && <>
                     <div className="table-container">
                         <table className="table is-fullwidth">
                             <thead>
                                 <tr>
-                                    <th className="fiftyPercent">Account</th>
-                                    <th>Value</th>
-                                    <th>Date</th>
-                                    <th>Options</th>
+                                    <th className="fiftyPercent">{t("index.transactions.account")}</th>
+                                    <th>{t("index.transactions.value")}</th>
+                                    <th>{t("index.transactions.date")}</th>
+                                    <th>{t("index.transactions.options")}</th>
                                 </tr>
                             </thead>
                             <tbody>

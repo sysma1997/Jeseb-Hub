@@ -39,7 +39,8 @@
 #dInformation .dInformationPhoto .dInformationPhotoProfile {
     position: relative;
 }
-#dInformation .dInformationPhoto #iIPPhoto {
+#dInformation .dInformationPhoto #iIPPhoto, 
+#dInformation .dInformationPhoto #iIPIcon {
     background-color: #00d1b2;
     border-radius: 50%;
     object-fit: cover;
@@ -83,4 +84,19 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+}
+
+@media screen and (max-width: 1024px) {
+    .profile {
+        padding: 1rem;
+    }
+    .profile .profile-content {
+        width: 100%;
+
+        flex-direction: column;
+    }
+    .profile .profile-content .menu .menu-list {
+        display: flex;
+        overflow: auto;
+    }
 }

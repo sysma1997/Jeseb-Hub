@@ -4,6 +4,8 @@ import dayjsUtc from "dayjs/plugin/utc.js";
 import { User } from "../core/user/domain/User";
 import type { UserRepository } from "../core/user/domain/UserRepository";
 import { UserApiRepository } from "../core/user/infrastructure/UserApiRepository";
+import { getLocale, t } from "../core/shared/infrastructure/i18n";
+import { MessageBuilder } from "../core/shared/domain/MessageBuilder";
 
 dayjs.extend(dayjsUtc);
 
@@ -11,6 +13,8 @@ const repository: UserRepository = new UserApiRepository();
 
 const email = document.getElementById("inEmail") as HTMLInputElement;
 const recover = document.getElementById("btnRecover") as HTMLButtonElement;
+
+const locale = getLocale();
 
 email.addEventListener("keydown", (event: KeyboardEvent) => {
     if (event.key === "Enter") {
@@ -20,11 +24,11 @@ email.addEventListener("keydown", (event: KeyboardEvent) => {
 });
 recover.onclick = async () => {
     if (!email.value) {
-        window.showAlert("Please fill in all fields.");
+        window.showAlert(t("shared.emailRequired"));
         return;
     }
     if (!User.IsValidEmail(email.value)) {
-        window.showAlert("Please enter a valid email.");
+        window.showAlert(t("shared.emailInvalid"));
         return;
     }
 
@@ -33,7 +37,7 @@ recover.onclick = async () => {
     try {
         const result = await repository.requestRecoverPassword(email.value);
 
-        window.showAlert(result, "Request recover email");
+        window.showAlert(result, t("recover.emailRequest"));
         recover.classList.remove("is-loading");
         recover.disabled = false;
     } catch (err: any) {
@@ -56,7 +60,7 @@ if (search.get("token")) {
     document.getElementById("dEmail")!.style.display = "none";
     document.getElementById("dPassword")!.style.display = "block";
     document.getElementById("dConfirmPassword")!.style.display = "block";
-    recover.innerText = "Update password";
+    recover.innerText = t("shared.passwordUpdate");
 
     password.addEventListener("keydown", (event: KeyboardEvent) => {
         if (event.key === "Enter") {
@@ -72,21 +76,16 @@ if (search.get("token")) {
     });
     recover.onclick = async () => {
         if (!password.value || !confirmPassword.value) {
-            let message = "";
-            let lineBreak = 0;
+            const message = new MessageBuilder(true);
 
-            if (!password.value) {
-                message += "Password is required.";
-                lineBreak++;
-            }
-            if (!confirmPassword.value) message += (lineBreak++ > 0 ? "</br>" : "") + 
-                "Confirm password is required.";
+            if (!password.value) message.add(t("shared.passwordRequired"));
+            if (!confirmPassword.value) message.add(t("shared.passwordConfirmRequired"));
 
-            window.showAlert(message);
+            window.showAlert(message.toString());
             return;
         }
         if (password.value !== confirmPassword.value) {
-            window.showAlert("Passwords do not match.");
+            window.showAlert(t("shared.passwordDontMatch"));
             return;
         }
 
@@ -95,8 +94,8 @@ if (search.get("token")) {
         try {
             const result = await repository.recoverPassword(token, password.value);
             
-            window.showAlert(result, "Recover password", () => {
-                window.location.href = "/login";
+            window.showAlert(result, t("recover.recoverPassword"), () => {
+                window.location.href = `/${locale}/login`;
             });
             recover.classList.remove("is-loading");
             recover.disabled = false;
