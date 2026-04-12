@@ -1,0 +1,124 @@
+{
+    "accounts": {
+        "errors": {
+            "idRequired": "The id is required.",
+            "nameRequired": "The name is required.", 
+            "balanceRequired": "The balance is required.", 
+            "nameAlreadyExists": "The account with name '{{name}}' already exists.", 
+            "notFound": "Account not found."
+        }, 
+        "success": {
+            "accountAdded": "Account added successfully.", 
+            "accountUpdated": "Account updated successfully.", 
+            "accountDeleted": "Account deleted successfully."
+        }
+    }, 
+    "categories": {
+        "errors": {
+            "idRequired": "The id is required.",
+            "nameRequired": "The name is required.", 
+            "nameAlreadyExists": "The category with name '{{name}}' already exists."
+        }, 
+        "success": {
+            "categoryAdded": "Category added successfully.", 
+            "categoryUpdated": "Category updated successfully.", 
+            "categoryDeleted": "Category deleted successfully."
+        }
+    }, 
+    "transactions": {
+        "errors": {
+            "idRequired": "The date for transaction is required.", 
+            "dateRequired": "The date for transaction is required.",
+            "typeRequired": "The type (ingress, egress) for transaction is required.", 
+            "accountRequired": "The account for transaction is required.", 
+            "valueRequired": "The value must be greater than 0.", 
+            "notFound": "Transaction not found or not exists.", 
+            "invalidFormat": "Invalid transactions format.",
+            "exceedLimit": "The number of transactions entered in chunks cannot exceed 500.", 
+            "noTransactionsToExport": "There are no transactions to export."
+        }, 
+        "success": {
+            "transactionAdded": "Transaction added successfully.", 
+            "transactionUpdated": "Transaction updated successfully.", 
+            "transactionDeleted": "Transaction deleted successfully.", 
+            "transactionsAdded": "Transactions added successfully."
+        }
+    }, 
+    "users": {
+        "errors": {
+            "nameRequired": "The name for user is required.", 
+            "emailRequired": "The email for user is required.",
+            "passwordRequired": "The password for user is required.", 
+            "emailInvalid": "The '{{email}}' is not a valid email.", 
+            "passwordInvalid": "The password is not valid, please check that it is in SHA256.", 
+            "emailExists": "The email '{{email}}' already exists.", 
+            "emailAlreadyExists": "The email '{{email}}' already exists in another account.", 
+            "notFound": "User not found or not exists.", 
+            "passwordIncorrect": "The current password is incorrect.", 
+            "emailNotFound": "The email '{{email}}' is not found.", 
+            "codeNotFound": "Verification code not found or not exists.", 
+            "codeNotMatch": "The code entered does not match the verification code.", 
+            "tokenRequired": "Token is required.", 
+            "imageRequired": "The image file is required.", 
+            "codeRequired": "The code verification is required.", 
+            "codeInvalid": "The code does not have 6 digits.", 
+            "currentPasswordRequired": "The current password is required.",
+            "newPasswordRequired": "The new password is required.", 
+            "activeRequired": "Active is required.", 
+            "typeRequired": "The type is required.", 
+            "currentUserError": "Error to get current user."
+        }, 
+        "success": {
+            "registrationSent": "We have sent an email to {{email}} to confirm your registration.", 
+            "userAdded": "User added successfully.", 
+            "loginTwoFactor": "We have sent an email to {{email}} to login with two-factor authentication.", 
+            "passwordRecovery": "We have sent an email to {{email}} to recover your user.", 
+            "passwordUpdated": "User updating password success.", 
+            "emailUpdated": "We have sent an email to {{email}} to update to your new email address.", 
+            "nameUpdated": "User updating name successful.", 
+            "emailUpdateSuccessful": "Email update successful.", 
+            "passwordUpdateSuccessful": "Password update successful.", 
+            "twoFactorUpdated": "Two factor update successful."
+        }, 
+        "email": {
+            "confirmRegister": "Confirm your registration", 
+            "validateToken": "Validate token", 
+            "twoFactor": "Two factor", 
+            "passwordRecovery": "Recover your user", 
+            "updateEmail": "Updating email", 
+            "verificationEmail": {
+                "welcome": "Welcome to Jeseb Hub", 
+                "confirmation": "Thanks for signing up. Please confirm your email address to start managing your finances.", 
+                "confirmAccount": "Confirm my account"
+            }, 
+            "welcomeEmail": {
+                "verification": "Your Jeseb Hub account has been successfully verified.", 
+                "description": "Now you can start to:", 
+                "track": "📝 Track your income and expenses", 
+                "statistics": "📊 View your financial statistics", 
+                "manage": "🏦 Manage multiple accounts",
+                "export": "📤 Export your data to CSV", 
+                "go": "Go to dashboard"
+            }, 
+            "passwordRecoveryEmail": {
+                "title": "Reset password - Jeseb Hub", 
+                "reset": "Reset your password", 
+                "description": "We received a request to reset your password. Click the button below to create a new one."
+            }, 
+            "twoFactorCode": {
+                "title": "Two Factor Code - Jeseb Hub", 
+                "verification": "Verification Code", 
+                "description": "Use the code below to complete your login. This code is valid for 10 minutes.", 
+                "warning": "🔒 <strong>Security notice:</strong> If you didn't try to log in, change your password immediately.", 
+                "footer": "Never share this code with anyone."
+            }, 
+            "shared": {
+                "hi": "Hi {{name}}!", 
+                "copyLink": "🔗 Or copy this link:", 
+                "warning": "⚠️ <strong>Security notice:</strong> This link expires in 24 hours.", 
+                "footer": "Jeseb Hub — Your personal finance control", 
+                "ignore": "If you didn't create an account, you can safely ignore this email."
+            }
+        }
+    }
+}

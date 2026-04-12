@@ -1,7 +1,12 @@
 ---
+import { createTranslations, type Locale } from "../../core/shared/infrastructure/i18n/server";
+
 import Base from "./Base.astro";
 
-const { title = "Warning" } = Astro.props;
+const locale = Astro.props?.locale ?? "en";
+const t = createTranslations(locale as Locale);
+
+const title = Astro.props?.title ?? t("shared.warning");
 ---
 
 <Base id="alert" title={title}>
@@ -14,6 +19,8 @@ const { title = "Warning" } = Astro.props;
 </Base>
 
 <script>
+    import { t } from "../../core/shared/infrastructure/i18n";
+
     const modal = document.getElementById("alert") as HTMLDivElement;
     const modalClose = modal.querySelector('.delete') as HTMLButtonElement;
     const modalMessage = document.getElementById("alertMessage") as HTMLParagraphElement;
@@ -23,8 +30,10 @@ const { title = "Warning" } = Astro.props;
 
     window.showAlert = (message: string, title: string = "Warning", okAction?: () => void) => {
         if (modalMessage) modalMessage.innerHTML = message;
-        if (modal!.querySelector('.modal-card-title')) 
-            modal!.querySelector('.modal-card-title')!.textContent = title;
+        if (modal!.querySelector('.modal-card-title')) {
+            const tTitle = (title === "Warning") ? t("shared.warning") : title;
+            modal!.querySelector('.modal-card-title')!.textContent = tTitle;
+        }
         modal!.classList.add('is-active');
 
         modalClose!.onclick = () => {

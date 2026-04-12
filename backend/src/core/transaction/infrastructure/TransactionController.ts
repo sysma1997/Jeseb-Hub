@@ -8,16 +8,21 @@ import { Transaction } from "../domain/Transaction";
 import { TransactionRepository } from "../domain/TransactionRepository";
 import { TransactionService } from "../application/TransactionService";
 import { UserAuthenticate } from "../../user/infrastructure/UserAuthenticate";
+import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
+import { MessageBuilder } from "../../shared/domain/MessageBuilder"; 
 
 export class TransactionController extends ControllerBase {
     private readonly repository: TransactionRepository;
     private readonly service: TransactionService;
+    private readonly translator: TranslatorRepository;
 
     constructor(repository: TransactionRepository, 
-        service: TransactionService) {
+        service: TransactionService, 
+        translator: TranslatorRepository) {
         super();
         this.repository = repository;
         this.service = service;
+        this.translator = translator;
     }
 
     setup() {
@@ -26,20 +31,16 @@ export class TransactionController extends ControllerBase {
                 (req.body.type === undefined || req.body.type === null) || 
                 !req.body.account || 
                 !req.body.value) {
-                let message = "";
-                let lineBreak = 0;
+                const message = new MessageBuilder(true);
 
                 if (!req.body.date) {
-                    message += "The date is required.";
-                    lineBreak++;
+                    message.add(this.translator.translate("transactions.errors.dateRequired"));
                 }
-                if (req.body.type === undefined || req.body.type === null) message += ((lineBreak++ > 0) ? "\n" : "") + 
-                    "The type is required.";
-                if (!req.body.account) message += ((lineBreak++ > 0) ? "\n" : "") + 
-                    "The account is required.";
-                if (!req.body.value) message += ((lineBreak > 0) ? "\n" : "") + 
-                    "The value is required.";
-                
+                if (req.body.type === undefined || req.body.type === null) 
+                    message.add(this.translator.translate("transactions.errors.typeRequired"));
+                if (!req.body.account) message.add(this.translator.translate("transactions.errors.accountRequired"));
+                if (!req.body.value) message.add(this.translator.translate("transactions.errors.valueRequired"));
+
                 return res.status(400).send(message);
             }
 
@@ -53,13 +54,13 @@ export class TransactionController extends ControllerBase {
                 const category: string | undefined = req.body.category ?? undefined;
                 const description: string | undefined = req.body.description ?? undefined;
 
-                const transaction = new Transaction(date, type, account, 
+                const transaction = new Transaction(this.translator, date, type, account, 
                     value, 
                     id, idUser, 
                     category, description);
                 await this.service.add(transaction);
 
-                res.status(201).send("Transaction add successfully.");
+                res.status(201).send(this.translator.translate("transaction.success.transactionAdded"));
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
@@ -70,21 +71,14 @@ export class TransactionController extends ControllerBase {
                 (req.body.type === undefined || req.body.type === null) || 
                 !req.body.account || 
                 !req.body.value) {
-                let message = "";
-                let lineBreak = 0;
+                const message = new MessageBuilder();
 
-                if (!req.body.id) {
-                    message += "The id is required.";
-                    lineBreak++;
-                }
-                if (!req.body.data) message += ((lineBreak++ > 0) ? "\n" : "") + 
-                    "The date is required.";
-                if (req.body.type === undefined || req.body.type === null) message += ((lineBreak++ > 0) ? "\n" : "") + 
-                    "The type is required.";
-                if (!req.body.account) message += ((lineBreak++ > 0) ? "\n" : "") + 
-                    "The account is required.";
-                if (!req.body.value) message += ((lineBreak > 0) ? "\n" : "") + 
-                    "The value is required.";
+                if (!req.body.id) message.add(this.translator.translate("transactions.errors.idRequired"));
+                if (!req.body.data) message.add(this.translator.translate("transactions.errors.dateRequired"));
+                if (req.body.type === undefined || req.body.type === null) 
+                    message.add(this.translator.translate("transactions.errors.typeRequired"));
+                if (!req.body.account) message.add(this.translator.translate("transactions.errors.accountRequired"));
+                if (!req.body.value) message.add(this.translator.translate("transactions.errors.valueRequired"));
                 
                 return res.status(400).send(message);
             }
@@ -99,13 +93,13 @@ export class TransactionController extends ControllerBase {
                 const category: string | undefined = req.body.category ?? undefined;
                 const description: string | undefined = req.body.description ?? undefined;
 
-                const transaction = new Transaction(date, type, account, 
+                const transaction = new Transaction(this.translator, date, type, account, 
                     value, 
                     id, idUser, 
                     category, description);
                 await this.service.update(transaction);
 
-                res.status(201).send("Transaction add successfully.");
+                res.status(201).send(this.translator.translate("transaction.success.transactionUpdated"));
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
@@ -116,7 +110,7 @@ export class TransactionController extends ControllerBase {
                 const id: string = this.getQueryString(req.params.id!);
 
                 await this.service.delete(idUser, id);
-                res.send("Transaction delete successfully.");
+                res.send(this.translator.translate("transaction.success.transactionDeleted"));
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
@@ -185,9 +179,9 @@ export class TransactionController extends ControllerBase {
                 const array: any[] = req.body;
 
                 if (!array || !Array.isArray(array)) 
-                    return res.status(400).send("Invalid transactions format.");
+                    return res.status(400).send(this.translator.translate("transactions.errors.invalidFormat"));
                 if (array.length > 500) 
-                    return res.status(400).send("The number of transactions entered in chunks cannot exceed 500.");
+                    return res.status(400).send(this.translator.translate("transactions.errors.exceedLimit"));
 
                 const transactions: Transaction[] = [];
                 for (let i = 0; i < array.length; i++) {
@@ -201,7 +195,7 @@ export class TransactionController extends ControllerBase {
                     const category: string | undefined = item.category ?? undefined;
                     const description: string | undefined = item.description ?? undefined;
 
-                    const transaction = new Transaction(date, type, account, 
+                    const transaction = new Transaction(this.translator, date, type, account, 
                         value, 
                         id, idUser, 
                         category, description);
@@ -209,7 +203,7 @@ export class TransactionController extends ControllerBase {
                 }
 
                 await this.service.addRange(idUser, transactions);
-                res.status(201).send("Transactions add successfully.");
+                res.status(201).send(this.translator.translate("transactions.success.transactionsAdded"));
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
@@ -220,7 +214,7 @@ export class TransactionController extends ControllerBase {
                 const limit: number = 500;
 
                 const totalTransactions = await this.repository.getCount(idUser);
-                if (totalTransactions === 0) return res.status(400).send("There are no transactions to export.");
+                if (totalTransactions === 0) return res.status(400).send(this.translator.translate("transactions.errors.noTransactionsToExport"));
 
                 res.setHeader("Content-Type", "application/json");
                 res.setHeader("Transfer-Encoding", "chunked");

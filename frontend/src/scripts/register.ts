@@ -4,6 +4,8 @@ import dayjsUtc from "dayjs/plugin/utc.js";
 import { User } from "../core/user/domain/User";
 import type { UserRepository } from "../core/user/domain/UserRepository";
 import { UserApiRepository } from "../core/user/infrastructure/UserApiRepository";
+import { t, getLocale } from "../core/shared/infrastructure/i18n";
+import { MessageBuilder } from "../core/shared/domain/MessageBuilder";
 
 dayjs.extend(dayjsUtc);
 
@@ -15,9 +17,11 @@ const password = document.getElementById("inPassword") as HTMLInputElement;
 const confirmPassword = document.getElementById("inConfirmPassword") as HTMLInputElement;
 const register = document.getElementById("btnRegister") as HTMLButtonElement;
 
+const locale = getLocale();
+
 repository.get().then((user: User | undefined) => {
     if (!user) return;
-    window.location.href = "/";
+    window.location.href = `/${locale}`;
 });
 
 name.addEventListener("keydown", (event: KeyboardEvent) => {
@@ -46,26 +50,22 @@ confirmPassword.addEventListener("keydown", (event: KeyboardEvent) => {
 });
 register.onclick = async () => {
     if (!name.value || !email.value || !password.value || !confirmPassword.value) {
-        let message = "";
-        let lineBreak = 0;
+        const message = new MessageBuilder(true);
 
-        if (!name.value) {
-            message += "Name is required.";
-            lineBreak++;
-        }
-        if (!email.value) message += (lineBreak++ > 0 ? "</br>" : "") + "Email is required.";
-        if (!password.value) message += (lineBreak++ > 0 ? "</br>" : "") + "Password is required.";
-        if (!confirmPassword.value) message += (lineBreak++ > 0 ? "</br>" : "") + "Confirm password is required.";
+        if (!name.value) message.add(t("shared.nameRequired"));
+        if (!email.value) message.add(t("shared.emailRequired"));
+        if (!password.value) message.add(t("shared.passwordRequired"));
+        if (!confirmPassword.value) message.add(t("shared.passwordConfirmRequired"));
 
-        window.showAlert(message);
+        window.showAlert(message.toString());
         return;
     }
     if (!User.IsValidEmail(email.value)) {
-        window.showAlert("Please enter a valid email.");
+        window.showAlert(t("shared.emailInvalid"));
         return;
     }
     if (password.value !== confirmPassword.value) {
-        window.showAlert("Passwords do not match.");
+        window.showAlert(t("shared.passwordDontMatch"));
         return;
     }
 
@@ -77,8 +77,8 @@ register.onclick = async () => {
             password.value);
 
         await repository.register(user);
-        window.showAlert("We have sent you an email to confirm your registration.", "Register", () => {
-            window.location.href = "/login";
+        window.showAlert(t("register.registerSuccessfully"), t("register.title"), () => {
+            window.location.href = `/${locale}/login`;
         });
     } catch (err: any) {
         if (err instanceof Error) {

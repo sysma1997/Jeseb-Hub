@@ -1,7 +1,12 @@
 ---
+import { createTranslations, type Locale } from "../../core/shared/infrastructure/i18n/server";
+
 import Base from "./Base.astro";
 
-const { title = "Warning" } = Astro.props;
+const locale = Astro.props?.locale ?? "en";
+const t = createTranslations(locale as Locale);
+
+const title = Astro.props?.title ?? t("shared.warning");
 ---
 
 <Base id="prompt" title={title}>
@@ -15,12 +20,14 @@ const { title = "Warning" } = Astro.props;
         </div>
     </section>
     <footer class="modal-card-foot" style="gap: 0.5rem;">
-        <button id="promptCancel" class="button is-danger is-fullwidth">Cancel</button>
-        <button id="promptAccept" class="button is-primary is-fullwidth">Accept</button>
+        <button id="promptCancel" class="button is-danger is-fullwidth">{t("shared.cancel")}</button>
+        <button id="promptAccept" class="button is-primary is-fullwidth">{t("shared.accept")}</button>
     </footer>
 </Base>
 
 <script>
+    import { t } from "../../core/shared/infrastructure/i18n";
+
     const modal = document.getElementById("prompt") as HTMLDivElement;
     const modalClose = modal.querySelector('.delete') as HTMLButtonElement;
     const modalMessage = document.getElementById("promptMessage") as HTMLParagraphElement;
@@ -31,10 +38,14 @@ const { title = "Warning" } = Astro.props;
 
     modalCancel!.onclick = () => modal!.classList.remove('is-active');
 
-    window.showPrompt = (message: string, title: string = "Warning", acceptAction?: (value: string) => void) => {
+    window.showPrompt = (message: string, title: string = "Warning", 
+        acceptAction?: (value: string) => void, 
+        cancelAction?: () => void) => {
         if (modalMessage) modalMessage.innerHTML = message;
-        if (modal!.querySelector('.modal-card-title')) 
-            modal!.querySelector('.modal-card-title')!.textContent = title;
+        if (modal!.querySelector('.modal-card-title')) {
+            const tTitle = (title === "Warning") ? t("shared.warning") : title;
+            modal!.querySelector('.modal-card-title')!.textContent = tTitle;
+        }
         modal!.classList.add('is-active');
 
         modalInput.classList.remove("is-danger");
@@ -42,6 +53,7 @@ const { title = "Warning" } = Astro.props;
 
         modalClose!.onclick = () => {
             modal!.classList.remove("is-active");
+            if (cancelAction) cancelAction();
             modalInput.value = "";
         }
         modalInput.addEventListener("keydown", (event: KeyboardEvent) => {
@@ -52,13 +64,14 @@ const { title = "Warning" } = Astro.props;
         });
         modalCancel!.onclick = () => {
             modal!.classList.remove('is-active');
+            if (cancelAction) cancelAction();
             modalInput.value = "";
         }
         modalAccept!.onclick = () => {
             if (!modalInput.value) {
                 modalInput.classList.add("is-danger");
                 modalSpan.style.display = "block";
-                modalSpan.innerHTML = "The input cannot be empty.";
+                modalSpan.innerHTML = t("shared.inputEmpty");
                 return;
             }
             modalInput.classList.remove("is-danger");

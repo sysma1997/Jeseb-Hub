@@ -4,12 +4,15 @@ import { v4 as Uuid } from "uuid";
 import { Transaction } from "../domain/Transaction";
 import { TransactionRepository } from "../domain/TransactionRepository";
 import { Pagination } from "../../shared/domain/Pagination";
+import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
 
 export class TransactionPrismaRepository implements TransactionRepository {
     private readonly prisma: PrismaClient;
+    private readonly translator: TranslatorRepository;
 
-    constructor(prisma: PrismaClient) {
+    constructor(prisma: PrismaClient, translator: TranslatorRepository) {
         this.prisma = prisma;
+        this.translator = translator;
     }
     
     async add(transaction: Transaction): Promise<void> {
@@ -66,9 +69,9 @@ export class TransactionPrismaRepository implements TransactionRepository {
         const transaction = await this.prisma.transaction.findUnique({
             where: { id, idUser },
         });
-        if (!transaction) throw new Error("Transaction not found or not exists.");
+        if (!transaction) throw new Error(this.translator.translate("transactions.errors.notFound"));
 
-        return new Transaction(transaction.date, transaction.type, transaction.account, 
+        return new Transaction(this.translator, transaction.date, transaction.type, transaction.account, 
             Number(transaction.value), 
             transaction.id ?? undefined, 
             transaction.idUser ?? undefined, 
@@ -95,7 +98,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
         ]);
 
         const pagination = new Pagination<Transaction>();
-        pagination.list = transactions.map(t => new Transaction(t.date, t.type, t.account, 
+        pagination.list = transactions.map(t => new Transaction(this.translator, t.date, t.type, t.account, 
             Number(t.value), 
             t.id ?? undefined, 
             t.idUser ?? undefined, 

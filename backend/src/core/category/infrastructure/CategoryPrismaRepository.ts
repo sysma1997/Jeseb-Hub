@@ -4,21 +4,24 @@ import { v4 as Uuid } from "uuid";
 import { Category } from "../domain/Category";
 import { CategoryRepository } from "../domain/CategoryRepository";
 import { Pagination } from "../../shared/domain/Pagination";
+import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
 
 export class CategoryPrismaRepository implements CategoryRepository {
     private readonly prisma: PrismaClient;
+    private readonly translator: TranslatorRepository;
 
-    constructor(prisma: PrismaClient) {
+    constructor(prisma: PrismaClient, translator: TranslatorRepository) {
         this.prisma = prisma;
+        this.translator = translator;
     }
 
     private parse(category: any): Category {
-        return Category.FromDto(category);
+        return Category.FromDto(this.translator, category);
     }
     
     async add(category: Category): Promise<void> {
         const exists = await this.search(category.idUser!, category.name);
-        if (exists) throw new Error(`The category with name '${category.name}' already exists.`);
+        if (exists) throw new Error(this.translator.translate("categories.errors.nameAlreadyExists", { name: category.name }));
 
         await this.prisma.category.create({
             data: {

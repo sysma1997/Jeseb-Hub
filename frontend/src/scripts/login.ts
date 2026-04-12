@@ -4,6 +4,8 @@ import dayjsUtc from "dayjs/plugin/utc.js";
 import { User } from "../core/user/domain/User";
 import type { UserRepository } from "../core/user/domain/UserRepository";
 import { UserApiRepository } from "../core/user/infrastructure/UserApiRepository";
+import { getLocale, t, type Locale } from "../core/shared/infrastructure/i18n";
+import { MessageBuilder } from "../core/shared/domain/MessageBuilder";
 
 dayjs.extend(dayjsUtc);
 
@@ -20,9 +22,11 @@ const mtsCode = document.getElementById("iMTSCode") as HTMLInputElement;
 const mtsCancel = document.getElementById("btnMTSCancel") as HTMLButtonElement;
 const mtsAccept = document.getElementById("btnMTSAccept") as HTMLButtonElement;
 
+const locale: Locale = getLocale();
+
 repository.get().then((user: User | undefined) => {
     if (!user) return;
-    window.location.href = "/";
+    window.location.href = `/${locale}`;
 });
 
 email.addEventListener("keydown", (event: KeyboardEvent) => {
@@ -39,11 +43,16 @@ password.addEventListener("keydown", (event: KeyboardEvent) => {
 });
 login.onclick = async () => {
     if (!email.value || !password.value) {
-        window.showAlert("Please fill in all fields.");
+        const message = new MessageBuilder(true);
+
+        if (!email.value) message.add(t("shared.emailRequired"));
+        if (!password.value) message.add(t("shared.passwordRequired"));
+
+        window.showAlert(message.toString());
         return;
     }
     if (!User.IsValidEmail(email.value)) {
-        window.showAlert("Please enter a valid email.");
+        window.showAlert(t("shared.emailInvalid"));
         return;
     }
 
@@ -58,7 +67,7 @@ login.onclick = async () => {
         }
 
         window.localStorage.setItem("token", login.token!);
-        window.location.href = "/";
+        window.location.href = `/${locale}`;
     } catch (err: any) {
         if (err instanceof Error) {
             console.error(err);
@@ -74,6 +83,9 @@ const tsClickCancel = () => {
     modalTwoStep.classList.remove("is-active");
     mtsMessage.innerText = "Two step";
     mtsCode.value = "";
+
+    login.classList.remove("is-loading");
+    login.disabled = false;
 }
 mtsClose.onclick = () => tsClickCancel();
 mtsCode.addEventListener("keydown", (event: KeyboardEvent) => {
@@ -85,11 +97,11 @@ mtsCode.addEventListener("keydown", (event: KeyboardEvent) => {
 mtsCancel.onclick = () => tsClickCancel();
 mtsAccept.onclick = async () => {
     if (!mtsCode.value) {
-        window.showAlert("Code is required.");
+        window.showAlert(t("shared.codeVerificationRequired"));
         return;
     }
     if (mtsCode.value.length !== 6) {
-        window.showAlert("The code must be 6 digits long.");
+        window.showAlert(t("shared.codeVerificationInvalid"));
         return;
     }
 
@@ -99,7 +111,7 @@ mtsAccept.onclick = async () => {
         const login = await repository.login(email.value, password.value, Number(mtsCode.value));
 
         window.localStorage.setItem("token", login.token!);
-        window.location.href = "/";
+        window.location.href = `/${locale}`;
     } catch (err: any) {
         if (err instanceof Error) {
             console.error(err);

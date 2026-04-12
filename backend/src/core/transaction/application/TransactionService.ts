@@ -7,23 +7,27 @@ import { AccountRepository } from "../../account/domain/AccountRepository";
 import { Category } from "../../category/domain/Category";
 import { CategoryRepository } from "../../category/domain/CategoryRepository";
 import { Pagination } from "../../shared/domain/Pagination";
+import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
 
 export class TransactionService {
     private repository: TransactionRepository;
     private accountRepository: AccountRepository;
     private categoryRepository: CategoryRepository;
+    private translator: TranslatorRepository;
 
     constructor(repository: TransactionRepository, 
         accountRepository: AccountRepository, 
-        categoryRepository: CategoryRepository) {
+        categoryRepository: CategoryRepository, 
+        translator: TranslatorRepository) {
         this.repository = repository;
         this.accountRepository = accountRepository;
         this.categoryRepository = categoryRepository;
+        this.translator = translator;
     }
 
     async add(transaction: Transaction): Promise<void> {
         let account: Account | undefined = await this.accountRepository.search(transaction.idUser!, transaction.account);
-        if (!account) throw new Error("Account not found");
+        if (!account) throw new Error(this.translator.translate("transactions.errors.accountNotFound"));
 
         account = (transaction.type) ? account.ingressBalance(transaction.value) : 
             account.egressBalance(transaction.value);
@@ -42,9 +46,9 @@ export class TransactionService {
 
             let account = pAccounts.list.find(a => a.name === transaction.account);
             if (!account) {
-                account = new Account(transaction.account, 
+                account = new Account(this.translator, transaction.account, 
                     (transaction.type) ? transaction.value : -transaction.value, 
-                Uuid(), transaction.idUser!);
+                    Uuid(), transaction.idUser!);
                 pAccounts.list.push(account);
             }
             else {
@@ -59,7 +63,7 @@ export class TransactionService {
             if (transaction.category) {
                 let category = pCategories.list.find(c => c.name === transaction.category!);
                 if (!category) {
-                    const category = new Category(transaction.category, undefined, transaction.idUser!);
+                    const category = new Category(this.translator, transaction.category, undefined, transaction.idUser!);
                     pCategories.list.push(category);
                     newCategories.push(category);
                 }
@@ -72,7 +76,7 @@ export class TransactionService {
     }
     async update(transaction: Transaction): Promise<void> {
         let lastTransaction: Transaction = await this.repository.get(transaction.idUser!, transaction.id!);
-        if (!lastTransaction) throw new Error("Transaction not found");
+        if (!lastTransaction) throw new Error(this.translator.translate("transactions.errors.transactionNotFound"));
         let account: Account | undefined = await this.accountRepository.search(lastTransaction.idUser!, lastTransaction.account);
         if (account) {
             account = (lastTransaction.type) ? 
@@ -93,7 +97,7 @@ export class TransactionService {
     }
     async delete(idUser: string, id: string): Promise<void> {
         let lastTransaction: Transaction = await this.repository.get(idUser, id);
-        if (!lastTransaction) throw new Error("Transaction not found");
+        if (!lastTransaction) throw new Error(this.translator.translate("transactions.errors.transactionNotFound"));
         let account: Account | undefined = await this.accountRepository.search(idUser, lastTransaction.account);
         if (account) account = (lastTransaction.type) ? 
             account.egressBalance(lastTransaction.value) : 

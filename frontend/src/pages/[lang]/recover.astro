@@ -1,0 +1,65 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getLocaleFromUrl, createTranslations } from "../../core/shared/infrastructure/i18n/server";
+
+import Layout from "../../layouts/Layout.astro";
+import Locale from "../../layouts/Locale.astro";
+
+import Form from "../../components/Form.astro";
+import Alert from "../../components/modals/Alert.astro";
+
+import jeseb from "../../assets/images/jeseb.png";
+
+import "../../styles/recover.css";
+
+export const getStaticPaths = (() => {    
+    return [
+        { params: { lang: "en" } }, 
+        { params: { lang: "es" } }
+    ];
+}) satisfies GetStaticPaths;
+
+const locale = getLocaleFromUrl(Astro.url);
+const t = createTranslations(locale);
+---
+
+<Layout locale={locale} title={t("recover.title")}>
+    <Locale locale={locale} />
+    <div class="container">
+        <img class="icon" src={jeseb.src} alt="Jeseb Hub" />
+        <Form title={t("recover.title")}>
+            <div id="dEmail" class="field">
+                <label class="label">{t("recover.email")}</label>
+                <div class="control">
+                    <input id="inEmail" class="input" type="email" placeholder="Email" />
+                </div>
+            </div>
+            <div id="dPassword" class="field" style="display: none">
+                <label class="label">{t("shared.passwordNew")}:</label>
+                <div class="control">
+                    <input id="inPassword" class="input" type="password" />
+                </div>
+            </div>
+            <div id="dConfirmPassword" class="field" style="display: none;">
+                <label class="label">{t("shared.passwordConfirm")}:</label>
+                <div class="control">
+                    <input id="inConfirmPassword" class="input" type="password" />
+                </div>
+            </div>
+            
+            <div class="info">
+                <label>{t("recover.back.description")} <a href={`/${locale}/login`}>{t("recover.back.link")}</a>.</label>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <button id="btnRecover" class="button is-primary is-fullwidth">{t("recover.recover")}</button>
+                </div>
+            </div>
+        </Form>
+    </div>
+
+    <Alert locale={locale} />
+
+    <script>import "../../scripts/recover";</script>
+</Layout>

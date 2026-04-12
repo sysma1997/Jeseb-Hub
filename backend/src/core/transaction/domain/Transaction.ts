@@ -4,7 +4,12 @@ import "dayjs/plugin/utc";
 import { Base } from "../../shared/domain/Base";
 import { User, UserDto } from "../../user/domain/User";
 
+import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
+import { MessageBuilder } from "../../shared/domain/MessageBuilder";
+
 export class Transaction implements Base {
+    private readonly translator: TranslatorRepository;
+
     public readonly date: Date;
     public readonly type: boolean;
     public readonly account: string;
@@ -17,24 +22,22 @@ export class Transaction implements Base {
 
     public readonly user?: User | undefined;
 
-    constructor(date: Date, type: boolean, account: string, 
+    constructor(translator: TranslatorRepository, 
+        date: Date, type: boolean, account: string, 
         value: number, 
         id?: string, idUser?: string, 
         category?: string, description?: string, 
         user?: User) {
+        this.translator = translator;
+
         if (!account || 
             value <= 0) {
-            let message: string = "";
-            let lineBreak: number = 0;
+            const message = new MessageBuilder(true);
 
-            if (!account) {
-                message += "The account for transaction is required.";
-                lineBreak++;
-            }
-            if (value <= 0) message += ((lineBreak > 0) ? "\n" : "") + 
-                "The value must be greater than 0.";
+            if (!account) message.add(translator.translate("transactions.errors.accountRequired"));
+            if (value <= 0) message.add(translator.translate("transactions.errors.valueRequired"));
             
-            throw new Error(message);
+            throw new Error(message.toString());
         }
         
         this.date = date;
@@ -50,31 +53,24 @@ export class Transaction implements Base {
         this.user = user;
     }
 
-    static FromDto(dto: TransactionDto): Transaction {
+    static FromDto(translator: TranslatorRepository, dto: TransactionDto): Transaction {
         if (!dto.date || 
             (dto.type === undefined || dto.type === null) || 
             !dto.account || 
             !dto.value) {
-            let message: string = "";
-            let lineBreak: number = 0;
+            const message = new MessageBuilder();
 
-            if (!dto.date) {
-                message += "The date for transaction is required."
-                lineBreak++;
-            }
-            if ((dto.type === undefined || dto.type === null)) message += ((lineBreak++ > 0) ? "\n" : "") + 
-                "The type (ingress, egress) for transaction is required.";
-            if (!dto.account) message += ((lineBreak++ > 0) ? "\n" : "") + 
-                "The account for transaction is required.";
-            if (!dto.value) message += ((lineBreak++ > 0) ? "\n" : "") + 
-                "The value for transaction is required.";
-            
-            throw new Error(message);
+            if (!dto.date) message.add(translator.translate("transactions.errors.dateRequired"));
+            if ((dto.type === undefined || dto.type === null)) message.add(translator.translate("transactions.errors.typeRequired"));
+            if (!dto.account) message.add(translator.translate("transactions.errors.accountRequired"));
+            if (!dto.value) message.add(translator.translate("transactions.errors.valueRequired"));
+
+            throw new Error(message.toString());
         }
 
         const date = dayjs.utc(dto.date).toDate();
-        let user: User | undefined = (dto.user) ? User.FromDto(dto.user) : undefined;
-        return new Transaction(date, dto.type, dto.account, 
+        let user: User | undefined = (dto.user) ? User.FromDto(translator, dto.user) : undefined;
+        return new Transaction(translator, date, dto.type, dto.account, 
             Number(dto.value), 
             dto.id, dto.idUser, 
             dto.category, dto.description, 

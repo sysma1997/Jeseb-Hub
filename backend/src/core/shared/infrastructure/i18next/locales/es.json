@@ -1,0 +1,124 @@
+{
+    "accounts": {
+        "errors": {
+            "idRequired": "El id es requerido.",
+            "nameRequired": "El nombre es requerido.", 
+            "balanceRequired": "El saldo de la cuenta es requerido.", 
+            "nameAlreadyExists": "La cuenta con nombre '{{name}}' ya existe.", 
+            "notFound": "Cuenta no encontrada."
+        }, 
+        "success": {
+            "accountAdded": "Cuenta agregada exitosamente.", 
+            "accountUpdated": "Cuenta actualizada exitosamente.", 
+            "accountDeleted": "Cuenta eliminada exitosamente."
+        }
+    }, 
+    "categories": {
+        "errors": {
+            "idRequired": "El id es requerido.",
+            "nameRequired": "El nombre es requerido.", 
+            "nameAlreadyExists": "La categoría con nombre '{{name}}' ya existe."
+        }, 
+        "success": {
+            "categoryAdded": "Categoría agregada exitosamente.", 
+            "categoryUpdated": "Categoría actualizada exitosamente.", 
+            "categoryDeleted": "Categoría eliminada exitosamente."
+        }
+    }, 
+    "transactions": {
+        "errors": {
+            "idRequired": "El id es requerido.",
+            "dateRequired": "La fecha para la transacción es requerida.",
+            "typeRequired": "El tipo (ingreso, egreso) para la transacción es requerido.", 
+            "accountRequired": "La cuenta para la transacción es requerida.", 
+            "valueRequired": "El valor debe ser mayor que 0.", 
+            "notFound": "Transacción no encontrada o no existe.", 
+            "invalidFormat": "Formato de transacciones inválido.",
+            "exceedLimit": "El número de transacciones ingresadas en bloques no puede exceder 500.", 
+            "noTransactionsToExport": "No hay transacciones para exportar."
+        }, 
+        "success": {
+            "transactionAdded": "Transacción agregada exitosamente.", 
+            "transactionUpdated": "Transacción actualizada exitosamente.", 
+            "transactionDeleted": "Transacción eliminada exitosamente.", 
+            "transactionsAdded": "Transacciones agregadas exitosamente."
+        }
+    }, 
+    "users": {
+        "errors": {
+            "nameRequired": "El nombre para el usuario es requerido.", 
+            "emailRequired": "El email para el usuario es requerido.",
+            "passwordRequired": "La contraseña para el usuario es requerida.", 
+            "emailInvalid": "El '{{email}}' no es un email válido.", 
+            "passwordInvalid": "La contraseña no es válida, por favor verifica que esté en SHA256.", 
+            "emailExists": "El email '{{email}}' ya existe.", 
+            "emailAlreadyExists": "El email '{{email}}' ya existe en otra cuenta.", 
+            "notFound": "Usuario no encontrado o no existe.", 
+            "passwordIncorrect": "La contraseña actual es incorrecta.", 
+            "emailNotFound": "El email '{{email}}' no se encuentra.", 
+            "codeNotFound": "Código de verificación no encontrado o no existe.", 
+            "codeNotMatch": "El código ingresado no coincide con el código de verificación.", 
+            "tokenRequired": "Token es requerido.", 
+            "imageRequired": "El archivo de imagen es requerido.", 
+            "codeRequired": "El código de verificación es requerido.", 
+            "codeInvalid": "El código no tiene 6 dígitos.", 
+            "currentPasswordRequired": "La contraseña actual es requerida.",
+            "newPasswordRequired": "La nueva contraseña es requerida.", 
+            "activeRequired": "El estado es requerido.", 
+            "typeRequired": "El tipo es requerido.", 
+            "currentUserError": "Error al obtener el usuario actual."
+        }, 
+        "success": {
+            "registrationSent": "Hemos enviado un email a {{email}} para confirmar tu registro.", 
+            "userAdded": "Usuario registrado exitosamente.", 
+            "loginTwoFactor": "Hemos enviado un email a {{email}} para iniciar sesión con autenticación de dos factores.", 
+            "passwordRecovery": "Hemos enviado un email a {{email}} para recuperar tu usuario.", 
+            "passwordUpdated": "Actualización de contraseña exitosa.", 
+            "emailUpdated": "Hemos enviado un email a {{email}} para actualizar a tu nueva dirección de email.", 
+            "nameUpdated": "Actualización de nombre exitosa.", 
+            "emailUpdateSuccessful": "Actualización de email exitosa.", 
+            "passwordUpdateSuccessful": "Actualización de contraseña exitosa.", 
+            "twoFactorUpdated": "Actualización de autenticación de dos factores exitosa."
+        }, 
+        "email": {
+            "confirmRegister": "Confirma tu registro", 
+            "validateToken": "Validar token", 
+            "twoFactor": "Autenticación de dos factores", 
+            "passwordRecovery": "Recupera tu usuario", 
+            "updateEmail": "Actualizando correo electrónico", 
+            "verificationEmail": {
+                "welcome": "Bienvenido a Jeseb Hub", 
+                "confirmation": "Gracias por registrarte. Confirma tu dirección de correo electrónico para empezar a gestionar tus finanzas.", 
+                "confirmAccount": "Confirma mi cuenta"
+            }, 
+            "welcomeEmail": {
+                "verification": "Tu cuenta de Jeseb Hub se ha verificado correctamente.", 
+                "description": "Ahora puedes empezar a:", 
+                "track": "📝 Controla tus ingresos y gastos", 
+                "statistics": "📊 Consulta tus estadísticas financieras", 
+                "manage": "🏦 Gestiona varias cuentas",
+                "export": "📤 Exporta tus datos a CSV", 
+                "go": "Ir al panel de control"
+            }, 
+            "passwordRecoveryEmail": {
+                "title": "Restablecer contraseña - Jeseb Hub", 
+                "reset": "Restablece tu contraseña", 
+                "description": "Hemos recibido una solicitud para restablecer tu contraseña. Haz clic en el botón de abajo para crear una nueva."
+            }, 
+            "twoFactorCode": {
+                "title": "Código de dos factores - Jeseb Hub", 
+                "verification": "Código de verificación", 
+                "description": "Utiliza el código a continuación para completar tu inicio de sesión. Este código es válido durante 10 minutos.", 
+                "warning": "🔒 <strong>Aviso de seguridad:</strong> Si no has intentado iniciar sesión, cambia tu contraseña inmediatamente.", 
+                "footer": "Nunca compartas este código con nadie."
+            }, 
+            "shared": {
+                "hi": "¡Hola {{name}}!", 
+                "copyLink": "🔗 O copia este enlace:", 
+                "warning": "⚠️ <strong>Aviso de seguridad:</strong> Este enlace caduca en 24 horas.", 
+                "footer": "Jeseb Hub — Controla tus finanzas personales", 
+                "ignore": "Si no has creado una cuenta, puedes ignorar este correo electrónico sin problema."
+            }
+        }
+    }
+}

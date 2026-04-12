@@ -8,6 +8,7 @@ import { AccountApiRepository } from "../../core/account/infrastructure/AccountA
 import { Pagination } from "../../core/shared/domain/Pagination";
 import { FormatNumber } from "../../core/shared/domain/FormatNumber";
 import { Attach, Detach } from "../../core/shared/domain/Subject";
+import { t } from "../../core/shared/infrastructure/i18n";
 
 import { Pagination as CPagination } from "../shared/Pagination";
 
@@ -16,6 +17,8 @@ import "../../styles/accounts/list.css";
 const repository: AccountRepository = new AccountApiRepository();
 
 export const List = () => {
+    const [total, setTotal] = useState<number>(0);
+
     const [pagination, setPagination] = useState<Pagination<Account>>(new Pagination());
     const [limit, setLimit] = useState<number>(15);
     const [page, setPage] = useState<number>(1);
@@ -26,6 +29,10 @@ export const List = () => {
         });
     }, []);
     useEffect(() => {
+        let total: number = 0;
+        pagination.list.forEach(account => total += account.balance);
+        setTotal(total);
+
         const add = (account: Account) => {
             let acc: Account[] = [];
             if (pagination.list.length > 0) acc = [...pagination.list];
@@ -50,12 +57,12 @@ export const List = () => {
     };
 
     const clickUpdate = (account: Account) => {
-        window.showPrompt("Enter the new name for this account", "Update account", (value: string) => {
-            window.showConfirm(`Update name account with '${value}'?`, "Update account", async () => {
+        window.showPrompt(t("account.update.description"), t("account.update.title"), (value: string) => {
+            window.showConfirm(t("account.update.confirm", { name: value }), t("account.update.title"), async () => {
                 account = account.setName(value);
                 try {
                     await repository.update(account);
-                    window.showAlert("Update account successfully.", "Update account", () => {
+                    window.showAlert(t("account.update.response"), t("account.update.title"), () => {
                         let acc: Account[] = [...pagination.list!];
 
                         acc = acc.map(ac => {
@@ -79,10 +86,10 @@ export const List = () => {
         });
     };
     const clickDelete = (id: string, name: string) => {
-        window.showConfirm(`Delete this account '${name}'?`, "Delete account", async () => {
+        window.showConfirm(t("account.delete.confirm", { name }), t("account.delete.title"), async () => {
             try {
                 await repository.delete(id);
-                window.showAlert("Delete account successfully.", "Delete account", () => {
+                window.showAlert(t("account.delete.response"), t("account.delete.title"), () => {
                     let acc: Account[] = [...pagination.list!];
 
                     acc = acc.filter(ac => ac.id! !== id);
@@ -115,20 +122,20 @@ export const List = () => {
 
     return <div className="accountsList card">
         <header className="card-header">
-            <h2 className="card-header-title">Accounts</h2>
+            <h2 className="card-header-title">{t("account.title")}</h2>
         </header>
         <div className="card-content">
             <div className="content">
-                {(pagination.list.length === 0) && <p className="noContent">There are not accounts to show.</p>}
+                {(pagination.list.length === 0) && <p className="noContent">{t("account.noItems")}</p>}
                 {(pagination.list.length > 0) && <>
                     <div className="table-container">
                         <table className="table is-fullwidth">
                             <thead>
                                 <tr>
-                                    <th className="fiftyPercent">Name</th>
-                                    <th className="fiftyPercent">Balance</th>
-                                    <th>Edit</th>
-                                    <th>Remove</th>
+                                    <th className="fiftyPercent">{t("shared.name")}</th>
+                                    <th className="fiftyPercent">{t("shared.balance")}</th>
+                                    <th>{t("shared.edit")}</th>
+                                    <th>{t("shared.remove")}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -144,6 +151,10 @@ export const List = () => {
                                         <Icon icon="solar:trash-bin-2-bold" />
                                     </button></td>
                                 </tr>)}
+                                <tr>
+                                    <th>{t("account.total")}</th>
+                                    <td>{FormatNumber(total)}</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

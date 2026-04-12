@@ -4,22 +4,25 @@ import { v4 as Uuid } from "uuid";
 import { Account } from "../domain/Account";
 import { AccountRepository } from "../domain/AccountRepository";
 import { Pagination } from "../../shared/domain/Pagination";
+import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
 
 export class AccountPrismaRepository implements AccountRepository {
     private readonly prisma: PrismaClient;
+    private readonly translator: TranslatorRepository;
 
-    constructor(prisma: PrismaClient) {
+    constructor(prisma: PrismaClient, translator: TranslatorRepository) {
         this.prisma = prisma;
+        this.translator = translator;
     }
     
     private parse(account: any): Account {
-        return Account.FromDto(account);
+        return Account.FromDto(this.translator, account);
     }
 
     async add(account: Account): Promise<void> {
         const exists = await this.search(account.idUser!, account.name);
         if (exists) 
-            throw new Error(`The account with name '${account.name}' already exists.`);
+            throw new Error(this.translator.translate("accounts.errors.nameAlreadyExists", { name: account.name }));
 
         await this.prisma.account.create({
             data: {
@@ -63,7 +66,7 @@ export class AccountPrismaRepository implements AccountRepository {
         const account = await this.prisma.account.findFirst({
             where: { idUser, id }
         });
-        if (!account) throw new Error("Account not found or not exists.");
+        if (!account) throw new Error(this.translator.translate("accounts.errors.notFound"));
 
         const ac = this.parse(account);
         return ac;

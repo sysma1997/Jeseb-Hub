@@ -1,0 +1,165 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getLocaleFromUrl, createTranslations } from "../../core/shared/infrastructure/i18n/server";
+
+import { Icon } from "astro-icon/components";
+
+import Layout from "../../layouts/Layout.astro";
+import Menu from "../../layouts/Menu.astro";
+
+import Base from "../../components/modals/Base.astro";
+import Alert from "../../components/modals/Alert.astro";
+import Confirm from "../../components/modals/Confirm.astro";
+
+import { TransactionList } from "../../components/index/TransactionList";
+
+import "../../styles/index/index.css";
+
+export const getStaticPaths = (() => {
+	return [
+		{ params: { lang: "en" } }, 
+		{ params: { lang: "es" } }
+	];
+}) satisfies GetStaticPaths;
+
+const locale = getLocaleFromUrl(Astro.url);
+const t = createTranslations(locale);
+---
+
+<Layout locale={locale} title="Jeseb Hub">
+	<Menu locale={locale} />
+	
+	<div class="transactions">
+        <div class="transactionsContent">
+			<TransactionList client:only="react" />
+        </div>
+    </div>
+
+	<button id="btnAddTransaction" class="button is-primary">
+		<Icon name="material-symbols:add-2-rounded" width={24} height={24} />
+    </button>
+
+	<Base id="modalAddTransaction" title={t("index.transactions.add")}>
+		<section id="sMAT1" class="modal-card-body" style="display: block;">
+			<div class="field">
+				<label class="label">{t("index.transactions.account")}:</label>
+				<div class="control">
+					<div class="select is-fullwidth">
+						<select id="sMATAccount"></select>
+					</div>
+				</div>
+			</div>
+			<label id="lMATAccountBalance">{t("shared.balance")}: 0</label>
+		</section>
+		<section id="sMAT2" class="modal-card-body" style="display: none;">
+			<div class="field">
+				<label class="label">{t("index.transactions.type")}:</label>
+				<div class="control">
+					<div class="select is-fullwidth">
+						<select id="sMATType">
+							<option value="true">{t("index.transactions.ingress")}</option>
+							<option value="false">{t("index.transactions.egress")}</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<label class="label">{t("index.transactions.value")}:</label>
+				<div class="control">
+					<input id="iMATValue" class="input" type="number" />
+				</div>
+			</div>
+		</section>
+		<section id="sMAT3" class="modal-card-body" style="display: none;">
+			<p style="margin-bottom: 1.5rem;">{t("index.transactions.optional")}</p>
+			<div class="field">
+				<label class="label">{t("index.transactions.date")}:</label>
+				<div class="control">
+					<input id="iMATDate" class="input" type="datetime-local" />
+				</div>
+			</div>
+			<div class="field">
+				<label class="label">{t("index.transactions.category")}:</label>
+				<div class="control">
+					<div class="select is-fullwidth">
+						<select id="sMATCategory"></select>
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<label class="label">{t("index.transactions.description")}:</label>
+				<div class="control">
+					<textarea id="taMATDescription" class="textarea" />
+				</div>
+			</div>
+		</section>
+		<section id="sMAT4" class="modal-card-body" style="display: none;">
+			<p style="margin-bottom: 1.5rem;">{t("index.transactions.confirm")}:</p>
+			<div class="item">
+				<label class="label">{t("index.transactions.account")}:</label>
+				<p id="pMATAccountConfirm">.</p>
+			</div>
+			<div class="item">
+				<label class="label">{t("index.transactions.type")}:</label>
+				<p id="pMATTypeConfirm">.</p>
+			</div>
+			<div class="item">
+				<label class="label">{t("index.transactions.value")}:</label>
+				<p id="pMATValueConfirm">.</p>
+			</div>
+			<div class="item">
+				<label class="label">{t("index.transactions.date")}:</label>
+				<p id="pMATDateConfirm">.</p>
+			</div>
+			<div id="dMATCategoryConfirm" class="item" style="display: none;">
+				<label class="label">{t("index.transactions.category")}:</label>
+				<p id="pMATCategoryConfirm">.</p>
+			</div>
+			<div id="dMATDescriptionConfirm" class="item" style="display: none;">
+				<label class="label">{t("index.transactions.description")}:</label>
+				<p id="pMATDescriptionConfirm">.</p>
+			</div>
+		</section>
+		<section id="sMAT5" class="modal-card-body" style="display: none;">
+			<p id="pMATMessage">{t("index.transactions.created")}</p>
+		</section>
+		<footer class="modal-card-foot" style="gap: 0.5rem;">
+            <button id="btnMATCancel" class="button is-danger is-fullwidth">{t("shared.cancel")}</button>
+            <button id="btnMATAccept" class="button is-primary is-fullwidth">{t("shared.next")}</button>
+        </footer>
+	</Base>
+	<Base id="modalTransaction" title={t("index.transactions.title")}>
+		<section class="modal-card-body">
+			<div class="item">
+				<label class="label">{t("index.transactions.account")}:</label>
+				<p id="pMTAccount">.</p>
+			</div>
+			<div class="item">
+				<label class="label">{t("index.transactions.type")}:</label>
+				<p id="pMTType">.</p>
+			</div>
+			<div class="item">
+				<label class="label">{t("index.transactions.value")}:</label>
+				<p id="pMTValue">.</p>
+			</div>
+			<div class="item">
+				<label class="label">{t("index.transactions.date")}:</label>
+				<p id="pMTDate">.</p>
+			</div>
+			<div id="dMTCategory" class="item" style="display: none;">
+				<label class="label">{t("index.transactions.category")}:</label>
+				<p id="pMTCategory">.</p>
+			</div>
+			<div id="dMTDescription" class="item" style="display: none;">
+				<label class="label">{t("index.transactions.description")}:</label>
+				<p id="pMTDescription">.</p>
+			</div>
+		</section>
+		<footer class="modal-card-foot" style="gap: 0.5rem;">
+            <button id="btnMTOk" class="button is-primary is-fullwidth">Ok</button>
+        </footer>
+	</Base>
+	<Confirm locale={locale} />
+	<Alert locale={locale} />
+	<script>import "../../scripts/index";</script>
+</Layout>
