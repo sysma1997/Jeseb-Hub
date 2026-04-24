@@ -4,6 +4,7 @@ import dayjsUtc from "dayjs/plugin/utc";
 
 import { Transaction } from "../core/transaction/domain/Transaction";
 import type { TransactionRepository } from "../core/transaction/domain/TransactionRepository";
+import type { TransactionFilter } from "../core/transaction/domain/TransactionFilter";
 import { TransactionApiRepository } from "../core/transaction/infrastructure/TransactionApiRepository";
 import { Account } from "../core/account/domain/Account";
 import type { AccountRepository } from "../core/account/domain/AccountRepository";
@@ -26,6 +27,16 @@ const categoryRepository: CategoryRepository = new CategoryApiRepository();
 let transaction: Transaction | undefined = undefined;
 let accounts: Account[] = [];
 let categories: Category[] = [];
+
+const mftDateFrom = document.getElementById("iMFTDateFrom") as HTMLInputElement;
+const mftDateTo = document.getElementById("iMFTDateTo") as HTMLInputElement;
+const mftClear = document.getElementById("btnMFTClear") as HTMLButtonElement;
+const mftAccount = document.getElementById("sMFTAccount") as HTMLSelectElement;
+const mftCategory = document.getElementById("sMFTCategory") as HTMLSelectElement;
+const mftType = document.getElementById("sMFTType") as HTMLSelectElement;
+const mftCancel = document.getElementById("btnMFTCancel") as HTMLButtonElement;
+const mftAccept = document.getElementById("btnMFTAccept") as HTMLButtonElement;
+const mftClearFilters = document.getElementById("btnMFTClearFilters") as HTMLButtonElement;
 
 const addTransaction = document.getElementById("btnAddTransaction") as HTMLButtonElement;
 
@@ -78,6 +89,7 @@ try {
             option.value = account.id!;
             option.innerText = account.name;
             matAccount.appendChild(option);
+            mftAccount.appendChild(option.cloneNode(true));
         });
         matAccountBalance.innerText = `${t("shared.balance")}: ${FormatNumber(accounts[0].balance)}`;
     });
@@ -96,6 +108,7 @@ try {
             option.value = category.id!;
             option.innerText = category.name;
             matCategory.appendChild(option);
+            mftCategory.appendChild(option.cloneNode(true));
         });
     });
 } catch (err: any) {
@@ -150,6 +163,28 @@ const transactionShowView = (_transaction: Transaction) => {
     
     modalTransaction.classList.add("is-active");
 };
+Attach("transaction:filter:show", () => {
+    const modal = document.getElementById("modalFilterTransactions") as HTMLDivElement;
+    modal.classList.add("is-active");
+    mftClearFilters.classList.remove("is-loading");
+    mftClearFilters.disabled = false;
+    mftAccept.classList.remove("is-loading");
+    mftAccept.disabled = false;
+});
+Attach("transaction:filter:hide", () => {
+    const modal = document.getElementById("modalFilterTransactions") as HTMLDivElement;
+    modal.classList.remove("is-active");
+    mftClearFilters.classList.remove("is-loading");
+    mftClearFilters.disabled = false;
+    mftAccept.classList.remove("is-loading");
+    mftAccept.disabled = false;
+});
+Attach("transaction:filter:activeButton", () => {
+    mftClearFilters.classList.remove("is-loading");
+    mftClearFilters.disabled = false;
+    mftAccept.classList.remove("is-loading");
+    mftAccept.disabled = false;
+});
 Attach("transaction:showUpdate", transactionShowUpdate);
 Attach("transaction:showView", transactionShowView);
 
@@ -181,6 +216,44 @@ const mtClickClose = () => {
     modalTransaction.classList.remove("is-active");
 }
 
+mftClear.onclick = () => {
+    mftDateFrom.value = "";
+    mftDateTo.value = "";
+};
+mftCancel.onclick = () => {
+    const modal = document.getElementById("modalFilterTransactions") as HTMLDivElement;
+    modal.classList.remove("is-active");
+};
+mftClearFilters.onclick = () => {
+    Notify("transaction:filter:clear");
+    mftClearFilters.classList.add("is-loading");
+    mftClearFilters.disabled = true;
+};
+mftAccept.onclick = () => {
+    const filter: TransactionFilter = {};
+    if (mftDateFrom.value) filter.dateFrom = dayjs.utc(mftDateFrom.value).toDate();
+    if (mftDateTo.value) filter.dateTo = dayjs.utc(mftDateTo.value).toDate();
+    if (mftAccount.value) {
+        const account = accounts.find(a => a.id === mftAccount.value);
+        if (account) filter.account = account.name;
+    }
+    if (mftCategory.value) {
+        const category = categories.find(c => c.id === mftCategory.value);
+        if (category) filter.category = category.name;
+    }
+    if (mftType.value != "all") filter.type = mftType.value === "true" ? true : false;
+
+    if (!filter.dateFrom && !filter.dateTo && 
+        !filter.account && !filter.category && 
+        !filter.type) {
+        window.showAlert(t("index.transactions.filter.noSelectFilters"));
+        return;
+    }
+
+    Notify("transaction:filter", filter);
+    mftAccept.classList.add("is-loading");
+    mftAccept.disabled = true;
+};
 addTransaction.onclick = () => {
     if (accounts.length == 0) {
         window.showAlert(t("index.transactions.accountsRequired"));

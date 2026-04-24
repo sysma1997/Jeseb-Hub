@@ -137,5 +137,23 @@ export class CategoryController extends ControllerBase {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
         });
+        this.router.post("/list/search", UserAuthenticate, async (req, res) => {
+            if (!req.body.name) 
+                return res.status(400).send(this.translator.translate("categories.errors.nameRequired"));
+
+            try {
+                const idUser: string = req.user!.id;
+                const name: string = req.body.name;
+                const limit: number | undefined = req.body.limit ? Number(req.body.limit) : undefined;
+                const page: number | undefined = req.body.page ? Number(req.body.page) : undefined;
+
+                const categories: Pagination<Category> = await this.repository.getListSearch(idUser, name, limit, page);
+                const list: CategoryDto[] = categories.list.map(ac => ac.toDto());
+                const pages: number = categories.pages;
+                res.json({ list, pages });
+            } catch (err: any) {
+                if (err instanceof Error) res.status(400).send(err.message);
+            }
+        });
     }
 }

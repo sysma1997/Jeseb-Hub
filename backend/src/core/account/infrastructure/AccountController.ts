@@ -140,5 +140,23 @@ export class AccountController extends ControllerBase {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
         });
+        this.router.post("/list/search/", UserAuthenticate, async (req, res) => {
+            if (!req.body.name) 
+                return res.status(400).send(this.translator.translate("accounts.errors.nameRequired"));
+
+            try {
+                const idUser: string = req.user!.id;
+                const search: string = req.body.name;
+                const limit: number = Number(req.query.limit ?? 30);
+                const page: number = Number(req.query.page ?? 1);
+
+                const accounts: Pagination<Account> = await this.repository.getListSearch(idUser, search, limit, page);
+                const list: AccountDto[] = accounts.list.map(ac => ac.toDto());
+                const pages: number = accounts.pages;
+                res.json({ list, pages });
+            } catch (err: any) {
+                if (err instanceof Error) res.status(400).send(err.message);
+            }
+        });
     }
 }

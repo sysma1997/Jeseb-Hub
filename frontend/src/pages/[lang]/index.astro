@@ -39,6 +39,61 @@ const t = createTranslations(locale);
 		<Icon name="material-symbols:add-2-rounded" width={24} height={24} />
     </button>
 
+	<Base id="modalFilterTransactions" title={t("shared.filter")}>
+		<section class="modal-card-body">
+			<div class="field">
+				<label class="label">{t("index.transactions.filter.dateRange")}:</label>
+				<div class="field has-addons">
+					<div class="control" style="flex: 1;">
+						<input id="iMFTDateFrom" class="input" type="date" />
+					</div>
+					<div class="control" style="flex: 1;">
+						<input id="iMFTDateTo" class="input" type="date" />
+					</div>
+					<div class="control">
+						<button id="btnMFTClear" class="button is-primary">{t("shared.clear")}</button>
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<label class="label">{t("index.transactions.account")}:</label>
+				<div class="control">
+					<div class="select is-fullwidth">
+						<select id="sMFTAccount">
+							<option value="all">{t("index.transactions.filter.all")}</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<label class="label">{t("index.transactions.category")}:</label>
+				<div class="control">
+					<div class="select is-fullwidth">
+						<select id="sMFTCategory">
+							<option value="all">{t("index.transactions.filter.all")}</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<label class="label">{t("index.transactions.type")}:</label>
+				<div class="control">
+					<div class="select is-fullwidth">
+						<select id="sMFTType">
+							<option value="all">{t("index.transactions.filter.all")}</option>
+							<option value="true">{t("index.transactions.ingress")}</option>
+							<option value="false">{t("index.transactions.egress")}</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</section>
+		<footer class="modal-card-foot" style="gap: 0.5rem;">
+            <button id="btnMFTCancel" class="button is-danger is-fullwidth">{t("shared.cancel")}</button>
+			<button id="btnMFTClearFilters" class="button is-info is-fullwidth">{t("shared.clear")}</button>
+            <button id="btnMFTAccept" class="button is-primary is-fullwidth">{t("shared.accept")}</button>
+        </footer>
+	</Base>
 	<Base id="modalAddTransaction" title={t("index.transactions.add")}>
 		<section id="sMAT1" class="modal-card-body" style="display: block;">
 			<div class="field">

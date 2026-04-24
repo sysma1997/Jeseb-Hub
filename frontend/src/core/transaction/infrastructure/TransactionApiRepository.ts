@@ -4,6 +4,7 @@ import type { TransactionRepository } from "../domain/TransactionRepository";
 import { Api, ApiMethods } from "../../shared/infrastructure/Api";
 import type { ApiResponse } from "../../shared/infrastructure/Api";
 import { Pagination } from "../../shared/domain/Pagination";
+import type { TransactionFilter } from "../domain/TransactionFilter";
 
 export class TransactionApiRepository extends Api implements TransactionRepository {
     async add(transaction: Transaction): Promise<void> {
@@ -44,6 +45,26 @@ export class TransactionApiRepository extends Api implements TransactionReposito
         const list: Transaction[] = [];
         for (let i = 0; i < data.list.length; i++) 
             list.push(Transaction.FromDto(data.list[i]));
+
+        const pagination: Pagination<Transaction> = new Pagination();
+        pagination.pages = pages;
+        pagination.list = list;
+        return pagination;
+    }
+    async getListFilter(transactionFilter: TransactionFilter, limit?: number, page?: number): Promise<Pagination<Transaction>> {
+        let method = "transaction/list/filter";
+        const data: any = transactionFilter;
+        if (limit) data.limit = limit;
+        if (page) data.page = page;
+        const response: ApiResponse = await this.fetch(ApiMethods.POST, method, data);
+        if (response.status >= 400)
+            throw new Error(response.data);
+
+        const responseData: any = JSON.parse(response.data);
+        const pages: number = responseData.pages;
+        const list: Transaction[] = [];
+        for (let i = 0; i < responseData.list.length; i++)
+            list.push(Transaction.FromDto(responseData.list[i]));
 
         const pagination: Pagination<Transaction> = new Pagination();
         pagination.pages = pages;

@@ -11,4 +11,5 @@ export interface AccountRepository {
     search(idUser: string, name: string): Promise<Account | undefined>;
 
     getList(idUser: string, limit?: number, page?: number): Promise<Pagination<Account>>;
+    getListSearch(idUser: string, name: string, limit?: number, page?: number): Promise<Pagination<Account>>;
 }

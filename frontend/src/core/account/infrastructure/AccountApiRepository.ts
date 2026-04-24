@@ -59,4 +59,24 @@ export class AccountApiRepository extends Api implements AccountRepository {
         pagination.list = list;
         return pagination;
     }
+    async getListSearch(name: string, limit?: number, page?: number): Promise<Pagination<Account>> {
+        let method = "account/list/search";
+        const data: any = { name };
+        if (limit) data.limit = limit;
+        if (page) data.page = page;
+        const response: ApiResponse = await this.fetch(ApiMethods.POST, method, data);
+        if (response.status >= 400)
+            throw new Error(response.data);
+
+        const resData: any = JSON.parse(response.data);
+        const pages: number = resData.pages;
+        const list: Account[] = [];
+        for (let i = 0; i < resData.list.length; i++)
+            list.push(Account.FromDto(resData.list[i]));
+
+        const pagination: Pagination<Account> = new Pagination();
+        pagination.pages = pages;
+        pagination.list = list;
+        return pagination;
+    }
 }

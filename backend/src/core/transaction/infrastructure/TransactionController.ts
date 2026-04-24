@@ -1,10 +1,10 @@
-import { Readable } from "stream";
 import { v4 as Uuid } from "uuid";
 import dayjs from "dayjs";
 import "dayjs/plugin/utc";
 
 import { ControllerBase } from "../../shared/infrastructure/ControllerBase";
 import { Transaction } from "../domain/Transaction";
+import type { TransactionFilter } from "../domain/TransactionFilter";
 import { TransactionRepository } from "../domain/TransactionRepository";
 import { TransactionService } from "../application/TransactionService";
 import { UserAuthenticate } from "../../user/infrastructure/UserAuthenticate";
@@ -164,6 +164,27 @@ export class TransactionController extends ControllerBase {
                 const page: number = Number(req.params.page);
 
                 const transactions = await this.repository.getList(idUser, limit, page);
+                const list = transactions.list.map(t => t.toDto());
+                const pages = transactions.pages;
+
+                res.json({ list, pages });
+            } catch (err: any) {
+                if (err instanceof Error) res.status(400).send(err.message);
+            }
+        });
+        this.router.post("/list/filter", UserAuthenticate, async (req, res) => {
+            try {
+                const idUser: string = req.user!.id;
+                const filter: TransactionFilter = {};
+                filter.dateFrom = req.body.dateFrom ? dayjs.utc(String(req.body.dateFrom)).toDate() : undefined;
+                filter.dateTo = req.body.dateTo ? dayjs.utc(String(req.body.dateTo)).toDate() : undefined;
+                filter.type = req.body.type !== undefined ? String(req.body.type) === "true" : undefined;
+                filter.account = req.body.account ? String(req.body.account) : undefined;
+                filter.category = req.body.category ? String(req.body.category) : undefined;
+                const limit: number | undefined = req.body.limit ? Number(req.body.limit) : undefined;
+                const page: number | undefined = req.body.page ? Number(req.body.page) : undefined;
+                
+                const transactions = await this.repository.getListFilter(idUser, filter, limit, page);
                 const list = transactions.list.map(t => t.toDto());
                 const pages = transactions.pages;
 

@@ -104,4 +104,29 @@ export class AccountPrismaRepository implements AccountRepository {
 
         return pagination;
     }
+    async getListSearch(idUser: string, name: string, limit?: number, page?: number): Promise<Pagination<Account>> {
+        const take = limit ?? 30;
+        const skip = page ?? 1;
+        const shouldPaginate = (limit !== undefined || limit !== null);
+        
+        const [accounts, total] = await Promise.all([
+            this.prisma.account.findMany({
+                where: { idUser, name: { contains: name } }, 
+                orderBy: { name: "asc" },
+                ...(shouldPaginate && {
+                    take: take,
+                    skip: (skip - 1) * take
+                })
+            }),
+            this.prisma.account.count({
+                where: { idUser, name: { contains: name } }
+            })
+        ]);
+
+        const pagination = new Pagination<Account>();
+        pagination.list = accounts.map(ac => this.parse(ac));
+        pagination.pages = (limit) ? Pagination.PageLength(total, limit) : 1;
+
+        return pagination;
+    }
 }

@@ -4,6 +4,7 @@ import dayjsUtc from "dayjs/plugin/utc";
 import { Icon } from "@iconify/react";
 
 import { Transaction } from "../../core/transaction/domain/Transaction";
+import type { TransactionFilter } from "../../core/transaction/domain/TransactionFilter";
 import type { TransactionRepository } from "../../core/transaction/domain/TransactionRepository";
 import { TransactionApiRepository } from "../../core/transaction/infrastructure/TransactionApiRepository";
 
@@ -57,15 +58,44 @@ export const TransactionList = () => {
             newPagination.pages = pagination.pages;
             setPagination(newPagination);
         };
+        const filter = (filter: TransactionFilter) => {
+            repository.getListFilter(filter, limit, page).then((pagination: Pagination<Transaction>) => {
+                setPagination(pagination);
+                Notify("transaction:filter:hide");
+            }).catch((err: any) => {
+                if (err instanceof Error) {
+                    window.showAlert(err.message);
+                    Notify("transaction:filter:activeButton")
+                }
+            });
+        };
+        const clear = () => {
+            repository.getList(limit, page).then((pagination: Pagination<Transaction>) => {
+                setPagination(pagination);
+                Notify("transaction:filter:hide");
+            }).catch((err: any) => {
+                if (err instanceof Error) {
+                    window.showAlert(err.message);
+                    Notify("transaction:filter:activeButton")
+                }
+            });
+        };
 
         Attach("transaction:add", add);
         Attach("transaction:update", update);
+        Attach("transaction:filter", filter);
+        Attach("transaction:filter:clear", clear);
         return () => {
             Detach("transaction:add", add);
             Detach("transaction:update", update);
+            Detach("transaction:filter", filter);
+            Detach("transaction:filter:clear", clear);
         };
-    }, [pagination.list]);
+    }, [pagination.list, limit, page]);
 
+    const clickShowFilter = () => {
+        Notify("transaction:filter:show");
+    }
     const clickShow = (transaction: Transaction) => {
         Notify("transaction:showView", transaction);
     }
@@ -107,31 +137,35 @@ export const TransactionList = () => {
     };
 
     return <div className="transactionsList card">
-        <header className="card-header">
+        <header className="card-header" style={{ margin: "1rem", marginBottom: "0" }}>
             <h2 className="card-header-title">{t("index.transactions.title")}</h2>
+            <button className="button is-primary" aria-label="more options" 
+                onClick={clickShowFilter}>
+                <Icon icon="material-symbols:filter-alt-sharp" />
+            </button>
         </header>
         <div className="card-content">
             <div className="content">
                 {(pagination.list.length === 0) && <p className="noContent">{t("index.transactions.noItems")}</p>}
                 {(pagination.list.length > 0) && <>
                     <div className="table-container">
-                        <table className="table is-fullwidth">
+                        <table className="table is-fullwidth is-bordered is-hoverable">
                             <thead>
                                 <tr>
-                                    <th className="fiftyPercent">{t("index.transactions.account")}</th>
-                                    <th>{t("index.transactions.value")}</th>
-                                    <th>{t("index.transactions.date")}</th>
-                                    <th>{t("index.transactions.options")}</th>
+                                    <th className="has-text-centered">{t("index.transactions.account")}</th>
+                                    <th className="has-text-centered">{t("index.transactions.date")}</th>
+                                    <th className="has-text-centered">{t("index.transactions.value")}</th>
+                                    <th className="has-text-centered">{t("index.transactions.options")}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {pagination.list.map((transaction: Transaction) => <tr key={transaction.id}>
-                                    <th>{transaction.account}</th>
-                                    <td style={{ color: (transaction.type) ? "green" : "red" }}>
+                                    <th className="has-text-centered">{transaction.account}</th>
+                                    <td className="has-text-centered">{dayjs.utc(transaction.date).format("DD/MM/YYYY HH:mm:ss")}</td>
+                                    <td className="has-text-right" style={{ color: (transaction.type) ? "green" : "red" }}>
                                         {((transaction.type) ? "" : "-") + FormatNumber(transaction.value)}
                                     </td>
-                                    <td>{dayjs.utc(transaction.date).format("DD/MM/YYYY HH:mm:ss")}</td>
-                                    <td>
+                                    <td className="has-text-centered">
                                         <div className="options">
                                             <button className="button is-info" 
                                                 onClick={() => clickShow(transaction)}>
