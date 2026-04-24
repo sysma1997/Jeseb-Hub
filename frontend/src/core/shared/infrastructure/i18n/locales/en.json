@@ -1,4 +1,8 @@
 {
+    "og": {
+        "title": "Jeseb Hub", 
+        "description": "Jeseb Hub is a personal finance management application that allows you to easily manage your accounts, transactions and categories. With a simple and intuitive interface, you can quickly add and edit your financial information, as well as view detailed reports and statistics about your finances."
+    }, 
     "locales": {
         "title": "Language", 
         "en": "English", 
@@ -69,12 +73,18 @@
                 "description": "Delete this transaction?", 
                 "success": "Delete transaction successfully."
             }, 
-            "accountsRequired": "You need to create at least one account to add a transaction."
+            "accountsRequired": "You need to create at least one account to add a transaction.", 
+            "filter": {
+                "dateRange": "Date range", 
+                "all": "All", 
+                "noSelectFilters": "No filters selected to apply."
+            }
         }
     }, 
     "account": {
         "title": "Accounts", 
         "noItems": "There are not accounts to show.", 
+        "search": "Search account",
         "total": "Total", 
         "add": {
             "title": "Add account", 
@@ -97,6 +107,7 @@
     "category": {
         "title": "Categories", 
         "noItems": "There are not categories to show.", 
+        "search": "Search category",
         "add": {
             "title": "Add category", 
             "description": "Enter the name for the category", 
@@ -199,6 +210,9 @@
         }, 
         "balance": "Balance", 
         "limit": "Limit", 
-        "page": "Page"
+        "page": "Page", 
+        "search": "Search", 
+        "filter": "Filter", 
+        "clear": "Clear"
     }
 }

@@ -40,11 +40,11 @@ const detectLocaleFromBrowser = (): Locale | null => {
 }
 
 export const initTranslations = (defaultLocale: Locale = "en") => {
-    const urlLocale = detectLocaleFromURL();
-    if (urlLocale) {
-        currentLocale = urlLocale;
+    const browserLocale = detectLocaleFromBrowser();
+    if (browserLocale) {
+        currentLocale = browserLocale;
         if (typeof localStorage !== 'undefined') {
-            localStorage.setItem('locale', urlLocale);
+            localStorage.setItem('locale', browserLocale);
         }
         return;
     }
@@ -53,11 +53,11 @@ export const initTranslations = (defaultLocale: Locale = "en") => {
         currentLocale = storedLocale;
         return;
     }
-    const browserLocale = detectLocaleFromBrowser();
-    if (browserLocale) {
-        currentLocale = browserLocale;
+    const urlLocale = detectLocaleFromURL();
+    if (urlLocale) {
+        currentLocale = urlLocale;
         if (typeof localStorage !== 'undefined') {
-            localStorage.setItem('locale', browserLocale);
+            localStorage.setItem('locale', urlLocale);
         }
         return;
     }

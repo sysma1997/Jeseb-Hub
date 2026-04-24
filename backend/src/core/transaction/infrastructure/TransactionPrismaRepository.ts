@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { v4 as Uuid } from "uuid";
 
 import { Transaction } from "../domain/Transaction";
+import type { TransactionFilter } from "../domain/TransactionFilter";
 import { TransactionRepository } from "../domain/TransactionRepository";
 import { Pagination } from "../../shared/domain/Pagination";
 import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
@@ -111,5 +112,41 @@ export class TransactionPrismaRepository implements TransactionRepository {
     }
     async getCount(idUser: string): Promise<number> {
         return await this.prisma.transaction.count({ where: { idUser } });
+    }
+    async getListFilter(idUser: string, filter: TransactionFilter, limit?: number, page?: number): Promise<Pagination<Transaction>> {
+        const take = limit ?? 30;
+        const skip = page ?? 1;
+        const shouldPaginate = (limit !== undefined || limit !== null);
+        
+        const where: any = { idUser };
+        if (filter.dateFrom) where.date = { gte: filter.dateFrom };
+        if (filter.dateTo) where.date = { lte: filter.dateTo };
+        if (filter.type !== undefined) where.type = filter.type;
+        if (filter.account) where.account = filter.account;
+        if (filter.category) where.category = filter.category;
+
+        const [transactions, total] = await Promise.all([
+            this.prisma.transaction.findMany({
+                where, 
+                orderBy: { date: 'desc' }, 
+                ...(shouldPaginate && {
+                    take, 
+                    skip: (skip - 1) * take
+                })
+            }),
+            this.prisma.transaction.count({ where })
+        ]);
+
+        const pagination = new Pagination<Transaction>();
+        pagination.list = transactions.map(t => new Transaction(this.translator, t.date, t.type, t.account, 
+            Number(t.value), 
+            t.id ?? undefined, 
+            t.idUser ?? undefined, 
+            t.category ?? undefined, 
+            t.description ?? undefined, 
+            undefined
+        ));
+        pagination.pages = (limit) ? Pagination.PageLength(total, limit) : 1;
+        return pagination;
     }
 }

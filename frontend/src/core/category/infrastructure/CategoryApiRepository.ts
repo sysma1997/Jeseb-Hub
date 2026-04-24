@@ -35,7 +35,7 @@ export class CategoryApiRepository extends Api implements CategoryRepository {
         if (response.status >= 400) 
             throw new Error(response.data);
 
-        if (!response.data) return undefined;
+        if (response.data === "{}") return undefined;
         const categoryDto: CategoryDto = JSON.parse(response.data);
         return Category.FromDto(categoryDto);
     }
@@ -53,6 +53,27 @@ export class CategoryApiRepository extends Api implements CategoryRepository {
         const list: Category[] = [];
         for (let i = 0; i < data.list.length; i++) 
             list.push(Category.FromDto(data.list[i]));
+
+        const pagination: Pagination<Category> = new Pagination();
+        pagination.pages = pages;
+        pagination.list = list;
+        return pagination;
+    }
+    async getListSearch(name: string, limit?: number, page?: number): Promise<Pagination<Category>> {
+        let method = "category/list/search";
+        const data: any = { name };
+        if (limit) data.limit = limit;
+        if (page) data.page = page;
+
+        const response: ApiResponse = await this.fetch(ApiMethods.POST, method, data);
+        if (response.status >= 400) 
+            throw new Error(response.data);
+
+        const resData: any = JSON.parse(response.data);
+        const pages: number = resData.pages;
+        const list: Category[] = [];
+        for (let i = 0; i < resData.list.length; i++)
+            list.push(Category.FromDto(resData.list[i]));
 
         const pagination: Pagination<Category> = new Pagination();
         pagination.pages = pages;

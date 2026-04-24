@@ -17,6 +17,7 @@ import "../../styles/accounts/list.css";
 const repository: AccountRepository = new AccountApiRepository();
 
 export const List = () => {
+    const [search, setSearch] = useState<string>("");
     const [total, setTotal] = useState<number>(0);
 
     const [pagination, setPagination] = useState<Pagination<Account>>(new Pagination());
@@ -56,6 +57,16 @@ export const List = () => {
             ac1.name.localeCompare(ac2.name));
     };
 
+    const clickSearch = () => {
+            if (search === "") {
+                repository.getList(limit, page).then((pagination: Pagination<Account>) => setPagination(pagination));
+                return;
+            }
+    
+            repository.getListSearch(search, limit, page).then((pagination: Pagination<Account>) => {
+                setPagination(pagination);
+            });
+        };
     const clickUpdate = (account: Account) => {
         window.showPrompt(t("account.update.description"), t("account.update.title"), (value: string) => {
             window.showConfirm(t("account.update.confirm", { name: value }), t("account.update.title"), async () => {
@@ -126,10 +137,25 @@ export const List = () => {
         </header>
         <div className="card-content">
             <div className="content">
+                <div className="field has-addons">
+                    <p className="control has-icons-left" style={{ flex: 1 }}>
+                        <input className="input" type="text" placeholder={t("account.search")} 
+                            value={search} onChange={e => setSearch(e.target.value)}
+                            onKeyDown={e => e.key == "Enter" && clickSearch()} />
+                        <span className="icon is-small is-left">
+                            <Icon icon="material-symbols:search" />
+                        </span>
+                    </p>
+                    <div className="control">
+                        <button className="button is-primary" onClick={clickSearch}>
+                            {t("shared.search")}
+                        </button>
+                    </div>
+                </div>
                 {(pagination.list.length === 0) && <p className="noContent">{t("account.noItems")}</p>}
                 {(pagination.list.length > 0) && <>
                     <div className="table-container">
-                        <table className="table is-fullwidth">
+                        <table className="table is-fullwidth is-bordered is-hoverable">
                             <thead>
                                 <tr>
                                     <th className="fiftyPercent">{t("shared.name")}</th>
@@ -141,7 +167,7 @@ export const List = () => {
                             <tbody>
                                 {pagination.list.map((account: Account) => <tr key={account.id}>
                                     <th>{account.name}</th>
-                                    <td>{FormatNumber(account.balance)}</td>
+                                    <td className="has-text-right">{FormatNumber(account.balance)}</td>
                                     <td><button className="button is-primary" 
                                         onClick={() => clickUpdate(account)}>
                                         <Icon icon="material-symbols:edit-rounded" />
@@ -153,7 +179,7 @@ export const List = () => {
                                 </tr>)}
                                 <tr>
                                     <th>{t("account.total")}</th>
-                                    <td>{FormatNumber(total)}</td>
+                                    <td className="has-text-right">{FormatNumber(total)}</td>
                                 </tr>
                             </tbody>
                         </table>

@@ -95,4 +95,27 @@ export class CategoryPrismaRepository implements CategoryRepository {
 
         return pagination;
     }
+    async getListSearch(idUser: string, name: string, limit?: number, page?: number): Promise<Pagination<Category>> {
+        const take = limit ?? 30;
+        const skip = page ?? 1;
+        const shouldPaginate = (limit !== undefined || limit !== null);
+
+        const [categories, total] = await Promise.all([
+            this.prisma.category.findMany({
+                where: { idUser, name: { contains: name } }, 
+                orderBy: { name: "asc" }, 
+                ...(shouldPaginate && {
+                    take: take, 
+                    skip: (skip - 1) * take
+                })
+            }), 
+            this.prisma.category.count({ where: { idUser, name: { contains: name } } })
+        ]);
+
+        const pagination = new Pagination<Category>();
+        pagination.list = categories.map(ca => this.parse(ca));
+        pagination.pages = (limit) ? Pagination.PageLength(total, limit) : 1;
+
+        return pagination;
+    }
 }

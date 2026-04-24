@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import { t } from "../../core/shared/infrastructure/i18n";
 
@@ -16,6 +16,8 @@ import "../../styles/categories/list.css";
 const repository: CategoryRepository = new CategoryApiRepository();
 
 export const List = () => {
+    const [search, setSearch] = useState<string>("");
+
     const [pagination, setPagination] = useState<Pagination<Category>>(new Pagination<Category>());
     const [limit, setLimit] = useState<number>(15);
     const [page, setPage] = useState<number>(1);
@@ -49,6 +51,16 @@ export const List = () => {
             ca1.name.localeCompare(ca2.name));
     };
 
+    const clickSearch = () => {
+        if (search === "") {
+            repository.getList(limit, page).then((pagination: Pagination<Category>) => setPagination(pagination));
+            return;
+        }
+
+        repository.getListSearch(search, limit, page).then((pagination: Pagination<Category>) => {
+            setPagination(pagination);
+        });
+    };
     const clickUpdate = (category: Category) => {
         window.showPrompt(t("category.update.description"), t("category.update.title"), (value: string) => {
             window.showConfirm(t("category.update.confirm", { name: value }), t("category.update.title"), async () => {
@@ -119,10 +131,25 @@ export const List = () => {
         </header>
         <div className="card-content">
             <div className="content">
+                <div className="field has-addons">
+                    <p className="control has-icons-left" style={{ flex: 1 }}>
+                        <input className="input" type="text" placeholder={t("category.search")} 
+                            value={search} onChange={e => setSearch(e.target.value)}
+                            onKeyDown={e => e.key == "Enter" && clickSearch()} />
+                        <span className="icon is-small is-left">
+                            <Icon icon="material-symbols:search" />
+                        </span>
+                    </p>
+                    <div className="control">
+                        <button className="button is-primary" onClick={clickSearch}>
+                            {t("shared.search")}
+                        </button>
+                    </div>
+                </div>
                 {(pagination.list.length === 0) && <p className="noContent">{t("category.noItems")}</p>}
                 {(pagination.list.length > 0) && <>
                     <div className="table-container">
-                        <table className="table is-fullwidth">
+                        <table className="table is-fullwidth is-bordered is-hoverable">
                             <thead>
                                 <tr>
                                     <th className="oneHundredPercent">{t("shared.name")}</th>

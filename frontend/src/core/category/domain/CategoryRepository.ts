@@ -10,4 +10,5 @@ export interface CategoryRepository {
     search(name: string): Promise<Category | undefined>;
 
     getList(limit?: number, page?: number): Promise<Pagination<Category>>;
+    getListSearch(name: string, limit?: number, page?: number): Promise<Pagination<Category>>;
 }

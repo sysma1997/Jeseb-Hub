@@ -7,9 +7,6 @@
 .transactionsList .content .noContent {
     text-align: center;
 }
-.transactionsList .content .fiftyPercent {
-    width: 50%;
-}
 .transactionsList .content .oneHundredPercent {
     width: 100%;
 }
