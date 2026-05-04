@@ -2,21 +2,23 @@ import { v4 as Uuid } from "uuid";
 import dayjs from "dayjs";
 import dayjsUtc from "dayjs/plugin/utc";
 
-import { Transaction } from "../core/transaction/domain/Transaction";
-import type { TransactionRepository } from "../core/transaction/domain/TransactionRepository";
-import type { TransactionFilter } from "../core/transaction/domain/TransactionFilter";
-import { TransactionApiRepository } from "../core/transaction/infrastructure/TransactionApiRepository";
-import { Account } from "../core/account/domain/Account";
-import type { AccountRepository } from "../core/account/domain/AccountRepository";
-import { AccountApiRepository } from "../core/account/infrastructure/AccountApiRepository"; 
-import { Category } from "../core/category/domain/Category";
-import type { CategoryRepository } from "../core/category/domain/CategoryRepository";
-import { CategoryApiRepository } from "../core/category/infrastructure/CategoryApiRepository";
+import { Transaction } from "../../core/transaction/domain/Transaction";
+import type { TransactionRepository } from "../../core/transaction/domain/TransactionRepository";
+import type { TransactionFilter } from "../../core/transaction/domain/TransactionFilter";
+import { TransactionApiRepository } from "../../core/transaction/infrastructure/TransactionApiRepository";
+import { Account } from "../../core/account/domain/Account";
+import type { AccountRepository } from "../../core/account/domain/AccountRepository";
+import { AccountApiRepository } from "../../core/account/infrastructure/AccountApiRepository"; 
+import { Category } from "../../core/category/domain/Category";
+import type { CategoryRepository } from "../../core/category/domain/CategoryRepository";
+import { CategoryApiRepository } from "../../core/category/infrastructure/CategoryApiRepository";
 
-import { Pagination } from "../core/shared/domain/Pagination";
-import { Attach, Notify } from "../core/shared/domain/Subject";
-import { FormatNumber } from "../core/shared/domain/FormatNumber";
-import { t } from "../core/shared/infrastructure/i18n";
+import { Pagination } from "../../core/shared/domain/Pagination";
+import { Attach, Notify } from "../../core/shared/domain/Subject";
+import { FormatNumber } from "../../core/shared/domain/FormatNumber";
+import { t } from "../../core/shared/infrastructure/i18n";
+
+import { summaryInit } from "./summary";
 
 dayjs.extend(dayjsUtc);
 
@@ -111,6 +113,8 @@ try {
             mftCategory.appendChild(option.cloneNode(true));
         });
     });
+
+    summaryInit(transactionRepository);
 } catch (err: any) {
     if (err instanceof Error) {
         console.error(err);
@@ -231,8 +235,8 @@ mftClearFilters.onclick = () => {
 };
 mftAccept.onclick = () => {
     const filter: TransactionFilter = {};
-    if (mftDateFrom.value) filter.dateFrom = dayjs.utc(mftDateFrom.value).toDate();
-    if (mftDateTo.value) filter.dateTo = dayjs.utc(mftDateTo.value).toDate();
+    if (mftDateFrom.value) filter.dateFrom = dayjs(mftDateFrom.value).toDate();
+    if (mftDateTo.value) filter.dateTo = dayjs(mftDateTo.value).toDate();
     if (mftAccount.value) {
         const account = accounts.find(a => a.id === mftAccount.value);
         if (account) filter.account = account.name;
@@ -245,7 +249,7 @@ mftAccept.onclick = () => {
 
     if (!filter.dateFrom && !filter.dateTo && 
         !filter.account && !filter.category && 
-        !filter.type) {
+        filter.type === undefined) {
         window.showAlert(t("index.transactions.filter.noSelectFilters"));
         return;
     }

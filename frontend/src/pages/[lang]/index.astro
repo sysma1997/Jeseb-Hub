@@ -31,6 +31,24 @@ const t = createTranslations(locale);
 	
 	<div class="transactions">
         <div class="transactionsContent">
+			<p id="pSTitle" class="is-size-5" style="color: white"><b>{t("index.summary.title")}</b></p>
+			<div id="dSTags" style="display: flex; gap: 0.5rem">
+			</div>
+			<div class="summary">
+				<div class="box">
+					<label class="has-text-white">{t("index.summary.income")}:</label>
+					<label id="lSIncome" class="has-text-right">...</label>
+				</div>
+				<div class="box">
+					<label class="has-text-white">{t("index.summary.expenses")}:</label>
+					<label id="lSExpenses" class="has-text-right">...</label>
+				</div>
+				<div class="box">
+					<label class="has-text-white">{t("index.summary.diff")}:</label>
+					<label id="lSDiff" class="has-text-right">...</label>
+				</div>
+				<div></div>
+			</div>
 			<TransactionList client:only="react" />
         </div>
     </div>
@@ -45,10 +63,10 @@ const t = createTranslations(locale);
 				<label class="label">{t("index.transactions.filter.dateRange")}:</label>
 				<div class="field has-addons">
 					<div class="control" style="flex: 1;">
-						<input id="iMFTDateFrom" class="input" type="date" />
+						<input id="iMFTDateFrom" class="input" type="date" style="color: white" />
 					</div>
 					<div class="control" style="flex: 1;">
-						<input id="iMFTDateTo" class="input" type="date" />
+						<input id="iMFTDateTo" class="input" type="date" style="color: white" />
 					</div>
 					<div class="control">
 						<button id="btnMFTClear" class="button is-primary">{t("shared.clear")}</button>
@@ -216,5 +234,5 @@ const t = createTranslations(locale);
 	</Base>
 	<Confirm locale={locale} />
 	<Alert locale={locale} />
-	<script>import "../../scripts/index";</script>
+	<script>import "../../scripts/index/index";</script>
 </Layout>

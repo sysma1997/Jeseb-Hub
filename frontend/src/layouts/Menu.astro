@@ -83,9 +83,9 @@ const t = createTranslations(locale);
         aLocale.onclick = () => {
             setLocale(aLocale.id as Locale);
 
-            let pathname: string = window.location.pathname;
-            pathname = pathname.replace(locale, aLocale.id);
-            window.location.href = pathname;
+            let split = window.location.pathname.split("/");
+            split[1] = split[1].replace(locale, aLocale.id);
+            window.location.href = split.join("/");
         };
     }
     

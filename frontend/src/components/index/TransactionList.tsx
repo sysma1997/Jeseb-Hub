@@ -22,6 +22,8 @@ dayjs.extend(dayjsUtc);
 const repository: TransactionRepository = new TransactionApiRepository();
 
 export const TransactionList = () => {
+    const [filter, setFilter] = useState<TransactionFilter>();
+
     const [pagination, setPagination] = useState<Pagination<Transaction>>(new Pagination());
     const [limit, setLimit] = useState<number>(15);
     const [page, setPage] = useState<number>(1);
@@ -59,7 +61,9 @@ export const TransactionList = () => {
             setPagination(newPagination);
         };
         const filter = (filter: TransactionFilter) => {
-            repository.getListFilter(filter, limit, page).then((pagination: Pagination<Transaction>) => {
+            setFilter(filter);
+            setPage(1);
+            repository.getListFilter(filter, limit, 1).then((pagination: Pagination<Transaction>) => {
                 setPagination(pagination);
                 Notify("transaction:filter:hide");
             }).catch((err: any) => {
@@ -70,7 +74,9 @@ export const TransactionList = () => {
             });
         };
         const clear = () => {
-            repository.getList(limit, page).then((pagination: Pagination<Transaction>) => {
+            setFilter(undefined);
+            setPage(1);
+            repository.getList(limit, 1).then((pagination: Pagination<Transaction>) => {
                 setPagination(pagination);
                 Notify("transaction:filter:hide");
             }).catch((err: any) => {
@@ -118,6 +124,7 @@ export const TransactionList = () => {
                 newPagination.list = tra;
                 newPagination.pages = pagination.pages;
                 setPagination(newPagination);
+                Notify("transaction:delete", id);
                 window.showAlert(t("index.transactions.delete.success"), t("index.transactions.delete.title"));
             } catch (err: any) {
                 if (err instanceof Error) {
@@ -131,9 +138,11 @@ export const TransactionList = () => {
     const onChangePagination = (limit: number, page: number) => {
         setLimit(limit);
         setPage(page);
-        repository.getList(limit, page).then((pagination: Pagination<Transaction>) => {
-            setPagination(pagination);
-        });
+
+        if (filter) repository.getListFilter(filter, limit, page).then((pagination: Pagination<Transaction>) => 
+            setPagination(pagination));
+        else repository.getList(limit, page).then((pagination: Pagination<Transaction>) => 
+            setPagination(pagination));
     };
 
     return <div className="transactionsList card">

@@ -47,6 +47,17 @@
         "invalid": "Token inválido o caducado."
     }, 
     "index": {
+        "summary": {
+            "title": "Resumen", 
+            "income": "Ingresos", 
+            "expenses": "Gastos", 
+            "diff": "Diferencia", 
+            "thisMonth": "Este mes", 
+            "filter": {
+                "dateFrom": "Fecha desde", 
+                "dateTo": "Fecha hasta"
+            }
+        }, 
         "transactions": {
             "noItems": "No hay transacciones para mostrar.", 
             "title": "Transacciones", 

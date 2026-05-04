@@ -194,6 +194,43 @@ export class TransactionController extends ControllerBase {
             }
         });
 
+        this.router.post("/get/monthly/income", UserAuthenticate, async (req, res) => {
+            try {
+                const idUser: string = req.user!.id;
+                const filter: TransactionFilter = {};
+                filter.dateFrom = req.body.dateFrom ? dayjs.utc(String(req.body.dateFrom)).toDate() : undefined;
+                filter.dateTo = req.body.dateTo ? dayjs.utc(String(req.body.dateTo)).toDate() : undefined;
+                filter.account = req.body.account ? String(req.body.account) : undefined;
+                filter.category = req.body.category ? String(req.body.category) : undefined;
+
+                const income = await this.repository.getMonthlyIncome(idUser, 
+                    (filter.dateFrom || filter.dateTo || filter.account || filter.category) ? filter : undefined);
+                console.log("income", income);
+
+                res.send(income);
+            } catch (err: any) {
+                if (err instanceof Error) res.status(400).send(err.message);
+            }
+        });
+        this.router.post("/get/monthly/expenses", UserAuthenticate, async (req, res) => {
+            try {
+                const idUser: string = req.user!.id;
+                const filter: TransactionFilter = {};
+                filter.dateFrom = req.body.dateFrom ? dayjs.utc(String(req.body.dateFrom)).toDate() : undefined;
+                filter.dateTo = req.body.dateTo ? dayjs.utc(String(req.body.dateTo)).toDate() : undefined;
+                filter.account = req.body.account ? String(req.body.account) : undefined;
+                filter.category = req.body.category ? String(req.body.category) : undefined;
+
+                const expenses = await this.repository.getMonthlyExpenses(idUser, 
+                    (filter.dateFrom || filter.dateTo || filter.account || filter.category) ? filter : undefined);
+                console.log("expenses", expenses);
+
+                res.send(expenses);
+            } catch (err: any) {
+                if (err instanceof Error) res.status(400).send(err.message);
+            }
+        });
+
         this.router.post("/import", UserAuthenticate, async (req, res) => {
             try {
                 const idUser: string = req.user!.id;
