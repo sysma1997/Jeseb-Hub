@@ -8,22 +8,18 @@ const dictionaries: Record<Locale, any> = { en, es };
 let currentLocale: Locale = "en";
 
 const detectLocaleFromURL = (): Locale | null => {
-    if (typeof window === 'undefined') return null;
-
     const path = window.location.pathname;
     if (path.startsWith('/es/') || path === '/es') {
         return 'es';
     }
-    if (path.startsWith('/en/') || path === '/en' || path === '/') {
+    if (path.startsWith('/en/') || path === '/en') {
         return 'en';
     }
 
     return null;
 };
 const detectLocaleFromStorage = (): Locale | null => {
-    if (typeof localStorage === 'undefined') return null;
-
-    const saved = localStorage.getItem('locale') as Locale;
+    const saved = window.localStorage.getItem('locale') as Locale;
     if (saved && (saved === 'en' || saved === 'es')) {
         return saved;
     }
@@ -40,25 +36,21 @@ const detectLocaleFromBrowser = (): Locale | null => {
 }
 
 export const initTranslations = (defaultLocale: Locale = "en") => {
+    const urlLocale = detectLocaleFromURL();
+    if (urlLocale) {
+        currentLocale = urlLocale;
+        window.localStorage.setItem("locale", urlLocale);
+        return;
+    }
     const browserLocale = detectLocaleFromBrowser();
     if (browserLocale) {
         currentLocale = browserLocale;
-        if (typeof localStorage !== 'undefined') {
-            localStorage.setItem('locale', browserLocale);
-        }
+        window.localStorage.setItem("locale", browserLocale);
         return;
     }
     const storedLocale = detectLocaleFromStorage();
     if (storedLocale) {
         currentLocale = storedLocale;
-        return;
-    }
-    const urlLocale = detectLocaleFromURL();
-    if (urlLocale) {
-        currentLocale = urlLocale;
-        if (typeof localStorage !== 'undefined') {
-            localStorage.setItem('locale', urlLocale);
-        }
         return;
     }
 
@@ -67,8 +59,7 @@ export const initTranslations = (defaultLocale: Locale = "en") => {
 export const getLocale = (): Locale => currentLocale;
 export const setLocale = (locale: Locale) => {
     currentLocale = locale;
-    if (typeof localStorage !== "undefined")
-        localStorage.setItem("locale", locale);
+    window.localStorage.setItem("locale", locale);
 };
 
 export const t = (key: string, params?: Record<string, string | number>): string => {

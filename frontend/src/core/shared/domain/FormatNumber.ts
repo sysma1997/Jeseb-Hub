@@ -1,5 +1,7 @@
 export const FormatNumber = (value: number): string => {
-    let str = String(value).trim();
+    const rounded = Math.round(value * 100) / 100;
+
+    let str = rounded.toFixed(2);
     if (str.includes('.')) str = str.replace('.', ',');
     
     const parts = str.split(',');

@@ -47,6 +47,17 @@
         "invalid": "Invalid or expired token."
     }, 
     "index": {
+        "summary": {
+            "title": "Summary", 
+            "income": "Income", 
+            "expenses": "Expenses", 
+            "diff": "Diff", 
+            "thisMonth": "This month", 
+            "filter": {
+                "dateFrom": "Date from", 
+                "dateTo": "Date to"
+            }
+        }, 
         "transactions": {
             "noItems": "There are not transactions to show.", 
             "title": "Transactions", 

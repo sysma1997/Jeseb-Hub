@@ -13,4 +13,7 @@ export interface TransactionRepository {
     getList(idUser: string, limit?: number, page?: number): Promise<Pagination<Transaction>>;
     getCount(idUser: string): Promise<number>;
     getListFilter(idUser: string, filter: TransactionFilter, limit?: number, page?: number): Promise<Pagination<Transaction>>;
+
+    getMonthlyIncome(idUser: string, filter?: TransactionFilter): Promise<number>;
+    getMonthlyExpenses(idUser: string, filter?: TransactionFilter): Promise<number>;
 }

@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { v4 as Uuid } from "uuid";
+import dayjs from "dayjs";
 
 import { Transaction } from "../domain/Transaction";
 import type { TransactionFilter } from "../domain/TransactionFilter";
@@ -120,7 +121,16 @@ export class TransactionPrismaRepository implements TransactionRepository {
         
         const where: any = { idUser };
         if (filter.dateFrom) where.date = { gte: filter.dateFrom };
-        if (filter.dateTo) where.date = { lte: filter.dateTo };
+        if (filter.dateTo) {
+            let dateTo = dayjs(filter.dateTo);
+            dateTo = dateTo.add(1, "days");
+            where.date = { lte: dateTo.toDate() };
+        }
+        if (filter.dateFrom && filter.dateTo) {
+            let dateTo = dayjs(filter.dateTo);
+            dateTo = dateTo.add(1, "days");
+            where.date = { gte: filter.dateFrom, lte: dateTo.toDate() };
+        }
         if (filter.type !== undefined) where.type = filter.type;
         if (filter.account) where.account = filter.account;
         if (filter.category) where.category = filter.category;
@@ -148,5 +158,76 @@ export class TransactionPrismaRepository implements TransactionRepository {
         ));
         pagination.pages = (limit) ? Pagination.PageLength(total, limit) : 1;
         return pagination;
+    }
+
+    async getMonthlyIncome(idUser: string, filter?: TransactionFilter): Promise<number> {
+        let where: any = { idUser };
+        if (filter) {
+            if (filter.dateFrom) where.date = { gte: filter.dateFrom };
+            if (filter.dateTo) {
+                let dateTo = dayjs(filter.dateTo);
+                dateTo = dateTo.add(1, "days");
+                where.date = { lte: dateTo.toDate() };
+            }
+            if (filter.dateFrom && filter.dateTo) {
+                let dateTo = dayjs(filter.dateTo);
+                dateTo = dateTo.add(1, "days");
+                where.date = { gte: filter.dateFrom, lte: dateTo.toDate() };
+            }
+            if (filter.account) where.account = filter.account;
+            if (filter.category) where.category = filter.category;
+        }
+        else {
+            const current = dayjs();
+            const dateFrom = current.startOf("month").toDate();
+            const dateTo = current.endOf("month").toDate();
+
+            where.date = { gte: dateFrom, lte: dateTo };
+        }
+        where.type = true;
+
+        const income = await this.prisma.transaction.aggregate({
+            where, 
+            _sum: {
+                value: true
+            }
+        });
+
+        return Number(income._sum.value ?? 0.0);
+    }
+    async getMonthlyExpenses(idUser: string, filter?: TransactionFilter): Promise<number> {
+        let where: any = { idUser };
+        if (filter) {
+            if (filter.dateFrom) where.date = { gte: filter.dateFrom };
+            if (filter.dateTo) {
+                let dateTo = dayjs(filter.dateTo);
+                dateTo = dateTo.add(1, "days");
+                where.date = { lte: dateTo.toDate() };
+            }
+            if (filter.dateFrom && filter.dateTo) {
+                let dateTo = dayjs(filter.dateTo);
+                dateTo = dateTo.add(1, "days");
+                where.date = { gte: filter.dateFrom, lte: dateTo.toDate() };
+            }
+            if (filter.account) where.account = filter.account;
+            if (filter.category) where.category = filter.category;
+        }
+        else {
+            const current = dayjs();
+            const dateFrom = current.startOf("month").toDate();
+            const dateTo = current.endOf("month").toDate();
+
+            where.date = { gte: dateFrom, lte: dateTo };
+        }
+        where.type = false;
+
+        const expenses = await this.prisma.transaction.aggregate({
+            where, 
+            _sum: {
+                value: true
+            }
+        });
+
+        return Number(expenses._sum.value ?? 0.0);
     }
 }

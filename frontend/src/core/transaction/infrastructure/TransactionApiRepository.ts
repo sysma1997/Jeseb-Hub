@@ -72,6 +72,21 @@ export class TransactionApiRepository extends Api implements TransactionReposito
         return pagination;
     }
 
+    async getMonthlyIncome(transactionFilter?: TransactionFilter): Promise<number> {
+        const response: ApiResponse = await this.fetch(ApiMethods.POST, "transaction/get/monthly/income", transactionFilter);
+        if (response.status >= 400) 
+            throw new Error(response.data);
+
+        return Number(response.data);
+    }
+    async getMonthlyExpenses(transactionFilter?: TransactionFilter): Promise<number> {
+        const response: ApiResponse = await this.fetch(ApiMethods.POST, "transaction/get/monthly/expenses", transactionFilter);
+        if (response.status >= 400) 
+            throw new Error(response.data);
+
+        return Number(response.data);
+    }
+
     async import(transactions: Transaction[]): Promise<void> {
         const params: TransactionDto[] = transactions.map(t => t.toDto());
         const response: ApiResponse = await this.fetch(ApiMethods.POST, "transaction/import", params);
