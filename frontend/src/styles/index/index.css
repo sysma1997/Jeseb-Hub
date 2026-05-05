@@ -16,6 +16,13 @@
     gap: 1rem;
 }
 
+.transactions .transactionsContent #pSTitle {
+    color: white;
+}
+.transactions .transactionsContent #dSTags {
+    display: flex; 
+    gap: 0.5rem;
+}
 .transactions .transactionsContent .summary {
     display: flex;
     flex-direction: row;
@@ -54,5 +61,18 @@
 
         flex-direction: column;
         align-items: center;
+    }
+
+    .transactions .transactionsContent #pSTitle {
+        width: 100%;
+    }
+    .transactions .transactionsContent #dSTags {
+        width: 100%;
+        overflow: auto;
+    }
+    
+    .transactions .transactionsContent .summary {
+        width: 100%;
+        overflow: auto;
     }
 }
