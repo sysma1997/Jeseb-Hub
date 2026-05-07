@@ -9,7 +9,7 @@ import Form from "../../components/Form.astro";
 import Base from "../../components/modals/Base.astro";
 import Alert from "../../components/modals/Alert.astro";
 
-import jeseb from "../../assets/images/jeseb.png";
+import icon from "../../../public/jeseb_icon_dark.svg";
 
 import "../../styles/login.css";
 
@@ -27,7 +27,7 @@ const t = createTranslations(locale);
 <Layout locale={locale} title={t("login.title")}>
     <Locale locale={locale} />
     <div class="container">
-        <img class="icon" src={jeseb.src} alt="Jeseb Hub" />
+        <img class="icon" src={icon.src} alt="Jeseb Hub" />
         <Form title={t("login.title")}>
             <div class="field">
                 <label class="label">{t("shared.email")}</label>
