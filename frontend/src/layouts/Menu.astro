@@ -1,7 +1,7 @@
 ---
 import { createTranslations } from "../core/shared/infrastructure/i18n/server"; 
 
-import jeseb from "../assets/images/jeseb.png";
+import jeseb from "../../public/jeseb_icon_dark.svg";
 
 const locale = Astro.props?.locale || "en";
 const t = createTranslations(locale);
@@ -15,7 +15,7 @@ const t = createTranslations(locale);
 <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
         <a class="navbar-item" href={`/${locale}`}>
-            <img src={jeseb.src} alt="Jeseb" />
+            <img src={jeseb.src} alt="Jeseb" width="28" />
             <b>Jeseb</b>
         </a>
         <a id="navbarBurger" role="button" class="navbar-burger" 
