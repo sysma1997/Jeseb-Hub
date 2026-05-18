@@ -1,0 +1,60 @@
+---
+import { createTranslations } from "../../core/shared/infrastructure/i18n/server";
+
+import Dropdown from "./Dropdown.astro";
+
+const locale = Astro.props?.locale || "en";
+const t = createTranslations(locale);
+---
+
+<style>
+    #dOptions {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+
+        position: fixed;
+        right: 10px;
+        top: 10px;
+        z-index: 1;
+    }
+</style>
+<div id="dOptions">
+    <Dropdown id="theme" icon="material-symbols:sunny-snowing-rounded" label={t("theme.title")} items={[
+        { label: t("theme.light"), icon: "solar:sun-2-bold", value: "light" }, 
+        { label: t("theme.dark"), icon: "solar:moon-bold", value: "dark" }, 
+    ]} />
+    <Dropdown id="locale" label={t("locales.title")} items={[
+        { label: t("locales.en"), value: "en" }, 
+        { label: t("locales.es"), value: "es" }
+    ]} value={locale} />
+</div>
+<script>
+    import { type Locale, getLocale, setLocale } from "../../core/shared/infrastructure/i18n";
+
+    let currentLocale = getLocale();
+
+    const themeDropdown = document.getElementById("themeDropdown");
+    const localesDropdown = document.getElementById("localeDropdown");
+
+    themeDropdown?.addEventListener("dropdown-select", (event: Event) => {
+        const theme = (event as CustomEvent).detail.value;
+        
+        window.localStorage.setItem("theme", theme);
+        document.documentElement.setAttribute("data-theme", theme);
+        document.cookie = `theme=${theme};path=/;max-age=31536000;SameSite=Lax`;
+
+        const id = document.getElementById("icon") as HTMLImageElement;
+        id.src = (theme === "dark") ? "/favicon/icon-dark.svg" : "/favicon/icon.svg";
+    });
+    localesDropdown?.addEventListener("dropdown-select", (event: Event) => {
+        const locale = (event as CustomEvent).detail.value;
+        setLocale(locale as Locale);
+
+        let pathname: string = window.location.pathname;
+        pathname = pathname.replace(currentLocale, locale);
+        window.location.href = pathname;
+    });
+</script>

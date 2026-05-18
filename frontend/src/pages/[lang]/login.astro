@@ -2,14 +2,14 @@
 import type { GetStaticPaths } from "astro";
 import { getLocaleFromUrl, createTranslations } from "../../core/shared/infrastructure/i18n/server";
 
+import { Icon } from "astro-icon/components";
+
 import Layout from "../../layouts/Layout.astro";
-import Locale from "../../layouts/Locale.astro";
+import Options from "../../components/shared/Options.astro";
 
 import Form from "../../components/Form.astro";
 import Base from "../../components/modals/Base.astro";
 import Alert from "../../components/modals/Alert.astro";
-
-import icon from "../../../public/favicon/icon-dark.svg";
 
 import "../../styles/login.css";
 
@@ -25,26 +25,35 @@ const t = createTranslations(locale);
 ---
 
 <Layout locale={locale} title={t("login.title")}>
-    <Locale locale={locale} />
+    <Options locale={locale} />
     <div class="container">
-        <img class="icon" src={icon.src} alt="Jeseb Hub" />
+        <img id="icon" src="/favicon/icon.svg" alt="Jeseb Hub" />
+        <script is:inline>
+			(function() {
+				const theme = localStorage.getItem('theme');
+				const id = document.getElementById("icon");
+                id.src = (theme === "dark") ? "/favicon/icon-dark.svg" : "/favicon/icon.svg";
+			})();
+		</script>
         <Form title={t("login.title")}>
             <div class="field">
                 <label class="label">{t("shared.email")}</label>
-                <div class="control">
+                <div class="control has-icons-left">
                     <input id="inEmail" class="input" type="email" />
+                    <span class="icon is-small is-left"><Icon name="material-symbols:mail" /></span>
                 </div>
             </div>
             <div class="field">
                 <label class="label">{t("shared.password")}</label>
-                <div class="control">
+                <div class="control has-icons-left">
                     <input id="inPassword" class="input" type="password" />
+                    <span class="icon is-small is-left"><Icon name="solar:lock-password-bold" /></span>
                 </div>
             </div>
             
             <div class="info">
-                <label>{t("login.passwordRecovery.description")} <a href={`/${locale}/recover`}>{t("login.passwordRecovery.link")}</a>.</label>
-                <label>{t("login.register.description")} <a href={`/${locale}/register`}>{t("login.register.link")}</a>.</label>
+                <label>{t("login.passwordRecovery.description")} <a href={`/${locale}/recover`}><b>{t("login.passwordRecovery.link")}</b></a>.</label>
+                <label>{t("login.register.description")} <a href={`/${locale}/register`}><b>{t("login.register.link")}</b></a>.</label>
             </div>
 
             <div class="field">

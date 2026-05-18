@@ -1,0 +1,94 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Item {
+    label: string;
+    icon?: string;
+    value: string;
+}
+interface Props {
+    id: string;
+    label: string;
+    icon?: string;
+    items: Item[];
+    value?: string;
+}
+
+const { id, label, icon, items, value } = Astro.props;
+
+const selectedItem = (value) ? items.find(item => item.value === value) : null;
+---
+
+<div class="dropdown" id={`${id}Dropdown`} data-value={value}>
+    <div class="dropdown-trigger">
+        <button class="button" aria-haspopup="true" aria-controls={`${id}-menu`}>
+            {(selectedItem?.icon) ? <span class="icon">
+                <Icon name={selectedItem.icon} size={20} />
+            </span> : 
+            (icon) && <span class="icon">
+                <Icon name={icon} size={20} />
+            </span>}
+            <span class="text">{(selectedItem?.label) && selectedItem.label || label}</span>
+            <span class="icon is-small">
+                <Icon name="material-symbols:arrow-drop-down" size={14} />
+            </span>
+        </button>
+    </div>
+
+    <div id={`${id}-menu`} class="dropdown-menu" role="menu">
+        <div class="dropdown-content">
+            {items.map((item) => <a class={`dropdown-item${item.value === value ? " is-active" : ""}`} 
+                data-value={item.value}>
+                {item.icon && <span class="icon">
+                    <Icon name={item.icon} size={18} />
+                </span>}
+                <span>{item.label}</span>
+            </a>)}
+        </div>
+    </div>
+</div>
+
+<script define:vars={{ id, value }}>
+    const dropdown = document.getElementById(`${id}Dropdown`);
+    const trigger = dropdown.querySelector(".dropdown-trigger");
+    const triggerButton = trigger.querySelector("button");
+    const triggerIcon = triggerButton.querySelector(".icon:first-child");
+    const triggerLabel = triggerButton.querySelector(".text");
+    const menu = dropdown.querySelector(".dropdown-menu");
+
+    trigger.addEventListener("click", () => dropdown.classList.toggle("is-active"));
+
+    // Cerrar al hacer clic en un item
+    menu.querySelectorAll(".dropdown-item").forEach((item) => {
+        item.addEventListener("click", (event) => {
+            const target = event.currentTarget;
+            const newValue = target.getAttribute("data-value");
+
+            dropdown.setAttribute("data-value", newValue);
+
+            const itemIcon = target.querySelector(".icon")?.cloneNode(true);
+            const itemLabel = target.querySelector("span:last-child")?.textContent;
+            if (itemIcon && itemLabel) {
+                triggerIcon.innerHTML = "";
+                triggerIcon.appendChild(itemIcon.querySelector("svg")?.cloneNode(true) || itemIcon);
+            }
+            if (itemLabel && triggerLabel) 
+                triggerLabel.textContent = itemLabel;
+
+            menu.querySelectorAll(".dropdown-item").forEach(item => item.classList.remove("is-active"));
+            target.classList.add("is-active");
+            dropdown.classList.remove("is-active");
+
+            dropdown.dispatchEvent(new CustomEvent("dropdown-select", {
+                detail: { value: newValue }, 
+                bubbles: true
+            }))
+        });
+    });
+
+    // Cerrar al hacer clic fuera
+    document.addEventListener("click", (event) => {
+        if (!dropdown.contains(event.target)) 
+            dropdown.classList.remove("is-active");
+    });
+</script>
