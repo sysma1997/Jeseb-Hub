@@ -3,6 +3,11 @@
         "title": "Jeseb Hub", 
         "description": "Jeseb Hub es una aplicación de gestión de finanzas personales que te permite administrar fácilmente tus cuentas, transacciones y categorías. Con una interfaz sencilla e intuitiva, puedes agregar y editar rápidamente tu información financiera, así como consultar informes y estadísticas detalladas sobre tus finanzas."
     }, 
+    "theme": {
+        "title": "Tema", 
+        "light": "Claro", 
+        "dark": "Oscuro"
+    }, 
     "locales": {
         "title": "Idioma", 
         "en": "Inglés", 

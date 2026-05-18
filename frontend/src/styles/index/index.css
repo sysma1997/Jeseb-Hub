@@ -16,9 +16,6 @@
     gap: 1rem;
 }
 
-.transactions .transactionsContent #pSTitle {
-    color: white;
-}
 .transactions .transactionsContent #dSTags {
     display: flex; 
     gap: 0.5rem;

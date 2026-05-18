@@ -3,10 +3,8 @@ import type { GetStaticPaths } from "astro";
 import { getLocaleFromUrl, createTranslations } from "../../core/shared/infrastructure/i18n/server";
 
 import Layout from "../../layouts/Layout.astro";
-import Locale from "../../layouts/Locale.astro";
+import Options from "../../components/shared/Options.astro";
 import Form from "../../components/Form.astro";
-
-import jeseb from "../../../public/favicon/icon-dark.svg";
 
 import "../../styles/validation.css";
 
@@ -22,9 +20,16 @@ const t = createTranslations(locale);
 ---
 
 <Layout locale={locale} title={t("validation.title")}>
-    <Locale locale={locale} />
+    <Options locale={locale} />
     <div class="container">
-        <img class="icon" src={jeseb.src} alt="Jeseb Hub" />
+        <img id="icon" src="/favicon/icon.svg" alt="Jeseb Hub" />
+        <script is:inline>
+			(function() {
+				const theme = localStorage.getItem('theme');
+				const id = document.getElementById("icon");
+                id.src = (theme === "dark") ? "/favicon/icon-dark.svg" : "/favicon/icon.svg";
+			})();
+		</script>
         <Form title={t("validation.title")}>
             <div class="content">
                 <p id="pMessage">{t("validation.description")}</p>

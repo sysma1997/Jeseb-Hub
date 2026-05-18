@@ -1,0 +1,131 @@
+---
+import { Icon } from "astro-icon/components";
+
+import { createTranslations } from "../../core/shared/infrastructure/i18n/server";
+
+const locale = Astro.props?.locale || "en";
+const t = createTranslations(locale);
+---
+
+<style>
+    .navbar {
+        border-bottom: 1px solid #b7b7b7;
+    }
+    .navbar .separator {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .navbar .separator span {
+        background-color: #b7b7b7;
+        margin: 0 0.5rem;
+        width: 1px;
+        height: 60%;
+    }
+
+    #nmiUserIcon {
+        background-color: #00d1b2;
+        border-radius: 50%;
+        object-fit: cover;
+        width: 28px;
+        height: 28px;
+    }
+    #nmUserIcon {
+        display: none;
+
+        background-color: #00d1b2;
+        border-radius: 50%;
+        object-fit: cover;
+        width: 28px;
+        height: 28px;
+    }
+</style>
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div id="navbarMenu" class="navbar-menu">
+        <div class="navbar-end">
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">{t("theme.title")}</a>
+                <div id="nmThemes" class="navbar-dropdown">
+                    <a id="light" class="navbar-item">{t("theme.light")}</option>
+                    <a id="dark" class="navbar-item">{t("theme.dark")}</option>
+                </div>
+            </div>
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">{t("locales.title")}</a>
+                <div id="nmLocales" class="navbar-dropdown">
+                    <a id="en" class="navbar-item">{t("locales.en")}</option>
+                    <a id="es" class="navbar-item">{t("locales.es")}</option>
+                </div>
+            </div>
+            <div class="separator"><span></span></div>
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">
+                    <Icon id="nmiUserIcon" name="solar:user-bold" width={24} color="white" />
+                    <img id="nmUserIcon" />
+                    <span id="nmUserName">{t("shared.name")}</span>
+                </a>
+                <div class="navbar-dropdown is-right">
+                    <a class="navbar-item" href={`/${locale}/profile`}>{t("shared.menu.profile")}</a>
+                    <a id="nmUserLogout" class="navbar-item">{t("shared.menu.logout")}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<script>
+    import { Api } from "../../core/shared/infrastructure/Api";
+    import { User } from "../../core/user/domain/User";
+    import type { UserRepository } from "../../core/user/domain/UserRepository";
+    import { UserApiRepository } from "../../core/user/infrastructure/UserApiRepository";
+    import { type Locale, getLocale, setLocale } from "../../core/shared/infrastructure/i18n";
+
+    const userRepository: UserRepository = new UserApiRepository();
+
+    const nmThemes = document.getElementById("nmThemes") as HTMLDivElement;
+    const nmLocales = document.getElementById("nmLocales") as HTMLDivElement;
+    const nmiUserIcon = document.getElementById("nmiUserIcon") as HTMLElement;
+    const nmUserIcon = document.getElementById("nmUserIcon") as HTMLImageElement;
+    const nmUserName = document.getElementById("nmUserName") as HTMLSpanElement;
+    const nmUserLogout = document.getElementById("nmUserLogout") as HTMLAnchorElement;
+
+    const locale = getLocale();
+
+    const themes = nmThemes.getElementsByClassName("navbar-item");
+    for (let i = 0; i < themes.length; i++) {
+        const aTheme = themes[i] as HTMLAnchorElement;
+        aTheme.onclick = () => {
+            window.localStorage.setItem("theme", aTheme.id);
+            document.documentElement.setAttribute("data-theme", aTheme.id);
+            document.cookie = `theme=${aTheme.id};path=/;max-age=31536000;SameSite=Lax`;
+        };
+    }
+    const locales = nmLocales.getElementsByClassName("navbar-item");
+    for (let i = 0; i < locales.length; i++) {
+        const aLocale = locales[i] as HTMLAnchorElement;
+        aLocale.onclick = () => {
+            setLocale(aLocale.id as Locale);
+
+            let split = window.location.pathname.split("/");
+            split[1] = split[1].replace(locale, aLocale.id);
+            window.location.href = split.join("/");
+        };
+    }
+    
+    const user: User | undefined = await userRepository.get();
+    if (!user) window.location.href = `/${locale}/login`;
+
+    if (user?.profile) {
+        nmUserIcon.src = `${Api.BackendUrl}${user.profile}`;
+        nmUserIcon.style.display = "block";
+        nmiUserIcon.style.display = "none";
+    }
+    else {
+        nmiUserIcon.style.display = "block";
+        nmUserIcon.style.display = "none";
+    }
+    nmUserName.textContent = user!.name;
+    nmUserLogout.onclick = () => {
+        window.localStorage.removeItem("token");
+        window.location.href = `/${locale}/login`;
+    };
+</script>

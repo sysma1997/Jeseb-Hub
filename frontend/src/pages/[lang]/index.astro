@@ -5,7 +5,8 @@ import { getLocaleFromUrl, createTranslations } from "../../core/shared/infrastr
 import { Icon } from "astro-icon/components";
 
 import Layout from "../../layouts/Layout.astro";
-import Menu from "../../layouts/Menu.astro";
+import Menu from "../../components/shared/Menu.astro";
+import Sidebar from "../../components/shared/Sidebar.astro";
 
 import Base from "../../components/modals/Base.astro";
 import Alert from "../../components/modals/Alert.astro";
@@ -27,6 +28,7 @@ const t = createTranslations(locale);
 ---
 
 <Layout locale={locale} title="Jeseb Hub">
+	<Sidebar locale={locale} />
 	<Menu locale={locale} />
 	
 	<div class="transactions">
@@ -36,15 +38,15 @@ const t = createTranslations(locale);
 			</div>
 			<div class="summary">
 				<div class="box">
-					<label class="has-text-white">{t("index.summary.income")}:</label>
+					<label>{t("index.summary.income")}:</label>
 					<label id="lSIncome" class="has-text-right">...</label>
 				</div>
 				<div class="box">
-					<label class="has-text-white">{t("index.summary.expenses")}:</label>
+					<label>{t("index.summary.expenses")}:</label>
 					<label id="lSExpenses" class="has-text-right">...</label>
 				</div>
 				<div class="box">
-					<label class="has-text-white">{t("index.summary.diff")}:</label>
+					<label>{t("index.summary.diff")}:</label>
 					<label id="lSDiff" class="has-text-right">...</label>
 				</div>
 				<div></div>

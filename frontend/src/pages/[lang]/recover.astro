@@ -3,12 +3,10 @@ import type { GetStaticPaths } from "astro";
 import { getLocaleFromUrl, createTranslations } from "../../core/shared/infrastructure/i18n/server";
 
 import Layout from "../../layouts/Layout.astro";
-import Locale from "../../layouts/Locale.astro";
+import Options from "../../components/shared/Options.astro";
 
 import Form from "../../components/Form.astro";
 import Alert from "../../components/modals/Alert.astro";
-
-import jeseb from "../../../public/favicon/icon-dark.svg";
 
 import "../../styles/recover.css";
 
@@ -24,9 +22,16 @@ const t = createTranslations(locale);
 ---
 
 <Layout locale={locale} title={t("recover.title")}>
-    <Locale locale={locale} />
+    <Options locale={locale} />
     <div class="container">
-        <img class="icon" src={jeseb.src} alt="Jeseb Hub" />
+        <img id="icon" src="/favicon/icon.svg" alt="Jeseb Hub" />
+        <script is:inline>
+			(function() {
+				const theme = localStorage.getItem('theme');
+				const id = document.getElementById("icon");
+                id.src = (theme === "dark") ? "/favicon/icon-dark.svg" : "/favicon/icon.svg";
+			})();
+		</script>
         <Form title={t("recover.title")}>
             <div id="dEmail" class="field">
                 <label class="label">{t("recover.email")}</label>
@@ -48,7 +53,7 @@ const t = createTranslations(locale);
             </div>
             
             <div class="info">
-                <label>{t("recover.back.description")} <a href={`/${locale}/login`}>{t("recover.back.link")}</a>.</label>
+                <label>{t("recover.back.description")} <a href={`/${locale}/login`}><b>{t("recover.back.link")}</b></a>.</label>
             </div>
 
             <div class="field">

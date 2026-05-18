@@ -146,9 +146,9 @@ export const TransactionList = () => {
     };
 
     return <div className="transactionsList card">
-        <header className="card-header" style={{ margin: "1rem", marginBottom: "0" }}>
+        <header className="card-header">
             <h2 className="card-header-title">{t("index.transactions.title")}</h2>
-            <button className="button is-primary" aria-label="more options" 
+            <button className="card-header-icon" aria-label="more options" 
                 onClick={clickShowFilter}>
                 <Icon icon="material-symbols:filter-alt-sharp" />
             </button>
