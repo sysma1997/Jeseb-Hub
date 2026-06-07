@@ -222,7 +222,8 @@
             "accounts": "Accounts", 
             "categories": "Categories", 
             "profile": "Profile", 
-            "logout": "Log out"
+            "logout": "Log out", 
+            "settings": "Settings"
         }, 
         "balance": "Balance", 
         "limit": "Limit", 

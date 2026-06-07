@@ -222,7 +222,8 @@
             "accounts": "Cuentas", 
             "categories": "Categorías", 
             "profile": "Perfil", 
-            "logout": "Cerrar sesión"
+            "logout": "Cerrar sesión", 
+            "settings": "Configuración"
         }, 
         "balance": "Saldo", 
         "limit": "Límite", 

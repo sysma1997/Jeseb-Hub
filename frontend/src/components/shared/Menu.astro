@@ -1,77 +1,81 @@
 ---
 import { Icon } from "astro-icon/components";
-
 import { createTranslations } from "../../core/shared/infrastructure/i18n/server";
+
+import Dropdown from "./Dropdown.astro";
+
+import "../../styles/shared/menu.css";
 
 const locale = Astro.props?.locale || "en";
 const t = createTranslations(locale);
 ---
 
-<style>
-    .navbar {
-        border-bottom: 1px solid #b7b7b7;
-    }
-    .navbar .separator {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .navbar .separator span {
-        background-color: #b7b7b7;
-        margin: 0 0.5rem;
-        width: 1px;
-        height: 60%;
-    }
+<nav class="menu">
+    <div class="menu-content">
+        <div class="menu-desktop">
+            <div class="menu-item">
+                <Dropdown id="theme" icon="material-symbols:sunny-snowing-rounded" label={t("theme.title")} items={[
+                    { label: t("theme.light"), icon: "solar:sun-2-bold", value: "light" }, 
+                    { label: t("theme.dark"), icon: "solar:moon-bold", value: "dark" }, 
+                ]} />
+            </div>
+            <div class="menu-item">
+                <Dropdown id="locale" icon="material-symbols:language" label={t("locales.title")} items={[
+                    { label: t("locales.en"), value: "en" }, 
+                    { label: t("locales.es"), value: "es" }
+                ]} value={locale} />
+            </div>
 
-    #nmiUserIcon {
-        background-color: #00d1b2;
-        border-radius: 50%;
-        object-fit: cover;
-        width: 28px;
-        height: 28px;
-    }
-    #nmUserIcon {
-        display: none;
+            <div class="separator"></div>
 
-        background-color: #00d1b2;
-        border-radius: 50%;
-        object-fit: cover;
-        width: 28px;
-        height: 28px;
-    }
-</style>
-<nav class="navbar" role="navigation" aria-label="main navigation">
-    <div id="navbarMenu" class="navbar-menu">
-        <div class="navbar-end">
-            <div class="navbar-item has-dropdown is-hoverable">
-                <a class="navbar-link">{t("theme.title")}</a>
-                <div id="nmThemes" class="navbar-dropdown">
-                    <a id="light" class="navbar-item">{t("theme.light")}</option>
-                    <a id="dark" class="navbar-item">{t("theme.dark")}</option>
+            <div class="menu-item">
+                <button class="menu-trigger" id="userMenuBtn">
+                    <div id="userAvatar" class="menu-user-avatar">
+                        <Icon name="material-symbols:person-rounded" width={18} />
+                    </div>
+                    <span id="userNameDisplay" class="menu-user-name"></span>
+                </button>
+                <div class="menu-dropdown">
+                    <a class="menu-dropdown-item" href={`/${locale}/profile`}>
+                        <Icon name="solar:user-bold" />
+                        {t("shared.menu.profile")}
+                    </a>
+                    <button id="desktopLogout" class="menu-dropdown-item">
+                        <Icon name="material-symbols:logout" />
+                        {t("shared.menu.logout")}
+                    </button>
                 </div>
             </div>
-            <div class="navbar-item has-dropdown is-hoverable">
-                <a class="navbar-link">{t("locales.title")}</a>
-                <div id="nmLocales" class="navbar-dropdown">
-                    <a id="en" class="navbar-item">{t("locales.en")}</option>
-                    <a id="es" class="navbar-item">{t("locales.es")}</option>
-                </div>
-            </div>
-            <div class="separator"><span></span></div>
-            <div class="navbar-item has-dropdown is-hoverable">
-                <a class="navbar-link">
-                    <Icon id="nmiUserIcon" name="solar:user-bold" width={24} color="white" />
-                    <img id="nmUserIcon" />
-                    <span id="nmUserName">{t("shared.name")}</span>
-                </a>
-                <div class="navbar-dropdown is-right">
-                    <a class="navbar-item" href={`/${locale}/profile`}>{t("shared.menu.profile")}</a>
-                    <a id="nmUserLogout" class="navbar-item">{t("shared.menu.logout")}</a>
+        </div>
+
+        <div class="menu-mobile">
+            <button id="mobileThemeBtn" class="menu-mobile-btn">
+                <Icon name="material-symbols:sunny-snowing-rounded" width={20} />
+            </button>
+            <button id="mobileLocaleBtn" class="menu-mobile-btn">
+                <Icon name="material-symbols:language" width={20} />
+            </button>
+            <div class="menu-item">
+                <button class="menu-trigger" style="padding: 0.5rem;">
+                    <div id="mobileUserAvatar" class="menu-user-avatar" style="width: 32px; height: 32px;">
+                        <Icon name="material-symbols:person-rounded" width={18} />
+                    </div>
+                </button>
+                <div class="menu-dropdown">
+                    <a id="mobileProfile" class="menu-dropdown-item" href={`/${locale}/profile`}>
+                        <Icon name="solar:user-bold" />
+                        {t("shared.menu.profile")}
+                    </a>
+                    <button id="mobileLogout" class="menu-dropdown-item">
+                        <Icon name="material-symbols:logout" />
+                        {t("shared.menu.logout")}
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </nav>
+
 <script>
     import { Api } from "../../core/shared/infrastructure/Api";
     import { User } from "../../core/user/domain/User";
@@ -79,53 +83,125 @@ const t = createTranslations(locale);
     import { UserApiRepository } from "../../core/user/infrastructure/UserApiRepository";
     import { type Locale, getLocale, setLocale } from "../../core/shared/infrastructure/i18n";
 
-    const userRepository: UserRepository = new UserApiRepository();
+    (async () => {
+        const userRepository: UserRepository = new UserApiRepository();
+        const currentLocale = getLocale();
 
-    const nmThemes = document.getElementById("nmThemes") as HTMLDivElement;
-    const nmLocales = document.getElementById("nmLocales") as HTMLDivElement;
-    const nmiUserIcon = document.getElementById("nmiUserIcon") as HTMLElement;
-    const nmUserIcon = document.getElementById("nmUserIcon") as HTMLImageElement;
-    const nmUserName = document.getElementById("nmUserName") as HTMLSpanElement;
-    const nmUserLogout = document.getElementById("nmUserLogout") as HTMLAnchorElement;
+        // Elementos desktop
+        const desktopLogout = document.getElementById("desktopLogout");
+        const userNameDisplay = document.getElementById("userNameDisplay");
+        const userAvatar = document.getElementById("userAvatar");
+        
+        // Elementos móvil
+        const mobileThemeBtn = document.getElementById("mobileThemeBtn");
+        const mobileLocaleBtn = document.getElementById("mobileLocaleBtn");
+        const mobileLogout = document.getElementById("mobileLogout");
+        const mobileUserAvatar = document.getElementById("mobileUserAvatar");
 
-    const locale = getLocale();
-
-    const themes = nmThemes.getElementsByClassName("navbar-item");
-    for (let i = 0; i < themes.length; i++) {
-        const aTheme = themes[i] as HTMLAnchorElement;
-        aTheme.onclick = () => {
-            window.localStorage.setItem("theme", aTheme.id);
-            document.documentElement.setAttribute("data-theme", aTheme.id);
-            document.cookie = `theme=${aTheme.id};path=/;max-age=31536000;SameSite=Lax`;
-        };
-    }
-    const locales = nmLocales.getElementsByClassName("navbar-item");
-    for (let i = 0; i < locales.length; i++) {
-        const aLocale = locales[i] as HTMLAnchorElement;
-        aLocale.onclick = () => {
-            setLocale(aLocale.id as Locale);
-
+        // Cambiar tema
+        function setTheme(theme: string) {
+            localStorage.setItem("theme", theme);
+            document.documentElement.setAttribute("data-theme", theme);
+            document.cookie = `theme=${theme};path=/;max-age=31536000;SameSite=Lax`;
+            
+            const icon = document.getElementById("icon") as HTMLImageElement;
+            if (icon) {
+                icon.src = theme === "dark" ? "/favicon/icon-dark.svg" : "/favicon/icon.svg";
+            }
+        }
+        
+        // Ciclar tema (para móvil)
+        function cycleTheme() {
+            const current = localStorage.getItem("theme") || "light";
+            const newTheme = current === "light" ? "dark" : "light";
+            setTheme(newTheme);
+        }
+        // Ciclar idioma (para móvil)
+        function cycleLanguage() {
+            const current = getLocale();
+            const newLang = current === "en" ? "es" : "en";
+            setLocale(newLang as Locale);
             let split = window.location.pathname.split("/");
-            split[1] = split[1].replace(locale, aLocale.id);
+            split[1] = split[1].replace(currentLocale, newLang);
             window.location.href = split.join("/");
-        };
-    }
-    
-    const user: User | undefined = await userRepository.get();
-    if (!user) window.location.href = `/${locale}/login`;
+        }
+        
+        // Tema inicial
+        const currentTheme = localStorage.getItem("theme") || "light";
+        setTheme(currentTheme);
+        
+        // Eventos móvil
+        if (mobileThemeBtn) mobileThemeBtn.onclick = cycleTheme;
+        if (mobileLocaleBtn) mobileLocaleBtn.onclick = cycleLanguage;
 
-    if (user?.profile) {
-        nmUserIcon.src = `${Api.BackendUrl}${user.profile}`;
-        nmUserIcon.style.display = "block";
-        nmiUserIcon.style.display = "none";
-    }
-    else {
-        nmiUserIcon.style.display = "block";
-        nmUserIcon.style.display = "none";
-    }
-    nmUserName.textContent = user!.name;
-    nmUserLogout.onclick = () => {
-        window.localStorage.removeItem("token");
-        window.location.href = `/${locale}/login`;
-    };
+        const themeDropdown = document.getElementById("themeDropdown");
+        const localesDropdown = document.getElementById("localeDropdown");
+
+        themeDropdown?.addEventListener("dropdown-select", (event: Event) => {
+            const theme = (event as CustomEvent).detail.value;
+            
+            window.localStorage.setItem("theme", theme);
+            document.documentElement.setAttribute("data-theme", theme);
+            document.cookie = `theme=${theme};path=/;max-age=31536000;SameSite=Lax`;
+        });
+        localesDropdown?.addEventListener("dropdown-select", (event: Event) => {
+            const locale = (event as CustomEvent).detail.value;
+            setLocale(locale as Locale);
+
+            let pathname: string = window.location.pathname;
+            pathname = pathname.replace(currentLocale, locale);
+            window.location.href = pathname;
+        });
+        
+        // Cargar usuario
+        try {
+            const user: User | undefined = await userRepository.get();
+            if (!user) {
+                window.location.href = `/${currentLocale}/login`;
+                return;
+            }
+            
+            // Mostrar nombre desktop
+            if (userNameDisplay) {
+                userNameDisplay.textContent = user.name;
+            }
+            
+            // Mostrar avatar desktop
+            if (user.profile && userAvatar) {
+                const img = document.createElement("img");
+                img.src = `${Api.BackendUrl}${user.profile}`;
+                img.style.width = "32px";
+                img.style.height = "32px";
+                img.style.borderRadius = "50%";
+                img.style.objectFit = "cover";
+                userAvatar.innerHTML = "";
+                userAvatar.appendChild(img);
+            }
+            
+            // Mostrar avatar móvil
+            if (user.profile && mobileUserAvatar) {
+                const img = document.createElement("img");
+                img.src = `${Api.BackendUrl}${user.profile}`;
+                img.style.width = "32px";
+                img.style.height = "32px";
+                img.style.borderRadius = "50%";
+                img.style.objectFit = "cover";
+                mobileUserAvatar.innerHTML = "";
+                mobileUserAvatar.appendChild(img);
+            }
+            
+            // Logout
+            const handleLogout = () => {
+                localStorage.removeItem("token");
+                window.location.href = `/${currentLocale}/login`;
+            };
+            
+            if (desktopLogout) desktopLogout.onclick = handleLogout;
+            if (mobileLogout) mobileLogout.onclick = handleLogout;
+            
+        } catch (error) {
+            console.error("Error loading user:", error);
+            window.location.href = `/${currentLocale}/login`;
+        }
+    })();
 </script>

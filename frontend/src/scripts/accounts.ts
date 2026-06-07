@@ -3,14 +3,12 @@ import { v4 as Uuid } from "uuid";
 import { Account } from "../core/account/domain/Account";
 import type { AccountRepository } from "../core/account/domain/AccountRepository";
 import { AccountApiRepository } from "../core/account/infrastructure/AccountApiRepository";
-import { Notify } from "../core/shared/domain/Subject";
+import { Attach, Notify } from "../core/shared/domain/Subject";
 import { t } from "../core/shared/infrastructure/i18n";
-
-const add = document.getElementById("btnAdd") as HTMLButtonElement;
 
 const repository: AccountRepository = new AccountApiRepository();
 
-add.onclick = async () => {
+Attach("sidebar:add", () => {
     window.showPrompt(t("account.add.description"), t("account.add.title"), (value: string) => {
         window.showConfirm(t("account.add.confirm", { name: value }), t("account.add.title"), async () => {
             try {
@@ -29,4 +27,4 @@ add.onclick = async () => {
             }
         });
     });
-};
+});

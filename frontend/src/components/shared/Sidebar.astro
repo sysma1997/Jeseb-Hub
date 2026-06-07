@@ -1,70 +1,133 @@
 ---
 import { Icon } from "astro-icon/components";
-
 import { createTranslations } from "../../core/shared/infrastructure/i18n/server";
+
+import "../../styles/shared/sidebar.css";
 
 const locale = Astro.props?.locale || "en";
 const t = createTranslations(locale);
+const hideAddButton = Astro.props?.hideAddButton || false;
 ---
 
-<style>
-    .sidebar {
-        background: #00d1b2;
-        padding: 1rem;
-        z-index: 31;
+<section id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-logo-container">
+            <div class="sidebar-logo-icon">
+                <img id="logoImg" src="/favicon/icon-dark.svg" alt="Jeseb Hub" />
+            </div>
+            <span class="sidebar-logo-text"><b>Jeseb Hub</b></span>
+        </div>
+    </div>
 
-        display: flex;
-        flex-direction: column;
-        
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-    }
+    <div class="sidebar-nav">
+        <a id="sbHome" class="sidebar-nav-item" href={`/${locale}`} data-tooltip={t("shared.menu.home")}>
+            <Icon class="iIcon" name="solar:home-2-bold" />
+            <span><b>{t("shared.menu.home")}</b></span>
+        </a>
+        <a id="sbAccounts" class="sidebar-nav-item" href={`/${locale}/accounts`} data-tooltip={t("shared.menu.accounts")}>
+            <Icon class="iIcon" name="solar:wallet-2-bold" />
+            <span><b>{t("shared.menu.accounts")}</b></span>
+        </a>
+        <a id="sbCategories" class="sidebar-nav-item" href={`/${locale}/categories`} data-tooltip={t("shared.menu.categories")}>
+            <Icon class="iIcon" name="solar:widget-4-bold" />
+            <span><b>{t("shared.menu.categories")}</b></span>
+        </a>
+    </div>
 
-    .sidebar .item {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-    }
-    .sidebar .head {
-        margin-bottom: 2rem;
-    }
+    <div class="sidebar-footer">
+        <a id="sbProfile" class="sidebar-nav-item" href={`/${locale}/profile`} data-tooltip={t("shared.menu.settings")}>
+            <Icon class="iIcon" name="solar:settings-bold" />
+            <span><b>{t("shared.menu.settings")}</b></span>
+        </a>
+    </div>
+    
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Colapsar sidebar">
+        <Icon class="iIcon" name="solar:alt-arrow-left-bold" style="width: 16px; height: 16px;" />
+    </button>
 
-    #icon {
-        width: 60px;
-    }
-</style>
-<section class="sidebar">
-    <div class="item head">
-        <img id="icon" src="/favicon/icon-dark.svg" alt="Jeseb Hub" />
-        <!-- <script is:inline>
-			(function() {
-				const theme = localStorage.getItem('theme');
-				const id = document.getElementById("icon");
-                id.src = (theme === "dark") ? "/favicon/icon-dark.svg" : "/favicon/icon.svg";
-			})();
-		</script> -->
-        <span><b>Jeseb Hub</b></span>
-    </div>
-    <div class="item">
-        <Icon name="solar:home-2-bold" />
-        <span>Home</span>
-    </div>
-    <div class="item">
-        <Icon name="solar:wallet-2-bold" />
-        <span>Accounts</span>
-    </div>
-    <div class="item">
-        <Icon name="solar:widget-4-bold" />
-        <span>Categories</span>
-    </div>
-    <div class="item">
-        <Icon name="solar:diagram-up-bold" />
-        <span>Transactions</span>
-    </div>
-    <div class="item">
-        <Icon name="solar:settings-bold" />
-        <span>Settings</span>
-    </div>
+    {!hideAddButton && <button id="sidebarAdd" class="sidebar-add-button">
+        <Icon name="material-symbols:add-2-rounded" width={24} height={24} />
+    </button>}
 </section>
+
+<nav class="sidebar-mobile">
+    <div class="sidebar-mobile-container">
+        <a id="sidebarMobileHome" class="sidebar-mobile-item" href={`/${locale}`}>
+            <Icon class="iIcon" name="solar:home-2-bold" />
+        </a>
+        <a id="sidebarMobileAccounts" class="sidebar-mobile-item" href={`/${locale}/accounts`}>
+            <Icon class="iIcon" name="solar:wallet-2-bold" />
+        </a>
+        {(!hideAddButton) && <div class="sidebar-mobile-item">
+            <button id="sidebarAddMobile" class="sidebar-add-button">
+                <Icon class="iIcon" name="material-symbols:add-2-rounded" />
+            </button>
+        </div>}
+        <a id="sidebarMobileCategories" class="sidebar-mobile-item" href={`/${locale}/categories`}>
+            <Icon class="iIcon" name="solar:widget-4-bold" />
+        </a>
+        <a id="sidebarMobileProfile" class="sidebar-mobile-item" href={`/${locale}/profile`}>
+            <Icon class="iIcon" name="solar:user-bold" />
+        </a>
+    </div>
+</nav>
+
+<script>
+    import { Notify } from "../../core/shared/domain/Subject";
+
+    // Detect current path to highlight active menu item
+    const path = window.location.pathname;
+    
+    // Resaltar en sidebar desktop
+    const homeLink = document.getElementById("sbHome") as HTMLAnchorElement | null;
+    const accountsLink = document.getElementById("sbAccounts") as HTMLAnchorElement | null;
+    const categoriesLink = document.getElementById("sbCategories") as HTMLAnchorElement | null;
+    const profileLink = document.getElementById("sbProfile") as HTMLAnchorElement | null;
+    
+    if (path.includes("/accounts") && accountsLink) accountsLink.classList.add("active");
+    else if (path.includes("/categories") && categoriesLink) categoriesLink.classList.add("active");
+    else if (path.includes("/profile") && profileLink) profileLink.classList.add("active");
+    else if (homeLink) homeLink.classList.add("active");
+    
+    // Resaltar en bottom nav móvil
+    const mobileHome = document.getElementById("sidebarMobileHome") as HTMLAnchorElement | null;
+    const mobileAccounts = document.getElementById("sidebarMobileAccounts") as HTMLAnchorElement | null;
+    const mobileCategories = document.getElementById("sidebarMobileCategories") as HTMLAnchorElement | null;
+    const mobileProfile = document.getElementById("sidebarMobileProfile") as HTMLAnchorElement | null;
+    
+    if (path.includes("/accounts") && mobileAccounts) mobileAccounts.classList.add("active");
+    else if (path.includes("/categories") && mobileCategories) mobileCategories.classList.add("active");
+    else if (path.includes("/profile") && mobileProfile) mobileProfile.classList.add("active");
+    else if (mobileHome) mobileHome.classList.add("active");
+    
+    // Funcionalidad para colapsar sidebar (desktop)
+    const sidebar = document.getElementById("sidebar") as HTMLElement | null;
+    const toggleBtn = document.getElementById("sidebarToggle") as HTMLButtonElement | null;
+    
+    if (toggleBtn && sidebar && window.innerWidth > 768) {
+        const savedState = localStorage.getItem("sidebarCollapsed");
+        if (savedState === "true") sidebar.classList.add("collapsed");
+        
+        toggleBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            sidebar.classList.toggle("collapsed");
+            localStorage.setItem("sidebarCollapsed", sidebar.classList.contains("collapsed") ? "true" : "false");
+        });
+    }
+    
+    // Envia un evento al hacer click en el boton de agregar (tanto desktop como móvil)
+    const addBtn = document.getElementById("sidebarAdd") as HTMLButtonElement | null;
+    if (addBtn) addBtn.onclick = () => Notify("sidebar:add");
+    const mobileAddBtn = document.getElementById("sidebarAddMobile") as HTMLButtonElement | null;
+    if (mobileAddBtn) mobileAddBtn.onclick = () => Notify("sidebar:add");
+    
+    // Manejar resize: si pasamos de móvil a desktop, recargar lógica
+    window.addEventListener("resize", () => {
+        if (window.innerWidth > 768 && sidebar && toggleBtn) {
+            // En desktop, asegurar que el sidebar está visible
+            const savedState = localStorage.getItem("sidebarCollapsed");
+            if (savedState === "true") sidebar.classList.add("collapsed");
+            else sidebar.classList.remove("collapsed");
+        }
+    });
+</script>

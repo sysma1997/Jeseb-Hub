@@ -19,6 +19,25 @@ const { id, label, icon, items, value } = Astro.props;
 const selectedItem = (value) ? items.find(item => item.value === value) : null;
 ---
 
+<style>
+    :root[data-theme="light"] {
+        --dropdown-is-active-background: #effcfa;
+        --dropdown-is-active-color: #00d1b2;
+        --dropdown-is-active-border: #00d1b2;
+    }
+    :root[data-theme="dark"] {
+        --dropdown-is-active-background: #0f1729;
+        --dropdown-is-active-color: #00d1b2;
+        --dropdown-is-active-border: #00d1b2;
+    }
+
+    .dropdown .dropdown-item.is-active {
+        background-color: var(--dropdown-is-active-background);
+        color: var(--dropdown-is-active-color);
+        border-right: 3px solid var(--dropdown-is-active-border);
+    }
+</style>
+
 <div class="dropdown" id={`${id}Dropdown`} data-value={value}>
     <div class="dropdown-trigger">
         <button class="button" aria-haspopup="true" aria-controls={`${id}-menu`}>
