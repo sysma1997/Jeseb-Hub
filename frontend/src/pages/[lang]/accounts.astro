@@ -5,7 +5,7 @@ import { getLocaleFromUrl, createTranslations } from "../../core/shared/infrastr
 import { Icon } from "astro-icon/components";
 
 import Layout from "../../layouts/Layout.astro";
-import Menu from "../../components/shared/Menu.astro";
+import Content from "../../components/shared/Content.astro";
 
 import Alert from "../../components/modals/Alert.astro";
 import Prompt from "../../components/modals/Prompt.astro";
@@ -27,17 +27,13 @@ const t = createTranslations(locale);
 ---
 
 <Layout locale={locale} title={t("account.title")}>
-    <Menu locale={locale} />
-
-    <div class="accounts">
-        <div class="accountsContent">
-            <List client:only="read" />
+    <Content locale={locale}>
+        <div class="accounts">
+            <div class="accountsContent">
+                <List client:only="read" />
+            </div>
         </div>
-    </div>
-
-    <button id="btnAdd" class="button is-primary">
-        <Icon name="material-symbols:add-2-rounded" width={24} height={24} />
-    </button>
+    </Content>
 
     <Prompt locale={locale} />
     <Confirm locale={locale} />

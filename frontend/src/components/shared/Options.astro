@@ -26,7 +26,7 @@ const t = createTranslations(locale);
         { label: t("theme.light"), icon: "solar:sun-2-bold", value: "light" }, 
         { label: t("theme.dark"), icon: "solar:moon-bold", value: "dark" }, 
     ]} />
-    <Dropdown id="locale" label={t("locales.title")} items={[
+    <Dropdown id="locale" icon="material-symbols:language" label={t("locales.title")} items={[
         { label: t("locales.en"), value: "en" }, 
         { label: t("locales.es"), value: "es" }
     ]} value={locale} />

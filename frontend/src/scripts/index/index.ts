@@ -40,8 +40,6 @@ const mftCancel = document.getElementById("btnMFTCancel") as HTMLButtonElement;
 const mftAccept = document.getElementById("btnMFTAccept") as HTMLButtonElement;
 const mftClearFilters = document.getElementById("btnMFTClearFilters") as HTMLButtonElement;
 
-const addTransaction = document.getElementById("btnAddTransaction") as HTMLButtonElement;
-
 const modalAddTransaction = document.getElementById("modalAddTransaction") as HTMLDivElement;
 const matTitle = modalAddTransaction.querySelector(".modal-card-title") as HTMLParagraphElement;
 const matClose = modalAddTransaction.querySelector(".delete") as HTMLButtonElement;
@@ -167,6 +165,16 @@ const transactionShowView = (_transaction: Transaction) => {
     
     modalTransaction.classList.add("is-active");
 };
+Attach("sidebar:add", () => {
+    if (accounts.length == 0) {
+        window.showAlert(t("index.transactions.accountsRequired"));
+        return;
+    }
+
+    modalAddTransaction.classList.add("is-active");
+    matTitle.innerText = t("index.transactions.add");
+    transaction = undefined;
+});
 Attach("transaction:filter:show", () => {
     const modal = document.getElementById("modalFilterTransactions") as HTMLDivElement;
     modal.classList.add("is-active");
@@ -257,16 +265,6 @@ mftAccept.onclick = () => {
     Notify("transaction:filter", filter);
     mftAccept.classList.add("is-loading");
     mftAccept.disabled = true;
-};
-addTransaction.onclick = () => {
-    if (accounts.length == 0) {
-        window.showAlert(t("index.transactions.accountsRequired"));
-        return;
-    }
-
-    modalAddTransaction.classList.add("is-active");
-    matTitle.innerText = t("index.transactions.add");
-    transaction = undefined;
 };
 matClose.onclick = matClickClose;
 matAccount.onchange = (event: Event) => {
