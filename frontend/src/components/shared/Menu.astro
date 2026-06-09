@@ -49,27 +49,32 @@ const t = createTranslations(locale);
         </div>
 
         <div class="menu-mobile">
-            <button id="mobileThemeBtn" class="menu-mobile-btn">
-                <Icon name="material-symbols:sunny-snowing-rounded" width={20} />
-            </button>
-            <button id="mobileLocaleBtn" class="menu-mobile-btn">
-                <Icon name="material-symbols:language" width={20} />
-            </button>
-            <div class="menu-item">
-                <button class="menu-trigger" style="padding: 0.5rem;">
-                    <div id="mobileUserAvatar" class="menu-user-avatar" style="width: 32px; height: 32px;">
-                        <Icon name="material-symbols:person-rounded" width={18} />
-                    </div>
+            <a class="sidebar-logo-icon" href={`/${locale}`}>
+                <img id="logoImg" src="/favicon/icon-dark.svg" alt="Jeseb Hub" />
+            </a>
+            <div class="menu-mobile-options">
+                <button id="mobileThemeBtn" class="menu-mobile-btn">
+                    <Icon name="material-symbols:sunny-snowing-rounded" width={20} />
                 </button>
-                <div class="menu-dropdown">
-                    <a id="mobileProfile" class="menu-dropdown-item" href={`/${locale}/profile`}>
-                        <Icon name="solar:user-bold" />
-                        {t("shared.menu.profile")}
-                    </a>
-                    <button id="mobileLogout" class="menu-dropdown-item">
-                        <Icon name="material-symbols:logout" />
-                        {t("shared.menu.logout")}
+                <button id="mobileLocaleBtn" class="menu-mobile-btn">
+                    <Icon name="material-symbols:language" width={20} />
+                </button>
+                <div class="menu-item">
+                    <button class="menu-trigger" style="padding: 0.5rem;">
+                        <div id="mobileUserAvatar" class="menu-user-avatar" style="width: 32px; height: 32px;">
+                            <Icon name="material-symbols:person-rounded" width={18} />
+                        </div>
                     </button>
+                    <div class="menu-dropdown">
+                        <a id="mobileProfile" class="menu-dropdown-item" href={`/${locale}/profile`}>
+                            <Icon name="solar:user-bold" />
+                            {t("shared.menu.profile")}
+                        </a>
+                        <button id="mobileLogout" class="menu-dropdown-item">
+                            <Icon name="material-symbols:logout" />
+                            {t("shared.menu.logout")}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
