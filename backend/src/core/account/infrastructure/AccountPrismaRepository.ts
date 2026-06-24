@@ -129,4 +129,13 @@ export class AccountPrismaRepository implements AccountRepository {
 
         return pagination;
     }
+
+    async getTotalBalance(idUser: string): Promise<number> {
+        const total = await this.prisma.account.aggregate({
+            where: { idUser },
+            _sum: { balance: true }
+        });
+
+        return (total._sum.balance !== null && total._sum.balance !== undefined) ? Number(total._sum.balance) : 0;
+    }
 }

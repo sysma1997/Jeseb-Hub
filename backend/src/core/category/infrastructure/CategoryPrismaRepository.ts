@@ -1,8 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 import { v4 as Uuid } from "uuid";
+import dayjs from "dayjs";
 
 import { Category } from "../domain/Category";
 import { CategoryRepository } from "../domain/CategoryRepository";
+import type { CategoryBreakdown } from "../domain/CategoryBreakdown";
 import { Pagination } from "../../shared/domain/Pagination";
 import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
 
@@ -117,5 +119,38 @@ export class CategoryPrismaRepository implements CategoryRepository {
         pagination.pages = (limit) ? Pagination.PageLength(total, limit) : 1;
 
         return pagination;
+    }
+
+    async getMonthlyReport(idUser: string, type: boolean): Promise<CategoryBreakdown[]> {
+        const currentDate = dayjs();
+        const grouped = await this.prisma.transaction.groupBy({
+            by: ["category"], 
+            where: {
+                idUser, type, 
+                category: {
+                    not: null
+                }, 
+                date: {
+                    gte: currentDate.startOf("month").toDate(), 
+                    lte: currentDate.endOf("month").toDate()
+                }
+            }, 
+            _sum: { value: true }, 
+            _count: { id: true }
+        });
+        const totalExpenses = grouped.reduce((sum, item) => 
+            sum + Number(item._sum.value ?? 0), 0);
+
+        return grouped.map(item => {
+            const categoryBreakdown: CategoryBreakdown = {
+                name: item.category ?? "None", 
+                total: Number(item._sum.value ?? 0), 
+                percentage: (totalExpenses > 0) ? 
+                    (Number(item._sum.value ?? 0) / totalExpenses) * 100 : 0, 
+                transactionsCount: item._count.id
+            };
+
+            return categoryBreakdown;
+        });
     }
 }

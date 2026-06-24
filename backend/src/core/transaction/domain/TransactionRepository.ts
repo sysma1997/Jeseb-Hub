@@ -1,5 +1,7 @@
 import { Transaction } from "./Transaction";
 import type { TransactionFilter } from "./TransactionFilter";
+import type { TransactionComparison } from "./TransactionComparison"
+import type { BalanceEvolution } from "./BalanceEvolution";
 import { Pagination } from "../../shared/domain/Pagination";
 
 export interface TransactionRepository {
@@ -14,6 +16,7 @@ export interface TransactionRepository {
     getCount(idUser: string): Promise<number>;
     getListFilter(idUser: string, filter: TransactionFilter, limit?: number, page?: number): Promise<Pagination<Transaction>>;
 
-    getMonthlyIncome(idUser: string, filter?: TransactionFilter): Promise<number>;
-    getMonthlyExpenses(idUser: string, filter?: TransactionFilter): Promise<number>;
+    getMonthlyIncome(idUser: string, filter?: TransactionFilter, compareLastMonth?: boolean): Promise<TransactionComparison>;
+    getMonthlyExpenses(idUser: string, filter?: TransactionFilter, compareLastMonth?: boolean): Promise<TransactionComparison>;
+    getBalanceEvolution(idUser: string): Promise<BalanceEvolution[]>;
 }

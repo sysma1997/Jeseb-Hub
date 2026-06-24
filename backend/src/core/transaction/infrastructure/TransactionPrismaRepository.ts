@@ -4,6 +4,8 @@ import dayjs from "dayjs";
 
 import { Transaction } from "../domain/Transaction";
 import type { TransactionFilter } from "../domain/TransactionFilter";
+import type { TransactionComparison } from "../domain/TransactionComparison";
+import type { BalanceEvolution } from "../domain/BalanceEvolution";
 import { TransactionRepository } from "../domain/TransactionRepository";
 import { Pagination } from "../../shared/domain/Pagination";
 import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
@@ -160,8 +162,8 @@ export class TransactionPrismaRepository implements TransactionRepository {
         return pagination;
     }
 
-    async getMonthlyIncome(idUser: string, filter?: TransactionFilter): Promise<number> {
-        let where: any = { idUser };
+    async getMonthlyIncome(idUser: string, filter?: TransactionFilter, compareLastMonth?: boolean): Promise<TransactionComparison> {
+        let where: any = { idUser, type: true };
         if (filter) {
             if (filter.dateFrom) where.date = { gte: filter.dateFrom };
             if (filter.dateTo) {
@@ -184,7 +186,6 @@ export class TransactionPrismaRepository implements TransactionRepository {
 
             where.date = { gte: dateFrom, lte: dateTo };
         }
-        where.type = true;
 
         const income = await this.prisma.transaction.aggregate({
             where, 
@@ -193,10 +194,67 @@ export class TransactionPrismaRepository implements TransactionRepository {
             }
         });
 
-        return Number(income._sum.value ?? 0.0);
+        const currentValue: number = Number(income._sum.value ?? 0.0);
+        if (!compareLastMonth) return {
+            current: currentValue, 
+            previous: 0,
+            difference: 0, 
+            percentageChange: 0
+        };
+
+        let previousWhere: any = { idUser, type: true };
+        if (filter) {
+            if (filter.dateFrom) {
+                let dateFrom = dayjs(filter.dateFrom);
+                dateFrom = dateFrom.subtract(1, "month");
+                previousWhere.date = { gte: dateFrom.toDate() };
+            }
+            if (filter.dateTo) {
+                let dateTo = dayjs(filter.dateTo);
+                dateTo = dateTo.add(1, "days");
+                dateTo = dateTo.subtract(1, "month");
+                previousWhere.date = { lte: dateTo.toDate() };
+            }
+            if (filter.dateFrom && filter.dateTo) {
+                let dateFrom = dayjs(filter.dateFrom);
+                let dateTo = dayjs(filter.dateTo);
+                dateFrom = dateFrom.subtract(1, "month");
+                dateTo = dateTo.add(1, "days");
+                dateTo = dateTo.subtract(1, "month");
+                previousWhere.date = { gte: filter.dateFrom, lte: dateTo.toDate() };
+            }
+            if (filter.account) previousWhere.account = filter.account;
+            if (filter.category) previousWhere.category = filter.category;
+        }
+        else {
+            const previous = dayjs().subtract(1, "month");
+
+            previousWhere.date = { 
+                gte: previous.startOf("month").toDate(), 
+                lte: previous.endOf("month").toDate() 
+            };
+        }
+
+        const previousIncome = await this.prisma.transaction.aggregate({
+            where: previousWhere, 
+            _sum: {
+                value: true
+            }
+        });
+        
+        const previousValue: number = Number(previousIncome._sum.value ?? 0.0);
+        const difference = currentValue - previousValue;
+        const percentageChange = (previousValue === 0) ? 0 : (difference / previousValue) * 100;
+
+        return {
+            current: currentValue, 
+            previous: previousValue,
+            difference, 
+            percentageChange
+        };
     }
-    async getMonthlyExpenses(idUser: string, filter?: TransactionFilter): Promise<number> {
-        let where: any = { idUser };
+    async getMonthlyExpenses(idUser: string, filter?: TransactionFilter, compareLastMonth?: boolean): Promise<TransactionComparison> {
+        let where: any = { idUser, type: false };
         if (filter) {
             if (filter.dateFrom) where.date = { gte: filter.dateFrom };
             if (filter.dateTo) {
@@ -219,7 +277,6 @@ export class TransactionPrismaRepository implements TransactionRepository {
 
             where.date = { gte: dateFrom, lte: dateTo };
         }
-        where.type = false;
 
         const expenses = await this.prisma.transaction.aggregate({
             where, 
@@ -228,6 +285,106 @@ export class TransactionPrismaRepository implements TransactionRepository {
             }
         });
 
-        return Number(expenses._sum.value ?? 0.0);
+        const currentValue: number = Number(expenses._sum.value ?? 0.0);
+        if (!compareLastMonth) return {
+            current: currentValue, 
+            previous: 0,
+            difference: 0, 
+            percentageChange: 0
+        };
+
+        let previousWhere: any = { idUser, type: false };
+        if (filter) {
+            if (filter.dateFrom) {
+                let dateFrom = dayjs(filter.dateFrom);
+                dateFrom = dateFrom.subtract(1, "month");
+                previousWhere.date = { gte: dateFrom.toDate() };
+            }
+            if (filter.dateTo) {
+                let dateTo = dayjs(filter.dateTo);
+                dateTo = dateTo.add(1, "days");
+                dateTo = dateTo.subtract(1, "month");
+                previousWhere.date = { lte: dateTo.toDate() };
+            }
+            if (filter.dateFrom && filter.dateTo) {
+                let dateFrom = dayjs(filter.dateFrom);
+                let dateTo = dayjs(filter.dateTo);
+                dateFrom = dateFrom.subtract(1, "month");
+                dateTo = dateTo.add(1, "days");
+                dateTo = dateTo.subtract(1, "month");
+                previousWhere.date = { gte: filter.dateFrom, lte: dateTo.toDate() };
+            }
+            if (filter.account) previousWhere.account = filter.account;
+            if (filter.category) previousWhere.category = filter.category;
+        }
+        else {
+            const previous = dayjs().subtract(1, "month");
+            
+            previousWhere.date = { 
+                gte: previous.startOf("month").toDate(), 
+                lte: previous.endOf("month").toDate() 
+            };
+        }
+
+        const previousExpenses = await this.prisma.transaction.aggregate({
+            where: previousWhere, 
+            _sum: {
+                value: true
+            }
+        });
+        
+        const previousValue: number = Number(previousExpenses._sum.value ?? 0.0);
+        const difference = currentValue - previousValue;
+        const percentageChange = (previousValue === 0) ? 0 : (difference / previousValue) * 100;
+
+        return {
+            current: currentValue, 
+            previous: previousValue,
+            difference, 
+            percentageChange
+        };
+    }
+    async getBalanceEvolution(idUser: string): Promise<BalanceEvolution[]> {
+        const currentDate = dayjs();
+        const transactions = await this.prisma.transaction.findMany({
+            where: {
+                idUser, 
+                date: {
+                    gte: currentDate.startOf("month").toDate(), 
+                    lte: currentDate.endOf("month").toDate()
+                }
+            }, 
+            orderBy: { date: "asc" }, 
+            select: {
+                date: true, 
+                type: true, 
+                value: true
+            }
+        });
+
+        const dailyMap = new Map<string, { income: number, expenses: number }>();
+        for (const tx of transactions) {
+            const day = dayjs(tx.date).format("YYYY-MM-DD");
+            const current = dailyMap.get(day) || { income: 0, expenses: 0 };
+
+            if (tx.type === true) current.income += Number(tx.value);
+            else current.expenses += Number(tx.value);
+
+            dailyMap.set(day, current);
+        }
+
+        let acumulatedBalance = 0;
+        const evolution: BalanceEvolution[] = [];
+        for (const [date, values] of dailyMap) {
+            acumulatedBalance += (values.income - values.expenses);
+            evolution.push({
+                date, 
+                income: values.income, 
+                expenses: values.expenses, 
+                balance: acumulatedBalance
+            });
+        }
+
+        return evolution;
     }
 }

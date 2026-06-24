@@ -12,4 +12,6 @@ export interface AccountRepository {
 
     getList(idUser: string, limit?: number, page?: number): Promise<Pagination<Account>>;
     getListSearch(idUser: string, name: string, limit?: number, page?: number): Promise<Pagination<Account>>;
+
+    getTotalBalance(idUser: string): Promise<number>;
 }

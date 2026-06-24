@@ -155,5 +155,21 @@ export class CategoryController extends ControllerBase {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
         });
+
+        this.router.post("/get/report/month", UserAuthenticate, async (req, res) => {
+            if (req.body.type === undefined || req.body.type === null)
+                return res.status(400).send(this.translator.translate("transactions.errors.typeRequired"));
+
+            try {
+                const idUser: string = req.user!.id;
+                const type: boolean = req.body.type;
+
+                const monthReport = await this.repository.getMonthlyReport(idUser, type);
+
+                res.json(monthReport);
+            } catch (err: any) {
+                if (err instanceof Error) res.status(400).send(err.message);
+            }
+        });
     }
 }

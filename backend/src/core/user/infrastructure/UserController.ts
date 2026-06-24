@@ -388,5 +388,17 @@ export class UserController extends ControllerBase {
             if (token) result.newToken = token;
             res.json(result);
         });
+
+        this.router.delete("/delete/all/data", UserAuthenticate, async (req, res) => {
+            try {
+                const id: string = req.user!.id;
+
+                await this.repository.deleteAllData(id);
+                
+                res.status(201).send("All data delete success.");
+            } catch (err: any) {
+                if (err instanceof Error) res.status(400).send(err.message);
+            }
+        });
     }
 }
