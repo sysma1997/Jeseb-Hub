@@ -10,6 +10,8 @@ export interface UserRepository {
     updateEmail(id: string, email: string): Promise<void>;
     updatePassword(id: string, currentPassword: string, newPassword: string): Promise<void>;
     updateTwoStep(id: string, config: UserConfig): Promise<void>;
+
+    deleteAllData(id: string): Promise<void>;
     
     login(email: string, password: string): Promise<User>;
 

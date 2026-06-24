@@ -10,6 +10,7 @@ import { TransactionService } from "../application/TransactionService";
 import { UserAuthenticate } from "../../user/infrastructure/UserAuthenticate";
 import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
 import { MessageBuilder } from "../../shared/domain/MessageBuilder"; 
+import { compare } from "bcryptjs";
 
 export class TransactionController extends ControllerBase {
     private readonly repository: TransactionRepository;
@@ -202,10 +203,12 @@ export class TransactionController extends ControllerBase {
                 filter.dateTo = req.body.dateTo ? dayjs.utc(String(req.body.dateTo)).toDate() : undefined;
                 filter.account = req.body.account ? String(req.body.account) : undefined;
                 filter.category = req.body.category ? String(req.body.category) : undefined;
+                
+                const compareLastMonth = req.body.compareLastMonth ? true : false;
 
                 const income = await this.repository.getMonthlyIncome(idUser, 
-                    (filter.dateFrom || filter.dateTo || filter.account || filter.category) ? filter : undefined);
-                console.log("income", income);
+                    (filter.dateFrom || filter.dateTo || filter.account || filter.category) ? filter : undefined, 
+                    compareLastMonth);
 
                 res.send(income);
             } catch (err: any) {
@@ -220,12 +223,25 @@ export class TransactionController extends ControllerBase {
                 filter.dateTo = req.body.dateTo ? dayjs.utc(String(req.body.dateTo)).toDate() : undefined;
                 filter.account = req.body.account ? String(req.body.account) : undefined;
                 filter.category = req.body.category ? String(req.body.category) : undefined;
+                
+                const compareLastMonth = req.body.compareLastMonth ? true : false;
 
                 const expenses = await this.repository.getMonthlyExpenses(idUser, 
-                    (filter.dateFrom || filter.dateTo || filter.account || filter.category) ? filter : undefined);
-                console.log("expenses", expenses);
+                    (filter.dateFrom || filter.dateTo || filter.account || filter.category) ? filter : undefined, 
+                    compareLastMonth);
 
                 res.send(expenses);
+            } catch (err: any) {
+                if (err instanceof Error) res.status(400).send(err.message);
+            }
+        });
+        this.router.get("/get/balance/evolution", UserAuthenticate, async (req, res) => {
+            try {
+                const idUser: string = req.user!.id;
+
+                const balanceEvolution = await this.repository.getBalanceEvolution(idUser);
+
+                res.send(balanceEvolution);
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }

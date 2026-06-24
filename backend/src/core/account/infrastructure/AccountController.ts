@@ -158,5 +158,16 @@ export class AccountController extends ControllerBase {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
         });
+
+        this.router.get("/total/balance", UserAuthenticate, async (req, res) => {
+            try {
+                const idUser: string = req.user!.id;
+                const totalBalance: number = await this.repository.getTotalBalance(idUser);
+                
+                res.json({ totalBalance });
+            } catch (err: any) {
+                if (err instanceof Error) res.status(400).send(err.message);
+            }
+        });
     }
 }

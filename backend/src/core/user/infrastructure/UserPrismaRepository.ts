@@ -129,6 +129,18 @@ export class UserPrismaRepository implements UserRepository {
         });
     }
 
+    async deleteAllData(id: string): Promise<void> {
+        await this.prisma.transaction.deleteMany({
+            where: { idUser: id }
+        });
+        await this.prisma.account.deleteMany({
+            where: { idUser: id }
+        });
+        await this.prisma.category.deleteMany({
+            where: { idUser: id }
+        });
+    }
+
     async login(email: string, password: string): Promise<User> {
         const user = await this.prisma.user.findUnique({ where: { email } });
         if (!user) throw new Error(this.translator.translate("users.errors.emailNotFound", { email }));
