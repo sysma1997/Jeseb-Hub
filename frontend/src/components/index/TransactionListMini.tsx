@@ -22,7 +22,7 @@ export const TransactionListMini = () => {
             setTransactions(pagination.list);
             setLoading(false);
         });
-    });
+    }, []);
 
     if (loading) return <div className="transactions-loading">
         <span className="loading-spinner"></span>
