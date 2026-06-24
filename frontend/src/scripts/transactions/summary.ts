@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
 
-import { Transaction } from "../../core/transaction/domain/Transaction";
 import type { TransactionRepository } from "../../core/transaction/domain/TransactionRepository";
 import type { TransactionFilter } from "../../core/transaction/domain/TransactionFilter";
+import type { TransactionComparison } from "../../core/transaction/domain/TransactionComparison";
 
 import { Attach } from "../../core/shared/domain/Subject";
 
@@ -41,8 +41,10 @@ const addSpan = (key: string, value: string) => {
 };
 
 export const summaryInit = async (transactionRepository: TransactionRepository) => {
-    incomeThisMonth = await transactionRepository.getMonthlyIncome();
-    expensesThisMonth = await transactionRepository.getMonthlyExpenses();
+    const income = await transactionRepository.getMonthlyIncome();
+    const expenses = await transactionRepository.getMonthlyExpenses();
+    incomeThisMonth = income.current;
+    expensesThisMonth = expenses.current;
 
     getSummaryThisMonth();
 
@@ -67,33 +69,35 @@ export const summaryInit = async (transactionRepository: TransactionRepository) 
         if (filter.account) addSpan(t("index.transactions.account"), filter.account);
         if (filter.category) addSpan(t("index.transactions.category"), filter.category);
 
-        const income = (filter.type === undefined || filter.type === true) ? 
-            await transactionRepository.getMonthlyIncome(filter) : 0.0;
-        const expenses = (filter.type === undefined || filter.type === false) ? 
-            await transactionRepository.getMonthlyExpenses(filter) : 0.0;
-        setSummary(income, expenses);
+        const income: TransactionComparison = (filter.type === undefined || filter.type === true) ? 
+            await transactionRepository.getMonthlyIncome(filter) : 
+            { current: 0, previous: 0, difference: 0, percentageChange: 0 };
+        const expenses: TransactionComparison = (filter.type === undefined || filter.type === false) ? 
+            await transactionRepository.getMonthlyExpenses(filter) : 
+            { current: 0, previous: 0, difference: 0, percentageChange: 0 };
+        setSummary(income.current, expenses.current);
     });
     Attach("transaction:add", async () => {
         if (transactionFilter) return;
 
-        incomeThisMonth = await transactionRepository.getMonthlyIncome();
-        expensesThisMonth = await transactionRepository.getMonthlyExpenses();
+        incomeThisMonth = (await transactionRepository.getMonthlyIncome()).current;
+        expensesThisMonth = (await transactionRepository.getMonthlyExpenses()).current;
 
         getSummaryThisMonth();
     });
     Attach("transaction:update", async () => {
         if (transactionFilter) return;
 
-        incomeThisMonth = await transactionRepository.getMonthlyIncome();
-        expensesThisMonth = await transactionRepository.getMonthlyExpenses();
+        incomeThisMonth = (await transactionRepository.getMonthlyIncome()).current;
+        expensesThisMonth = (await transactionRepository.getMonthlyExpenses()).current;
 
         getSummaryThisMonth();
     });
     Attach("transaction:delete", async () => {
         if (transactionFilter) return;
 
-        incomeThisMonth = await transactionRepository.getMonthlyIncome();
-        expensesThisMonth = await transactionRepository.getMonthlyExpenses();
+        incomeThisMonth = (await transactionRepository.getMonthlyIncome()).current;
+        expensesThisMonth = (await transactionRepository.getMonthlyExpenses()).current;
 
         getSummaryThisMonth();
     });

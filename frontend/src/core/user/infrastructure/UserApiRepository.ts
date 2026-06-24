@@ -78,6 +78,14 @@ export class UserApiRepository extends Api implements UserRepository {
         return response.data;
     }
 
+    async deleteAllData(): Promise<string> {
+        const response: ApiResponse = await this.fetch(ApiMethods.DELETE, "user/delete/all/data");
+        if (response.status >= 400) 
+            throw new Error(response.data);
+
+        return response.data;
+    }
+
     async login(email: string, password: string, code?: number): Promise<{ token: string | undefined, message?: string | undefined }> {
         const params: any = {
             email, password

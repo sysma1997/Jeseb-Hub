@@ -15,7 +15,7 @@ import { t } from "../../core/shared/infrastructure/i18n";
 
 import { Pagination as CPagination } from "../shared/Pagination";
 
-import "../../styles/index/transactionsList.css";
+import "../../styles/transactions/transactionsList.css";
 
 dayjs.extend(dayjsUtc);
 

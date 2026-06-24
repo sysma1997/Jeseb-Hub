@@ -1,4 +1,5 @@
 import { Category } from "./Category";
+import type { CategoryBreakdown } from "./CategoryBreakdown";
 import { Pagination } from "../../shared/domain/Pagination";
 
 export interface CategoryRepository {
@@ -11,4 +12,6 @@ export interface CategoryRepository {
 
     getList(limit?: number, page?: number): Promise<Pagination<Category>>;
     getListSearch(name: string, limit?: number, page?: number): Promise<Pagination<Category>>;
+
+    getMonthlyReport(type: boolean): Promise<CategoryBreakdown[]>;
 }

@@ -1,29 +1,17 @@
 :root[data-theme="light"] {
-    --navbar-bg: rgba(255, 255, 255, 0.95);
-    --navbar-text: #1e293b;
-    --navbar-text-muted: #64748b;
-    --navbar-border: #e2e8f0;
-    --navbar-hover: #f1f5f9;
-    --navbar-accent: #00d1b2;
     --navbar-dropdown-bg: #ffffff;
 }
 
 :root[data-theme="dark"] {
-    --navbar-bg: rgba(15, 23, 42, 0.95);
-    --navbar-text: #f1f5f9;
-    --navbar-text-muted: #94a3b8;
-    --navbar-border: #1e293b;
-    --navbar-hover: #1e293b;
-    --navbar-accent: #00d1b2;
     --navbar-dropdown-bg: #1e293b;
 }
 
 .menu {
     position: sticky;
     top: 0;
-    background: var(--navbar-bg);
+    background: var(--global-bg);
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--navbar-border);
+    border-bottom: var(--global-border);
     width: 100%;
     z-index: 30;
     padding: 0.25rem 1.5rem;
@@ -49,7 +37,7 @@
     padding: 0.5rem 1rem;
     background: transparent;
     border: none;
-    color: var(--navbar-text);
+    color: var(--global-text);
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
@@ -59,13 +47,13 @@
 }
 
 .menu-trigger:hover {
-    background: var(--navbar-hover);
-    color: var(--navbar-accent);
+    background: var(--global-hover);
+    color: var(--global-accent);
 }
 
 .menu-dropdown {
     background: var(--navbar-dropdown-bg);
-    border: 1px solid var(--navbar-border);
+    border: var(--global-border);
     border-radius: 10px;
     margin-top: 0.5rem;
     min-width: 160px;
@@ -92,7 +80,7 @@
 .menu-dropdown .menu-dropdown-item {
     display: block;
     padding: 0.625rem 1rem;
-    color: var(--navbar-text);
+    color: var(--global-text);
     text-decoration: none;
     font-size: 0.875rem;
     transition: all 0.2s ease;
@@ -102,7 +90,7 @@
     width: 100%;
     text-align: left;
     font-family: inherit;
-    border-bottom: 1px solid var(--navbar-border);
+    border-bottom: var(--global-border);
 }
 
 .menu-dropdown .menu-dropdown-item:last-child {
@@ -110,8 +98,8 @@
 }
 
 .menu-dropdown .menu-dropdown-item:hover {
-    background: var(--navbar-hover);
-    color: var(--navbar-accent);
+    background: var(--global-hover);
+    color: var(--global-accent);
 }
 
 .menu-user-avatar {
@@ -134,7 +122,7 @@
 .menu-user-name {
     font-size: 0.875rem;
     font-weight: 500;
-    color: var(--navbar-text);
+    color: var(--global-text);
     max-width: 150px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -155,19 +143,19 @@
 
 .menu-mobile-btn {
     background: transparent;
-    border: 1px solid var(--navbar-border);
+    border: var(--global-border);
     padding: 0.5rem;
     border-radius: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--navbar-text);
+    color: var(--global-text);
 }
 
 .menu-mobile-btn:hover {
-    background: var(--navbar-hover);
-    color: var(--navbar-accent);
+    background: var(--global-hover);
+    color: var(--global-accent);
 }
 
 @media (max-width: 768px) {

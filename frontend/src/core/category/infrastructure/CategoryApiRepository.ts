@@ -1,5 +1,6 @@
 import { Category } from "../domain/Category";
 import type { CategoryDto } from "../domain/Category";
+import type { CategoryBreakdown } from "../domain/CategoryBreakdown";
 import type { CategoryRepository } from "../domain/CategoryRepository";
 import { Api, ApiMethods } from "../../shared/infrastructure/Api";
 import type { ApiResponse } from "../../shared/infrastructure/Api";
@@ -79,5 +80,16 @@ export class CategoryApiRepository extends Api implements CategoryRepository {
         pagination.pages = pages;
         pagination.list = list;
         return pagination;
+    }
+
+    async getMonthlyReport(type: boolean): Promise<CategoryBreakdown[]> {
+        const response: ApiResponse = await this.fetch(ApiMethods.POST, "category/get/report/month", {
+            type
+        });
+        if (response.status >= 400) 
+            throw new Error(response.data);
+
+        const categoriesBreakdown: CategoryBreakdown[] = JSON.parse(response.data);
+        return categoriesBreakdown;
     }
 }

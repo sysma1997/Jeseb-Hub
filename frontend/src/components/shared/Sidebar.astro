@@ -24,6 +24,10 @@ const hideAddButton = Astro.props?.hideAddButton || false;
             <Icon class="iIcon" name="solar:home-2-bold" />
             <span><b>{t("shared.menu.home")}</b></span>
         </a>
+        <a id="sbTransactions" class="sidebar-nav-item" href={`/${locale}/transactions`} data-tooltip={t("index.transactions.title")}>
+            <Icon class="iIcon" name="material-symbols:list-rounded" />
+            <span><b>{t("index.transactions.title")}</b></span>
+        </a>
         <a id="sbAccounts" class="sidebar-nav-item" href={`/${locale}/accounts`} data-tooltip={t("shared.menu.accounts")}>
             <Icon class="iIcon" name="solar:wallet-2-bold" />
             <span><b>{t("shared.menu.accounts")}</b></span>
@@ -55,19 +59,19 @@ const hideAddButton = Astro.props?.hideAddButton || false;
         <a id="sidebarMobileHome" class="sidebar-mobile-item" href={`/${locale}`}>
             <Icon class="iIcon" name="solar:home-2-bold" />
         </a>
-        <a id="sidebarMobileAccounts" class="sidebar-mobile-item" href={`/${locale}/accounts`}>
-            <Icon class="iIcon" name="solar:wallet-2-bold" />
+        <a id="sidebarMobileTransactions" class="sidebar-mobile-item" href={`/${locale}/transactions`}>
+            <Icon class="iIcon" name="material-symbols:list-rounded" />
         </a>
         {(!hideAddButton) && <div class="sidebar-mobile-item">
             <button id="sidebarAddMobile" class="sidebar-add-button">
                 <Icon class="iIcon" name="material-symbols:add-2-rounded" />
             </button>
         </div>}
+        <a id="sidebarMobileAccounts" class="sidebar-mobile-item" href={`/${locale}/accounts`}>
+            <Icon class="iIcon" name="solar:wallet-2-bold" />
+        </a>
         <a id="sidebarMobileCategories" class="sidebar-mobile-item" href={`/${locale}/categories`}>
             <Icon class="iIcon" name="solar:widget-4-bold" />
-        </a>
-        <a id="sidebarMobileProfile" class="sidebar-mobile-item" href={`/${locale}/profile`}>
-            <Icon class="iIcon" name="solar:user-bold" />
         </a>
     </div>
 </nav>
@@ -80,24 +84,26 @@ const hideAddButton = Astro.props?.hideAddButton || false;
     
     // Resaltar en sidebar desktop
     const homeLink = document.getElementById("sbHome") as HTMLAnchorElement | null;
+    const transactionsLink = document.getElementById("sbTransactions") as HTMLAnchorElement | null;
     const accountsLink = document.getElementById("sbAccounts") as HTMLAnchorElement | null;
     const categoriesLink = document.getElementById("sbCategories") as HTMLAnchorElement | null;
     const profileLink = document.getElementById("sbProfile") as HTMLAnchorElement | null;
     
-    if (path.includes("/accounts") && accountsLink) accountsLink.classList.add("active");
+    if (path.includes("/transactions") && transactionsLink) transactionsLink.classList.add("active");
+    else if (path.includes("/accounts") && accountsLink) accountsLink.classList.add("active");
     else if (path.includes("/categories") && categoriesLink) categoriesLink.classList.add("active");
     else if (path.includes("/profile") && profileLink) profileLink.classList.add("active");
     else if (homeLink) homeLink.classList.add("active");
     
     // Resaltar en bottom nav móvil
     const mobileHome = document.getElementById("sidebarMobileHome") as HTMLAnchorElement | null;
+    const mobileTransactions = document.getElementById("sidebarMobileTransactions") as HTMLAnchorElement | null;
     const mobileAccounts = document.getElementById("sidebarMobileAccounts") as HTMLAnchorElement | null;
     const mobileCategories = document.getElementById("sidebarMobileCategories") as HTMLAnchorElement | null;
-    const mobileProfile = document.getElementById("sidebarMobileProfile") as HTMLAnchorElement | null;
     
-    if (path.includes("/accounts") && mobileAccounts) mobileAccounts.classList.add("active");
+    if (path.includes("/transactions") && mobileTransactions) mobileTransactions.classList.add("active");
+    else if (path.includes("/accounts") && mobileAccounts) mobileAccounts.classList.add("active");
     else if (path.includes("/categories") && mobileCategories) mobileCategories.classList.add("active");
-    else if (path.includes("/profile") && mobileProfile) mobileProfile.classList.add("active");
     else if (mobileHome) mobileHome.classList.add("active");
     
     // Funcionalidad para colapsar sidebar (desktop)

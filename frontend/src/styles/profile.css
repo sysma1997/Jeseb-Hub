@@ -1,5 +1,6 @@
 @import "bulma-switch-control/css/main.min.css";
 @import "bulma/css/bulma.min.css";
+@import url("./shared/global.css");
 
 .profile {
     padding: 2rem;

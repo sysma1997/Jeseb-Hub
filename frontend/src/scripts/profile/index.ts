@@ -24,7 +24,7 @@ const user: User | undefined = await repository.get();
 if (user) {
     informationSetup(user, repository);
     securitySetup(user, repository);
-    dataSetup(transactionRepository);
+    dataSetup(repository, transactionRepository);
 }
 
 const clickMenuItem = (menuItem: HTMLAnchorElement) => {
