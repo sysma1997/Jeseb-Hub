@@ -1,25 +1,19 @@
 ---
 import type { GetStaticPaths } from "astro";
-import { getLocaleFromUrl, createTranslations } from "../../core/shared/infrastructure/i18n/server";
-
-import { Icon } from "astro-icon/components";
+import {
+    getLocaleFromUrl,
+    createTranslations,
+} from "../../core/shared/infrastructure/i18n/server";
 
 import Layout from "../../layouts/Layout.astro";
 import Content from "../../components/shared/Content.astro";
 
-import Base from "../../components/modals/Base.astro";
-import Alert from "../../components/modals/Alert.astro";
-import Confirm from "../../components/modals/Confirm.astro";
-
-import { TransactionList } from "../../components/index/TransactionList";
+import { TransactionListMini } from "../../components/index/TransactionListMini";
 
 import "../../styles/index/index.css";
 
 export const getStaticPaths = (() => {
-	return [
-		{ params: { lang: "en" } }, 
-		{ params: { lang: "es" } }
-	];
+    return [{ params: { lang: "en" } }, { params: { lang: "es" } }];
 }) satisfies GetStaticPaths;
 
 const locale = getLocaleFromUrl(Astro.url);
@@ -27,208 +21,166 @@ const t = createTranslations(locale);
 ---
 
 <Layout locale={locale} title="Jeseb Hub">
-	<Content locale={locale}>
-		<div class="transactions">
-			<div class="transactionsContent">
-				<p id="pSTitle" class="is-size-5"><b>{t("index.summary.title")}</b></p>
-				<div id="dSTags">
-				</div>
-				<div class="summary">
-					<div class="box">
-						<label>{t("index.summary.income")}:</label>
-						<label id="lSIncome" class="has-text-right">...</label>
-					</div>
-					<div class="box">
-						<label>{t("index.summary.expenses")}:</label>
-						<label id="lSExpenses" class="has-text-right">...</label>
-					</div>
-					<div class="box">
-						<label>{t("index.summary.diff")}:</label>
-						<label id="lSDiff" class="has-text-right">...</label>
-					</div>
-					<div></div>
-				</div>
-				<TransactionList client:only="react" />
-			</div>
-		</div>
-	</Content>
+    <Content locale={locale} hideAddButton>
+        <div class="container">
+            <div class="kpi-grid">
+                <!-- Balance Total -->
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="1" y="4" width="22" height="16" rx="2" stroke="currentColor"/>
+                                <path d="M1 10h22" stroke="currentColor"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="kpi-title">Balance total</div>
+                    <div class="kpi-value" id="totalBalance">Loading...</div>
+                    <div class="kpi-subtitle">En todas tus cuentas</div>
+                </div>
 
-	<Base id="modalFilterTransactions" title={t("shared.filter")}>
-		<section class="modal-card-body">
-			<div class="field">
-				<label class="label">{t("index.transactions.filter.dateRange")}:</label>
-				<div class="field has-addons">
-					<div class="control" style="flex: 1;">
-						<input id="iMFTDateFrom" class="input" type="date" style="color: white" />
-					</div>
-					<div class="control" style="flex: 1;">
-						<input id="iMFTDateTo" class="input" type="date" style="color: white" />
-					</div>
-					<div class="control">
-						<button id="btnMFTClear" class="button is-primary">{t("shared.clear")}</button>
-					</div>
-				</div>
-			</div>
-			<div class="field">
-				<label class="label">{t("index.transactions.account")}:</label>
-				<div class="control">
-					<div class="select is-fullwidth">
-						<select id="sMFTAccount">
-							<option value="all">{t("index.transactions.filter.all")}</option>
-						</select>
-					</div>
-				</div>
-			</div>
-			<div class="field">
-				<label class="label">{t("index.transactions.category")}:</label>
-				<div class="control">
-					<div class="select is-fullwidth">
-						<select id="sMFTCategory">
-							<option value="all">{t("index.transactions.filter.all")}</option>
-						</select>
-					</div>
-				</div>
-			</div>
-			<div class="field">
-				<label class="label">{t("index.transactions.type")}:</label>
-				<div class="control">
-					<div class="select is-fullwidth">
-						<select id="sMFTType">
-							<option value="all">{t("index.transactions.filter.all")}</option>
-							<option value="true">{t("index.transactions.ingress")}</option>
-							<option value="false">{t("index.transactions.egress")}</option>
-						</select>
-					</div>
-				</div>
-			</div>
-		</section>
-		<footer class="modal-card-foot" style="gap: 0.5rem;">
-            <button id="btnMFTCancel" class="button is-danger is-fullwidth">{t("shared.cancel")}</button>
-			<button id="btnMFTClearFilters" class="button is-info is-fullwidth">{t("shared.clear")}</button>
-            <button id="btnMFTAccept" class="button is-primary is-fullwidth">{t("shared.accept")}</button>
-        </footer>
-	</Base>
-	<Base id="modalAddTransaction" title={t("index.transactions.add")}>
-		<section id="sMAT1" class="modal-card-body" style="display: block;">
-			<div class="field">
-				<label class="label">{t("index.transactions.account")}:</label>
-				<div class="control">
-					<div class="select is-fullwidth">
-						<select id="sMATAccount"></select>
-					</div>
-				</div>
-			</div>
-			<label id="lMATAccountBalance">{t("shared.balance")}: 0</label>
-		</section>
-		<section id="sMAT2" class="modal-card-body" style="display: none;">
-			<div class="field">
-				<label class="label">{t("index.transactions.type")}:</label>
-				<div class="control">
-					<div class="select is-fullwidth">
-						<select id="sMATType">
-							<option value="true">{t("index.transactions.ingress")}</option>
-							<option value="false">{t("index.transactions.egress")}</option>
-						</select>
-					</div>
-				</div>
-			</div>
-			<div class="field">
-				<label class="label">{t("index.transactions.value")}:</label>
-				<div class="control">
-					<input id="iMATValue" class="input" type="number" />
-				</div>
-			</div>
-		</section>
-		<section id="sMAT3" class="modal-card-body" style="display: none;">
-			<p style="margin-bottom: 1.5rem;">{t("index.transactions.optional")}</p>
-			<div class="field">
-				<label class="label">{t("index.transactions.date")}:</label>
-				<div class="control">
-					<input id="iMATDate" class="input" type="datetime-local" />
-				</div>
-			</div>
-			<div class="field">
-				<label class="label">{t("index.transactions.category")}:</label>
-				<div class="control">
-					<div class="select is-fullwidth">
-						<select id="sMATCategory"></select>
-					</div>
-				</div>
-			</div>
-			<div class="field">
-				<label class="label">{t("index.transactions.description")}:</label>
-				<div class="control">
-					<textarea id="taMATDescription" class="textarea" />
-				</div>
-			</div>
-		</section>
-		<section id="sMAT4" class="modal-card-body" style="display: none;">
-			<p style="margin-bottom: 1.5rem;">{t("index.transactions.confirm")}:</p>
-			<div class="item">
-				<label class="label">{t("index.transactions.account")}:</label>
-				<p id="pMATAccountConfirm">.</p>
-			</div>
-			<div class="item">
-				<label class="label">{t("index.transactions.type")}:</label>
-				<p id="pMATTypeConfirm">.</p>
-			</div>
-			<div class="item">
-				<label class="label">{t("index.transactions.value")}:</label>
-				<p id="pMATValueConfirm">.</p>
-			</div>
-			<div class="item">
-				<label class="label">{t("index.transactions.date")}:</label>
-				<p id="pMATDateConfirm">.</p>
-			</div>
-			<div id="dMATCategoryConfirm" class="item" style="display: none;">
-				<label class="label">{t("index.transactions.category")}:</label>
-				<p id="pMATCategoryConfirm">.</p>
-			</div>
-			<div id="dMATDescriptionConfirm" class="item" style="display: none;">
-				<label class="label">{t("index.transactions.description")}:</label>
-				<p id="pMATDescriptionConfirm">.</p>
-			</div>
-		</section>
-		<section id="sMAT5" class="modal-card-body" style="display: none;">
-			<p id="pMATMessage">{t("index.transactions.created")}</p>
-		</section>
-		<footer class="modal-card-foot" style="gap: 0.5rem;">
-            <button id="btnMATCancel" class="button is-danger is-fullwidth">{t("shared.cancel")}</button>
-            <button id="btnMATAccept" class="button is-primary is-fullwidth">{t("shared.next")}</button>
-        </footer>
-	</Base>
-	<Base id="modalTransaction" title={t("index.transactions.title")}>
-		<section class="modal-card-body">
-			<div class="item">
-				<label class="label">{t("index.transactions.account")}:</label>
-				<p id="pMTAccount">.</p>
-			</div>
-			<div class="item">
-				<label class="label">{t("index.transactions.type")}:</label>
-				<p id="pMTType">.</p>
-			</div>
-			<div class="item">
-				<label class="label">{t("index.transactions.value")}:</label>
-				<p id="pMTValue">.</p>
-			</div>
-			<div class="item">
-				<label class="label">{t("index.transactions.date")}:</label>
-				<p id="pMTDate">.</p>
-			</div>
-			<div id="dMTCategory" class="item" style="display: none;">
-				<label class="label">{t("index.transactions.category")}:</label>
-				<p id="pMTCategory">.</p>
-			</div>
-			<div id="dMTDescription" class="item" style="display: none;">
-				<label class="label">{t("index.transactions.description")}:</label>
-				<p id="pMTDescription">.</p>
-			</div>
-		</section>
-		<footer class="modal-card-foot" style="gap: 0.5rem;">
-            <button id="btnMTOk" class="button is-primary is-fullwidth">Ok</button>
-        </footer>
-	</Base>
-	<Confirm locale={locale} />
-	<Alert locale={locale} />
-	<script>import "../../scripts/index/index";</script>
+                <!-- Ingresos del Mes -->
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor"/>
+                            </svg>
+                        </div>
+                        <span class="kpi-badge" id="incomeBadge">Loading...</span>
+                    </div>
+                    <div class="kpi-title">Ingresos del mes</div>
+                    <div class="kpi-value" id="incomeCurrent">Loading...</div>
+                    <div class="kpi-details">
+                        <span class="kpi-previous">Mes pasado: <span id="incomePrevious">Loading...</span></span>
+                        <span class="kpi-difference" id="incomeDiff">Loading...</span>
+                    </div>
+                </div>
+
+                <!-- Gastos del Mes -->
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor"/>
+                            </svg>
+                        </div>
+                        <span class="kpi-badge" id="expensesBadge">Loading...</span>
+                    </div>
+                    <div class="kpi-title">Gastos del mes</div>
+                    <div class="kpi-value" id="expensesCurrent">Loading...</div>
+                    <div class="kpi-details">
+                        <span class="kpi-previous">Mes pasado: <span id="expensesPrevious">Loading...</span></span>
+                        <span class="kpi-difference" id="expensesDiff">Loading...</span>
+                    </div>
+                </div>
+
+                <!-- Ahorro Neto -->
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor"/>
+                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" stroke="currentColor"/>
+                            </svg>
+                        </div>
+                        <span class="kpi-badge" id="netSavingBadge">Loading...</span>
+                    </div>
+                    <div class="kpi-title">Ahorro neto</div>
+                    <div class="kpi-value" id="netSavingCurrent">Loading...</div>
+                    <div class="kpi-details">
+                        <span class="kpi-previous">Mes pasado: <span id="netSavingPrevious">Loading...</span></span>
+                        <span class="kpi-difference" id="netSavingDiff">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Gráficos de Categorías -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3 class="chart-title">
+                        <span class="chart-icon income-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 19V5M5 12l7-7 7 7"/>
+                            </svg>
+                        </span>
+                        Ingresos por Categoría
+                    </h3>
+                    <div class="chart-wrapper">
+                        <canvas id="categoryBreakdownIncome"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3 class="chart-title">
+                        <span class="chart-icon expense-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 5v14M5 12l7 7 7-7"/>
+                            </svg>
+                        </span>
+                        Gastos por Categoría
+                    </h3>
+                    <div class="chart-wrapper">
+                        <canvas id="categoryBreakdownExpenses"></canvas>
+                    </div>
+                </div>
+            </div>
+            <!-- Evolución del Balance -->
+            <div class="chart-card full-width">
+                <h3 class="chart-title">
+                    <span class="chart-icon balance-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 12L7 8L11 12L17 6L21 10"/>
+                            <path d="M3 16L7 12L11 16L17 10L21 14"/>
+                        </svg>
+                    </span>
+                    Evolución del Balance
+                </h3>
+                <div class="chart-wrapper large">
+                    <canvas id="balanceEvolution"></canvas>
+                </div>
+            </div>
+
+            <!-- Transacciones Recientes y Top 3 Gastos -->
+            <div class="bottom-section">
+                <div class="transactions-card">
+                    <h3 class="section-title">
+                        <span class="section-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="3" width="20" height="18" rx="2" stroke="currentColor"/>
+                                <path d="M8 7h8M8 11h6M8 15h4" stroke="currentColor"/>
+                            </svg>
+                        </span>
+                        Transacciones Recientes
+                    </h3>
+                    <TransactionListMini client:only="react" />
+                </div>
+
+                <div class="top-expenses-card-modern">
+                    <h3 class="section-title">
+                        <span class="section-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor"/>
+                                <path d="M2 17l10 5 10-5" stroke="currentColor"/>
+                                <path d="M2 12l10 5 10-5" stroke="currentColor"/>
+                            </svg>
+                        </span>
+                        Top 3 Gastos del Mes
+                    </h3>
+                    <ul id="topExpenses" class="top-expenses-list-modern"></ul>
+                </div>
+
+            <!-- <div class="box">
+                <h2 class="title">Transactions</h2>
+                <TransactionListMini client:only="react" />
+            </div>
+            <div class="box">
+                <h2 class="title">Top 3 expenses</h2>
+                <ul id="topExpenses" />
+            </div> -->
+        </div>
+    </Content>
+
+    <script>
+        import "../../scripts/index";
+    </script>
 </Layout>

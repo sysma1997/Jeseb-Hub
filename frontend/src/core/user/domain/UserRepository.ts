@@ -14,6 +14,8 @@ export interface UserRepository {
     updateEmail(email: string, code: number): Promise<string>;
     updatePassword(currentPassword: string, newPassword: string): Promise<string>;
     updateTwoStep(config: UserConfig): Promise<string>;
+
+    deleteAllData(): Promise<string>;
     
     login(email: string, password: string, code?: number): Promise<{ token: string | undefined, message?: string | undefined }>;
 

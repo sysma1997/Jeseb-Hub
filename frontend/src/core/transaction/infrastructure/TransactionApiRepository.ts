@@ -1,10 +1,12 @@
 import { Transaction } from "../domain/Transaction";
 import type { TransactionDto } from "../domain/Transaction";
 import type { TransactionRepository } from "../domain/TransactionRepository";
+import type { BalanceEvolution } from "../domain/BalanceEvolution";
 import { Api, ApiMethods } from "../../shared/infrastructure/Api";
 import type { ApiResponse } from "../../shared/infrastructure/Api";
 import { Pagination } from "../../shared/domain/Pagination";
 import type { TransactionFilter } from "../domain/TransactionFilter";
+import type { TransactionComparison } from "../domain/TransactionComparison";
 
 export class TransactionApiRepository extends Api implements TransactionRepository {
     async add(transaction: Transaction): Promise<void> {
@@ -72,19 +74,45 @@ export class TransactionApiRepository extends Api implements TransactionReposito
         return pagination;
     }
 
-    async getMonthlyIncome(transactionFilter?: TransactionFilter): Promise<number> {
-        const response: ApiResponse = await this.fetch(ApiMethods.POST, "transaction/get/monthly/income", transactionFilter);
+    async getMonthlyIncome(transactionFilter?: TransactionFilter, compareLastMonth?: boolean): Promise<TransactionComparison> {
+        const response: ApiResponse = await this.fetch(ApiMethods.POST, "transaction/get/monthly/income", {
+            ...transactionFilter, 
+            compareLastMonth: compareLastMonth === true ? compareLastMonth : false
+        });
         if (response.status >= 400) 
             throw new Error(response.data);
 
-        return Number(response.data);
+        const data: TransactionComparison = JSON.parse(response.data);
+        return {
+            current: data.current, 
+            previous: data.previous, 
+            difference: data.difference, 
+            percentageChange: data.percentageChange
+        }
     }
-    async getMonthlyExpenses(transactionFilter?: TransactionFilter): Promise<number> {
-        const response: ApiResponse = await this.fetch(ApiMethods.POST, "transaction/get/monthly/expenses", transactionFilter);
+    async getMonthlyExpenses(transactionFilter?: TransactionFilter, compareLastMonth?: boolean): Promise<TransactionComparison> {
+        const response: ApiResponse = await this.fetch(ApiMethods.POST, "transaction/get/monthly/expenses", {
+            ...transactionFilter, 
+            compareLastMonth: compareLastMonth === true ? compareLastMonth : false
+        });
         if (response.status >= 400) 
             throw new Error(response.data);
 
-        return Number(response.data);
+        const data: TransactionComparison = JSON.parse(response.data);
+        return {
+            current: data.current, 
+            previous: data.previous, 
+            difference: data.difference, 
+            percentageChange: data.percentageChange
+        }
+    }
+    async getBalanceEvolution(): Promise<BalanceEvolution[]> {
+        const response: ApiResponse = await this.fetch(ApiMethods.GET, "transaction/get/balance/evolution");
+        if (response.status >= 400) 
+            throw new Error(response.data);
+
+        const balancesEvolution: BalanceEvolution[] = JSON.parse(response.data);
+        return balancesEvolution;
     }
 
     async import(transactions: Transaction[]): Promise<void> {

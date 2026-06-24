@@ -1,0 +1,19 @@
+:root[data-theme="light"] {
+    --global-bg: rgba(255, 255, 255, 0.95);
+    --global-text: #1e293b;
+    --global-text-muted: #64748b;
+    --global-border: 1px solid #e2e8f0;
+    --global-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --global-hover: #f0fdfa;
+    --global-accent: #00d1b2;
+}
+
+:root[data-theme="dark"] {
+    --global-bg: rgba(15, 23, 42, 0.95);
+    --global-text: #f1f5f9;
+    --global-text-muted: #94a3b8;
+    --global-border: 1px solid #1e293b;
+    --global-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --global-hover: #1e293b;
+    --global-accent: #00d1b2;
+}

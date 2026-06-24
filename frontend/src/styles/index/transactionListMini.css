@@ -1,0 +1,126 @@
+/* ===== Loading ===== */
+.transactions-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 30px 0;
+    color: var(--global-text-muted);
+    font-size: 14px;
+}
+
+.loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--global-border);
+    border-top: 2px solid var(--global-accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== Transactions Table ===== */
+.transactions-table-wrapper-modern {
+    overflow-x: auto;
+}
+
+.transactions-table-modern {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.transactions-table-modern thead th {
+    text-align: left;
+    padding: 10px 12px;
+    color: var(--global-text-muted);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--global-border);
+}
+
+.transactions-table-modern tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--global-border);
+    color: var(--global-text);
+}
+
+.transactions-table-modern tbody tr {
+    transition: background 0.15s ease;
+}
+
+.transactions-table-modern tbody tr:hover {
+    background: var(--global-hover);
+}
+
+.transaction-account-modern .account-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    background: var(--kpi-icon-bg);
+    color: var(--global-accent);
+}
+
+.transaction-date-modern {
+    font-size: 12px;
+    color: var(--global-text-muted);
+    white-space: nowrap;
+}
+
+.transaction-amount-modern {
+    font-weight: 600;
+    text-align: right;
+    font-size: 13px;
+}
+
+.transaction-amount-modern.positive {
+    color: #00d1b2;
+}
+
+.transaction-amount-modern.negative {
+    color: #ff3860;
+}
+
+.amount-header {
+    text-align: right;
+}
+
+@media (max-width: 768px) {
+    .transactions-table-modern {
+        font-size: 12px;
+    }
+
+    .transactions-table-modern thead th,
+    .transactions-table-modern tbody td {
+        padding: 8px 10px;
+    }
+
+    .transaction-account-modern .account-badge {
+        font-size: 11px;
+        padding: 2px 8px;
+    }
+
+    .transaction-date-modern {
+        font-size: 11px;
+    }
+
+    .transaction-amount-modern {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 375px) {
+    .transactions-table-modern thead th,
+    .transactions-table-modern tbody td {
+        padding: 6px 8px;
+        font-size: 11px;
+    }
+}

@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import dayjsUtc from "dayjs/plugin/utc";
 import Papa from "papaparse";
 
+import type { UserRepository } from "../../core/user/domain/UserRepository";
 import { Transaction } from "../../core/transaction/domain/Transaction";
 import type { TransactionDto } from "../../core/transaction/domain/Transaction"; 
 import type { TransactionRepository } from "../../core/transaction/domain/TransactionRepository";
@@ -12,6 +13,7 @@ dayjs.extend(dayjsUtc);
 
 const importCsv = document.getElementById("btnDImportCsv") as HTMLButtonElement;
 const exportCsv = document.getElementById("btnDExportCsv") as HTMLButtonElement;
+const DeleteAllData = document.getElementById("btnDDeleteAllData") as HTMLButtonElement;
 const showApiUrl = document.getElementById("btnDShowApiUrl") as HTMLButtonElement;
 const progressBar = document.getElementById("pDProgress") as HTMLProgressElement;
 
@@ -46,7 +48,7 @@ const exportParseCSV = (text: string): string => {
     return escaped;
 };
 
-export const setup = (repository: TransactionRepository) => {
+export const setup = (userRepository: UserRepository, transactionRepository: TransactionRepository) => {
     importCsv.onclick = () => {
         const input = document.createElement("input");
         input.type = "file";
@@ -103,7 +105,7 @@ export const setup = (repository: TransactionRepository) => {
                     }
 
                     try {
-                        await repository.import(transactionsChunk);
+                        await transactionRepository.import(transactionsChunk);
                     } catch (ex: any) {
                         if (ex instanceof Error) console.error(ex);
                     }
@@ -129,7 +131,7 @@ export const setup = (repository: TransactionRepository) => {
 
             const transactions: string[] = ["Date,Type,Account,Value,Category,Description"];
             let totalProgress: number = 0;
-            repository.export((chunk, progress) => {
+            transactionRepository.export((chunk, progress) => {
                 const list = chunk.list as TransactionDto[];
                 
                 list.forEach(transaction => {
@@ -174,6 +176,13 @@ export const setup = (repository: TransactionRepository) => {
                     }, 1000);
                 }
             }, 1000);
+        });
+    };
+
+    DeleteAllData.onclick = () => {
+        window.showConfirm("Delete all data? This action cannot be reversed", "Delete", async () => {
+            const result = await userRepository.deleteAllData();
+            window.showAlert(result);
         });
     };
 

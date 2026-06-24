@@ -1,5 +1,7 @@
 import { Transaction } from "./Transaction";
 import type { TransactionFilter } from "./TransactionFilter";
+import type { TransactionComparison } from "./TransactionComparison";
+import type { BalanceEvolution } from "./BalanceEvolution";
 import { Pagination } from "../../shared/domain/Pagination";
 
 export interface TransactionRepository {
@@ -12,9 +14,10 @@ export interface TransactionRepository {
     getList(limit?: number, page?: number): Promise<Pagination<Transaction>>;
     getListFilter(transactionFilter: TransactionFilter, limit?: number, page?: number): Promise<Pagination<Transaction>>;
 
-    getMonthlyIncome(transactionFilter?: TransactionFilter): Promise<number>;
-    getMonthlyExpenses(transactionFilter?: TransactionFilter): Promise<number>;
-    
+    getMonthlyIncome(transactionFilter?: TransactionFilter, compareLastMonth?: boolean): Promise<TransactionComparison>;
+    getMonthlyExpenses(transactionFilter?: TransactionFilter, compareLastMonth?: boolean): Promise<TransactionComparison>;
+    getBalanceEvolution(): Promise<BalanceEvolution[]>;
+
     import(transactions: Transaction[]): Promise<void>;
     export(action: (chunk: any, progress: number) => void): Promise<void>;
 }

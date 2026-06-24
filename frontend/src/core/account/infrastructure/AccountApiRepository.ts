@@ -79,4 +79,13 @@ export class AccountApiRepository extends Api implements AccountRepository {
         pagination.list = list;
         return pagination;
     }
+
+    async getTotalBalance(): Promise<number> {
+        const response: ApiResponse = await this.fetch(ApiMethods.GET, "account/total/balance");
+        if (response.status >= 400)
+            throw new Error(response.data);
+        
+        const data: any = JSON.parse(response.data);
+        return data.totalBalance;
+    }
 }

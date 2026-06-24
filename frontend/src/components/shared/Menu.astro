@@ -87,6 +87,7 @@ const t = createTranslations(locale);
     import type { UserRepository } from "../../core/user/domain/UserRepository";
     import { UserApiRepository } from "../../core/user/infrastructure/UserApiRepository";
     import { type Locale, getLocale, setLocale } from "../../core/shared/infrastructure/i18n";
+    import { Notify } from "../../core/shared/domain/Subject";
 
     (async () => {
         const userRepository: UserRepository = new UserApiRepository();
@@ -148,6 +149,7 @@ const t = createTranslations(locale);
             window.localStorage.setItem("theme", theme);
             document.documentElement.setAttribute("data-theme", theme);
             document.cookie = `theme=${theme};path=/;max-age=31536000;SameSite=Lax`;
+            Notify("menu:theme", theme);
         });
         localesDropdown?.addEventListener("dropdown-select", (event: Event) => {
             const locale = (event as CustomEvent).detail.value;
