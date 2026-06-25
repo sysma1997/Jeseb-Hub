@@ -100,7 +100,7 @@ try {
         {
             const option = document.createElement("option");
             option.value = "";
-            option.innerText = t("index.transactions.categoryNone");
+            option.innerText = t("transactions.categoryNone");
             matCategory.appendChild(option);
         }
         categories.forEach(category => {
@@ -143,13 +143,13 @@ const transactionShowUpdate = (_transaction: Transaction) => {
     else matDescription.value = "";
     
     modalAddTransaction.classList.add("is-active");
-    matTitle.innerText = t("index.transactions.update");
+    matTitle.innerText = t("transactions.update");
 };
 const transactionShowView = (_transaction: Transaction) => {
     transaction = _transaction;
     
     mtAccount.innerText = transaction.account;
-    mtType.innerText = (transaction.type) ? t("index.transactions.ingress") : t("index.transactions.egress");
+    mtType.innerText = (transaction.type) ? t("transactions.ingress") : t("transactions.egress");
     mtValue.innerText = FormatNumber(transaction.value);
     mtDate.innerText = dayjs(transaction.date).format("DD/MM/YYYY HH:mm:ss");
     if (transaction.category) {
@@ -167,12 +167,12 @@ const transactionShowView = (_transaction: Transaction) => {
 };
 Attach("sidebar:add", () => {
     if (accounts.length == 0) {
-        window.showAlert(t("index.transactions.accountsRequired"));
+        window.showAlert(t("transactions.accountsRequired"));
         return;
     }
 
     modalAddTransaction.classList.add("is-active");
-    matTitle.innerText = t("index.transactions.add");
+    matTitle.innerText = t("transactions.add");
     transaction = undefined;
 });
 Attach("transaction:filter:show", () => {
@@ -258,7 +258,7 @@ mftAccept.onclick = () => {
     if (!filter.dateFrom && !filter.dateTo && 
         !filter.account && !filter.category && 
         filter.type === undefined) {
-        window.showAlert(t("index.transactions.filter.noSelectFilters"));
+        window.showAlert(t("transactions.filter.noSelectFilters"));
         return;
     }
 
@@ -316,7 +316,7 @@ matAccept.onclick = async () => {
     }
     if (matSection2.style.display === "block") {
         if (matValue.value === "" || isNaN(Number(matValue.value)) || Number(matValue.value) <= 0) {
-            window.showAlert(t("index.transactions.valueInvalid"));
+            window.showAlert(t("transactions.valueInvalid"));
             return;
         }
         const account = accounts.find(a => a.id === matAccount.value)!;
@@ -336,7 +336,7 @@ matAccept.onclick = async () => {
 
         const account = accounts.find(a => a.id === matAccount.value)!;
         matAccountConfirm.innerText = account.name;
-        matTypeConfirm.innerText = matType.value === "true" ? t("index.transactions.ingress") : t("index.transactions.egress");
+        matTypeConfirm.innerText = matType.value === "true" ? t("transactions.ingress") : t("transactions.egress");
         matValueConfirm.innerText = FormatNumber(Number(matValue.value));
         matDateConfirm.innerText = dayjs(matDate.value).format("DD/MM/YYYY HH:mm:ss");
         if (matCategory.value) {
@@ -391,8 +391,8 @@ matAccept.onclick = async () => {
                 return a;
             });
             matMessage.innerText = (!transaction) ? 
-                t("index.transactions.added") : 
-                t("index.transactions.updated");
+                t("transactions.added") : 
+                t("transactions.updated");
 
             matSection4.style.display = "none";
             matSection5.style.display = "block";

@@ -30,7 +30,7 @@ const setSummary = (income: number, expenses: number) => {
     lSDiff.innerHTML = `<b>${FormatNumber(diff)}</b>`;
 };
 const getSummaryThisMonth = async () => {
-    dSTags.innerHTML = `<span class="tag">${t("index.summary.thisMonth")}</span>`;
+    dSTags.innerHTML = `<span class="tag">${t("transactions.summary.thisMonth")}</span>`;
     setSummary(incomeThisMonth, expensesThisMonth);
 };
 const addSpan = (key: string, value: string) => {
@@ -58,16 +58,16 @@ export const summaryInit = async (transactionRepository: TransactionRepository) 
         dSTags.innerHTML = "";
         if (filter.dateFrom) {
             const dateFrom = dayjs(filter.dateFrom);
-            addSpan(t("index.summary.filter.dateFrom"), dateFrom.format("DD/MM/YYYY"));
+            addSpan(t("transactions.summary.filter.dateFrom"), dateFrom.format("DD/MM/YYYY"));
         }
         if (filter.dateTo) {
             const dateTo = dayjs(filter.dateTo);
-            addSpan(t("index.summary.filter.dateTo"), dateTo.format("DD/MM/YYYY"));
+            addSpan(t("transactions.summary.filter.dateTo"), dateTo.format("DD/MM/YYYY"));
         }
-        if (filter.type !== undefined) addSpan(t("index.transactions.type"), (filter.type === true) ? 
-            t("index.transactions.ingress") : t("index.transactions.egress"));
-        if (filter.account) addSpan(t("index.transactions.account"), filter.account);
-        if (filter.category) addSpan(t("index.transactions.category"), filter.category);
+        if (filter.type !== undefined) addSpan(t("transactions.type"), (filter.type === true) ? 
+            t("transactions.ingress") : t("transactions.egress"));
+        if (filter.account) addSpan(t("transactions.account"), filter.account);
+        if (filter.category) addSpan(t("transactions.category"), filter.category);
 
         const income: TransactionComparison = (filter.type === undefined || filter.type === true) ? 
             await transactionRepository.getMonthlyIncome(filter) : 

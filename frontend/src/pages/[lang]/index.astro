@@ -34,9 +34,9 @@ const t = createTranslations(locale);
                             </svg>
                         </div>
                     </div>
-                    <div class="kpi-title">Balance total</div>
+                    <div class="kpi-title">{t("index.kpi.balance.title")}</div>
                     <div class="kpi-value" id="totalBalance">Loading...</div>
-                    <div class="kpi-subtitle">En todas tus cuentas</div>
+                    <div class="kpi-subtitle">{t("index.kpi.balance.subtitle")}</div>
                 </div>
 
                 <!-- Ingresos del Mes -->
@@ -49,10 +49,10 @@ const t = createTranslations(locale);
                         </div>
                         <span class="kpi-badge" id="incomeBadge">Loading...</span>
                     </div>
-                    <div class="kpi-title">Ingresos del mes</div>
+                    <div class="kpi-title">{t("index.kpi.income.title")}</div>
                     <div class="kpi-value" id="incomeCurrent">Loading...</div>
                     <div class="kpi-details">
-                        <span class="kpi-previous">Mes pasado: <span id="incomePrevious">Loading...</span></span>
+                        <span class="kpi-previous">{t("index.kpi.shared.lastMonth")}: <span id="incomePrevious">Loading...</span></span>
                         <span class="kpi-difference" id="incomeDiff">Loading...</span>
                     </div>
                 </div>
@@ -67,10 +67,10 @@ const t = createTranslations(locale);
                         </div>
                         <span class="kpi-badge" id="expensesBadge">Loading...</span>
                     </div>
-                    <div class="kpi-title">Gastos del mes</div>
+                    <div class="kpi-title">{t("index.kpi.expenses.title")}</div>
                     <div class="kpi-value" id="expensesCurrent">Loading...</div>
                     <div class="kpi-details">
-                        <span class="kpi-previous">Mes pasado: <span id="expensesPrevious">Loading...</span></span>
+                        <span class="kpi-previous">{t("index.kpi.shared.lastMonth")}: <span id="expensesPrevious">Loading...</span></span>
                         <span class="kpi-difference" id="expensesDiff">Loading...</span>
                     </div>
                 </div>
@@ -86,10 +86,10 @@ const t = createTranslations(locale);
                         </div>
                         <span class="kpi-badge" id="netSavingBadge">Loading...</span>
                     </div>
-                    <div class="kpi-title">Ahorro neto</div>
+                    <div class="kpi-title">{t("index.kpi.netSaving.title")}</div>
                     <div class="kpi-value" id="netSavingCurrent">Loading...</div>
                     <div class="kpi-details">
-                        <span class="kpi-previous">Mes pasado: <span id="netSavingPrevious">Loading...</span></span>
+                        <span class="kpi-previous">{t("index.kpi.shared.lastMonth")}: <span id="netSavingPrevious">Loading...</span></span>
                         <span class="kpi-difference" id="netSavingDiff">Loading...</span>
                     </div>
                 </div>
@@ -104,7 +104,7 @@ const t = createTranslations(locale);
                                 <path d="M12 19V5M5 12l7-7 7 7"/>
                             </svg>
                         </span>
-                        Ingresos por Categoría
+                        {t("index.graphics.income")}
                     </h3>
                     <div class="chart-wrapper">
                         <canvas id="categoryBreakdownIncome"></canvas>
@@ -117,7 +117,7 @@ const t = createTranslations(locale);
                                 <path d="M12 5v14M5 12l7 7 7-7"/>
                             </svg>
                         </span>
-                        Gastos por Categoría
+                        {t("index.graphics.expenses")}
                     </h3>
                     <div class="chart-wrapper">
                         <canvas id="categoryBreakdownExpenses"></canvas>
@@ -133,7 +133,7 @@ const t = createTranslations(locale);
                             <path d="M3 16L7 12L11 16L17 10L21 14"/>
                         </svg>
                     </span>
-                    Evolución del Balance
+                    {t("index.graphics.evolution")}
                 </h3>
                 <div class="chart-wrapper large">
                     <canvas id="balanceEvolution"></canvas>
@@ -150,7 +150,7 @@ const t = createTranslations(locale);
                                 <path d="M8 7h8M8 11h6M8 15h4" stroke="currentColor"/>
                             </svg>
                         </span>
-                        Transacciones Recientes
+                        {t("index.transactions")}
                     </h3>
                     <TransactionListMini client:only="react" />
                 </div>
@@ -164,7 +164,7 @@ const t = createTranslations(locale);
                                 <path d="M2 12l10 5 10-5" stroke="currentColor"/>
                             </svg>
                         </span>
-                        Top 3 Gastos del Mes
+                        {t("index.top")}
                     </h3>
                     <ul id="topExpenses" class="top-expenses-list-modern"></ul>
                 </div>

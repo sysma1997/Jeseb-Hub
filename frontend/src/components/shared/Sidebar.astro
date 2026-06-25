@@ -24,9 +24,9 @@ const hideAddButton = Astro.props?.hideAddButton || false;
             <Icon class="iIcon" name="solar:home-2-bold" />
             <span><b>{t("shared.menu.home")}</b></span>
         </a>
-        <a id="sbTransactions" class="sidebar-nav-item" href={`/${locale}/transactions`} data-tooltip={t("index.transactions.title")}>
+        <a id="sbTransactions" class="sidebar-nav-item" href={`/${locale}/transactions`} data-tooltip={t("transactions.title")}>
             <Icon class="iIcon" name="material-symbols:list-rounded" />
-            <span><b>{t("index.transactions.title")}</b></span>
+            <span><b>{t("transactions.title")}</b></span>
         </a>
         <a id="sbAccounts" class="sidebar-nav-item" href={`/${locale}/accounts`} data-tooltip={t("shared.menu.accounts")}>
             <Icon class="iIcon" name="solar:wallet-2-bold" />

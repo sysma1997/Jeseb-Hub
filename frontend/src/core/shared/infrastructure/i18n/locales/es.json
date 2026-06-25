@@ -52,6 +52,33 @@
         "invalid": "Token inválido o caducado."
     }, 
     "index": {
+        "kpi": {
+            "balance": {
+                "title": "Saldo total", 
+                "subtitle": "En todas tus cuentas"
+            }, 
+            "income": {
+                "title": "Ingresos del mes"
+            }, 
+            "expenses": {
+                "title": "Gastos del mes"
+            }, 
+            "netSaving": {
+                "title": "Ahorro neto"
+            },
+            "shared": {
+                "lastMonth": "Mes pasado"
+            }
+        }, 
+        "graphics": {
+            "income": "Ingresos por categoría", 
+            "expenses": "Gastos por categoría", 
+            "evolution": "Evolución del balance"
+        }, 
+        "transactions": "Transacciones Recientes", 
+        "top": "Top 3 gastos del mes"
+    }, 
+    "transactions": {
         "summary": {
             "title": "Resumen", 
             "income": "Ingresos", 
@@ -62,41 +89,39 @@
                 "dateFrom": "Fecha desde", 
                 "dateTo": "Fecha hasta"
             }
+        },
+        "noItems": "No hay transacciones para mostrar.", 
+        "title": "Transacciones", 
+        "account": "Cuenta", 
+        "value": "Valor", 
+        "valueInvalid": "Por favor, introduzca un valor válido para la transacción.", 
+        "date": "Fecha", 
+        "options": "Opciones", 
+        "type": "Tipo", 
+        "ingress": "Entrada", 
+        "egress": "Salida", 
+        "category": "Categoría", 
+        "categoryNone": "Sin categoría", 
+        "description": "Descripción", 
+        "optional": "Las siguientes opciones son opcionales.", 
+        "confirm": "Por favor, confirme la siguiente información para crear la transacción", 
+        "created": "La transacción se ha creado correctamente.",
+        "add": "Agregar transacción", 
+        "added": "La transacción se ha agregado correctamente.", 
+        "update": "Actualizar transacción", 
+        "updated": "La transacción se ha creado correctamente.", 
+        "delete": {
+            "title": "Eliminar transacción", 
+            "description": "¿Eliminar esta transacción?", 
+            "success": "Transacción eliminada correctamente."
         }, 
-        "transactions": {
-            "noItems": "No hay transacciones para mostrar.", 
-            "title": "Transacciones", 
-            "account": "Cuenta", 
-            "value": "Valor", 
-            "valueInvalid": "Por favor, introduzca un valor válido para la transacción.", 
-            "date": "Fecha", 
-            "options": "Opciones", 
-            "type": "Tipo", 
-            "ingress": "Entrada", 
-            "egress": "Salida", 
-            "category": "Categoría", 
-            "categoryNone": "Sin categoría", 
-            "description": "Descripción", 
-            "optional": "Las siguientes opciones son opcionales.", 
-            "confirm": "Por favor, confirme la siguiente información para crear la transacción", 
-            "created": "La transacción se ha creado correctamente.",
-            "add": "Agregar transacción", 
-            "added": "La transacción se ha agregado correctamente.", 
-            "update": "Actualizar transacción", 
-            "updated": "La transacción se ha creado correctamente.", 
-            "delete": {
-                "title": "Eliminar transacción", 
-                "description": "¿Eliminar esta transacción?", 
-                "success": "Transacción eliminada correctamente."
-            }, 
-            "accountsRequired": "Necesitas crear al menos una cuenta para añadir una transacción.", 
-            "filter": {
-                "dateRange": "Rango de fechas", 
-                "all": "Todas", 
-                "noSelectFilters": "No selecciono ningun filtro para aplicar."
-            }
+        "accountsRequired": "Necesitas crear al menos una cuenta para añadir una transacción.", 
+        "filter": {
+            "dateRange": "Rango de fechas", 
+            "all": "Todas", 
+            "noSelectFilters": "No selecciono ningun filtro para aplicar."
         }
-    }, 
+    },
     "account": {
         "title": "Cuentas", 
         "noItems": "No hay cuentas para mostrar.", 

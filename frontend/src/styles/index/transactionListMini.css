@@ -10,10 +10,10 @@
 }
 
 .loading-spinner {
-    width: 20px;
-    height: 20px;
-    border: 2px solid var(--global-border);
-    border-top: 2px solid var(--global-accent);
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
 }

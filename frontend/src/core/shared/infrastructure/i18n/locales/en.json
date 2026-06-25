@@ -52,6 +52,33 @@
         "invalid": "Invalid or expired token."
     }, 
     "index": {
+        "kpi": {
+            "balance": {
+                "title": "Total balance", 
+                "subtitle": "In all your accounts"
+            }, 
+            "income": {
+                "title": "Monthly income"
+            }, 
+            "expenses": {
+                "title": "Monthly expenses"
+            }, 
+            "netSaving": {
+                "title": "Net saving"
+            },
+            "shared": {
+                "lastMonth": "Last month"
+            }
+        }, 
+        "graphics": {
+            "income": "Revenue by category", 
+            "expenses": "Expenses by category", 
+            "evolution": "Balance evolution"
+        }, 
+        "transactions": "Recent transactions", 
+        "top": "Top 3 expenses of the month"
+    }, 
+    "transactions": {
         "summary": {
             "title": "Summary", 
             "income": "Income", 
@@ -62,41 +89,39 @@
                 "dateFrom": "Date from", 
                 "dateTo": "Date to"
             }
+        },
+        "noItems": "There are not transactions to show.", 
+        "title": "Transactions", 
+        "account": "Account", 
+        "value": "Value", 
+        "valueInvalid": "Please enter a valid value for the transaction.", 
+        "date": "Date", 
+        "options": "Options", 
+        "type": "Type", 
+        "ingress": "Ingress", 
+        "egress": "Egress", 
+        "category": "Category", 
+        "categoryNone": "Without category", 
+        "description": "Description", 
+        "optional": "The following options are optional.", 
+        "confirm": "Please confirm the following information to create the transaction", 
+        "created": "The transaction has been created successfully.", 
+        "add": "Add transaction", 
+        "added": "The transaction has been created successfully.", 
+        "update": "Update transaction", 
+        "updated": "The transaction has been updated successfully.", 
+        "delete": {
+            "title": "Delete transaction", 
+            "description": "Delete this transaction?", 
+            "success": "Delete transaction successfully."
         }, 
-        "transactions": {
-            "noItems": "There are not transactions to show.", 
-            "title": "Transactions", 
-            "account": "Account", 
-            "value": "Value", 
-            "valueInvalid": "Please enter a valid value for the transaction.", 
-            "date": "Date", 
-            "options": "Options", 
-            "type": "Type", 
-            "ingress": "Ingress", 
-            "egress": "Egress", 
-            "category": "Category", 
-            "categoryNone": "Without category", 
-            "description": "Description", 
-            "optional": "The following options are optional.", 
-            "confirm": "Please confirm the following information to create the transaction", 
-            "created": "The transaction has been created successfully.", 
-            "add": "Add transaction", 
-            "added": "The transaction has been created successfully.", 
-            "update": "Update transaction", 
-            "updated": "The transaction has been updated successfully.", 
-            "delete": {
-                "title": "Delete transaction", 
-                "description": "Delete this transaction?", 
-                "success": "Delete transaction successfully."
-            }, 
-            "accountsRequired": "You need to create at least one account to add a transaction.", 
-            "filter": {
-                "dateRange": "Date range", 
-                "all": "All", 
-                "noSelectFilters": "No filters selected to apply."
-            }
+        "accountsRequired": "You need to create at least one account to add a transaction.", 
+        "filter": {
+            "dateRange": "Date range", 
+            "all": "All", 
+            "noSelectFilters": "No filters selected to apply."
         }
-    }, 
+    },
     "account": {
         "title": "Accounts", 
         "noItems": "There are not accounts to show.", 
