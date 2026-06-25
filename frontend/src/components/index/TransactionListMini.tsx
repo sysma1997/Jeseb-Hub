@@ -26,16 +26,16 @@ export const TransactionListMini = () => {
 
     if (loading) return <div className="transactions-loading">
         <span className="loading-spinner"></span>
-        <span>Cargando transacciones...</span>
+        <span>Loading...</span>
     </div>;
 
     return <div className="transactions-table-wrapper-modern">
         <table className="transactions-table-modern">
             <thead>
                 <tr>
-                    <th>Cuenta</th>
-                    <th>Fecha</th>
-                    <th className="amount-header">Monto</th>
+                    <th>{t("transactions.account")}</th>
+                    <th>{t("transactions.date")}</th>
+                    <th className="amount-header">{t("transactions.value")}</th>
                 </tr>
             </thead>
             <tbody>

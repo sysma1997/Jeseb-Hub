@@ -24,24 +24,24 @@ const locale = getLocaleFromUrl(Astro.url);
 const t = createTranslations(locale);
 ---
 
-<Layout locale={locale} title={t("index.transactions.title")}>
+<Layout locale={locale} title={t("transactions.title")}>
 	<Content locale={locale}>
 		<div class="transactions">
 			<div class="transactionsContent">
-				<p id="pSTitle" class="is-size-5"><b>{t("index.summary.title")}</b></p>
+				<p id="pSTitle" class="is-size-5"><b>{t("transactions.summary.title")}</b></p>
 				<div id="dSTags">
 				</div>
 				<div class="summary">
 					<div class="box">
-						<label>{t("index.summary.income")}:</label>
+						<label>{t("transactions.summary.income")}:</label>
 						<label id="lSIncome" class="has-text-right">...</label>
 					</div>
 					<div class="box">
-						<label>{t("index.summary.expenses")}:</label>
+						<label>{t("transactions.summary.expenses")}:</label>
 						<label id="lSExpenses" class="has-text-right">...</label>
 					</div>
 					<div class="box">
-						<label>{t("index.summary.diff")}:</label>
+						<label>{t("transactions.summary.diff")}:</label>
 						<label id="lSDiff" class="has-text-right">...</label>
 					</div>
 					<div></div>
@@ -54,13 +54,13 @@ const t = createTranslations(locale);
 	<Base id="modalFilterTransactions" title={t("shared.filter")}>
 		<section class="modal-card-body">
 			<div class="field">
-				<label class="label">{t("index.transactions.filter.dateRange")}:</label>
+				<label class="label">{t("transactions.filter.dateRange")}:</label>
 				<div class="field has-addons">
 					<div class="control" style="flex: 1;">
-						<input id="iMFTDateFrom" class="input" type="date" style="color: white" />
+						<input id="iMFTDateFrom" class="input" type="date" />
 					</div>
 					<div class="control" style="flex: 1;">
-						<input id="iMFTDateTo" class="input" type="date" style="color: white" />
+						<input id="iMFTDateTo" class="input" type="date" />
 					</div>
 					<div class="control">
 						<button id="btnMFTClear" class="button is-primary">{t("shared.clear")}</button>
@@ -68,33 +68,33 @@ const t = createTranslations(locale);
 				</div>
 			</div>
 			<div class="field">
-				<label class="label">{t("index.transactions.account")}:</label>
+				<label class="label">{t("transactions.account")}:</label>
 				<div class="control">
 					<div class="select is-fullwidth">
 						<select id="sMFTAccount">
-							<option value="all">{t("index.transactions.filter.all")}</option>
+							<option value="all">{t("transactions.filter.all")}</option>
 						</select>
 					</div>
 				</div>
 			</div>
 			<div class="field">
-				<label class="label">{t("index.transactions.category")}:</label>
+				<label class="label">{t("transactions.category")}:</label>
 				<div class="control">
 					<div class="select is-fullwidth">
 						<select id="sMFTCategory">
-							<option value="all">{t("index.transactions.filter.all")}</option>
+							<option value="all">{t("transactions.filter.all")}</option>
 						</select>
 					</div>
 				</div>
 			</div>
 			<div class="field">
-				<label class="label">{t("index.transactions.type")}:</label>
+				<label class="label">{t("transactions.type")}:</label>
 				<div class="control">
 					<div class="select is-fullwidth">
 						<select id="sMFTType">
-							<option value="all">{t("index.transactions.filter.all")}</option>
-							<option value="true">{t("index.transactions.ingress")}</option>
-							<option value="false">{t("index.transactions.egress")}</option>
+							<option value="all">{t("transactions.filter.all")}</option>
+							<option value="true">{t("transactions.ingress")}</option>
+							<option value="false">{t("transactions.egress")}</option>
 						</select>
 					</div>
 				</div>
@@ -106,10 +106,10 @@ const t = createTranslations(locale);
             <button id="btnMFTAccept" class="button is-primary is-fullwidth">{t("shared.accept")}</button>
         </footer>
 	</Base>
-	<Base id="modalAddTransaction" title={t("index.transactions.add")}>
+	<Base id="modalAddTransaction" title={t("transactions.add")}>
 		<section id="sMAT1" class="modal-card-body" style="display: block;">
 			<div class="field">
-				<label class="label">{t("index.transactions.account")}:</label>
+				<label class="label">{t("transactions.account")}:</label>
 				<div class="control">
 					<div class="select is-fullwidth">
 						<select id="sMATAccount"></select>
@@ -120,33 +120,33 @@ const t = createTranslations(locale);
 		</section>
 		<section id="sMAT2" class="modal-card-body" style="display: none;">
 			<div class="field">
-				<label class="label">{t("index.transactions.type")}:</label>
+				<label class="label">{t("transactions.type")}:</label>
 				<div class="control">
 					<div class="select is-fullwidth">
 						<select id="sMATType">
-							<option value="true">{t("index.transactions.ingress")}</option>
-							<option value="false">{t("index.transactions.egress")}</option>
+							<option value="true">{t("transactions.ingress")}</option>
+							<option value="false">{t("transactions.egress")}</option>
 						</select>
 					</div>
 				</div>
 			</div>
 			<div class="field">
-				<label class="label">{t("index.transactions.value")}:</label>
+				<label class="label">{t("transactions.value")}:</label>
 				<div class="control">
 					<input id="iMATValue" class="input" type="number" />
 				</div>
 			</div>
 		</section>
 		<section id="sMAT3" class="modal-card-body" style="display: none;">
-			<p style="margin-bottom: 1.5rem;">{t("index.transactions.optional")}</p>
+			<p style="margin-bottom: 1.5rem;">{t("transactions.optional")}</p>
 			<div class="field">
-				<label class="label">{t("index.transactions.date")}:</label>
+				<label class="label">{t("transactions.date")}:</label>
 				<div class="control">
 					<input id="iMATDate" class="input" type="datetime-local" />
 				</div>
 			</div>
 			<div class="field">
-				<label class="label">{t("index.transactions.category")}:</label>
+				<label class="label">{t("transactions.category")}:</label>
 				<div class="control">
 					<div class="select is-fullwidth">
 						<select id="sMATCategory"></select>
@@ -154,71 +154,71 @@ const t = createTranslations(locale);
 				</div>
 			</div>
 			<div class="field">
-				<label class="label">{t("index.transactions.description")}:</label>
+				<label class="label">{t("transactions.description")}:</label>
 				<div class="control">
 					<textarea id="taMATDescription" class="textarea" />
 				</div>
 			</div>
 		</section>
 		<section id="sMAT4" class="modal-card-body" style="display: none;">
-			<p style="margin-bottom: 1.5rem;">{t("index.transactions.confirm")}:</p>
+			<p style="margin-bottom: 1.5rem;">{t("transactions.confirm")}:</p>
 			<div class="item">
-				<label class="label">{t("index.transactions.account")}:</label>
+				<label class="label">{t("transactions.account")}:</label>
 				<p id="pMATAccountConfirm">.</p>
 			</div>
 			<div class="item">
-				<label class="label">{t("index.transactions.type")}:</label>
+				<label class="label">{t("transactions.type")}:</label>
 				<p id="pMATTypeConfirm">.</p>
 			</div>
 			<div class="item">
-				<label class="label">{t("index.transactions.value")}:</label>
+				<label class="label">{t("transactions.value")}:</label>
 				<p id="pMATValueConfirm">.</p>
 			</div>
 			<div class="item">
-				<label class="label">{t("index.transactions.date")}:</label>
+				<label class="label">{t("transactions.date")}:</label>
 				<p id="pMATDateConfirm">.</p>
 			</div>
 			<div id="dMATCategoryConfirm" class="item" style="display: none;">
-				<label class="label">{t("index.transactions.category")}:</label>
+				<label class="label">{t("transactions.category")}:</label>
 				<p id="pMATCategoryConfirm">.</p>
 			</div>
 			<div id="dMATDescriptionConfirm" class="item" style="display: none;">
-				<label class="label">{t("index.transactions.description")}:</label>
+				<label class="label">{t("transactions.description")}:</label>
 				<p id="pMATDescriptionConfirm">.</p>
 			</div>
 		</section>
 		<section id="sMAT5" class="modal-card-body" style="display: none;">
-			<p id="pMATMessage">{t("index.transactions.created")}</p>
+			<p id="pMATMessage">{t("transactions.created")}</p>
 		</section>
 		<footer class="modal-card-foot" style="gap: 0.5rem;">
             <button id="btnMATCancel" class="button is-danger is-fullwidth">{t("shared.cancel")}</button>
             <button id="btnMATAccept" class="button is-primary is-fullwidth">{t("shared.next")}</button>
         </footer>
 	</Base>
-	<Base id="modalTransaction" title={t("index.transactions.title")}>
+	<Base id="modalTransaction" title={t("transactions.title")}>
 		<section class="modal-card-body">
 			<div class="item">
-				<label class="label">{t("index.transactions.account")}:</label>
+				<label class="label">{t("transactions.account")}:</label>
 				<p id="pMTAccount">.</p>
 			</div>
 			<div class="item">
-				<label class="label">{t("index.transactions.type")}:</label>
+				<label class="label">{t("transactions.type")}:</label>
 				<p id="pMTType">.</p>
 			</div>
 			<div class="item">
-				<label class="label">{t("index.transactions.value")}:</label>
+				<label class="label">{t("transactions.value")}:</label>
 				<p id="pMTValue">.</p>
 			</div>
 			<div class="item">
-				<label class="label">{t("index.transactions.date")}:</label>
+				<label class="label">{t("transactions.date")}:</label>
 				<p id="pMTDate">.</p>
 			</div>
 			<div id="dMTCategory" class="item" style="display: none;">
-				<label class="label">{t("index.transactions.category")}:</label>
+				<label class="label">{t("transactions.category")}:</label>
 				<p id="pMTCategory">.</p>
 			</div>
 			<div id="dMTDescription" class="item" style="display: none;">
-				<label class="label">{t("index.transactions.description")}:</label>
+				<label class="label">{t("transactions.description")}:</label>
 				<p id="pMTDescription">.</p>
 			</div>
 		</section>

@@ -109,7 +109,7 @@ export const TransactionList = () => {
         Notify("transaction:showUpdate", transaction);
     };
     const clickDelete = (id: string) => {
-        window.showConfirm(t("index.transactions.delete.description"), t("index.transactions.delete.title"), async () => {
+        window.showConfirm(t("transactions.delete.description"), t("transactions.delete.title"), async () => {
             try {
                 await repository.delete(id);
                 let tra: Transaction[] = [...pagination.list!];
@@ -125,7 +125,7 @@ export const TransactionList = () => {
                 newPagination.pages = pagination.pages;
                 setPagination(newPagination);
                 Notify("transaction:delete", id);
-                window.showAlert(t("index.transactions.delete.success"), t("index.transactions.delete.title"));
+                window.showAlert(t("transactions.delete.success"), t("transactions.delete.title"));
             } catch (err: any) {
                 if (err instanceof Error) {
                     console.error(err);
@@ -147,7 +147,7 @@ export const TransactionList = () => {
 
     return <div className="transactionsList card">
         <header className="card-header">
-            <h2 className="card-header-title">{t("index.transactions.title")}</h2>
+            <h2 className="card-header-title">{t("transactions.title")}</h2>
             <button className="card-header-icon" aria-label="more options" 
                 onClick={clickShowFilter}>
                 <Icon icon="material-symbols:filter-alt-sharp" />
@@ -155,16 +155,16 @@ export const TransactionList = () => {
         </header>
         <div className="card-content">
             <div className="content">
-                {(pagination.list.length === 0) && <p className="noContent">{t("index.transactions.noItems")}</p>}
+                {(pagination.list.length === 0) && <p className="noContent">{t("transactions.noItems")}</p>}
                 {(pagination.list.length > 0) && <>
                     <div className="table-container">
                         <table className="table is-fullwidth is-bordered is-hoverable">
                             <thead>
                                 <tr>
-                                    <th className="has-text-centered">{t("index.transactions.account")}</th>
-                                    <th className="has-text-centered">{t("index.transactions.date")}</th>
-                                    <th className="has-text-centered">{t("index.transactions.value")}</th>
-                                    <th className="has-text-centered">{t("index.transactions.options")}</th>
+                                    <th className="has-text-centered">{t("transactions.account")}</th>
+                                    <th className="has-text-centered">{t("transactions.date")}</th>
+                                    <th className="has-text-centered">{t("transactions.value")}</th>
+                                    <th className="has-text-centered">{t("transactions.options")}</th>
                                 </tr>
                             </thead>
                             <tbody>
