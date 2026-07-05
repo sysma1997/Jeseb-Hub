@@ -1,0 +1,112 @@
+---
+import { createTranslations } from "../i18n/server";
+
+const { locale = "en" } = Astro.props;
+const t = createTranslations(locale);
+const hubUrl = import.meta.env.PUBLIC_LANDING_FRONTEND_URL || "https://hub.jeseb.com/";
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="footer-logo">
+          <img src="/favicon/icon-dark.svg" alt="Jeseb Hub" width="28" height="28" />
+          <span>Jeseb Hub</span>
+        </a>
+        <p class="footer-tagline">{t("footer.tagline")}</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>{t("footer.product")}</h4>
+          <a href="#features">{t("footer.features")}</a>
+          <a href="#how-it-works">{t("footer.howItWorks")}</a>
+          <a href={hubUrl}>{t("footer.openApp")}</a>
+        </div>
+        <div class="footer-col">
+          <h4>{t("footer.resources")}</h4>
+          <a href="https://github.com/sysma1997/Jeseb-Hub" target="_blank" rel="noopener">GitHub</a>
+          <a href={hubUrl}>Dashboard</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; {year} Jeseb Hub. {t("footer.copyright")}</span>
+      <span>{t("footer.builtWith")}</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--footer-bg);
+    color: var(--footer-text);
+    padding: 60px 0 30px;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 60px;
+    margin-bottom: 40px;
+  }
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 16px;
+  }
+  .footer-tagline {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    opacity: 0.6;
+    white-space: pre-line;
+  }
+  .footer-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+  .footer-col h4 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    opacity: 0.5;
+    margin-bottom: 16px;
+  }
+  .footer-col a {
+    display: block;
+    color: var(--footer-text);
+    opacity: 0.7;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+    transition: opacity 0.2s;
+    text-decoration: none;
+  }
+  .footer-col a:hover { opacity: 1; }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    opacity: 0.4;
+  }
+
+  @media (max-width: 700px) {
+    .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+    .footer-links { grid-template-columns: 1fr 1fr; gap: 24px; }
+    .footer-bottom { flex-direction: column; gap: 8px; }
+  }
+</style>

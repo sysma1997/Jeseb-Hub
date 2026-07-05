@@ -1,0 +1,67 @@
+---
+import { createTranslations } from "../i18n/server";
+
+const { locale = "en" } = Astro.props;
+const t = createTranslations(locale);
+const hubUrl = import.meta.env.PUBLIC_LANDING_FRONTEND_URL || "https://hub.jeseb.com/";
+---
+
+<section class="section cta-section" style="padding-bottom: 120px;">
+  <div class="container">
+    <div class="cta-card">
+      <h2 class="cta-title">{t("cta.title")}</h2>
+      <p class="cta-desc">{t("cta.desc")}</p>
+      <a href={hubUrl} class="c-btn c-btn-primary" style="font-size: 1.1rem; padding: 18px 44px;">
+        {t("cta.button")}
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-section {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .cta-card {
+    background: linear-gradient(135deg, #00d1b2 0%, #009688 100%);
+    border-radius: 24px;
+    padding: 80px 60px;
+    text-align: center;
+    color: white;
+  }
+  .cta-title {
+    font-size: 2.6rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    letter-spacing: -1px;
+  }
+  .cta-desc {
+    font-size: 1.15rem;
+    max-width: 560px;
+    margin: 0 auto 36px;
+    opacity: 0.9;
+    line-height: 1.7;
+  }
+  .cta-card .c-btn-primary {
+    background: white;
+    color: var(--primary-dark);
+  }
+  .cta-card .c-btn-primary:hover {
+    background: white;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    transform: translateY(-3px);
+  }
+
+  @media (max-width: 640px) {
+    .cta-card { padding: 48px 24px; }
+    .cta-title { font-size: 1.8rem; }
+  }
+</style>

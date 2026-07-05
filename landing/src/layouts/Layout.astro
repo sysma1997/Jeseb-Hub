@@ -1,0 +1,129 @@
+---
+import { createTranslations } from "../i18n/server";
+
+export interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  ogImage?: string;
+  locale?: string;
+}
+
+const {
+  title = "Jeseb Hub - Professional Financial Engineering Suite",
+  description = "Jeseb Hub is a powerful, open-source personal finance management application. Track your accounts, manage transactions, and visualize your finances with beautiful charts.",
+  canonical = "https://jeseb.com/",
+  ogImage = "/favicon/og.svg",
+  locale = "en",
+} = Astro.props;
+
+const t = createTranslations(locale);
+const lang = locale;
+const altLocale = locale === "en" ? "es" : "en";
+const altUrl = locale === "en" ? "https://jeseb.com/es/" : "https://jeseb.com/";
+const fullUrl = locale === "en" ? "https://jeseb.com/" : `https://jeseb.com/${locale}/`;
+const ogUrl = canonical || fullUrl;
+const siteName = "Jeseb Hub";
+---
+
+<!doctype html>
+<html id="html" lang={lang} data-theme="light">
+  <head>
+    <script is:inline>
+      (function() {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+
+        var locale = localStorage.getItem('locale');
+        if (locale && !window.location.pathname.startsWith('/' + locale)) {
+          if (locale === 'en' && window.location.pathname !== '/') {
+            window.location.replace('/');
+          } else if (locale === 'es' && !window.location.pathname.startsWith('/es')) {
+            window.location.replace('/es/');
+          }
+        }
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#00d1b2" />
+
+    <title>{t("hero.title")} {t("hero.highlight")} | Jeseb Hub</title>
+    <meta name="description" content={description} />
+
+    <link rel="canonical" href={ogUrl} />
+
+    <link rel="alternate" hreflang={lang} href={ogUrl} />
+    <link rel="alternate" hreflang={altLocale} href={altUrl} />
+    <link rel="alternate" hreflang="x-default" href="https://jeseb.com/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={ogUrl} />
+    <meta property="og:image" content={`https://jeseb.com${ogImage}`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={lang === "en" ? "en_US" : "es_ES"} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`https://jeseb.com${ogImage}`} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon/icon.svg" />
+    <link rel="shortcut icon" href="/favicon/icon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/icon.svg" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Jeseb Hub",
+      "url": "https://jeseb.com",
+      "description": description,
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "Jeseb",
+        "url": "https://jeseb.com"
+      }
+    })} />
+
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Jeseb",
+      "url": "https://jeseb.com",
+      "logo": "https://jeseb.com/favicon/icon.svg",
+      "sameAs": []
+    })} />
+
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://jeseb.com"
+      }]
+    })} />
+
+    <style>
+      @import "../styles/global.css";
+    </style>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

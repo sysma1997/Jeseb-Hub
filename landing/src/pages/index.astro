@@ -1,0 +1,29 @@
+---
+import { createTranslations } from "../i18n/server";
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Features from "../components/Features.astro";
+import HowItWorks from "../components/HowItWorks.astro";
+import CtaSection from "../components/CtaSection.astro";
+import Footer from "../components/Footer.astro";
+
+import "../styles/global.css";
+
+const locale = "en";
+const t = createTranslations(locale);
+---
+
+<Layout locale={locale}
+  title={t("hero.title") + " " + t("hero.highlight") + " | Jeseb Hub"} 
+  description={t("hero.description")} 
+  canonical="https://jeseb.com/">
+  <Header locale={locale} />
+  <main>
+    <Hero locale={locale} />
+    <Features locale={locale} />
+    <HowItWorks locale={locale} />
+    <CtaSection locale={locale} />
+  </main>
+  <Footer locale={locale} />
+</Layout>

@@ -27,3 +27,15 @@ FROM nginx:alpine AS frontend
 COPY --from=frontend-build /usr/local/app/dist /usr/share/nginx/html
 COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
+
+FROM base AS landing-build
+COPY landing/. ./
+ARG LANDING_FRONTEND_URL
+ENV PUBLIC_LANDING_FRONTEND_URL=$LANDING_FRONTEND_URL
+RUN npm install
+RUN npm run build
+
+FROM nginx:alpine AS landing
+COPY --from=landing-build /usr/local/app/dist /usr/share/nginx/html
+COPY landing/nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80

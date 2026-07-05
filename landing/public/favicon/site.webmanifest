@@ -1,0 +1,16 @@
+{
+  "name": "Jeseb Hub",
+  "short_name": "Jeseb",
+  "start_url": "https://jeseb.com",
+  "display": "standalone",
+  "background_color": "#00d1b2",
+  "theme_color": "#00d1b2",
+  "icons": [
+    {
+      "src": "/favicon/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

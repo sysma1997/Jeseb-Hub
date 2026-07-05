@@ -11,5 +11,12 @@ frontend/dist
 frontend/package-lock.json
 frontend/pnpm-lock.yaml
 frontend/pnpm-workspace.yaml
+landing/node_modules/
+landing/.astro/
+landing/.vscode/
+landing/dist
+landing/package-lock.json
+landing/pnpm-lock.yaml
+landing/pnpm-workspace.yaml
 .env
 Dockerfile

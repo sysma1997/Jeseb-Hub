@@ -1,0 +1,99 @@
+---
+import { createTranslations } from "../i18n/server";
+
+const { locale = "en" } = Astro.props;
+const t = createTranslations(locale);
+
+const features: { key: string; icon: string }[] = [
+  { key: "accounts", icon: "M3 3h7v7H3V3zm11 0h7v7h-7V3zM3 14h7v7H3v-7zm11 0h7v7h-7v-7z" },
+  { key: "transactions", icon: "M3 3h18v2H3V3zm0 4h18v2H3V7zm0 4h18v2H3v-2zm0 4h18v2H3v-2zm0 4h18v2H3v-2z" },
+  { key: "analytics", icon: "M3 3v18h18V3H3zm16 16H5V5h14v14zM7 13h2v4H7v-4zm4-3h2v7h-2v-7zm4-2h2v9h-2V8z" },
+  { key: "open", icon: "M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3" },
+  { key: "privacy", icon: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" },
+  { key: "import", icon: "M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5 5 5-5m-5 5V3" },
+];
+---
+
+<section id="features" class="section">
+  <div class="container">
+    <div class="text-center" style="margin-bottom: 60px;">
+      <span class="section-label features-label">{t("features.label")}</span>
+      <h2 class="section-title">{t("features.title")}</h2>
+      <p class="section-subtitle">{t("features.subtitle")}</p>
+    </div>
+    <div class="features-grid">
+      {features.map((f) => (
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d={f.icon} />
+            </svg>
+          </div>
+          <h3 class="feature-title">{t("features." + f.key + ".title")}</h3>
+          <p class="feature-desc">{t("features." + f.key + ".desc")}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  #features {
+    width: 100%;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .features-label {
+    font-size: 2rem;
+  }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+  .feature-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 36px 28px;
+    transition: all 0.3s ease;
+  }
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow);
+    border-color: var(--primary);
+  }
+  .feature-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: rgba(0,209,178,0.1);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .feature-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .feature-desc {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--text-light);
+  }
+
+  @media (max-width: 900px) {
+    .features-label { font-size: 1rem; }
+    .features-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .features-grid { grid-template-columns: 1fr; }
+  }
+</style>
