@@ -1,0 +1,86 @@
+{
+  "nav": {
+    "features": "Features",
+    "howItWorks": "How it works",
+    "openApp": "Open App"
+  },
+  "hero": {
+    "title": "Take Control of",
+    "highlight": "Your Finances",
+    "description": "Jeseb Hub is a professional personal finance management suite. Track accounts, manage transactions, and visualize your financial health with powerful analytics \u2014 all in one place.",
+    "cta": "Get Started",
+    "learnMore": "Learn More",
+    "totalBalance": "Total Balance",
+    "monthlyExpenses": "Monthly Expenses",
+    "netSavings": "Net Savings"
+  },
+  "features": {
+    "label": "Features",
+    "title": "Everything you need to manage\nyour personal finances",
+    "subtitle": "A comprehensive suite of tools designed to give you full control over your financial life.",
+    "accounts": {
+      "title": "Account Management",
+      "desc": "Create and manage multiple accounts in one place. Track balances, monitor activity, and keep your finances organized effortlessly."
+    },
+    "transactions": {
+      "title": "Transaction Tracking",
+      "desc": "Log income and expenses with ease. Filter, search, and categorize every transaction for complete financial visibility."
+    },
+    "analytics": {
+      "title": "Visual Analytics",
+      "desc": "Beautiful charts and KPIs show your income breakdown, expense patterns, and balance evolution at a glance."
+    },
+    "open": {
+      "title": "Self-Hosted & Private",
+      "desc": "Deploy on your own infrastructure with Docker. Your data stays on your server, fully under your control."
+    },
+    "privacy": {
+      "title": "Privacy First",
+      "desc": "Your financial data never leaves your server. End-to-end encrypted, with optional 2FA for extra security."
+    },
+    "import": {
+      "title": "CSV Import / Export",
+      "desc": "Import your existing transactions from CSV files or export your data anytime. You always own your information."
+    }
+  },
+  "howItWorks": {
+    "label": "How it works",
+    "title": "Get started in minutes",
+    "subtitle": "No complicated setup. Just simple, powerful financial tracking.",
+    "step1": {
+      "title": "Create your account",
+      "desc": "Sign up with your email and password. Secure 2FA is available for extra protection."
+    },
+    "step2": {
+      "title": "Set up your accounts",
+      "desc": "Add your bank accounts, cash wallets, or any financial accounts you want to track."
+    },
+    "step3": {
+      "title": "Track your transactions",
+      "desc": "Log income and expenses, categorize them, and watch your financial insights grow in real time."
+    }
+  },
+  "cta": {
+    "title": "Ready to transform your finances?",
+    "desc": "Join Jeseb Hub today and take full control of your financial life. Built for people who value their privacy and financial independence.",
+    "button": "Get Started"
+  },
+  "footer": {
+    "tagline": "Professional Financial Engineering Suite.\nTake control of your financial future.",
+    "product": "Product",
+    "features": "Features",
+    "howItWorks": "How it works",
+    "openApp": "Open App",
+    "resources": "Resources",
+    "copyright": "All rights reserved.",
+    "builtWith": "Built with Astro"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "locales": {
+    "en": "English",
+    "es": "Espa\u00F1ol"
+  }
+}

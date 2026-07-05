@@ -1,0 +1,46 @@
+---
+import type { GetStaticPaths } from "astro";
+import { createTranslations, getLocaleFromUrl } from "../../i18n/server";
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Hero from "../../components/Hero.astro";
+import Features from "../../components/Features.astro";
+import HowItWorks from "../../components/HowItWorks.astro";
+import CtaSection from "../../components/CtaSection.astro";
+import Footer from "../../components/Footer.astro";
+
+import "../../styles/global.css";
+
+export const getStaticPaths = (() => {
+  return [{ params: { lang: "es" } }];
+}) satisfies GetStaticPaths;
+
+const locale = getLocaleFromUrl(Astro.url);
+const t = createTranslations(locale);
+const hubUrl = import.meta.env.PUBLIC_LANDING_FRONTEND_URL || "https://hub.jeseb.com/";
+---
+
+<Layout
+  locale={locale}
+  title={t("hero.title") + " " + t("hero.highlight") + " | Jeseb Hub"}
+  description={t("hero.description")}
+  canonical="https://jeseb.com/es/"
+>
+  <Header locale={locale} />
+  <main>
+    <Hero locale={locale} />
+    <Features locale={locale} />
+    <HowItWorks locale={locale} />
+    <CtaSection locale={locale} />
+  </main>
+  <Footer locale={locale} />
+</Layout>
+
+<style>
+  @media (max-width: 900px) {
+    .hero .container { grid-template-columns: 1fr !important; text-align: center; padding: 60px 20px !important; }
+    .hero h1 { font-size: 2.8rem !important; }
+    .hero p { max-width: 100% !important; }
+    .hero .c-btn { justify-content: center; }
+  }
+</style>

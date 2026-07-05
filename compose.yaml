@@ -63,6 +63,32 @@ services:
     networks:
       - jeseb-network
 
+  landing:
+    build:
+      context: ./
+      target: landing
+      args:
+        - LANDING_FRONTEND_URL=${LANDING_FRONTEND_URL}
+    restart: always
+    ports:
+      - "${LANDING_PORT}:${LANDING_PORT_CONTAINER}"
+    environment:
+      PUBLIC_LANDING_FRONTEND_URL: ${LANDING_FRONTEND_URL}
+    develop:
+      watch:
+        - path: ./landing/src
+          action: sync
+          target: /usr/local/app/src
+        - path: ./landing/public
+          action: sync
+          target: /usr/local/app/public
+        - path: ./landing/package.json
+          action: rebuild
+        - path: ./landing/astro.config.mjs
+          action: rebuild
+    networks:
+      - jeseb-network
+
 networks:
   jeseb-network:
     driver: bridge

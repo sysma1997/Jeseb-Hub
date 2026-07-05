@@ -1,0 +1,86 @@
+{
+  "nav": {
+    "features": "Caracter\u00EDsticas",
+    "howItWorks": "C\u00F3mo funciona",
+    "openApp": "Abrir App"
+  },
+  "hero": {
+    "title": "Toma el control de",
+    "highlight": "tus finanzas",
+    "description": "Jeseb Hub es una suite profesional para la gesti\u00F3n de finanzas personales. Controla tus cuentas, administra transacciones y visualiza tu salud financiera con potentes an\u00E1lisis, todo en un solo lugar.",
+    "cta": "Comenzar",
+    "learnMore": "M\u00E1s informaci\u00F3n",
+    "totalBalance": "Saldo Total",
+    "monthlyExpenses": "Gastos Mensuales",
+    "netSavings": "Ahorro Neto"
+  },
+  "features": {
+    "label": "Caracter\u00EDsticas",
+    "title": "Todo lo que necesitas para administrar\ntus finanzas personales",
+    "subtitle": "Un conjunto completo de herramientas dise\u00F1adas para darte control total sobre tu vida financiera.",
+    "accounts": {
+      "title": "Gesti\u00F3n de cuentas",
+      "desc": "Crea y administra m\u00FAltiples cuentas en un solo lugar. Controla saldos, monitorea actividad y mant\u00E9n tus finanzas organizadas sin esfuerzo."
+    },
+    "transactions": {
+      "title": "Seguimiento de transacciones",
+      "desc": "Registra ingresos y gastos con facilidad. Filtra, busca y categoriza cada transacci\u00F3n para tener visibilidad financiera completa."
+    },
+    "analytics": {
+      "title": "Anal\u00EDtica visual",
+      "desc": "Gr\u00E1ficos incre\u00EDbles y KPIs muestran el desglose de tus ingresos, patrones de gastos y evoluci\u00F3n del saldo de un vistazo."
+    },
+    "open": {
+      "title": "Auto-hospedado y privado",
+      "desc": "Despliega en tu propia infraestructura con Docker. Tus datos permanecen en tu servidor, completamente bajo tu control."
+    },
+    "privacy": {
+      "title": "Privacidad primero",
+      "desc": "Tus datos financieros nunca salen de tu servidor. Cifrado de extremo a extremo, con 2FA opcional para mayor seguridad."
+    },
+    "import": {
+      "title": "Importaci\u00F3n / Exportaci\u00F3n CSV",
+      "desc": "Importa tus transacciones existentes desde archivos CSV o exporta tus datos en cualquier momento. Siempre eres due\u00F1o de tu informaci\u00F3n."
+    }
+  },
+  "howItWorks": {
+    "label": "C\u00F3mo funciona",
+    "title": "Comienza en minutos",
+    "subtitle": "Sin configuraci\u00F3n complicada. Solo seguimiento financiero simple y potente.",
+    "step1": {
+      "title": "Crea tu cuenta",
+      "desc": "Reg\u00EDstrate con tu correo electr\u00F3nico y contrase\u00F1a. La autenticaci\u00F3n de dos factores est\u00E1 disponible para mayor protecci\u00F3n."
+    },
+    "step2": {
+      "title": "Configura tus cuentas",
+      "desc": "Agrega tus cuentas bancarias, billeteras o cualquier cuenta financiera que desees controlar."
+    },
+    "step3": {
+      "title": "Controla tus transacciones",
+      "desc": "Registra ingresos y gastos, categor\u00EDzalos y observa c\u00F3mo crecen tus conocimientos financieros en tiempo real."
+    }
+  },
+  "cta": {
+    "title": "\u00BFCansado de perder el control de tu dinero?",
+    "desc": "\u00DAnete a Jeseb Hub hoy y toma el control total de tu vida financiera. Creado para personas que valoran su privacidad e independencia financiera.",
+    "button": "Comenzar"
+  },
+  "footer": {
+    "tagline": "Suite profesional de ingenier\u00EDa financiera.\nToma el control de tu futuro financiero.",
+    "product": "Producto",
+    "features": "Caracter\u00EDsticas",
+    "howItWorks": "C\u00F3mo funciona",
+    "openApp": "Abrir App",
+    "resources": "Recursos",
+    "copyright": "Todos los derechos reservados.",
+    "builtWith": "Hecho con Astro"
+  },
+  "theme": {
+    "light": "Claro",
+    "dark": "Oscuro"
+  },
+  "locales": {
+    "en": "English",
+    "es": "Espa\u00F1ol"
+  }
+}

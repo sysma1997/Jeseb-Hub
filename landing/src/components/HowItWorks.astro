@@ -1,0 +1,99 @@
+---
+import { createTranslations } from "../i18n/server";
+
+const { locale = "en" } = Astro.props;
+const t = createTranslations(locale);
+
+const steps = [
+  { key: "step1", num: "01" },
+  { key: "step2", num: "02" },
+  { key: "step3", num: "03" },
+];
+---
+
+<section id="how-it-works" class="section section-alt">
+  <div class="container">
+    <div class="text-center" style="margin-bottom: 60px;">
+      <span class="section-label">{t("howItWorks.label")}</span>
+      <h2 class="section-title">{t("howItWorks.title")}</h2>
+      <p class="section-subtitle">{t("howItWorks.subtitle")}</p>
+    </div>
+    <div class="steps">
+      {steps.map((s) => (
+        <div class="step">
+          <div class="step-number">{s.num}</div>
+          <div class="step-line" />
+          <div class="step-content">
+            <h3 class="step-title">{t("howItWorks." + s.key + ".title")}</h3>
+            <p class="step-desc">{t("howItWorks." + s.key + ".desc")}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  #how-it-works {
+    width: 100%;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .steps {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .step {
+    display: flex;
+    gap: 24px;
+    position: relative;
+    padding-bottom: 48px;
+  }
+  .step:last-child { padding-bottom: 0; }
+  .step:last-child .step-line { display: none; }
+
+  .step-number {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.1rem;
+    position: relative;
+    z-index: 1;
+  }
+  .step-line {
+    position: absolute;
+    left: 28px;
+    top: 56px;
+    width: 2px;
+    bottom: 0;
+    background: var(--border);
+  }
+  .step-content {
+    padding-top: 12px;
+  }
+  .step-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .step-desc {
+    font-size: 1rem;
+    color: var(--text-light);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 600px) {
+    .step { gap: 16px; }
+  }
+</style>

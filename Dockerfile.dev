@@ -11,3 +11,8 @@ FROM base AS frontend
 COPY frontend/. ./
 RUN npm install
 CMD ["sh", "-c", "npm run dev"]
+
+FROM base AS landing
+COPY landing/. ./
+RUN npm install
+CMD ["sh", "-c", "npm run dev"]

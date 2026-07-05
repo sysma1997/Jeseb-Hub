@@ -1,0 +1,195 @@
+---
+import { createTranslations } from "../i18n/server";
+
+const { locale = "en" } = Astro.props;
+const t = createTranslations(locale);
+const hubUrl = import.meta.env.PUBLIC_LANDING_FRONTEND_URL || "https://hub.jeseb.com/";
+const altLocale = locale === "en" ? "es" : "en";
+const altPath = altLocale === "en" ? "/" : `/${altLocale}/`;
+---
+
+<header class="header">
+  <div class="container header-container">
+    <a href="/" class="logo">
+      <img id="logoImg" src="/favicon/icon.svg" alt="Jeseb Hub" width="36" height="36" />
+      <span class="logo-text">Jeseb Hub</span>
+    </a>
+    <nav class="nav">
+      <a href="#features" class="nav-link">{t("nav.features")}</a>
+      <a href="#how-it-works" class="nav-link">{t("nav.howItWorks")}</a>
+      <a href={altPath} id="localeToggle" class="nav-icon nav-locale" title={t("locales." + altLocale)}>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M2 12h20"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+      </a>
+      <button id="themeToggle" class="nav-icon" aria-label={t("theme.title")}>
+        <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/>
+          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+        <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+      <a href={hubUrl} class="nav-app">{t("nav.openApp")}</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById("themeToggle") as HTMLButtonElement;
+  const localeLink = document.getElementById("localeToggle") as HTMLAnchorElement;
+  const html = document.documentElement;
+  const sun = toggle && toggle.querySelector(".sun-icon") as SVGElement | null;
+  const moon = toggle && toggle.querySelector(".moon-icon") as SVGElement | null;
+  const logoImg = document.getElementById("logoImg") as HTMLImageElement;
+
+  function applyTheme(theme: string) {
+    if (theme === "dark") {
+      html.setAttribute("data-theme", "dark");
+      if (sun) sun.style.display = "none";
+      if (moon) moon.style.display = "";
+      if (logoImg) logoImg.src = "/favicon/icon-dark.svg";
+    } else {
+      html.setAttribute("data-theme", "light");
+      if (sun) sun.style.display = "";
+      if (moon) moon.style.display = "none";
+      if (logoImg) logoImg.src = "/favicon/icon.svg";
+    }
+  }
+
+  applyTheme(localStorage.getItem("theme") || "light");
+
+  if (toggle) {
+    toggle.addEventListener("click", function () {
+      var current = html.getAttribute("data-theme");
+      var next = current === "dark" ? "light" : "dark";
+      localStorage.setItem("theme", next);
+      applyTheme(next);
+    });
+  }
+
+  if (localeLink) {
+    localeLink.addEventListener("click", function (e) {
+      var alt = localeLink.getAttribute("href");
+      var nextLocale = alt === "/" || alt === "/en/" ? "en" : "es";
+      localStorage.setItem("locale", nextLocale);
+    });
+  }
+</script>
+
+<style>
+  :root {
+    --header-height: 72px;
+  }
+
+  .header {
+    background: var(--bg);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    height: var(--header-height);
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+  }
+  .header-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .nav-link {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-light);
+    transition: color 0.2s;
+    text-decoration: none;
+  }
+  .nav-link:hover { color: var(--text); }
+  .nav-locale { font-size: 0.85rem; }
+  .nav-icon {
+    background-color: transparent;
+    border-radius: var(--radius);
+    color: var(--text-light);
+    width: 36px;
+    height: 36px;
+    border: none;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    transition: background-color 0.2s, color 0.2s;
+    cursor: pointer;
+  }
+  .nav-app {
+    background-color: var(--primary);
+    border-radius: var(--radius);
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 10px 24px;
+    
+    transition: background-color 0.2s, color 0.2s;
+  }
+  .nav-app:hover {
+    background-color: var(--primary-dark);
+  }
+
+  @media (max-width: 640px) {
+    .header {
+      --header-height: 52px;
+    }
+
+    .header-container {
+      padding: 0 0.5rem;
+
+      flex-direction: row;
+      align-items: center;
+      text-align: center;
+    }
+
+    .logo-text {
+      font-size: 1rem;
+    }
+
+    .nav {
+      gap: 0;
+    }
+    .nav-link {
+      display: none;
+    }
+    .nav-app {
+      border-radius: 6px;
+      padding: 0.3rem 0.5rem;
+    }
+  }
+</style>
