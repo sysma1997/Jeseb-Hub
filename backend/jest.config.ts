@@ -1,4 +1,7 @@
 import type { Config } from 'jest';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 const config: Config = {
   preset: 'ts-jest',
@@ -8,11 +11,11 @@ const config: Config = {
   rootDir: './src',
   setupFilesAfterEnv: ["<rootDir>/__tests__/shared/prisma/Singleton.ts"],
   transformIgnorePatterns: [
-    "node_modules/(?!uuid)" // Transforma los módulos ES de `uuid`
+    "node_modules/(?!uuid)"
   ],
   transform: {
-    "^.+\\.tsx?$": "ts-jest", // Transforma TypeScript
-    "^.+\\.js$": "babel-jest", // Transforma JavaScript (incluyendo ES Modules)
+    "^.+\\.tsx?$": "ts-jest",
+    "^.+\\.js$": "babel-jest",
   },
   moduleNameMapper: {
     "^uuid$": require.resolve('uuid'),

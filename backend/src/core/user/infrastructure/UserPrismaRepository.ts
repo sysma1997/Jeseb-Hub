@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "../../../generated/prisma/client";
 import { v4 as Uuid } from "uuid";
 import dayjs from "dayjs";
 import dayjsUtc from "dayjs/plugin/utc";
@@ -28,10 +28,10 @@ export class UserPrismaRepository implements UserRepository {
         createAt: Date, 
         lastUpdate: Date | null, 
         profile: string | null, 
-        config: string | null
+        config: Prisma.JsonValue | null
     }): User {
         const lastUpdate = (user.lastUpdate) ? user.lastUpdate : undefined;
-        const config: UserConfig | undefined = (user.config) ? JSON.parse(user.config) : undefined;
+        const config: UserConfig | undefined = (user.config) ? user.config as unknown as UserConfig : undefined;
 
         return new User(this.translator, user.name, user.email, user.password, user.createAt, 
             user.id, lastUpdate, 
@@ -116,7 +116,7 @@ export class UserPrismaRepository implements UserRepository {
 
         let _config: UserConfig = config;
         if (user.config) {
-            _config = JSON.parse(user.config);
+            _config = user.config as unknown as UserConfig;
             _config.twoStep.active = config.twoStep.active;
             _config.twoStep.type = config.twoStep.type;
         }
@@ -124,7 +124,7 @@ export class UserPrismaRepository implements UserRepository {
         await this.prisma.user.update({
             where: { id }, 
             data: {
-                config: JSON.stringify(_config)
+                config: _config as unknown as Prisma.InputJsonValue
             }
         });
     }

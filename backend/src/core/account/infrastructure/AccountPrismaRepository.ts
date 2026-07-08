@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../../../generated/prisma/client";
 import { v4 as Uuid } from "uuid";
 
 import { Account } from "../domain/Account";

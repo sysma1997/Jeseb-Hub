@@ -1,11 +1,10 @@
 generator client {
-    provider = "prisma-client-js"
-    previewFeatures = ["postgresqlExtensions"]
+    provider = "prisma-client"
+    output   = "../src/generated/prisma"
 }
 
 datasource storage {
-    provider = "sqlite"
-    url = env("DATABASE_URL")
+    provider = "postgresql"
 }
 
 model User {
@@ -16,7 +15,7 @@ model User {
     createAt DateTime @default(now())
     lastUpdate DateTime?
     profile String?
-    config String?
+    config Json?
 
     transactions Transaction[]
     accounts Account[]

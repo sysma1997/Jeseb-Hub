@@ -4,6 +4,7 @@ backend/package-lock.json
 backend/pnpm-lock.yaml
 backend/pnpm-workspace.yaml
 backend/dist/
+backend/src/generated/
 frontend/node_modules/
 frontend/.astro/
 frontend/.vscode/
