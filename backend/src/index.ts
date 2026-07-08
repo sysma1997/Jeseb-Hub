@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "./generated/prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 import dayjs from "dayjs";
 import dayjsUtc from "dayjs/plugin/utc";
 import multer from "multer";
@@ -49,7 +50,9 @@ const corsOptions = {
 };
 
 const translator: TranslatorRepository = new TranslatorI18nRepository();
-const prisma = new PrismaClient();
+const connectionString = process.env.DATABASE_URL!;
+const adapter = new PrismaPg({ connectionString });
+const prisma = new PrismaClient({ adapter });
 
 const userRepository: UserRepository = new UserPrismaRepository(prisma, translator);
 const userController: ControllerBase = new UserController(userRepository, translator);
@@ -75,7 +78,7 @@ app.use(express.urlencoded({ limit: "5mb", extended: true }));
 app.use("/uploads", express.static("uploads"));
 
 app.get("/", (_, res) => {
-    res.send("Jeseb Api: v1.1.0");
+    res.send("Jeseb Api: v1.1.1");
 });
 
 app.use("/api/user", userController.getRouter());

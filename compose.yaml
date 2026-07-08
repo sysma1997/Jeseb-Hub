@@ -12,12 +12,11 @@ services:
     environment:
       PORT: ${BACKEND_PORT}
       JWT_SECRET: ${BACKEND_JWT_SECRET}
-      DATABASE_URL: file:/usr/local/app/data/sqlite.db
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/jeseb
       FRONTEND_URL: ${BACKEND_FRONTEND_URL}
       RESEND_API_KEY: ${BACKEND_RESEND_API_KEY}
     volumes:
       - uploads:/usr/local/app/uploads
-      - sqlite_data:/usr/local/app/data
     develop:
       watch:
         - path: ./backend/src
@@ -95,4 +94,3 @@ networks:
 
 volumes:
   uploads:
-  sqlite_data:

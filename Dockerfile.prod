@@ -5,6 +5,7 @@ FROM base AS backend-build
 COPY backend/. ./
 RUN mkdir -p /usr/local/app/uploads
 RUN npm install
+RUN DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy" npx prisma generate
 RUN npm run build
 
 FROM base AS backend
@@ -13,6 +14,7 @@ COPY --from=backend-build /usr/local/app/dist ./dist
 COPY --from=backend-build /usr/local/app/node_modules ./node_modules
 COPY --from=backend-build /usr/local/app/package*.json ./
 COPY --from=backend-build /usr/local/app/prisma ./prisma
+COPY --from=backend-build /usr/local/app/prisma.config.ts ./
 RUN mkdir -p /usr/local/app/uploads
 CMD ["sh", "-c", "npx prisma migrate deploy && npm run start"]
 
