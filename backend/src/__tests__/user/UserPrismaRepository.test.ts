@@ -1,25 +1,34 @@
 import { describe, it, expect, beforeEach, jest } from "@jest/globals";
 import { prismaMock } from "../shared/prisma/Singleton";
-import bcrypt from "bcryptjs";
+import { mockTranslator } from "../shared/TranslatorMock";
 
 import { User } from "../../core/user/domain/User";
 import { UserRepository } from "../../core/user/domain/UserRepository";
 import { UserPrismaRepository } from "../../core/user/infrastructure/UserPrismaRepository";
 
 jest.mock("bcryptjs", () => {
-    const actualBcrypt = jest.requireActual("bcryptjs");
+    const _hash = jest.fn(() => Promise.resolve("$2b$10$jTYJBb0p31vWk5TZdsXhbedB7EA9VOd5CbvMgseg3uDVAIH9rUn6"));
+    const _compare = jest.fn(() => Promise.resolve(true));
     return {
-        ...actualBcrypt,
-        hash: jest.fn().mockResolvedValue("$2b$10$jTYJBb0p31vWk5TZdsXhbedB7EA9VOd5CbvMgseg3uDVAIH9rUn6") as jest.Mock<Promise<string>>,
+        __esModule: true,
+        default: {
+            hash: _hash,
+            compare: _compare,
+            genSalt: () => Promise.resolve("$2b$10$default"),
+            hashSync: () => "$2b$10$jTYJBb0p31vWk5TZdsXhbedB7EA9VOd5CbvMgseg3uDVAIH9rUn6",
+            compareSync: () => true,
+            genSaltSync: () => "$2b$10$default",
+            getRounds: () => 10,
+            getSalt: () => "$2b$10$default",
+        }
     };
 });
-jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
 
 describe("User Prisma Repository", () => {
     let repository: UserRepository;
 
     beforeEach(() => {
-        repository = new UserPrismaRepository(prismaMock);
+        repository = new UserPrismaRepository(prismaMock, mockTranslator);
     });
 
     it("Should register a user.", async () => {
@@ -30,7 +39,7 @@ describe("User Prisma Repository", () => {
         const createAt = new Date(2025, 8, 12);
         const hashedPassword = "$2b$10$jTYJBb0p31vWk5TZdsXhbedB7EA9VOd5CbvMgseg3uDVAIH9rUn6";
 
-        const user = new User(name, email, password, createAt, id);
+        const user = new User(mockTranslator, name, email, password, createAt, id);
 
         prismaMock.user.findUnique.mockResolvedValue(null);
         prismaMock.user.create.mockResolvedValue({
@@ -196,7 +205,7 @@ describe("User Prisma Repository", () => {
 
         const result = await repository.login(email, password);
 
-        expect(result).toEqual(new User(name, email, password, createAt, id));
+        expect(result).toEqual(new User(mockTranslator, name, email, password, createAt, id));
         expect(prismaMock.user.findUnique).toHaveBeenCalledWith({
             where: { email },
         });
@@ -218,7 +227,7 @@ describe("User Prisma Repository", () => {
 
         const result = await repository.get(id);
 
-        expect(result).toEqual(new User(name, email, password, createAt, id));
+        expect(result).toEqual(new User(mockTranslator, name, email, password, createAt, id));
         expect(prismaMock.user.findUnique).toHaveBeenCalledWith({
             where: { id },
         });
@@ -240,7 +249,7 @@ describe("User Prisma Repository", () => {
 
         const result = await repository.getWithEmail(email);
 
-        expect(result).toEqual(new User(name, email, password, createAt, id));
+        expect(result).toEqual(new User(mockTranslator, name, email, password, createAt, id));
         expect(prismaMock.user.findUnique).toHaveBeenCalledWith({
             where: { email },
         });

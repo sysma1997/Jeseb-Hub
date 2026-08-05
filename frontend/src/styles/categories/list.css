@@ -1,15 +1,177 @@
-.categoriesList {
-    width: 100%;
+.categoriesCard {
+    background: var(--global-bg);
+    border-radius: 12px;
+    border: var(--global-border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
 }
-.categoriesList .content {
-    width: 100%;
+
+.categoriesCard-header {
+    padding: 1rem 1.25rem;
+    border-bottom: var(--global-border);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--global-text);
 }
-.categoriesList .content .noContent {
+
+.categoriesCard-content {
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.categoriesSearch {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+@media screen and (max-width: 480px) {
+    .categoriesSearch {
+        flex-direction: column;
+    }
+    .categoriesSearch-input,
+    .categoriesSearch-button {
+        width: 100%;
+    }
+}
+
+.categoriesSearch-input {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    border: var(--global-border);
+    background: var(--global-bg);
+    color: var(--global-text);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.categoriesSearch-input:focus {
+    border-color: var(--global-accent);
+}
+.categoriesSearch-input::placeholder {
+    color: var(--global-text-muted);
+}
+
+.categoriesSearch-button {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: none;
+    background: var(--global-accent);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.categoriesSearch-button:hover {
+    opacity: 0.85;
+}
+
+.categoriesEmpty {
+    padding: 2.5rem 1rem;
     text-align: center;
+    color: var(--global-text-muted);
+    font-size: 0.95rem;
 }
-.categoriesList .content .fiftyPercent {
-    width: 50%;
-}
-.categoriesList .content .oneHundredPercent {
+
+.categoriesTable {
     width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.categoriesTable th,
+.categoriesTable td {
+    padding: 0.7rem 0.75rem;
+    text-align: left;
+    border-bottom: var(--global-border);
+}
+.categoriesTable th {
+    font-weight: 600;
+    color: var(--global-text-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: rgba(0, 0, 0, 0.02);
+}
+.categoriesTable tr:last-child td {
+    border-bottom: none;
+}
+.categoriesTable tr:hover td {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.categoriesName {
+    font-weight: 600;
+    color: var(--global-text);
+}
+
+.categoriesActions {
+    display: flex;
+    gap: 0.4rem;
+}
+.categoriesActions button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s, background 0.2s;
+    font-size: 1rem;
+}
+.categoriesActions button:hover {
+    opacity: 0.8;
+}
+.categoriesActions button.edit {
+    background: var(--global-accent);
+    color: #fff;
+}
+.categoriesActions button.btnDelete {
+    background: #ff3860;
+    color: #fff;
+}
+
+@media screen and (max-width: 768px) {
+    .categoriesCard-content {
+        padding: 0.75rem;
+    }
+
+    .categoriesTable thead {
+        display: none;
+    }
+    .categoriesTable {
+        display: flex;
+        flex-direction: column;
+    }
+    .categoriesTable tbody {
+        display: flex;
+        flex-direction: column;
+    }
+    .categoriesTable tr {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.65rem 0;
+        border-bottom: var(--global-border);
+    }
+    .categoriesTable tr:last-child {
+        border-bottom: none;
+    }
+    .categoriesTable td {
+        padding: 0;
+        border: none;
+        background: none;
+    }
+    .categoriesActions {
+        gap: 0.3rem;
+    }
+    .categoriesActions button {
+        width: 30px;
+        height: 30px;
+    }
 }

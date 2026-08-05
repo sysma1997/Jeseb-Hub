@@ -31,23 +31,19 @@ export const Pagination = (props: {
 
     return <div className="cPagination">
         <div className="item">
-            <p>{t("shared.limit")}:</p>
-            <div className="select">
-                <select value={limit} onChange={onChangeLimit}>
-                    {[15, 30, 50, 100].map((limit) => 
-                        <option key={limit} value={limit}>{limit}</option>)}
-                </select>
-            </div>
+            <label>{t("shared.limit")}:</label>
+            <select value={limit} onChange={onChangeLimit}>
+                {[15, 30, 50, 100].map((limit) => 
+                    <option key={limit} value={limit}>{limit}</option>)}
+            </select>
         </div>
         <div className="item">
-            <p>{t("shared.page")}:</p>
-            <div className="select">
-                <select value={page} onChange={onChangePage}>
-                    {Array.from({ length: pages }, (_, i) => i + 1).map((pageNumber) => (
-                        <option key={pageNumber} value={pageNumber}>{pageNumber}</option>
-                    ))}
-                </select>
-            </div>
+            <label>{t("shared.page")}:</label>
+            <select value={page} onChange={onChangePage}>
+                {Array.from({ length: pages }, (_, i) => i + 1).map((pageNumber) => (
+                    <option key={pageNumber} value={pageNumber}>{pageNumber}</option>
+                ))}
+            </select>
         </div>
     </div>;
 };

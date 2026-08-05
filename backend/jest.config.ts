@@ -11,15 +11,13 @@ const config: Config = {
   rootDir: './src',
   setupFilesAfterEnv: ["<rootDir>/__tests__/shared/prisma/Singleton.ts"],
   transformIgnorePatterns: [
-    "node_modules/(?!uuid)"
+    "node_modules/(?!.*uuid)"
   ],
   transform: {
     "^.+\\.tsx?$": "ts-jest",
     "^.+\\.js$": "babel-jest",
   },
-  moduleNameMapper: {
-    "^uuid$": require.resolve('uuid'),
-  }
+  moduleNameMapper: {},
 };
 
 export default config;

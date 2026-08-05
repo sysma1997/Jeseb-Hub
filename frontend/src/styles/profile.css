@@ -1,103 +1,258 @@
-@import "bulma-switch-control/css/main.min.css";
 @import "bulma/css/bulma.min.css";
 @import url("./shared/global.css");
 
 .profile {
-    padding: 2rem;
-
+    padding: 1rem;
     display: flex;
-    flex-direction: row;
     justify-content: center;
-    align-items: center;
 }
-.profile .profile-content {
-    width: 90%;
-
+.profile-content {
+    width: 100%;
+    max-width: 900px;
     display: flex;
     flex-direction: row;
+    align-items: flex-start;
     gap: 1rem;
 }
-.profile .profile-content .menu .menu-list li a {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
+
+.profileSidebar {
+    width: 260px;
+    flex-shrink: 0;
 }
-.profile .profile-content .menu .menu-list .is-active {
-    color: black;
-    background-color: #00d1b2;
+
+.profileMenu {
+    background: var(--global-bg);
+    border: var(--global-border);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    padding: 1rem;
+}
+.profileMenu .menu-label {
+    margin: 0 0 0.75rem;
+    padding: 0;
+    color: var(--global-text-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+.profileMenu .menu-list {
+    list-style: none;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+.profileMenu .menu-list li {
+    margin: 0;
+}
+.profileMenu .menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 10px;
+    color: var(--global-text);
+    font-size: 0.92rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+.profileMenu .menu-item:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+.profileMenu .menu-item.is-active {
+    background: var(--global-accent);
+    color: #fff;
+}
+.profileMenu .menu-item label {
+    cursor: pointer;
 }
 
 #dItems {
     flex: 1;
+    min-width: 0;
 }
+#dItems .card {
+    background: var(--global-bg);
+    border: var(--global-border);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+}
+#dItems .card .card-content {
+    padding: 1.25rem;
+}
+#dItems .card .content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#dItems .field {
+    margin-bottom: 0;
+}
+#dItems .label {
+    margin: 0 0 0.4rem;
+    color: var(--global-text);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+#dItems .control {
+    width: 100%;
+}
+#dItems .input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    background: var(--global-bg);
+    color: var(--global-text);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+#dItems .input:focus {
+    border-color: var(--global-accent);
+}
+#dItems .input::placeholder {
+    color: var(--global-text-muted);
+}
+
+#dInformation #dInformationEditName,
+#dInformation #dInformationEditEmail {
+    display: none;
+}
+
 #dInformation .dInformationPhoto {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
 }
 #dInformation .dInformationPhoto .dInformationPhotoProfile {
     position: relative;
 }
-#dInformation .dInformationPhoto #iIPPhoto, 
+#dInformation .dInformationPhoto #iIPPhoto,
 #dInformation .dInformationPhoto #iIPIcon {
-    background-color: #00d1b2;
+    background-color: var(--global-accent);
     border-radius: 50%;
     object-fit: cover;
-    width: 130px;
-    height: 130px;
+    width: 120px;
+    height: 120px;
 }
 #dInformation .dInformationPhoto #btnIPPhotoEdit {
-    font-size: 1rem;
-    object-fit: cover;
-    border-radius: 50%;
-    padding: 0.5rem;
-    
     position: absolute;
-    bottom: 0;
     right: 0;
+    bottom: 0;
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 #dInformation .dInformationPhoto #lIPName {
-    margin-top: 0.5rem;
+    margin: 0.75rem 0 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--global-text);
 }
 
 #dInformation .dInformationElement {
-    margin-bottom: 1rem;
-    
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-#dInformation #dInformationEditName, 
-#dInformation #dInformationEditEmail {
-    margin-bottom: 1rem;
-    
-    display: none;
-}
-
-#dItems .card .option, 
-#mUpdateTwoStep .option {
-    margin-bottom: 1rem;
-    
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.02);
+    border: var(--global-border);
+    border-radius: 10px;
+}
+#dInformation .dInformationElement label {
+    margin: 0;
+}
+#dInformation .dInformationElement label b {
+    font-weight: 600;
+    color: var(--global-text-muted);
+    font-size: 0.85rem;
+}
+#dInformation .dInformationElement #dIEEmail {
+    font-weight: 600;
+    color: var(--global-text);
+    font-size: 0.95rem;
+    text-align: right;
+    word-break: break-all;
+}
+
+#dInformationOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+#dInformationOptions .btn-primary {
+    width: 100%;
+}
+
+#dInformation #sICreatedAt,
+#dInformation #sILastUpdate {
+    font-size: 0.8rem;
+    color: var(--global-text-muted);
+}
+
+#dItems .card .option {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    border-bottom: var(--global-border);
+}
+#dItems .card .option:last-of-type {
+    border-bottom: none;
+}
+#dItems .card .option .label {
+    margin: 0;
+    color: var(--global-text);
+}
+
+#pDProgress {
+    width: 100%;
+    height: 8px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.08);
+    border: none;
+    margin: 0;
+}
+#pDProgress::-webkit-progress-bar {
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 999px;
+}
+#pDProgress::-webkit-progress-value {
+    background: var(--global-accent);
+    border-radius: 999px;
+}
+#pDProgress::-moz-progress-bar {
+    background: var(--global-accent);
+    border-radius: 999px;
 }
 
 @media screen and (max-width: 1024px) {
-    .profile {
-        padding: 1rem;
-    }
-    .profile .profile-content {
-        width: 100%;
-
+    .profile-content {
         flex-direction: column;
+        align-items: stretch;
     }
-    .profile .profile-content .menu .menu-list {
-        display: flex;
-        overflow: auto;
+    .profileSidebar {
+        width: 100%;
+    }
+    .profileMenu .menu-list {
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 0.25rem;
+    }
+    .profileMenu .menu-item {
+        white-space: nowrap;
     }
 }

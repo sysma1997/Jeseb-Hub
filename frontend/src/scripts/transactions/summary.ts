@@ -19,14 +19,17 @@ const lSIncome = document.getElementById("lSIncome")!;
 const lSExpenses = document.getElementById("lSExpenses")!;
 const lSDiff = document.getElementById("lSDiff")!;
 
+const INCOME_COLOR = "#00d1b2";
+const EXPENSE_COLOR = "#ff3860";
+
 const setSummary = (income: number, expenses: number) => {
     const diff: number = income - expenses;
 
-    lSIncome.style.color = "green";
+    lSIncome.style.color = INCOME_COLOR;
     lSIncome.innerHTML = `<b>${FormatNumber(income)}</b>`;
-    lSExpenses.style.color = "red";
+    lSExpenses.style.color = EXPENSE_COLOR;
     lSExpenses.innerHTML = `<b>${FormatNumber(expenses)}</b>`;
-    lSDiff.style.color = (diff < 0) ? "red" : "green";
+    lSDiff.style.color = (diff < 0) ? EXPENSE_COLOR : INCOME_COLOR;
     lSDiff.innerHTML = `<b>${FormatNumber(diff)}</b>`;
 };
 const getSummaryThisMonth = async () => {

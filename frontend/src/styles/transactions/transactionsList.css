@@ -1,19 +1,181 @@
-.transactionsList {
-    width: 100%;
+.transactionsCard {
+    background: var(--global-bg);
+    border-radius: 12px;
+    border: var(--global-border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
 }
-.transactionsList .content {
-    width: 100%;
-}
-.transactionsList .content .noContent {
-    text-align: center;
-}
-.transactionsList .content .oneHundredPercent {
-    width: 100%;
-}
-.transactionsList .content table tbody td .options {
+
+.transactionsCard-header {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
     align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: var(--global-border);
+}
+.transactionsCard-header span {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--global-text);
+}
+.transactionsCard-header button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: none;
+    background: var(--global-accent);
+    color: #fff;
+    font-size: 1.15rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.transactionsCard-header button:hover {
+    opacity: 0.85;
+}
+
+.transactionsCard-content {
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.transactionsEmpty {
+    padding: 2.5rem 1rem;
+    text-align: center;
+    color: var(--global-text-muted);
+    font-size: 0.95rem;
+}
+
+.transactionsTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.transactionsTable th,
+.transactionsTable td {
+    padding: 0.7rem 0.75rem;
+    text-align: left;
+    border-bottom: var(--global-border);
+}
+.transactionsTable th {
+    font-weight: 600;
+    color: var(--global-text-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: rgba(0, 0, 0, 0.02);
+}
+.transactionsTable tr:last-child td {
+    border-bottom: none;
+}
+.transactionsTable tr:hover td {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.transactionAccount {
+    font-weight: 600;
+    color: var(--global-text);
+}
+
+.transactionDate {
+    color: var(--global-text-muted);
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.transactionValue {
+    text-align: right;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.transactionOptions {
+    display: flex;
     gap: 0.3rem;
+    justify-content: flex-end;
+}
+.transactionOptions button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: opacity 0.2s, background 0.2s;
+}
+.transactionOptions button:hover {
+    opacity: 0.8;
+}
+.transactionOptions button.view {
+    background: #3b82f6;
+    color: #fff;
+}
+.transactionOptions button.edit {
+    background: var(--global-accent);
+    color: #fff;
+}
+.transactionOptions button.btnDelete {
+    background: #ff3860;
+    color: #fff;
+}
+
+@media screen and (max-width: 768px) {
+    .transactionsCard-content {
+        padding: 0.75rem;
+    }
+
+    .transactionsTable thead {
+        display: none;
+    }
+    .transactionsTable {
+        display: flex;
+        flex-direction: column;
+    }
+    .transactionsTable tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .transactionsTable td,
+    .transactionsTable th {
+        padding: 0;
+        border: none;
+        background: none;
+    }
+    .transactionsTable tr:hover td {
+        background: none;
+    }
+
+    .transactionRow {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        padding: 0.75rem;
+        border: 1px solid var(--txn-row-color);
+        border-radius: 10px;
+    }
+    .transactionRow .transactionAccount {
+        order: 1;
+        flex: 1;
+        min-width: 0;
+    }
+    .transactionRow .transactionOptions {
+        order: 2;
+    }
+    .transactionRow .transactionDate {
+        order: 3;
+        flex: 1;
+        margin-top: 0.4rem;
+    }
+    .transactionRow .transactionValue {
+        order: 4;
+        margin-top: 0.4rem;
+    }
 }

@@ -111,7 +111,7 @@ export class AccountPrismaRepository implements AccountRepository {
         
         const [accounts, total] = await Promise.all([
             this.prisma.account.findMany({
-                where: { idUser, name: { contains: name } }, 
+                where: { idUser, name: { contains: name, mode: 'insensitive' } }, 
                 orderBy: { name: "asc" },
                 ...(shouldPaginate && {
                     take: take,
@@ -119,7 +119,7 @@ export class AccountPrismaRepository implements AccountRepository {
                 })
             }),
             this.prisma.account.count({
-                where: { idUser, name: { contains: name } }
+                where: { idUser, name: { contains: name, mode: 'insensitive' } }
             })
         ]);
 

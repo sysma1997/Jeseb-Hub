@@ -145,58 +145,50 @@ export const TransactionList = () => {
             setPagination(pagination));
     };
 
-    return <div className="transactionsList card">
-        <header className="card-header">
-            <h2 className="card-header-title">{t("transactions.title")}</h2>
-            <button className="card-header-icon" aria-label="more options" 
-                onClick={clickShowFilter}>
+    return <div className="transactionsCard">
+        <div className="transactionsCard-header">
+            <span>{t("transactions.title")}</span>
+            <button onClick={clickShowFilter} aria-label={t("shared.filter")}>
                 <Icon icon="material-symbols:filter-alt-sharp" />
             </button>
-        </header>
-        <div className="card-content">
-            <div className="content">
-                {(pagination.list.length === 0) && <p className="noContent">{t("transactions.noItems")}</p>}
-                {(pagination.list.length > 0) && <>
-                    <div className="table-container">
-                        <table className="table is-fullwidth is-bordered is-hoverable">
-                            <thead>
-                                <tr>
-                                    <th className="has-text-centered">{t("transactions.account")}</th>
-                                    <th className="has-text-centered">{t("transactions.date")}</th>
-                                    <th className="has-text-centered">{t("transactions.value")}</th>
-                                    <th className="has-text-centered">{t("transactions.options")}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {pagination.list.map((transaction: Transaction) => <tr key={transaction.id}>
-                                    <th className="has-text-centered">{transaction.account}</th>
-                                    <td className="has-text-centered">{dayjs.utc(transaction.date).format("DD/MM/YYYY HH:mm:ss")}</td>
-                                    <td className="has-text-right" style={{ color: (transaction.type) ? "green" : "red" }}>
-                                        {((transaction.type) ? "" : "-") + FormatNumber(transaction.value)}
-                                    </td>
-                                    <td className="has-text-centered">
-                                        <div className="options">
-                                            <button className="button is-info" 
-                                                onClick={() => clickShow(transaction)}>
-                                                <Icon icon="ic:baseline-remove-red-eye" />
-                                            </button>
-                                            <button className="button is-primary" 
-                                                onClick={() => clickUpdate(transaction)}>
-                                                <Icon icon="material-symbols:edit-rounded" />
-                                            </button>
-                                            <button className="button is-danger" 
-                                                onClick={() => clickDelete(transaction.id!)}>
-                                                <Icon icon="solar:trash-bin-2-bold" />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>)}
-                            </tbody>
-                        </table>
-                    </div>
-                    <CPagination updatePages={pagination.pages} onChange={onChangePagination} />
-                </>}
-            </div>
+        </div>
+        <div className="transactionsCard-content">
+            {(pagination.list.length === 0) && <div className="transactionsEmpty">{t("transactions.noItems")}</div>}
+            {(pagination.list.length > 0) && <>
+                <table className="transactionsTable">
+                    <thead>
+                        <tr>
+                            <th>{t("transactions.account")}</th>
+                            <th>{t("transactions.date")}</th>
+                            <th>{t("transactions.value")}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {pagination.list.map((transaction: Transaction) => <tr key={transaction.id} className="transactionRow">
+                            <td className="transactionAccount">{transaction.account}</td>
+                            <td className="transactionDate">{dayjs.utc(transaction.date).format("DD/MM/YYYY HH:mm:ss")}</td>
+                            <td className="transactionValue" style={{ color: (transaction.type) ? "#00d1b2" : "#ff3860" }}>
+                                {((transaction.type) ? "" : "-") + FormatNumber(transaction.value)}
+                            </td>
+                            <td>
+                                <div className="transactionOptions">
+                                    <button className="view" onClick={() => clickShow(transaction)}>
+                                        <Icon icon="ic:baseline-remove-red-eye" />
+                                    </button>
+                                    <button className="edit" onClick={() => clickUpdate(transaction)}>
+                                        <Icon icon="material-symbols:edit-rounded" />
+                                    </button>
+                                    <button className="btnDelete" onClick={() => clickDelete(transaction.id!)}>
+                                        <Icon icon="solar:trash-bin-2-bold" />
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>)}
+                    </tbody>
+                </table>
+                <CPagination updatePages={pagination.pages} onChange={onChangePagination} />
+            </>}
         </div>
     </div>;
 };

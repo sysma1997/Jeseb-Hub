@@ -1,0 +1,293 @@
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+.modal-overlay.is-active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-dialog {
+    background: var(--global-bg);
+    border-radius: 12px;
+    border: var(--global-border);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    width: 90%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: scale(0.95);
+    transition: transform 0.25s ease;
+}
+.modal-overlay.is-active .modal-dialog {
+    transform: scale(1);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: var(--global-border);
+}
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--global-text);
+}
+.modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--global-text-muted);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+.modal-close:hover {
+    background: rgba(0, 0, 0, 0.06);
+    color: var(--global-text);
+}
+
+.modal-body {
+    padding: 1.25rem;
+}
+.modal-body p {
+    margin: 0;
+    color: var(--global-text);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+.modal-body label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--global-text);
+    font-size: 0.9rem;
+}
+.modal-body .input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    background: var(--global-bg);
+    color: var(--global-text);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.modal-body .input:focus {
+    border-color: var(--global-accent);
+}
+.modal-body .input.is-danger {
+    border-color: #ff3860;
+}
+.modal-body .select,
+.modal-body select {
+    width: 100%;
+}
+.modal-body select {
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    background: var(--global-bg);
+    color: var(--global-text);
+    font-size: 0.95rem;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+.modal-body select:focus {
+    border-color: var(--global-accent);
+}
+.modal-body .textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    background: var(--global-bg);
+    color: var(--global-text);
+    font-size: 0.95rem;
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.2s;
+}
+.modal-body .textarea:focus {
+    border-color: var(--global-accent);
+}
+.modal-body .help {
+    display: none;
+    margin-top: 0.4rem;
+    font-size: 0.8rem;
+    color: #ff3860;
+}
+.modal-body .item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+}
+.modal-body .item:last-child {
+    margin-bottom: 0;
+}
+.modal-body .item label {
+    margin: 0;
+    font-weight: 600;
+    color: var(--global-text-muted);
+    font-size: 0.85rem;
+}
+.modal-body .item p {
+    font-weight: 600;
+    color: var(--global-text);
+    font-size: 0.9rem;
+    text-align: right;
+    word-break: break-word;
+}
+
+.modal-body .option {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+.modal-body .option:last-child {
+    margin-bottom: 0;
+}
+.modal-body .option label:first-child {
+    margin: 0;
+}
+
+.modal-body .switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+    cursor: pointer;
+    margin: 0;
+}
+.modal-body .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    margin: 0;
+}
+.modal-body .switch .check {
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background: #cbd5e1;
+    transition: background 0.2s;
+}
+.modal-body .switch .check::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+}
+.modal-body .switch input:checked + .check {
+    background: var(--global-accent);
+}
+.modal-body .switch input:checked + .check::before {
+    transform: translateX(20px);
+}
+.modal-body .switch input:focus-visible + .check {
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.15);
+}
+
+.modal-footer {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0 1.25rem 1.25rem;
+}
+.modal-footer button {
+    flex: 1;
+}
+
+.btn-primary,
+.btn-danger,
+.btn-info {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 1rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.btn-primary:hover,
+.btn-danger:hover,
+.btn-info:hover {
+    opacity: 0.85;
+}
+.btn-primary:disabled,
+.btn-danger:disabled,
+.btn-info:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+.btn-primary {
+    background: var(--global-accent);
+    color: #fff;
+}
+.btn-danger {
+    background: #ff3860;
+    color: #fff;
+}
+.btn-info {
+    background: #3b82f6;
+    color: #fff;
+}
+
+.is-loading {
+    position: relative;
+    color: transparent !important;
+    pointer-events: none;
+}
+.is-loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: modalSpin 0.8s linear infinite;
+}
+@keyframes modalSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}

@@ -1,0 +1,27 @@
+:root[data-theme="light"] {
+    --badge-success-bg: #dcfce7;
+    --badge-success-text: #166534;
+    --badge-danger-bg: #fee2e2;
+    --badge-danger-text: #991b1b;
+    --diff-positive-bg: #dcfce7;
+    --diff-positive-text: #166534;
+    --diff-negative-bg: #fee2e2;
+    --diff-negative-text: #991b1b;
+    --kpi-icon-bg: rgba(0, 209, 178, 0.08);
+}
+
+:root[data-theme="dark"] {
+    --badge-success-bg: rgba(34, 197, 94, 0.15);
+    --badge-success-text: #4ade80;
+    --badge-danger-bg: rgba(239, 68, 68, 0.15);
+    --badge-danger-text: #f87171;
+    --diff-positive-bg: rgba(34, 197, 94, 0.1);
+    --diff-positive-text: #4ade80;
+    --diff-negative-bg: rgba(239, 68, 68, 0.1);
+    --diff-negative-text: #f87171;
+    --kpi-icon-bg: rgba(0, 209, 178, 0.12);
+}
+
+.container {
+    padding: 1rem;
+}

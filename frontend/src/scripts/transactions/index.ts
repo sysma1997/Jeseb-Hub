@@ -41,8 +41,8 @@ const mftAccept = document.getElementById("btnMFTAccept") as HTMLButtonElement;
 const mftClearFilters = document.getElementById("btnMFTClearFilters") as HTMLButtonElement;
 
 const modalAddTransaction = document.getElementById("modalAddTransaction") as HTMLDivElement;
-const matTitle = modalAddTransaction.querySelector(".modal-card-title") as HTMLParagraphElement;
-const matClose = modalAddTransaction.querySelector(".delete") as HTMLButtonElement;
+const matTitle = modalAddTransaction.querySelector(".modal-header h3") as HTMLHeadingElement;
+const matClose = modalAddTransaction.querySelector(".modal-close") as HTMLButtonElement;
 const matSection1 = document.getElementById("sMAT1") as HTMLElement;
 const matAccount = document.getElementById("sMATAccount") as HTMLSelectElement;
 const matAccountBalance = document.getElementById("lMATAccountBalance") as HTMLLabelElement;
@@ -68,7 +68,7 @@ const matCancel = document.getElementById("btnMATCancel") as HTMLButtonElement;
 const matAccept = document.getElementById("btnMATAccept") as HTMLButtonElement;
 
 const modalTransaction = document.getElementById("modalTransaction") as HTMLDivElement;
-const mtClose = modalTransaction.querySelector(".delete") as HTMLButtonElement;
+const mtClose = modalTransaction.querySelector(".modal-close") as HTMLButtonElement;
 const mtAccount = document.getElementById("pMTAccount") as HTMLParagraphElement;
 const mtType = document.getElementById("pMTType") as HTMLParagraphElement;
 const mtValue = document.getElementById("pMTValue") as HTMLParagraphElement;

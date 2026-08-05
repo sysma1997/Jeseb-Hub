@@ -73,10 +73,20 @@
         "graphics": {
             "income": "Revenue by category", 
             "expenses": "Expenses by category", 
-            "evolution": "Balance evolution"
+            "evolution": "Balance evolution",
+            "total": "Total",
+            "totalIncome": "Income",
+            "totalExpenses": "Expenses",
+            "totalBalance": "Balance"
         }, 
         "transactions": "Recent transactions", 
-        "top": "Top 3 expenses of the month"
+        "top": "Top 3 expenses of the month",
+        "empty": {
+            "balance": "No accounts yet. Add one to get started.",
+            "charts": "No data to display yet. Add transactions to see your reports.",
+            "transactions": "No recent transactions.",
+            "top": "No expenses to show yet."
+        }
     }, 
     "transactions": {
         "summary": {
