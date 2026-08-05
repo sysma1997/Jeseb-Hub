@@ -1,8 +1,6 @@
 backend/node_modules/
 backend/.env
 backend/package-lock.json
-backend/pnpm-lock.yaml
-backend/pnpm-workspace.yaml
 backend/dist/
 backend/src/generated/
 frontend/node_modules/
@@ -10,14 +8,10 @@ frontend/.astro/
 frontend/.vscode/
 frontend/dist
 frontend/package-lock.json
-frontend/pnpm-lock.yaml
-frontend/pnpm-workspace.yaml
 landing/node_modules/
 landing/.astro/
 landing/.vscode/
 landing/dist
 landing/package-lock.json
-landing/pnpm-lock.yaml
-landing/pnpm-workspace.yaml
 .env
 Dockerfile

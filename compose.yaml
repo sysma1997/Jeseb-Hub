@@ -24,6 +24,10 @@ services:
           target: /usr/local/app/src
         - path: ./backend/package.json
           action: rebuild
+        - path: ./backend/pnpm-lock.yaml
+          action: rebuild
+        - path: ./backend/pnpm-workspace.yaml
+          action: rebuild
         - path: ./backend/prisma/
           action: rebuild
         - path: ./Dockerfile
@@ -55,6 +59,10 @@ services:
           target: /usr/local/app/public
         - path: ./frontend/package.json
           action: rebuild
+        - path: ./frontend/pnpm-lock.yaml
+          action: rebuild
+        - path: ./frontend/pnpm-workspace.yaml
+          action: rebuild
         - path: ./frontend/tsconfig.json
           action: rebuild
         - path: ./frontend/astro.config.mjs
@@ -82,6 +90,10 @@ services:
           action: sync
           target: /usr/local/app/public
         - path: ./landing/package.json
+          action: rebuild
+        - path: ./landing/pnpm-lock.yaml
+          action: rebuild
+        - path: ./landing/pnpm-workspace.yaml
           action: rebuild
         - path: ./landing/astro.config.mjs
           action: rebuild

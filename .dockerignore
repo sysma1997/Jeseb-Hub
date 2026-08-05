@@ -1,3 +1,7 @@
-backend/node_modules/
+**/node_modules/
+**/dist/
+**/.astro/
+**/pnpm-store/
 backend/.env
-frontend/node_modules/
+backend/src/generated/
+backend/uploads/
