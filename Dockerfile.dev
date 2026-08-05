@@ -1,19 +1,29 @@
 FROM node:22-alpine AS base
+RUN npm install -g pnpm@11.1.3
 WORKDIR /usr/local/app
 
 FROM base AS backend
+COPY backend/package.json backend/pnpm-lock.yaml backend/pnpm-workspace.yaml ./
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store pnpm install --frozen-lockfile
 COPY backend/. ./
+COPY .git .git
+RUN apk add --no-cache git && \
+    printf '{"version":"%s","commit":"%s"}' \
+        "$(git describe --tags --always --dirty | sed 's/^v//')" \
+        "$(git rev-parse --short HEAD)" > /usr/local/app/version.json && \
+    apk del git && rm -rf .git
 RUN mkdir -p /usr/local/app/uploads
-RUN npm install
-RUN DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy" npx prisma generate
-CMD ["sh", "-c", "npx prisma migrate dev && npm run dev"]
+RUN DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy" pnpm exec prisma generate
+CMD ["sh", "-c", "pnpm exec prisma migrate dev && pnpm run dev"]
 
 FROM base AS frontend
+COPY frontend/package.json frontend/pnpm-lock.yaml frontend/pnpm-workspace.yaml ./
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store pnpm install --frozen-lockfile
 COPY frontend/. ./
-RUN npm install
-CMD ["sh", "-c", "npm run dev"]
+CMD ["sh", "-c", "pnpm run dev"]
 
 FROM base AS landing
+COPY landing/package.json landing/pnpm-lock.yaml landing/pnpm-workspace.yaml ./
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store pnpm install --frozen-lockfile
 COPY landing/. ./
-RUN npm install
-CMD ["sh", "-c", "npm run dev"]
+CMD ["sh", "-c", "pnpm run dev"]
