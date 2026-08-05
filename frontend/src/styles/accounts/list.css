@@ -1,15 +1,274 @@
-.accountsList {
-    width: 100%;
+:root[data-theme="light"]  {
+    --accounts-row-color: #e0e0e0;
 }
-.accountsList .content {
-    width: 100%;
+:root[data-theme="dark"] {
+    --accounts-row-color: #192336;
 }
-.accountsList .content .noContent {
+
+.accountsCard {
+    background: var(--global-bg);
+    border-radius: 12px;
+    border: var(--global-border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+}
+
+.accountsCard-header {
+    padding: 1rem 1.25rem;
+    border-bottom: var(--global-border);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--global-text);
+}
+
+.accountsCard-content {
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.accountsSearch {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.accountsSearch-input {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    border: var(--global-border);
+    background: var(--global-bg);
+    color: var(--global-text);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.accountsSearch-input:focus {
+    border-color: var(--global-accent);
+}
+.accountsSearch-input::placeholder {
+    color: var(--global-text-muted);
+}
+
+.accountsSearch-button {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: none;
+    background: var(--global-accent);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.accountsSearch-button:hover {
+    opacity: 0.85;
+}
+
+.accountsEmpty {
+    padding: 2.5rem 1rem;
     text-align: center;
+    color: var(--global-text-muted);
+    font-size: 0.95rem;
 }
-.accountsList .content .fiftyPercent {
-    width: 50%;
-}
-.accountsList .content .oneHundredPercent {
+
+.accountsTable {
     width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.accountsTable th,
+.accountsTable td {
+    padding: 0.7rem 0.75rem;
+    text-align: left;
+    border-bottom: var(--global-border);
+}
+.accountsTable th {
+    font-weight: 600;
+    color: var(--global-text-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: rgba(0, 0, 0, 0.02);
+}
+.accountsTable tr:last-child td,
+.accountsTable tr:last-child th {
+    border-bottom: none;
+}
+.accountsTable tr:hover td {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.accountsName {
+    font-weight: 600;
+    color: var(--global-text);
+}
+
+.accountsBalance {
+    text-align: right;
+    font-weight: 600;
+    color: var(--global-text);
+    font-variant-numeric: tabular-nums;
+}
+
+.accountsRow-balance-label {
+    display: none;
+}
+
+.accountsTotal {
+    background: rgba(0, 0, 0, 0.03);
+}
+.accountsTotal th {
+    font-weight: 700;
+    color: var(--global-text);
+    font-size: 0.85rem;
+    text-transform: none;
+    letter-spacing: normal;
+    background: none;
+}
+.accountsTotal td {
+    font-weight: 700;
+    color: var(--global-accent);
+    text-align: right;
+    background: none;
+}
+.accountsTotal td:empty {
+    padding: 0;
+}
+
+.accountsActions {
+    display: flex;
+    gap: 0.4rem;
+    justify-content: flex-end;
+}
+.accountsActions button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s, background 0.2s;
+    font-size: 1rem;
+}
+.accountsActions button:hover {
+    opacity: 0.8;
+}
+.accountsActions button.edit {
+    background: var(--global-accent);
+    color: #fff;
+}
+.accountsActions button.btnDelete {
+    background: #ff3860;
+    color: #fff;
+}
+
+@media screen and (max-width: 480px) {
+    .accountsSearch {
+        flex-direction: column;
+    }
+    .accountsSearch-input,
+    .accountsSearch-button {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .accountsCard-content {
+        padding: 0.75rem;
+    }
+
+    .accountsTable thead {
+        display: none;
+    }
+    .accountsTable {
+        display: flex;
+        flex-direction: column;
+    }
+    .accountsTable tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .accountsTable td,
+    .accountsTable th {
+        padding: 0;
+        border: none;
+        background: none;
+    }
+    .accountsTable tr:hover td {
+        background: none;
+    }
+
+    .accountsRow {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        padding: 0.75rem;
+        border: 1px solid var(--accounts-row-color);
+        border-radius: 10px;
+    }
+    .accountsRow .accountsName {
+        order: 1;
+        flex: 1;
+        min-width: 0;
+    }
+    .accountsRow .accountsActions-cell {
+        order: 2;
+    }
+    .accountsRow .accountsRow-balance {
+        order: 3;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+        border-top: 1px dashed var(--accounts-row-color);
+    }
+    .accountsRow-balance-label {
+        display: inline;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--global-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+    .accountsRow-balance-value {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--global-text);
+    }
+
+    .accountsTotal {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem;
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0.04);
+    }
+    .accountsTotal th,
+    .accountsTotal td {
+        background: none;
+    }
+    .accountsTotal td:empty {
+        display: none;
+    }
+    .accountsTotal td {
+        text-align: right;
+        font-size: 1.05rem;
+    }
+
+    .accountsActions {
+        gap: 0.3rem;
+    }
+    .accountsActions button {
+        width: 30px;
+        height: 30px;
+    }
 }

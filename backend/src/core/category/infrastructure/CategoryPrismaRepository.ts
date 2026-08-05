@@ -104,14 +104,14 @@ export class CategoryPrismaRepository implements CategoryRepository {
 
         const [categories, total] = await Promise.all([
             this.prisma.category.findMany({
-                where: { idUser, name: { contains: name } }, 
+                where: { idUser, name: { contains: name, mode: 'insensitive' } }, 
                 orderBy: { name: "asc" }, 
                 ...(shouldPaginate && {
                     take: take, 
                     skip: (skip - 1) * take
                 })
             }), 
-            this.prisma.category.count({ where: { idUser, name: { contains: name } } })
+            this.prisma.category.count({ where: { idUser, name: { contains: name, mode: 'insensitive' } } })
         ]);
 
         const pagination = new Pagination<Category>();

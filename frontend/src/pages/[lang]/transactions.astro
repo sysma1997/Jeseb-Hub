@@ -28,23 +28,22 @@ const t = createTranslations(locale);
 	<Content locale={locale}>
 		<div class="transactions">
 			<div class="transactionsContent">
-				<p id="pSTitle" class="is-size-5"><b>{t("transactions.summary.title")}</b></p>
-				<div id="dSTags">
+				<p id="pSTitle" class="transactionsTitle">{t("transactions.summary.title")}</p>
+				<div id="dSTags" class="transactionsTags">
 				</div>
 				<div class="summary">
-					<div class="box">
-						<label>{t("transactions.summary.income")}:</label>
-						<label id="lSIncome" class="has-text-right">...</label>
+					<div class="summaryCard">
+						<span class="summaryCard-label">{t("transactions.summary.income")}</span>
+						<span id="lSIncome" class="summaryCard-value">...</span>
 					</div>
-					<div class="box">
-						<label>{t("transactions.summary.expenses")}:</label>
-						<label id="lSExpenses" class="has-text-right">...</label>
+					<div class="summaryCard">
+						<span class="summaryCard-label">{t("transactions.summary.expenses")}</span>
+						<span id="lSExpenses" class="summaryCard-value">...</span>
 					</div>
-					<div class="box">
-						<label>{t("transactions.summary.diff")}:</label>
-						<label id="lSDiff" class="has-text-right">...</label>
+					<div class="summaryCard">
+						<span class="summaryCard-label">{t("transactions.summary.diff")}</span>
+						<span id="lSDiff" class="summaryCard-value">...</span>
 					</div>
-					<div></div>
 				</div>
 				<TransactionList client:only="react" />
 			</div>
@@ -52,7 +51,7 @@ const t = createTranslations(locale);
 	</Content>
 
 	<Base id="modalFilterTransactions" title={t("shared.filter")}>
-		<section class="modal-card-body">
+		<div class="modal-body">
 			<div class="field">
 				<label class="label">{t("transactions.filter.dateRange")}:</label>
 				<div class="field has-addons">
@@ -63,7 +62,7 @@ const t = createTranslations(locale);
 						<input id="iMFTDateTo" class="input" type="date" />
 					</div>
 					<div class="control">
-						<button id="btnMFTClear" class="button is-primary">{t("shared.clear")}</button>
+						<button id="btnMFTClear" class="btn-primary">{t("shared.clear")}</button>
 					</div>
 				</div>
 			</div>
@@ -99,15 +98,15 @@ const t = createTranslations(locale);
 					</div>
 				</div>
 			</div>
-		</section>
-		<footer class="modal-card-foot" style="gap: 0.5rem;">
-            <button id="btnMFTCancel" class="button is-danger is-fullwidth">{t("shared.cancel")}</button>
-			<button id="btnMFTClearFilters" class="button is-info is-fullwidth">{t("shared.clear")}</button>
-            <button id="btnMFTAccept" class="button is-primary is-fullwidth">{t("shared.accept")}</button>
-        </footer>
+		</div>
+		<div class="modal-footer">
+            <button id="btnMFTCancel" class="btn-danger">{t("shared.cancel")}</button>
+			<button id="btnMFTClearFilters" class="btn-info">{t("shared.clear")}</button>
+            <button id="btnMFTAccept" class="btn-primary">{t("shared.accept")}</button>
+        </div>
 	</Base>
 	<Base id="modalAddTransaction" title={t("transactions.add")}>
-		<section id="sMAT1" class="modal-card-body" style="display: block;">
+		<div id="sMAT1" class="modal-body" style="display: block;">
 			<div class="field">
 				<label class="label">{t("transactions.account")}:</label>
 				<div class="control">
@@ -117,8 +116,8 @@ const t = createTranslations(locale);
 				</div>
 			</div>
 			<label id="lMATAccountBalance">{t("shared.balance")}: 0</label>
-		</section>
-		<section id="sMAT2" class="modal-card-body" style="display: none;">
+		</div>
+		<div id="sMAT2" class="modal-body" style="display: none;">
 			<div class="field">
 				<label class="label">{t("transactions.type")}:</label>
 				<div class="control">
@@ -136,9 +135,9 @@ const t = createTranslations(locale);
 					<input id="iMATValue" class="input" type="number" />
 				</div>
 			</div>
-		</section>
-		<section id="sMAT3" class="modal-card-body" style="display: none;">
-			<p style="margin-bottom: 1.5rem;">{t("transactions.optional")}</p>
+		</div>
+		<div id="sMAT3" class="modal-body" style="display: none;">
+			<p style="margin-bottom: 1rem;">{t("transactions.optional")}</p>
 			<div class="field">
 				<label class="label">{t("transactions.date")}:</label>
 				<div class="control">
@@ -156,75 +155,75 @@ const t = createTranslations(locale);
 			<div class="field">
 				<label class="label">{t("transactions.description")}:</label>
 				<div class="control">
-					<textarea id="taMATDescription" class="textarea" />
+					<textarea id="taMATDescription" class="textarea"></textarea>
 				</div>
 			</div>
-		</section>
-		<section id="sMAT4" class="modal-card-body" style="display: none;">
-			<p style="margin-bottom: 1.5rem;">{t("transactions.confirm")}:</p>
+		</div>
+		<div id="sMAT4" class="modal-body" style="display: none;">
+			<p style="margin-bottom: 1rem;">{t("transactions.confirm")}:</p>
 			<div class="item">
-				<label class="label">{t("transactions.account")}:</label>
+				<label>{t("transactions.account")}:</label>
 				<p id="pMATAccountConfirm">.</p>
 			</div>
 			<div class="item">
-				<label class="label">{t("transactions.type")}:</label>
+				<label>{t("transactions.type")}:</label>
 				<p id="pMATTypeConfirm">.</p>
 			</div>
 			<div class="item">
-				<label class="label">{t("transactions.value")}:</label>
+				<label>{t("transactions.value")}:</label>
 				<p id="pMATValueConfirm">.</p>
 			</div>
 			<div class="item">
-				<label class="label">{t("transactions.date")}:</label>
+				<label>{t("transactions.date")}:</label>
 				<p id="pMATDateConfirm">.</p>
 			</div>
 			<div id="dMATCategoryConfirm" class="item" style="display: none;">
-				<label class="label">{t("transactions.category")}:</label>
+				<label>{t("transactions.category")}:</label>
 				<p id="pMATCategoryConfirm">.</p>
 			</div>
 			<div id="dMATDescriptionConfirm" class="item" style="display: none;">
-				<label class="label">{t("transactions.description")}:</label>
+				<label>{t("transactions.description")}:</label>
 				<p id="pMATDescriptionConfirm">.</p>
 			</div>
-		</section>
-		<section id="sMAT5" class="modal-card-body" style="display: none;">
+		</div>
+		<div id="sMAT5" class="modal-body" style="display: none;">
 			<p id="pMATMessage">{t("transactions.created")}</p>
-		</section>
-		<footer class="modal-card-foot" style="gap: 0.5rem;">
-            <button id="btnMATCancel" class="button is-danger is-fullwidth">{t("shared.cancel")}</button>
-            <button id="btnMATAccept" class="button is-primary is-fullwidth">{t("shared.next")}</button>
-        </footer>
+		</div>
+		<div class="modal-footer">
+            <button id="btnMATCancel" class="btn-danger">{t("shared.cancel")}</button>
+            <button id="btnMATAccept" class="btn-primary">{t("shared.next")}</button>
+        </div>
 	</Base>
 	<Base id="modalTransaction" title={t("transactions.title")}>
-		<section class="modal-card-body">
+		<div class="modal-body">
 			<div class="item">
-				<label class="label">{t("transactions.account")}:</label>
+				<label>{t("transactions.account")}:</label>
 				<p id="pMTAccount">.</p>
 			</div>
 			<div class="item">
-				<label class="label">{t("transactions.type")}:</label>
+				<label>{t("transactions.type")}:</label>
 				<p id="pMTType">.</p>
 			</div>
 			<div class="item">
-				<label class="label">{t("transactions.value")}:</label>
+				<label>{t("transactions.value")}:</label>
 				<p id="pMTValue">.</p>
 			</div>
 			<div class="item">
-				<label class="label">{t("transactions.date")}:</label>
+				<label>{t("transactions.date")}:</label>
 				<p id="pMTDate">.</p>
 			</div>
 			<div id="dMTCategory" class="item" style="display: none;">
-				<label class="label">{t("transactions.category")}:</label>
+				<label>{t("transactions.category")}:</label>
 				<p id="pMTCategory">.</p>
 			</div>
 			<div id="dMTDescription" class="item" style="display: none;">
-				<label class="label">{t("transactions.description")}:</label>
+				<label>{t("transactions.description")}:</label>
 				<p id="pMTDescription">.</p>
 			</div>
-		</section>
-		<footer class="modal-card-foot" style="gap: 0.5rem;">
-            <button id="btnMTOk" class="button is-primary is-fullwidth">Ok</button>
-        </footer>
+		</div>
+		<div class="modal-footer">
+            <button id="btnMTOk" class="btn-primary">Ok</button>
+        </div>
 	</Base>
 	<Confirm locale={locale} />
 	<Alert locale={locale} />

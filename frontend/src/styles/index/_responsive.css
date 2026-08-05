@@ -1,0 +1,163 @@
+/* Tablet */
+@media (max-width: 1024px) {
+    .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .kpi-value {
+        font-size: 24px;
+    }
+
+    .charts-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .chart-wrapper {
+        height: 240px;
+    }
+
+    .chart-wrapper.large {
+        height: 280px;
+    }
+
+    .bottom-section {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .kpi-card {
+        padding: 16px;
+    }
+
+    .kpi-value {
+        font-size: 20px;
+    }
+
+    .kpi-title {
+        font-size: 12px;
+    }
+
+    .kpi-details {
+        font-size: 11px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .kpi-icon {
+        width: 32px;
+        height: 32px;
+        padding: 6px;
+    }
+
+    .kpi-icon svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .kpi-badge {
+        font-size: 10px;
+        padding: 3px 8px;
+    }
+
+    .chart-card {
+        padding: 16px;
+    }
+
+    .chart-title {
+        font-size: 14px;
+    }
+
+    .chart-wrapper {
+        height: 200px;
+    }
+
+    .chart-wrapper.large {
+        height: 240px;
+    }
+
+    .bottom-section {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-top: 20px;
+    }
+
+    .transactions-card {
+        padding: 16px;
+    }
+
+    .top-expenses-card-modern {
+        padding: 16px;
+    }
+
+    .top-expense-item-modern {
+        padding: 10px 12px;
+    }
+
+    .top-expense-category {
+        font-size: 12px;
+    }
+
+    .top-expense-amount {
+        font-size: 11px;
+    }
+
+    .percentage-text {
+        font-size: 11px;
+    }
+
+    .rank-number {
+        width: 24px;
+        height: 24px;
+        font-size: 11px;
+    }
+
+    .percentage-bar {
+        height: 3px;
+    }
+}
+
+/* Mobile Small */
+@media (max-width: 375px) {
+    .kpi-grid {
+        gap: 8px;
+    }
+
+    .kpi-card {
+        padding: 12px;
+    }
+
+    .kpi-value {
+        font-size: 17px;
+    }
+
+    .chart-wrapper {
+        height: 180px;
+    }
+
+    .chart-wrapper.large {
+        height: 200px;
+    }
+
+    .transactions-card {
+        padding: 12px;
+    }
+
+    .top-expenses-card-modern {
+        padding: 12px;
+    }
+
+    .top-expense-item-modern {
+        padding: 8px 10px;
+    }
+}

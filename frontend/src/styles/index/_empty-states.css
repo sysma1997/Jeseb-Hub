@@ -1,0 +1,44 @@
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--global-text-muted);
+}
+
+.empty-state-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 12px;
+    opacity: 0.4;
+}
+
+.empty-state-text {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.top-expenses-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+    text-align: center;
+    color: var(--global-text-muted);
+}
+
+.top-expenses-empty-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+    opacity: 0.3;
+}
+
+.top-expenses-empty-text {
+    font-size: 13px;
+    font-weight: 500;
+}

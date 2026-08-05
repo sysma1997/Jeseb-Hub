@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from "@jest/globals";
 import { prismaMock } from "../shared/prisma/Singleton";
+import { mockTranslator } from "../shared/TranslatorMock";
 
 import { Category } from "../../core/category/domain/Category";
 import { CategoryRepository } from "../../core/category/domain/CategoryRepository";
@@ -9,13 +10,13 @@ describe("Category Prisma Repository", () => {
     let repository: CategoryRepository;
 
     beforeEach(() => {
-        repository = new CategoryPrismaRepository(prismaMock);
+        repository = new CategoryPrismaRepository(prismaMock, mockTranslator);
     });
 
     it("Should add a category.", async () => {
         const id = "6b50041d-9f47-4124-9c81-c61e3b262763";
         const idUser = "998f4fa5-f903-47a4-b6bd-ec25ed9d3452";
-        const category = new Category("Food", id, idUser);
+        const category = new Category(mockTranslator, "Food", id, idUser);
 
         prismaMock.category.findFirst.mockResolvedValue(null);
         prismaMock.category.create.mockResolvedValue({
@@ -35,7 +36,7 @@ describe("Category Prisma Repository", () => {
     it("Should update a category.", async () => {
         const id = "6b50041d-9f47-4124-9c81-c61e3b262763";
         const idUser = "998f4fa5-f903-47a4-b6bd-ec25ed9d3452";
-        const category = new Category("Travel", id, idUser);
+        const category = new Category(mockTranslator, "Travel", id, idUser);
 
         prismaMock.category.update.mockResolvedValue({
             id,
@@ -77,7 +78,7 @@ describe("Category Prisma Repository", () => {
 
         const result = await repository.get(idUser, id);
 
-        expect(result).toEqual(new Category("Food", id, idUser));
+        expect(result).toEqual(new Category(mockTranslator, "Food", id, idUser));
         expect(prismaMock.category.findFirst).toHaveBeenCalledWith({
             where: { idUser, id },
         });
@@ -95,7 +96,7 @@ describe("Category Prisma Repository", () => {
 
         const result = await repository.search(idUser, name);
 
-        expect(result).toEqual(new Category("Food", id, idUser));
+        expect(result).toEqual(new Category(mockTranslator, "Food", id, idUser));
         expect(prismaMock.category.findFirst).toHaveBeenCalledWith({
             where: { idUser, name },
         });
@@ -113,8 +114,8 @@ describe("Category Prisma Repository", () => {
         const result = await repository.getList(idUser);
 
         expect(result.list).toEqual([
-            new Category("Food", "6b50041d-9f47-4124-9c81-c61e3b262763", idUser),
-            new Category("Travel", "3dbe67c9-b0b9-4e04-bd5b-cc2b4d8b0638", idUser),
+            new Category(mockTranslator, "Food", "6b50041d-9f47-4124-9c81-c61e3b262763", idUser),
+            new Category(mockTranslator, "Travel", "3dbe67c9-b0b9-4e04-bd5b-cc2b4d8b0638", idUser),
         ]);
         expect(result.pages).toBe(1);
 

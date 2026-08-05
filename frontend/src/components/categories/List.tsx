@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import { t } from "../../core/shared/infrastructure/i18n";
 
@@ -125,56 +125,45 @@ export const List = () => {
         });
     };
 
-    return <div className="categoriesList card">
-        <header className="card-header">
-            <h2 className="card-header-title">{t("category.title")}</h2>
-        </header>
-        <div className="card-content">
-            <div className="content">
-                <div className="field has-addons">
-                    <p className="control has-icons-left" style={{ flex: 1 }}>
-                        <input className="input" type="text" placeholder={t("category.search")} 
-                            value={search} onChange={e => setSearch(e.target.value)}
-                            onKeyDown={e => e.key == "Enter" && clickSearch()} />
-                        <span className="icon is-small is-left">
-                            <Icon icon="material-symbols:search" />
-                        </span>
-                    </p>
-                    <div className="control">
-                        <button className="button is-primary" onClick={clickSearch}>
-                            {t("shared.search")}
-                        </button>
-                    </div>
-                </div>
-                {(pagination.list.length === 0) && <p className="noContent">{t("category.noItems")}</p>}
-                {(pagination.list.length > 0) && <>
-                    <div className="table-container">
-                        <table className="table is-fullwidth is-bordered is-hoverable">
-                            <thead>
-                                <tr>
-                                    <th className="oneHundredPercent">{t("shared.name")}</th>
-                                    <th>{t("shared.edit")}</th>
-                                    <th>{t("shared.remove")}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {pagination.list.map((category: Category) => <tr key={category.id}>
-                                    <th>{category.name}</th>
-                                    <td><button className="button is-primary" 
-                                        onClick={() => clickUpdate(category)}>
-                                        <Icon icon="material-symbols:edit-rounded" />
-                                    </button></td>
-                                    <td><button className="button is-danger" 
-                                        onClick={() => clickDelete(category.id!, category.name)}>
-                                        <Icon icon="solar:trash-bin-2-bold" />
-                                    </button></td>
-                                </tr>)}
-                            </tbody>
-                        </table>
-                    </div>
-                    <CPagination updatePages={pagination.pages} onChange={onChangePagination} />
-                </>}
+    return <div className="categoriesCard">
+        <div className="categoriesCard-header">{t("category.title")}</div>
+        <div className="categoriesCard-content">
+            <div className="categoriesSearch">
+                <input className="categoriesSearch-input" type="text" placeholder={t("category.search")}
+                    value={search} onChange={e => setSearch(e.target.value)}
+                    onKeyDown={e => e.key == "Enter" && clickSearch()} />
+                <button className="categoriesSearch-button" onClick={clickSearch}>
+                    {t("shared.search")}
+                </button>
             </div>
+            {(pagination.list.length === 0) && <div className="categoriesEmpty">{t("category.noItems")}</div>}
+            {(pagination.list.length > 0) && <>
+                <table className="categoriesTable">
+                    <thead>
+                        <tr>
+                            <th style={{ width: "100%" }}>{t("shared.name")}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {pagination.list.map((category: Category) => <tr key={category.id}>
+                            <td className="categoriesName">{category.name}</td>
+                            <td />
+                            <td>
+                                <div className="categoriesActions">
+                                    <button className="edit" onClick={() => clickUpdate(category)}>
+                                        <Icon icon="material-symbols:edit-rounded" />
+                                    </button>
+                                    <button className="btnDelete" onClick={() => clickDelete(category.id!, category.name)}>
+                                        <Icon icon="solar:trash-bin-2-bold" />
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>)}
+                    </tbody>
+                </table>
+                <CPagination updatePages={pagination.pages} onChange={onChangePagination} />
+            </>}
         </div>
     </div>;
 };

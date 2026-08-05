@@ -1,16 +1,18 @@
 import { describe, it, expect, beforeEach } from "@jest/globals";
 import { prismaMock } from "../shared/prisma/Singleton";
+import { mockTranslator } from "../shared/TranslatorMock";
 
 import { Transaction } from "../../core/transaction/domain/Transaction";
 import { TransactionRepository } from "../../core/transaction/domain/TransactionRepository";
 import { TransactionPrismaRepository } from "../../core/transaction/infrastructure/TransactionPrismaRepository";
-import { Decimal } from "@prisma/client/runtime/library";
+import { Prisma } from "../../generated/prisma/client";
+const Decimal = Prisma.Decimal;
 
 describe("Transaction Prisma Repository", () => {
     let repository: TransactionRepository;
 
     beforeEach(() => {
-        repository = new TransactionPrismaRepository(prismaMock);
+        repository = new TransactionPrismaRepository(prismaMock, mockTranslator);
     });
 
     it("Should add a transaction.", async () => {
@@ -23,7 +25,7 @@ describe("Transaction Prisma Repository", () => {
         const category = "Savings";
         const description = "Testing with Jest";
         
-        const transaction = new Transaction(date, type, account, value, 
+        const transaction = new Transaction(mockTranslator, date, type, account, value, 
             id, idUser, 
             category, description);
 
@@ -53,7 +55,7 @@ describe("Transaction Prisma Repository", () => {
         const category = "Savings";
         const description = "Testing with Jest";
         
-        const transaction = new Transaction(date, type, account, value, 
+        const transaction = new Transaction(mockTranslator, date, type, account, value, 
             id, idUser, 
             category, description);
 
@@ -105,7 +107,7 @@ describe("Transaction Prisma Repository", () => {
         const category = "Savings";
         const description = "Testing with Jest";
         
-        const transaction = new Transaction(date, type, account, value, 
+        const transaction = new Transaction(mockTranslator, date, type, account, value, 
             id, idUser, 
             category, description);
 
@@ -153,10 +155,10 @@ describe("Transaction Prisma Repository", () => {
         const result = await repository.getList(idUser);
 
         expect(result.list).toEqual([
-            new Transaction(new Date(2025, 8, 12), true, "Bank", 
+            new Transaction(mockTranslator, new Date(2025, 8, 12), true, "Bank", 
                 25.3, "4d511d6e-ea14-4b9b-a40b-b63231e6bb911", idUser, 
                 "Groceries"),
-            new Transaction(new Date(2025, 8, 13), false, "Cash", 
+            new Transaction(mockTranslator, new Date(2025, 8, 13), false, "Cash", 
                 12.99, "c40b4cff-407b-4d43-80b4-e885de34ac97", idUser, 
                 "Utilities", "Movies and musics"),
         ]);

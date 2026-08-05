@@ -10,26 +10,22 @@ const title = Astro.props?.title ?? t("shared.warning");
 ---
 
 <Base id="prompt" title={title}>
-    <section class="modal-card-body">
-        <div class="field">
-            <label id="promptMessage" class="label" />
-            <div class="control">
-                <input id="promptInput" class="input" type="text" />
-            </div>
-            <p id="promptSpan" class="help is-danger" style="display: none;" />
-        </div>
-    </section>
-    <footer class="modal-card-foot" style="gap: 0.5rem;">
-        <button id="promptCancel" class="button is-danger is-fullwidth">{t("shared.cancel")}</button>
-        <button id="promptAccept" class="button is-primary is-fullwidth">{t("shared.accept")}</button>
-    </footer>
+    <div class="modal-body">
+        <label id="promptMessage" />
+        <input id="promptInput" class="input" type="text" />
+        <p id="promptSpan" class="help" />
+    </div>
+    <div class="modal-footer">
+        <button id="promptCancel" class="btn-danger">{t("shared.cancel")}</button>
+        <button id="promptAccept" class="btn-primary">{t("shared.accept")}</button>
+    </div>
 </Base>
 
 <script>
     import { t } from "../../core/shared/infrastructure/i18n";
 
     const modal = document.getElementById("prompt") as HTMLDivElement;
-    const modalClose = modal.querySelector('.delete') as HTMLButtonElement;
+    const modalClose = modal.querySelector('.modal-close') as HTMLButtonElement;
     const modalMessage = document.getElementById("promptMessage") as HTMLParagraphElement;
     const modalInput = document.getElementById("promptInput") as HTMLInputElement;
     const modalSpan = document.getElementById("promptSpan") as HTMLParagraphElement;
@@ -42,9 +38,9 @@ const title = Astro.props?.title ?? t("shared.warning");
         acceptAction?: (value: string) => void, 
         cancelAction?: () => void) => {
         if (modalMessage) modalMessage.innerHTML = message;
-        if (modal!.querySelector('.modal-card-title')) {
+        if (modal!.querySelector('.modal-header h3')) {
             const tTitle = (title === "Warning") ? t("shared.warning") : title;
-            modal!.querySelector('.modal-card-title')!.textContent = tTitle;
+            modal!.querySelector('.modal-header h3')!.textContent = tTitle;
         }
         modal!.classList.add('is-active');
 

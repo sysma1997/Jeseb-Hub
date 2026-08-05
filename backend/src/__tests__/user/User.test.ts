@@ -4,6 +4,7 @@ import dayjsUtc from "dayjs/plugin/utc";
 
 import { User } from "../../core/user/domain/User";
 import type { UserDto } from "../../core/user/domain/User";
+import { mockTranslator } from "../shared/TranslatorMock";
 
 dayjs.extend(dayjsUtc);
 
@@ -15,7 +16,7 @@ describe("User domain", () => {
         const password = "a34319cdf06c3077003ea8b46ca04ee756b6ee91023d91924e8e4bd50c93c722";
         const createAt = new Date(2025, 8, 12);
 
-        const user = new User(name, email, password, createAt, id);
+        const user = new User(mockTranslator, name, email, password, createAt, id);
 
         expect(user.id).toBe(id);
         expect(user.name).toBe(name);
@@ -30,7 +31,7 @@ describe("User domain", () => {
         const password = "a34319cdf06c3077003ea8b46ca04ee756b6ee91023d91924e8e4bd50c93c722";
         const createAt = new Date(2025, 8, 12);
 
-        const user = new User(name, email, password, createAt, id);
+        const user = new User(mockTranslator, name, email, password, createAt, id);
         const dto: UserDto = user.toDto();
 
         expect(dto.id).toBe(id);
@@ -46,7 +47,7 @@ describe("User domain", () => {
         const password = "a34319cdf06c3077003ea8b46ca04ee756b6ee91023d91924e8e4bd50c93c722";
         const createAt = new Date(2025, 8, 12);
 
-        const user = new User(name, email, password, createAt, id);
+        const user = new User(mockTranslator, name, email, password, createAt, id);
         const dto: UserDto = user.toDto(true);
 
         expect(dto.id).toBe(id);
@@ -61,13 +62,13 @@ describe("User domain", () => {
         const password = "a34319cdf06c3077003ea8b46ca04ee756b6ee91023d91924e8e4bd50c93c722";
         const createAt = new Date(2025, 8, 12);
         
-        expect(() => new User(name, "invalid-email", password, createAt)).toThrow("The 'invalid-email' is not a valid email.");
+        expect(() => new User(mockTranslator, name, "invalid-email", password, createAt)).toThrow("The 'invalid-email' is not a valid email.");
     });
     it("Should throw an error when creating a user with invalid password.", () => {
         const name = "John Doe";
         const email = "emailValid1@gmail.com";
         const createAt = new Date(2025, 8, 12);
 
-        expect(() => new User(name, email, "invalid-password", createAt)).toThrow("The password is not valid, please check that it is in SHA256.");
+        expect(() => new User(mockTranslator, name, email, "invalid-password", createAt)).toThrow("The password is not valid, please check that it is in SHA256.");
     });
 });

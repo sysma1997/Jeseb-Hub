@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import dayjsUtc from "dayjs/plugin/utc";
 
 import { Transaction } from "../../core/transaction/domain/Transaction";
+import { mockTranslator } from "../shared/TranslatorMock";
 
 dayjs.extend(dayjsUtc);
 
@@ -17,7 +18,7 @@ describe("Transaction Domain", () => {
         const category = "Savings";
         const description = "Testing with Jest";
 
-        const transaction = new Transaction(date, type, account, value, 
+        const transaction = new Transaction(mockTranslator, date, type, account, value, 
             id, idUser, 
             category, description);
 
@@ -36,13 +37,13 @@ describe("Transaction Domain", () => {
         const type = true;
         const value = 12.57;
 
-        expect(() => new Transaction(date, type, "", value)).toThrow("The account for transaction is required.");
+        expect(() => new Transaction(mockTranslator, date, type, "", value)).toThrow("The account for transaction is required.");
     });
     it("Should throw an error when creating transaction with negative value.", () => {
         const date = new Date(2025, 8, 12);
         const type = true;
         const account = "Bank";
 
-        expect(() => new Transaction(date, type, account, -4.88)).toThrow("The value must be greater than 0.");
+        expect(() => new Transaction(mockTranslator, date, type, account, -4.88)).toThrow("The value must be greater than 0.");
     });
 });

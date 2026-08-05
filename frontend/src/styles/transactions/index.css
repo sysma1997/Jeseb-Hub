@@ -1,65 +1,83 @@
 @import "bulma/css/bulma.min.css";
 @import url("../shared/global.css");
 
-.transactions {
-    padding: 2rem;
-
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+:root[data-theme="light"] {
+    --txn-row-color: #e0e0e0;
 }
-.transactions .transactionsContent {
-    width: 90%;
+:root[data-theme="dark"] {
+    --txn-row-color: #192336;
+}
 
+.transactions {
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.transactionsContent {
+    width: 100%;
+    max-width: 800px;
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
-.transactions .transactionsContent #dSTags {
-    display: flex; 
-    gap: 0.5rem;
+.transactionsTitle {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--global-text);
 }
-.transactions .transactionsContent .summary {
+
+.transactionsTags {
     display: flex;
-    flex-direction: row;
+    flex-wrap: wrap;
     gap: 0.5rem;
 }
-.transactions .transactionsContent .summary .box {
+.transactionsTags .tag {
+    margin: 0;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    background: var(--global-accent);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    height: auto;
+    border: none;
+}
+
+.summary {
+    display: flex;
+    gap: 0.5rem;
+}
+.summaryCard {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    flex: 1;
+    gap: 0.25rem;
+    padding: 0.75rem 1rem;
+    background: var(--global-bg);
+    border: var(--global-border);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+.summaryCard-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--global-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+.summaryCard-value {
+    font-size: 1.15rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--global-text);
+    text-align: right;
 }
 
-#sMAT4 .item, 
-#modalTransaction .item {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-@media screen and (max-width: 1024px) {
-    .transactions {
-        padding: 1rem;
-    }
-    .transactions .transactionsContent {
-        width: 100%;
-
+@media screen and (max-width: 480px) {
+    .summary {
         flex-direction: column;
-        align-items: center;
-    }
-
-    .transactions .transactionsContent #pSTitle {
-        width: 100%;
-    }
-    .transactions .transactionsContent #dSTags {
-        width: 100%;
-        overflow: auto;
-    }
-    
-    .transactions .transactionsContent .summary {
-        width: 100%;
-        overflow: auto;
     }
 }

@@ -29,6 +29,14 @@ export const TransactionListMini = () => {
         <span>Loading...</span>
     </div>;
 
+    if (transactions.length === 0) return <div className="transactions-empty">
+        <svg className="transactions-empty-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="2" y="3" width="20" height="18" rx="2"/>
+            <path d="M8 7h8M8 11h6M8 15h4"/>
+        </svg>
+        <span className="transactions-empty-text">{t("index.empty.transactions")}</span>
+    </div>;
+
     return <div className="transactions-table-wrapper-modern">
         <table className="transactions-table-modern">
             <thead>

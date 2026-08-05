@@ -131,62 +131,54 @@ export const List = () => {
         });
     };
 
-    return <div className="accountsList card">
-        <header className="card-header">
-            <h2 className="card-header-title">{t("account.title")}</h2>
-        </header>
-        <div className="card-content">
-            <div className="content">
-                <div className="field has-addons">
-                    <p className="control has-icons-left" style={{ flex: 1 }}>
-                        <input className="input" type="text" placeholder={t("account.search")} 
-                            value={search} onChange={e => setSearch(e.target.value)}
-                            onKeyDown={e => e.key == "Enter" && clickSearch()} />
-                        <span className="icon is-small is-left">
-                            <Icon icon="material-symbols:search" />
-                        </span>
-                    </p>
-                    <div className="control">
-                        <button className="button is-primary" onClick={clickSearch}>
-                            {t("shared.search")}
-                        </button>
-                    </div>
-                </div>
-                {(pagination.list.length === 0) && <p className="noContent">{t("account.noItems")}</p>}
-                {(pagination.list.length > 0) && <>
-                    <div className="table-container">
-                        <table className="table is-fullwidth is-bordered is-hoverable">
-                            <thead>
-                                <tr>
-                                    <th className="fiftyPercent">{t("shared.name")}</th>
-                                    <th className="fiftyPercent">{t("shared.balance")}</th>
-                                    <th>{t("shared.edit")}</th>
-                                    <th>{t("shared.remove")}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {pagination.list.map((account: Account) => <tr key={account.id}>
-                                    <th>{account.name}</th>
-                                    <td className="has-text-right">{FormatNumber(account.balance)}</td>
-                                    <td><button className="button is-primary" 
-                                        onClick={() => clickUpdate(account)}>
-                                        <Icon icon="material-symbols:edit-rounded" />
-                                    </button></td>
-                                    <td><button className="button is-danger" 
-                                        onClick={() => clickDelete(account.id!, account.name)}>
-                                        <Icon icon="solar:trash-bin-2-bold" />
-                                    </button></td>
-                                </tr>)}
-                                <tr>
-                                    <th>{t("account.total")}</th>
-                                    <td className="has-text-right">{FormatNumber(total)}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <CPagination updatePages={pagination.pages} onChange={onChangePagination} />
-                </>}
+    return <div className="accountsCard">
+        <div className="accountsCard-header">{t("account.title")}</div>
+        <div className="accountsCard-content">
+            <div className="accountsSearch">
+                <input className="accountsSearch-input" type="text" placeholder={t("account.search")}
+                    value={search} onChange={e => setSearch(e.target.value)}
+                    onKeyDown={e => e.key == "Enter" && clickSearch()} />
+                <button className="accountsSearch-button" onClick={clickSearch}>
+                    {t("shared.search")}
+                </button>
             </div>
+            {(pagination.list.length === 0) && <div className="accountsEmpty">{t("account.noItems")}</div>}
+            {(pagination.list.length > 0) && <>
+                <table className="accountsTable">
+                    <thead>
+                        <tr>
+                            <th>{t("shared.name")}</th>
+                            <th>{t("shared.balance")}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {pagination.list.map((account: Account) => <tr key={account.id} className="accountsRow">
+                            <td className="accountsName">{account.name}</td>
+                            <td className="accountsBalance accountsRow-balance">
+                                <span className="accountsRow-balance-label">{t("shared.balance")}</span>
+                                <span className="accountsRow-balance-value">{FormatNumber(account.balance)}</span>
+                            </td>
+                            <td className="accountsActions-cell">
+                                <div className="accountsActions">
+                                    <button className="edit" onClick={() => clickUpdate(account)}>
+                                        <Icon icon="material-symbols:edit-rounded" />
+                                    </button>
+                                    <button className="btnDelete" onClick={() => clickDelete(account.id!, account.name)}>
+                                        <Icon icon="solar:trash-bin-2-bold" />
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>)}
+                        <tr className="accountsTotal">
+                            <th>{t("account.total")}</th>
+                            <td className="accountsTotal-value">{FormatNumber(total)}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <CPagination updatePages={pagination.pages} onChange={onChangePagination} />
+            </>}
         </div>
     </div>;
 };

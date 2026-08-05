@@ -8,7 +8,7 @@ const updatePassword = document.getElementById("btnSUpdatePassword") as HTMLButt
 const updateTwoStep = document.getElementById("btnSUpdateTwoStep") as HTMLButtonElement;
 
 const modalUpdatePassword = document.getElementById("mUpdatePassword") as HTMLDivElement;
-const mupClose = modalUpdatePassword.querySelector('.delete') as HTMLButtonElement;
+const mupClose = modalUpdatePassword.querySelector('.modal-close') as HTMLButtonElement;
 const mupCurrentPassword = document.getElementById("iMUPCurrentPassword") as HTMLInputElement;
 const mupNewPassword = document.getElementById("iMUPNewPassword") as HTMLInputElement;
 const mupConfirmPassword = document.getElementById("iMUPConfirmPassword") as HTMLInputElement;
@@ -16,7 +16,7 @@ const mupCancel = document.getElementById("btnMUPCancel") as HTMLButtonElement;
 const mupAccept = document.getElementById("btnMUPAccept") as HTMLButtonElement;
 
 const modalUpdateTwoStep = document.getElementById("mUpdateTwoStep") as HTMLDivElement;
-const mutsClose = modalUpdateTwoStep.querySelector('.delete') as HTMLButtonElement;
+const mutsClose = modalUpdateTwoStep.querySelector('.modal-close') as HTMLButtonElement;
 const mutsActive = document.getElementById("iMUTSActive") as HTMLInputElement;
 const mutsType = document.getElementById("sMUTSType") as HTMLSelectElement;
 const mutsCancel = document.getElementById("btnMUTSCancel") as HTMLButtonElement;

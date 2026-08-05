@@ -90,7 +90,8 @@ services:
 
 networks:
   jeseb-network:
-    driver: bridge
+    external: true
+    name: postgres_sysmacloud_net
 
 volumes:
   uploads:

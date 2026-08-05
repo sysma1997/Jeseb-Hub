@@ -2,29 +2,12 @@
 @import url("../shared/global.css");
 
 .accounts {
-    padding: 2rem;
-
+    padding: 1rem;
     display: flex;
-    flex-direction: row;
     justify-content: center;
-    align-items: center;
-}
-.accounts .accountsContent {
-    width: 90%;
-
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
 }
 
-@media screen and (max-width: 1024px) {
-    .accounts {
-        padding: 1rem;
-    }
-    .accounts .accountsContent {
-        width: 100%;
-
-        flex-direction: column;
-        align-items: center;
-    }
+.accountsContent {
+    width: 100%;
+    max-width: 800px;
 }

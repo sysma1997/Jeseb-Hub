@@ -2,19 +2,23 @@
 const { id, title } = Astro.props;
 ---
 
-<div id={id} class="modal">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-        <header class="modal-card-head" style="box-shadow: none;">
-            <p class="modal-card-title">{title}</p>
-            <button class="delete" aria-label="close"></button>
-        </header>
+<div id={id} class="modal-overlay">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3>{title}</h3>
+            <button class="modal-close" aria-label="close">&times;</button>
+        </div>
         <slot />
     </div>
 </div>
+
+<style is:global>
+    @import "../../styles/shared/modal.css";
+</style>
+
 <script define:vars={{ id }}>
     const modal = document.getElementById(id);
-    const btnClose = modal.querySelector('.delete');
+    const btnClose = modal.querySelector('.modal-close');
 
     btnClose.onclick = () => modal.classList.remove('is-active');
 </script>
