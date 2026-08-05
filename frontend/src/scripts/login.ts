@@ -16,7 +16,7 @@ const password = document.getElementById("inPassword") as HTMLInputElement;
 const login = document.getElementById("btnLogin") as HTMLButtonElement;
 
 const modalTwoStep = document.getElementById("mTwoStep") as HTMLDivElement;
-const mtsClose = modalTwoStep.querySelector(".delete") as HTMLButtonElement;
+const mtsClose = modalTwoStep.querySelector(".modal-close") as HTMLButtonElement;
 const mtsMessage = document.getElementById("mtsMessage") as HTMLLabelElement;
 const mtsCode = document.getElementById("iMTSCode") as HTMLInputElement;
 const mtsCancel = document.getElementById("btnMTSCancel") as HTMLButtonElement;

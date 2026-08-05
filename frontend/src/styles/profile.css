@@ -1,4 +1,4 @@
-@import "bulma/css/bulma.min.css";
+@import url("./shared/base.css");
 @import url("./shared/global.css");
 
 .profile {
@@ -15,30 +15,33 @@
     gap: 1rem;
 }
 
+/* ---------- Sidebar menu ---------- */
 .profileSidebar {
-    width: 260px;
+    width: 250px;
     flex-shrink: 0;
+    position: sticky;
+    top: 4.75rem;
 }
-
 .profileMenu {
     background: var(--global-bg);
     border: var(--global-border);
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    padding: 1rem;
+    border-radius: 14px;
+    box-shadow: var(--global-shadow);
+    padding: 0.6rem;
 }
 .profileMenu .menu-label {
-    margin: 0 0 0.75rem;
-    padding: 0;
+    margin: 0 0 0.6rem;
+    padding: 0.4rem 0.6rem 0;
     color: var(--global-text-muted);
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.06em;
 }
 .profileMenu .menu-list {
     list-style: none;
     margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
@@ -47,29 +50,39 @@
     margin: 0;
 }
 .profileMenu .menu-item {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    padding: 0.6rem 0.75rem;
+    gap: 0.7rem;
+    padding: 0.7rem 0.8rem;
     border-radius: 10px;
     color: var(--global-text);
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     font-weight: 500;
     text-decoration: none;
     cursor: pointer;
-    transition: background 0.2s, color 0.2s;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.profileMenu .menu-item svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
 }
 .profileMenu .menu-item:hover {
-    background: rgba(0, 0, 0, 0.04);
+    background: var(--global-hover);
+    color: var(--global-accent);
 }
 .profileMenu .menu-item.is-active {
-    background: var(--global-accent);
-    color: #fff;
+    background: rgba(0, 209, 178, 0.12);
+    color: var(--global-accent);
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 var(--global-accent);
 }
 .profileMenu .menu-item label {
     cursor: pointer;
 }
 
+/* ---------- Content cards ---------- */
 #dItems {
     flex: 1;
     min-width: 0;
@@ -77,146 +90,248 @@
 #dItems .card {
     background: var(--global-bg);
     border: var(--global-border);
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border-radius: 14px;
+    box-shadow: var(--global-shadow);
     overflow: hidden;
 }
 #dItems .card .card-content {
-    padding: 1.25rem;
-}
-#dItems .card .content {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    padding: 1.5rem;
 }
 
-#dItems .field {
+/* ---------- Profile hero ---------- */
+.profileHero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.25rem;
+    border-bottom: var(--global-border);
+}
+.profileAvatar {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00d1b2, #0891b2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 0 0 4px var(--global-bg), 0 4px 18px rgba(0, 209, 178, 0.25);
+}
+.profileAvatar #iIPIcon {
+    width: 52px;
+    height: 52px;
+    display: block;
+}
+.profileAvatar #iIPPhoto {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: none;
+}
+.profileAvatar #btnIPPhotoEdit {
+    position: absolute;
+    right: -2px;
+    bottom: -2px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 3px solid var(--global-bg);
+    background: var(--global-accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+}
+.profileAvatar #btnIPPhotoEdit:hover {
+    opacity: 0.85;
+    transform: scale(1.08);
+}
+.profileAvatar #btnIPPhotoEdit svg {
+    width: 16px;
+    height: 16px;
+}
+.profileHeroName {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--global-text);
+}
+.profileEmailRow {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--global-text-muted);
+    font-size: 0.9rem;
+}
+.profileEmailRow-icon {
+    display: inline-flex;
+    align-items: center;
+}
+.profileEmailRow-icon svg {
+    width: 15px;
+    height: 15px;
+}
+.profileEmailRow #dIEEmail {
+    color: var(--global-text);
+    font-weight: 500;
+    word-break: break-all;
+}
+
+/* ---------- Edit forms ---------- */
+.profileForm .field {
+    margin-bottom: 0.85rem;
+}
+.profileForm .field:last-child {
     margin-bottom: 0;
 }
-#dItems .label {
-    margin: 0 0 0.4rem;
+.profileForm .label {
+    display: block;
+    margin: 0 0 0.35rem;
     color: var(--global-text);
     font-weight: 600;
     font-size: 0.9rem;
 }
-#dItems .control {
+.profileForm .control {
     width: 100%;
 }
-#dItems .input {
+.profileForm .input {
     width: 100%;
-    padding: 0.5rem 0.75rem;
-    border-radius: 8px;
-    border: 1px solid #e0e0e0;
+    padding: 0.6rem 0.85rem;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
     background: var(--global-bg);
     color: var(--global-text);
     font-size: 0.95rem;
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
-#dItems .input:focus {
+.profileForm .input:focus {
+    border-color: var(--global-accent);
+    box-shadow: 0 0 0 3px rgba(0, 209, 178, 0.15);
+}
+.profileForm .input::placeholder {
+    color: var(--global-text-muted);
+}
+.profileInlineControl {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+.profileInlineControl .input {
+    flex: 1;
+    min-width: 0;
+}
+.profileFormActions {
+    display: flex;
+    gap: 0.5rem;
+}
+.profileFormActions button {
+    flex: 1;
+}
+
+/* ---------- Outline action buttons ---------- */
+.profileActions {
+    display: flex;
+    gap: 0.75rem;
+}
+.btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex: 1;
+    padding: 0.6rem 1rem;
+    border-radius: 10px;
+    border: 1.5px solid rgba(0, 209, 178, 0.35);
+    background: transparent;
+    color: var(--global-accent);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+.btn-outline:hover {
+    background: rgba(0, 209, 178, 0.08);
     border-color: var(--global-accent);
 }
-#dItems .input::placeholder {
-    color: var(--global-text-muted);
+.btn-outline svg {
+    width: 17px;
+    height: 17px;
 }
 
-#dInformation #dInformationEditName,
-#dInformation #dInformationEditEmail {
-    display: none;
-}
-
-#dInformation .dInformationPhoto {
+/* ---------- Meta footer ---------- */
+.profileMeta {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem 1.5rem;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: var(--global-border);
 }
-#dInformation .dInformationPhoto .dInformationPhotoProfile {
-    position: relative;
-}
-#dInformation .dInformationPhoto #iIPPhoto,
-#dInformation .dInformationPhoto #iIPIcon {
-    background-color: var(--global-accent);
-    border-radius: 50%;
-    object-fit: cover;
-    width: 120px;
-    height: 120px;
-}
-#dInformation .dInformationPhoto #btnIPPhotoEdit {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    width: 36px;
-    height: 36px;
-    font-size: 1rem;
-    border-radius: 50%;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-}
-#dInformation .dInformationPhoto #lIPName {
-    margin: 0.75rem 0 0;
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--global-text);
-}
-
-#dInformation .dInformationElement {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1rem;
-    background: rgba(0, 0, 0, 0.02);
-    border: var(--global-border);
-    border-radius: 10px;
-}
-#dInformation .dInformationElement label {
-    margin: 0;
-}
-#dInformation .dInformationElement label b {
-    font-weight: 600;
-    color: var(--global-text-muted);
-    font-size: 0.85rem;
-}
-#dInformation .dInformationElement #dIEEmail {
-    font-weight: 600;
-    color: var(--global-text);
-    font-size: 0.95rem;
-    text-align: right;
-    word-break: break-all;
-}
-
-#dInformationOptions {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-#dInformationOptions .btn-primary {
-    width: 100%;
-}
-
-#dInformation #sICreatedAt,
-#dInformation #sILastUpdate {
+.profileMeta span {
     font-size: 0.8rem;
     color: var(--global-text-muted);
 }
 
-#dItems .card .option {
+/* ---------- Settings rows ---------- */
+.settingRow {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0;
+    gap: 1rem;
+    padding: 1rem 0;
     border-bottom: var(--global-border);
 }
-#dItems .card .option:last-of-type {
+.settingRow:last-child {
     border-bottom: none;
 }
-#dItems .card .option .label {
-    margin: 0;
+.settingIcon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 209, 178, 0.1);
+    color: var(--global-accent);
+}
+.settingIcon svg {
+    width: 22px;
+    height: 22px;
+}
+.settingInfo {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+.settingTitle {
+    font-size: 0.95rem;
+    font-weight: 600;
     color: var(--global-text);
 }
+.settingDesc {
+    font-size: 0.8rem;
+    color: var(--global-text-muted);
+}
+.settingRow-danger .settingIcon {
+    background: rgba(255, 56, 96, 0.1);
+    color: #ff3860;
+}
 
+/* ---------- Progress ---------- */
 #pDProgress {
     width: 100%;
     height: 8px;
@@ -224,21 +339,22 @@
     overflow: hidden;
     background: rgba(0, 0, 0, 0.08);
     border: none;
-    margin: 0;
+    margin: 0.5rem 0 0;
 }
 #pDProgress::-webkit-progress-bar {
     background: rgba(0, 0, 0, 0.08);
     border-radius: 999px;
 }
 #pDProgress::-webkit-progress-value {
-    background: var(--global-accent);
+    background: linear-gradient(90deg, #00d1b2, #0891b2);
     border-radius: 999px;
 }
 #pDProgress::-moz-progress-bar {
-    background: var(--global-accent);
+    background: linear-gradient(90deg, #00d1b2, #0891b2);
     border-radius: 999px;
 }
 
+/* ---------- Responsive ---------- */
 @media screen and (max-width: 1024px) {
     .profile-content {
         flex-direction: column;
@@ -246,6 +362,10 @@
     }
     .profileSidebar {
         width: 100%;
+        position: static;
+    }
+    .profileMenu .menu-label {
+        display: none;
     }
     .profileMenu .menu-list {
         flex-direction: row;
@@ -254,5 +374,21 @@
     }
     .profileMenu .menu-item {
         white-space: nowrap;
+    }
+}
+
+@media screen and (max-width: 560px) {
+    #dItems .card .card-content {
+        padding: 1rem;
+    }
+    .profileActions {
+        flex-direction: column;
+    }
+    .settingRow {
+        flex-wrap: wrap;
+    }
+    .settingRow .btn-primary,
+    .settingRow .btn-danger {
+        width: 100%;
     }
 }

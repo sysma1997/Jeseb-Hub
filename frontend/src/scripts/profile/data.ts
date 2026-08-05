@@ -180,7 +180,7 @@ export const setup = (userRepository: UserRepository, transactionRepository: Tra
     };
 
     DeleteAllData.onclick = () => {
-        window.showConfirm("Delete all data? This action cannot be reversed", "Delete", async () => {
+        window.showConfirm(t("profile.data.deleteAll.confirm"), t("profile.data.deleteAll.title"), async () => {
             const result = await userRepository.deleteAllData();
             window.showAlert(result);
         });

@@ -154,28 +154,48 @@
     }
 
     .transactionRow {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
         align-items: center;
         padding: 0.75rem;
         border: 1px solid var(--txn-row-color);
         border-radius: 10px;
     }
     .transactionRow .transactionAccount {
-        order: 1;
+        order: 0;
         flex: 1;
         min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-right: 0.5rem;
     }
     .transactionRow .transactionOptions {
-        order: 2;
+        order: 1;
+        flex: none;
     }
     .transactionRow .transactionDate {
-        order: 3;
+        order: 2;
         flex: 1;
-        margin-top: 0.4rem;
+        min-width: 0;
+        margin-top: 0.6rem;
+        padding-top: 0.6rem;
+        border-top: 1px dashed var(--txn-row-color);
+        font-size: 0.8rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 2rem;
     }
     .transactionRow .transactionValue {
-        order: 4;
-        margin-top: 0.4rem;
+        order: 3;
+        flex: none;
+        margin-top: 0.6rem;
+        padding-top: 0.6rem;
+        border-top: 1px dashed var(--txn-row-color);
+        font-size: 1.05rem;
+        white-space: nowrap;
+        height: 2rem;
+        text-align: right;
     }
 }

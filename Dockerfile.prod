@@ -3,6 +3,12 @@ WORKDIR /usr/local/app
 
 FROM base AS backend-build
 COPY backend/. ./
+COPY .git .git
+RUN apk add --no-cache git && \
+    printf '{"version":"%s","commit":"%s"}' \
+        "$(git describe --tags --always --dirty | sed 's/^v//')" \
+        "$(git rev-parse --short HEAD)" > /usr/local/app/version.json && \
+    apk del git && rm -rf .git
 RUN mkdir -p /usr/local/app/uploads
 RUN npm install
 RUN DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy" npx prisma generate
@@ -15,6 +21,7 @@ COPY --from=backend-build /usr/local/app/node_modules ./node_modules
 COPY --from=backend-build /usr/local/app/package*.json ./
 COPY --from=backend-build /usr/local/app/prisma ./prisma
 COPY --from=backend-build /usr/local/app/prisma.config.ts ./
+COPY --from=backend-build /usr/local/app/version.json ./version.json
 RUN mkdir -p /usr/local/app/uploads
 CMD ["sh", "-c", "npx prisma migrate deploy && npm run start"]
 

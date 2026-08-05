@@ -26,6 +26,7 @@ import { CategoryController } from "./core/category/infrastructure/CategoryContr
 
 import { TranslatorRepository } from "./core/shared/domain/TranslatorRepository";
 import { TranslatorI18nRepository } from "./core/shared/infrastructure/i18next/index";
+import { APP_VERSION } from "./version";
 
 const PORT = process.env.PORT ?? 3000;
 const FRONTEND_URL = (process.env.FRONTEND_URL) ? 
@@ -78,7 +79,11 @@ app.use(express.urlencoded({ limit: "5mb", extended: true }));
 app.use("/uploads", express.static("uploads"));
 
 app.get("/", (_, res) => {
-    res.send("Jeseb Api: v1.1.1");
+    res.send(`Jeseb Api: v${APP_VERSION.version}${APP_VERSION.commit ? ` (${APP_VERSION.commit})` : ""}`);
+});
+
+app.get("/api/version", (_, res) => {
+    res.json(APP_VERSION);
 });
 
 app.use("/api/user", userController.getRouter());
@@ -96,6 +101,7 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 });
 
 app.listen(PORT, () => {
+    console.log(`Jeseb Api: v${APP_VERSION.version}${APP_VERSION.commit ? ` (${APP_VERSION.commit})` : ""}`);
     console.log(`Listen to port: ${PORT}`);
     console.log(`CORS Allowed Origins: ${allowedOrigins.join(", ")}`);
 });

@@ -6,6 +6,7 @@
     --global-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     --global-hover: #f0fdfa;
     --global-accent: #00d1b2;
+    --global-page-bg: #ffffff;
 }
 
 :root[data-theme="dark"] {
@@ -16,4 +17,5 @@
     --global-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     --global-hover: #1e293b;
     --global-accent: #00d1b2;
+    --global-page-bg: #0b1220;
 }

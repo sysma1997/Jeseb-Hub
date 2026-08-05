@@ -1,0 +1,107 @@
+:root[data-theme="light"] {
+    --dropdown-is-active-background: #effcfa;
+    --dropdown-is-active-color: #00d1b2;
+    --dropdown-is-active-border: #00d1b2;
+}
+:root[data-theme="dark"] {
+    --dropdown-is-active-background: #0f1729;
+    --dropdown-is-active-color: #00d1b2;
+    --dropdown-is-active-border: #00d1b2;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-trigger {
+    display: inline-flex;
+}
+
+.dropdown-trigger .button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.75rem;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    color: var(--global-text);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+.dropdown-trigger .button:hover {
+    background: var(--global-hover);
+    color: var(--global-accent);
+}
+
+.dropdown .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.dropdown .icon svg {
+    width: 20px;
+    height: 20px;
+}
+.dropdown .icon.is-small svg {
+    width: 14px;
+    height: 14px;
+}
+.dropdown .text {
+    white-space: nowrap;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 0.5rem;
+    min-width: 170px;
+    z-index: 50;
+}
+#dOptions .dropdown-menu {
+    left: auto;
+    right: 0;
+}
+.dropdown.is-active .dropdown-menu {
+    display: block;
+}
+
+.dropdown-content {
+    background: var(--navbar-dropdown-bg, var(--global-bg));
+    border: var(--global-border);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 0.25rem;
+    overflow: hidden;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: 8px;
+    color: var(--global-text);
+    font-size: 0.875rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+.dropdown-item:hover {
+    background: var(--global-hover);
+    color: var(--global-accent);
+}
+.dropdown-item.is-active {
+    background-color: var(--dropdown-is-active-background);
+    color: var(--dropdown-is-active-color);
+    border-right: 3px solid var(--dropdown-is-active-border);
+}
+.dropdown-item .icon svg {
+    width: 18px;
+    height: 18px;
+}

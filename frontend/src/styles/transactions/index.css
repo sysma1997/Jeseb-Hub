@@ -1,4 +1,4 @@
-@import "bulma/css/bulma.min.css";
+@import url("../shared/base.css");
 @import url("../shared/global.css");
 
 :root[data-theme="light"] {
@@ -44,6 +44,8 @@
     font-weight: 600;
     height: auto;
     border: none;
+    display: inline-flex;
+    align-items: center;
 }
 
 .summary {
@@ -52,6 +54,7 @@
 }
 .summaryCard {
     flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
@@ -76,8 +79,12 @@
     text-align: right;
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 560px) {
     .summary {
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+    .summaryCard:last-child {
+        grid-column: 1 / -1;
     }
 }

@@ -204,16 +204,30 @@
             "active": "Activar", 
             "deactivate": "Desactivar", 
             "type": "Tipo", 
-            "confirm": "Luego podras {{value}} de nuevo."
+            "confirm": "Luego podras {{value}} de nuevo.",
+            "passwordDesc": "Cambia la contraseña de tu cuenta.",
+            "twoStepDesc": "Gestiona la verificación en dos pasos de tu cuenta."
         }, 
         "data": {
             "import": {
                 "title": "Importar desde archivo", 
-                "response": "Importación completada con éxito."
+                "response": "Importación completada con éxito.",
+                "desc": "Importa transacciones desde un archivo CSV."
             }, 
             "export": {
                 "title": "Exportar a un archivo", 
-                "confirm": "¿Exportar sus transacciones a un archivo CSV?"
+                "confirm": "¿Exportar sus transacciones a un archivo CSV?",
+                "desc": "Exporta todas tus transacciones a un archivo CSV."
+            }, 
+            "deleteAll": {
+                "title": "Eliminar todos los datos", 
+                "action": "Eliminar", 
+                "confirm": "¿Eliminar todos los datos? Esta acción no se puede deshacer.", 
+                "desc": "Elimina permanentemente todos tus datos."
+            }, 
+            "apiUrl": {
+                "title": "API del backend", 
+                "desc": "Muestra la URL de la API utilizada por esta aplicación."
             }, 
             "backendShow": "Mostrar", 
             "backend": "La URL actual de la API es: <a href=\"{{url}}\" target=\"_blank\">{{url}}</a>"
