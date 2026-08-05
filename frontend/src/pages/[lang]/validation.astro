@@ -6,7 +6,7 @@ import Layout from "../../layouts/Layout.astro";
 import Options from "../../components/shared/Options.astro";
 import Form from "../../components/Form.astro";
 
-import "../../styles/validation.css";
+import "../../styles/shared/auth.css";
 
 export const getStaticPaths = (() => {
     return [
@@ -21,8 +21,8 @@ const t = createTranslations(locale);
 
 <Layout locale={locale} title={t("validation.title")}>
     <Options locale={locale} />
-    <div class="container">
-        <img id="icon" src="/favicon/icon.svg" alt="Jeseb Hub" />
+    <div class="auth-container">
+        <img id="icon" class="auth-logo" src="/favicon/icon.svg" alt="Jeseb Hub" />
         <script is:inline>
 			(function() {
 				const theme = localStorage.getItem('theme');
@@ -31,10 +31,8 @@ const t = createTranslations(locale);
 			})();
 		</script>
         <Form title={t("validation.title")}>
-            <div class="content">
-                <p id="pMessage">{t("validation.description")}</p>
-            </div>
-            <button id="btnValidating" class="button is-primary is-fullwidth is-loading" disabled>Login</button>
+            <p id="pMessage" class="auth-message">{t("validation.description")}</p>
+            <button id="btnValidating" class="btn btn-primary is-loading" disabled>Login</button>
         </Form>
     </div>
 

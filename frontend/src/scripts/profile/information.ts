@@ -114,7 +114,7 @@ export const setup = (user: User, repository: UserRepository) => {
     ienCancel.onclick = () => {
         informationEditName.style.display = "none";
         informationShow.style.display = "block";
-        informationOptions.style.display = "block";
+        informationOptions.style.display = "flex";
     };
     ienUpdate.onclick = () => {
         if (!ienInput.value) {
@@ -195,7 +195,7 @@ export const setup = (user: User, repository: UserRepository) => {
     ieeCancel.onclick = () => {
         informationEditEmail.style.display = "none";
         informationShow.style.display = "block";
-        informationOptions.style.display = "block";
+        informationOptions.style.display = "flex";
     };
     ieeUpdate.onclick = async () => {
         if (!ieeInput.value || !ieecvInput.value) {

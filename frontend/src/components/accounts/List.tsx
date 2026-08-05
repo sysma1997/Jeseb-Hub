@@ -148,7 +148,7 @@ export const List = () => {
                     <thead>
                         <tr>
                             <th>{t("shared.name")}</th>
-                            <th>{t("shared.balance")}</th>
+                            <th style={{ textAlign: "right" }}>{t("shared.balance")}</th>
                             <th></th>
                         </tr>
                     </thead>

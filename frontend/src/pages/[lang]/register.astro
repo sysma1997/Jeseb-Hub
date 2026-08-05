@@ -2,13 +2,15 @@
 import type { GetStaticPaths } from "astro";
 import { getLocaleFromUrl, createTranslations } from "../../core/shared/infrastructure/i18n/server";
 
+import { Icon } from "astro-icon/components";
+
 import Layout from "../../layouts/Layout.astro";
 import Options from "../../components/shared/Options.astro";
 
 import Form from "../../components/Form.astro";
 import Alert from "../../components/modals/Alert.astro";
 
-import "../../styles/register.css";
+import "../../styles/shared/auth.css";
 
 export const getStaticPaths = (() => {
 	return [
@@ -23,8 +25,8 @@ const t = createTranslations(locale);
 
 <Layout locale={locale} title={t("register.title")}>
     <Options locale={locale} />
-    <div class="container">
-        <img id="icon" src="/favicon/icon.svg" alt="Jeseb Hub" />
+    <div class="auth-container">
+        <img id="icon" class="auth-logo" src="/favicon/icon.svg" alt="Jeseb Hub" />
         <script is:inline>
 			(function() {
 				const theme = localStorage.getItem('theme');
@@ -33,40 +35,40 @@ const t = createTranslations(locale);
 			})();
 		</script>
         <Form title={t("register.title")}>
-            <div class="field">
-                <label class="label">{t("shared.name")}</label>
-                <div class="control">
-                    <input id="inName" class="input" type="text" />
+            <div class="form-field">
+                <label class="form-label" for="inName">{t("shared.name")}</label>
+                <div class="form-input-wrapper">
+                    <input id="inName" class="form-input" type="text" />
+                    <span class="form-input-icon"><Icon name="solar:user-bold" /></span>
                 </div>
             </div>
-            <div class="field">
-                <label class="label">{t("shared.email")}</label>
-                <div class="control">
-                    <input id="inEmail" class="input" type="email" />
+            <div class="form-field">
+                <label class="form-label" for="inEmail">{t("shared.email")}</label>
+                <div class="form-input-wrapper">
+                    <input id="inEmail" class="form-input" type="email" />
+                    <span class="form-input-icon"><Icon name="material-symbols:mail" /></span>
                 </div>
             </div>
-            <div class="field">
-                <label class="label">{t("shared.password")}</label>
-                <div class="control">
-                    <input id="inPassword" class="input" type="password" />
+            <div class="form-field">
+                <label class="form-label" for="inPassword">{t("shared.password")}</label>
+                <div class="form-input-wrapper">
+                    <input id="inPassword" class="form-input" type="password" />
+                    <span class="form-input-icon"><Icon name="solar:lock-password-bold" /></span>
                 </div>
             </div>
-            <div class="field">
-                <label class="label">{t("shared.passwordConfirm")}</label>
-                <div class="control">
-                    <input id="inConfirmPassword" class="input" type="password" />
+            <div class="form-field">
+                <label class="form-label" for="inConfirmPassword">{t("shared.passwordConfirm")}</label>
+                <div class="form-input-wrapper">
+                    <input id="inConfirmPassword" class="form-input" type="password" />
+                    <span class="form-input-icon"><Icon name="solar:lock-password-bold" /></span>
                 </div>
-            </div>
-            
-            <div class="info">
-                <label>{t("register.login.description")} <a href=`/${locale}/login`><b>{t("register.login.link")}</b></a>.</label>
             </div>
 
-            <div class="field">
-                <div class="control">
-                    <button id="btnRegister" class="button is-primary is-fullwidth">{t("register.register")}</button>
-                </div>
+            <div class="auth-info">
+                <span>{t("register.login.description")} <a href={`/${locale}/login`}><b>{t("register.login.link")}</b></a>.</span>
             </div>
+
+            <button id="btnRegister" class="btn btn-primary">{t("register.register")}</button>
         </Form>
     </div>
 

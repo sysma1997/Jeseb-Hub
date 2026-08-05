@@ -43,6 +43,7 @@ const hideAddButton = Astro.props?.hideAddButton || false;
             <Icon class="iIcon" name="solar:settings-bold" />
             <span><b>{t("shared.menu.settings")}</b></span>
         </a>
+        <span id="appVersion" class="sidebar-version"></span>
     </div>
     
     <button class="sidebar-toggle" id="sidebarToggle" aria-label="Colapsar sidebar">
@@ -126,6 +127,18 @@ const hideAddButton = Astro.props?.hideAddButton || false;
     if (addBtn) addBtn.onclick = () => Notify("sidebar:add");
     const mobileAddBtn = document.getElementById("sidebarAddMobile") as HTMLButtonElement | null;
     if (mobileAddBtn) mobileAddBtn.onclick = () => Notify("sidebar:add");
+
+    // Muestra la versión del proyecto obtenida de la API
+    import("../../core/shared/infrastructure/Api").then(({ Api }) => {
+        const versionEl = document.getElementById("appVersion");
+        if (!versionEl) return;
+        fetch(`${Api.BackendUrl}/version`)
+            .then((res) => (res.ok ? res.json() : Promise.reject(res.status)))
+            .then((data: any) => {
+                versionEl.textContent = `v${data.version}` + (data.commit ? ` · ${data.commit}` : "");
+            })
+            .catch(() => versionEl.remove());
+    });
     
     // Manejar resize: si pasamos de móvil a desktop, recargar lógica
     window.addEventListener("resize", () => {

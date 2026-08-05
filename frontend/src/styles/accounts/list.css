@@ -107,7 +107,7 @@
 }
 
 .accountsBalance {
-    text-align: right;
+    text-align: right !important;
     font-weight: 600;
     color: var(--global-text);
     font-variant-numeric: tabular-nums;

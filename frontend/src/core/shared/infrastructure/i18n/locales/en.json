@@ -204,16 +204,30 @@
             "active": "Activate", 
             "deactivate": "Deactivate", 
             "type": "Type", 
-            "confirm": "Then you can {{value}} it again."
+            "confirm": "Then you can {{value}} it again.",
+            "passwordDesc": "Change the password of your account.",
+            "twoStepDesc": "Manage two-step verification for your account."
         }, 
         "data": {
             "import": {
                 "title": "Import from file", 
-                "response": "Import completed successfully."
+                "response": "Import completed successfully.",
+                "desc": "Import transactions from a CSV file."
             }, 
             "export": {
                 "title": "Export to file", 
-                "confirm": "Do you want to export your transactions to a CSV file?"
+                "confirm": "Do you want to export your transactions to a CSV file?",
+                "desc": "Export all your transactions to a CSV file."
+            }, 
+            "deleteAll": {
+                "title": "Delete all data", 
+                "action": "Delete", 
+                "confirm": "Delete all data? This action cannot be reversed.", 
+                "desc": "Permanently remove all your data."
+            }, 
+            "apiUrl": {
+                "title": "Backend API", 
+                "desc": "View the API URL used by this application."
             }, 
             "backendShow": "Show", 
             "backend": "The current API url is: <a href=\"{{url}}\" target=\"_blank\">{{url}}</a>"

@@ -11,7 +11,7 @@ import Form from "../../components/Form.astro";
 import Base from "../../components/modals/Base.astro";
 import Alert from "../../components/modals/Alert.astro";
 
-import "../../styles/login.css";
+import "../../styles/shared/auth.css";
 
 export const getStaticPaths = (() => {
 	return [
@@ -26,8 +26,8 @@ const t = createTranslations(locale);
 
 <Layout locale={locale} title={t("login.title")}>
     <Options locale={locale} />
-    <div class="container">
-        <img id="icon" src="/favicon/icon.svg" alt="Jeseb Hub" />
+    <div class="auth-container">
+        <img id="icon" class="auth-logo" src="/favicon/icon.svg" alt="Jeseb Hub" />
         <script is:inline>
 			(function() {
 				const theme = localStorage.getItem('theme');
@@ -36,47 +36,43 @@ const t = createTranslations(locale);
 			})();
 		</script>
         <Form title={t("login.title")}>
-            <div class="field">
-                <label class="label">{t("shared.email")}</label>
-                <div class="control has-icons-left">
-                    <input id="inEmail" class="input" type="email" />
-                    <span class="icon is-small is-left"><Icon name="material-symbols:mail" /></span>
+            <div class="form-field">
+                <label class="form-label" for="inEmail">{t("shared.email")}</label>
+                <div class="form-input-wrapper">
+                    <input id="inEmail" class="form-input" type="email" />
+                    <span class="form-input-icon"><Icon name="material-symbols:mail" /></span>
                 </div>
             </div>
-            <div class="field">
-                <label class="label">{t("shared.password")}</label>
-                <div class="control has-icons-left">
-                    <input id="inPassword" class="input" type="password" />
-                    <span class="icon is-small is-left"><Icon name="solar:lock-password-bold" /></span>
+            <div class="form-field">
+                <label class="form-label" for="inPassword">{t("shared.password")}</label>
+                <div class="form-input-wrapper">
+                    <input id="inPassword" class="form-input" type="password" />
+                    <span class="form-input-icon"><Icon name="solar:lock-password-bold" /></span>
                 </div>
-            </div>
-            
-            <div class="info">
-                <label>{t("login.passwordRecovery.description")} <a href={`/${locale}/recover`}><b>{t("login.passwordRecovery.link")}</b></a>.</label>
-                <label>{t("login.register.description")} <a href={`/${locale}/register`}><b>{t("login.register.link")}</b></a>.</label>
             </div>
 
-            <div class="field">
-                <div class="control">
-                    <button id="btnLogin" class="button is-primary is-fullwidth">{t("login.signIn")}</button>
-                </div>
+            <div class="auth-info">
+                <span>{t("login.passwordRecovery.description")} <a href={`/${locale}/recover`}><b>{t("login.passwordRecovery.link")}</b></a>.</span>
+                <span>{t("login.register.description")} <a href={`/${locale}/register`}><b>{t("login.register.link")}</b></a>.</span>
             </div>
+
+            <button id="btnLogin" class="btn btn-primary">{t("login.signIn")}</button>
         </Form>
     </div>
 
     <Base id="mTwoStep" title={t("shared.codeVerification")}>
-        <section class="modal-card-body">
+        <div class="modal-body">
             <div class="field">
                 <label id="mtsMessage" class="label">{t("shared.codeVerification")}</label>
                 <div class="control">
                     <input id="iMTSCode" class="input" type="number" />
                 </div>
             </div>
-        </section>
-        <footer class="modal-card-foot" style="gap: 0.5rem;">
-            <button id="btnMTSCancel" class="button is-danger is-fullwidth">{t("shared.cancel")}</button>
-            <button id="btnMTSAccept" class="button is-primary is-fullwidth">{t("shared.accept")}</button>
-        </footer>
+        </div>
+        <div class="modal-footer">
+            <button id="btnMTSCancel" class="btn-danger">{t("shared.cancel")}</button>
+            <button id="btnMTSAccept" class="btn-primary">{t("shared.accept")}</button>
+        </div>
     </Base>
     <Alert locale={locale} />
 

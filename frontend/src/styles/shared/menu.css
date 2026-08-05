@@ -71,6 +71,12 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+.menu-desktop .menu-item > .dropdown-menu,
+.menu-desktop .menu-item > .menu-dropdown {
+    left: auto;
+    right: 0;
+}
+
 .menu-item:hover .menu-dropdown {
     opacity: 1;
     visibility: visible;

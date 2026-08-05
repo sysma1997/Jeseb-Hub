@@ -142,7 +142,8 @@ export const List = () => {
                     <thead>
                         <tr>
                             <th style={{ width: "100%" }}>{t("shared.name")}</th>
-                            <th></th>
+                            <th />
+                            <th />
                         </tr>
                     </thead>
                     <tbody>
