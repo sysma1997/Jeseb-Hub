@@ -91,7 +91,7 @@ services:
 networks:
   jeseb-network:
     external: true
-    name: postgres_sysmacloud_net
+    name: ${POSTGRES_NETWORK}
 
 volumes:
   uploads:
