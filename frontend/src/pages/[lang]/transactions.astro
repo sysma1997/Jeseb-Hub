@@ -107,7 +107,7 @@ const t = createTranslations(locale);
 	</Base>
 	<Base id="modalAddTransaction" title={t("transactions.add")}>
 		<div class="modal-body">
-			<div class="field">
+			<div class="field" id="dMATOperation">
 				<label class="label">{t("transactions.operation")}:</label>
 				<div class="segment" id="gMATOperation">
 					<button type="button" id="btnMATOpTransaction" class="segment-btn is-active">{t("transactions.operationTransaction")}</button>
@@ -115,7 +115,7 @@ const t = createTranslations(locale);
 				</div>
 			</div>
 
-			<div class="field">
+			<div class="field" id="dMATAccount">
 				<label class="label">{t("transactions.account")}:</label>
 				<div class="control">
 					<div class="select is-fullwidth">
@@ -142,6 +142,7 @@ const t = createTranslations(locale);
 						<select id="sMATTo"></select>
 					</div>
 				</div>
+				<label id="lMATToBalance">{t("shared.balance")}: 0</label>
 			</div>
 
 			<div class="field" id="dMATType">

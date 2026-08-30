@@ -188,15 +188,17 @@ export const TransactionList = () => {
                             const neutralColor = "#7f8c8d";
                             return <tr key={transaction.id} className="transactionRow">
                             <td className="transactionAccount">
-                                {(transaction.isTransfer && counterpart)
-                                    ? `${transaction.account} → ${counterpart.account}`
-                                    : transaction.account}
+                                <div className="transactionAccountCell">
+                                    {transaction.isTransfer && <Icon icon="mdi:swap-horizontal" className="transferIcon" />}
+                                    <span className="transactionAccountName">
+                                        {(transaction.isTransfer && counterpart)
+                                            ? `${transaction.account} → ${counterpart.account}`
+                                            : transaction.account}
+                                    </span>
+                                </div>
                             </td>
                             <td className="transactionDate">
-                                <div className="transactionDateCell">
-                                    {dayjs.utc(transaction.date).format("DD/MM/YYYY HH:mm:ss")}
-                                    {transaction.isTransfer && <Icon icon="mdi:swap-horizontal" className="transferIcon" />}
-                                </div>
+                                {dayjs.utc(transaction.date).format("DD/MM/YYYY HH:mm:ss")}
                             </td>
                             <td className="transactionValue" style={{ color: (transaction.isTransfer) ? neutralColor : ((transaction.type) ? "#00d1b2" : "#ff3860") }}>
                                 {FormatNumber(transaction.value)}
