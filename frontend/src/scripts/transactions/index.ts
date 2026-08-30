@@ -44,13 +44,16 @@ const modalAddTransaction = document.getElementById("modalAddTransaction") as HT
 const matTitle = modalAddTransaction.querySelector(".modal-header h3") as HTMLHeadingElement;
 const matClose = modalAddTransaction.querySelector(".modal-close") as HTMLButtonElement;
 const matOperationGroup = document.getElementById("gMATOperation") as HTMLDivElement;
+const dmatOperation = document.getElementById("dMATOperation") as HTMLDivElement;
 const matOpTransaction = document.getElementById("btnMATOpTransaction") as HTMLButtonElement;
 const matOpTransfer = document.getElementById("btnMATOpTransfer") as HTMLButtonElement;
 const matAccount = document.getElementById("sMATAccount") as HTMLSelectElement;
+const dmatAccount = document.getElementById("dMATAccount") as HTMLDivElement;
 const matAccountBalance = document.getElementById("lMATAccountBalance") as HTMLLabelElement;
 const matFrom = document.getElementById("sMATFrom") as HTMLSelectElement;
 const matFromBalance = document.getElementById("lMATFromBalance") as HTMLLabelElement;
 const matTo = document.getElementById("sMATTo") as HTMLSelectElement;
+const matToBalance = document.getElementById("lMATToBalance") as HTMLLabelElement;
 const dmatFrom = document.getElementById("dMATFrom") as HTMLDivElement;
 const dmatTo = document.getElementById("dMATTo") as HTMLDivElement;
 const dmatType = document.getElementById("dMATType") as HTMLDivElement;
@@ -94,7 +97,13 @@ try {
         });
         matAccountBalance.innerText = `${t("shared.balance")}: ${FormatNumber(accounts[0].balance)}`;
         matFromBalance.innerText = `${t("shared.balance")}: ${FormatNumber(accounts[0].balance)}`;
-        if (accounts.length > 1) matTo.value = accounts[1].id!;
+        if (accounts.length > 1) {
+            matTo.value = accounts[1].id!;
+            matToBalance.innerText = `${t("shared.balance")}: ${FormatNumber(accounts[1].balance)}`;
+        }
+        else {
+            matToBalance.innerText = `${t("shared.balance")}: ${FormatNumber(accounts[0].balance)}`;
+        }
     });
     categoryRepository.getList().then((pagination: Pagination<Category>) => {
         categories = pagination.list;
@@ -131,6 +140,7 @@ const matSetOperation = (transfer: boolean) => {
 
     dmatFrom.style.display = (transfer) ? "block" : "none";
     dmatTo.style.display = (transfer) ? "block" : "none";
+    dmatAccount.style.display = (transfer) ? "none" : "block";
     dmatType.style.display = (transfer) ? "none" : "block";
     dmatCategory.style.display = (transfer) ? "none" : "block";
 };
@@ -143,14 +153,21 @@ const matReset = () => {
     matDescription.value = "";
     matSetType(true);
     matSetOperation(false);
-    matOperationGroup.style.display = "block";
+    matOperationGroup.style.display = "flex";
+    dmatOperation.style.display = "block";
     matDate.value = dayjs().format("YYYY-MM-DDTHH:mm");
     if (accounts.length > 0) {
         matAccount.value = accounts[0].id!;
         matAccountBalance.innerText = `${t("shared.balance")}: ${FormatNumber(accounts[0].balance)}`;
         matFrom.value = accounts[0].id!;
         matFromBalance.innerText = `${t("shared.balance")}: ${FormatNumber(accounts[0].balance)}`;
-        if (accounts.length > 1) matTo.value = accounts[1].id!;
+        if (accounts.length > 1) {
+            matTo.value = accounts[1].id!;
+            matToBalance.innerText = `${t("shared.balance")}: ${FormatNumber(accounts[1].balance)}`;
+        }
+        else {
+            matToBalance.innerText = `${t("shared.balance")}: ${FormatNumber(accounts[0].balance)}`;
+        }
     }
     if (categories.length > 0)
         matCategory.value = "";
@@ -183,6 +200,7 @@ const transactionShowUpdate = (_transaction: Transaction) => {
     matDate.value = dayjs(transaction.date).format("YYYY-MM-DDTHH:mm");
     matMessage.innerText = "";
     matSetOperation(false);
+    dmatOperation.style.display = "none";
     matOperationGroup.style.display = "none";
     
     modalAddTransaction.classList.add("is-active");
@@ -325,6 +343,12 @@ matFrom.onchange = (event: Event) => {
     const account: Account | undefined = accounts.find(a => a.id === id);
     if (!account) return;
     matFromBalance.innerText = `${t("shared.balance")}: ${FormatNumber(account.balance)}`;
+};
+matTo.onchange = (event: Event) => {
+    const id = (event.target as HTMLSelectElement).value;
+    const account: Account | undefined = accounts.find(a => a.id === id);
+    if (!account) return;
+    matToBalance.innerText = `${t("shared.balance")}: ${FormatNumber(account.balance)}`;
 };
 
 matCancel.onclick = () => {

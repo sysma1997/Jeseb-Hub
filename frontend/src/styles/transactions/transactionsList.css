@@ -93,16 +93,29 @@
     font-variant-numeric: tabular-nums;
 }
 
-.transactionDateCell {
+.transactionAccountCell {
     display: flex;
     align-items: center;
     gap: 0.4rem;
+}
+.transactionAccountName {
+    min-width: 0;
 }
 
 .transferIcon {
     font-size: 1.1rem;
     color: var(--global-text-muted);
     flex-shrink: 0;
+    width: 1.1rem;
+    height: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.transferIcon svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    display: block;
 }
 
 .transactionOptions {
@@ -177,10 +190,12 @@
         order: 0;
         flex: 1;
         min-width: 0;
+        padding-right: 0.5rem;
+    }
+    .transactionRow .transactionAccountName {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        padding-right: 0.5rem;
     }
     .transactionRow .transactionOptions {
         order: 1;
@@ -197,7 +212,7 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        height: 2rem;
+        min-height: 2rem;
     }
     .transactionRow .transactionValue {
         order: 3;
