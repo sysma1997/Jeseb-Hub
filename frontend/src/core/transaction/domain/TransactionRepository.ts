@@ -9,6 +9,9 @@ export interface TransactionRepository {
     update(transaction: Transaction): Promise<void>;
     delete(id: string): Promise<void>;
 
+    transfer(from: string, to: string, value: number, date: Date, description?: string): Promise<void>;
+    deleteTransfer(transferId: string): Promise<void>;
+
     get(id: string): Promise<Transaction>;
 
     getList(limit?: number, page?: number): Promise<Pagination<Transaction>>;

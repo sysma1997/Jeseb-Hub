@@ -7,6 +7,7 @@ import { Transaction } from "../domain/Transaction";
 import type { TransactionFilter } from "../domain/TransactionFilter";
 import { TransactionRepository } from "../domain/TransactionRepository";
 import { TransactionService } from "../application/TransactionService";
+import { TransferService } from "../application/TransferService";
 import { UserAuthenticate } from "../../user/infrastructure/UserAuthenticate";
 import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
 import { MessageBuilder } from "../../shared/domain/MessageBuilder"; 
@@ -15,18 +16,61 @@ import { compare } from "bcryptjs";
 export class TransactionController extends ControllerBase {
     private readonly repository: TransactionRepository;
     private readonly service: TransactionService;
+    private readonly transferService: TransferService;
     private readonly translator: TranslatorRepository;
 
     constructor(repository: TransactionRepository, 
         service: TransactionService, 
+        transferService: TransferService, 
         translator: TranslatorRepository) {
         super();
         this.repository = repository;
         this.service = service;
+        this.transferService = transferService;
         this.translator = translator;
     }
 
     setup() {
+        this.router.post("/transfer", UserAuthenticate, async (req, res) => {
+            if (!req.body.from || 
+                !req.body.to || 
+                !req.body.value || 
+                !req.body.date) {
+                const message = new MessageBuilder(true);
+
+                if (!req.body.from) message.add(this.translator.translate("transfers.errors.fromRequired"));
+                if (!req.body.to) message.add(this.translator.translate("transfers.errors.toRequired"));
+                if (!req.body.value) message.add(this.translator.translate("transfers.errors.valueRequired"));
+                if (!req.body.date) message.add(this.translator.translate("transfers.errors.dateRequired"));
+
+                return res.status(400).send(message);
+            }
+
+            try {
+                const idUser: string = req.user!.id;
+                const from: string = req.body.from;
+                const to: string = req.body.to;
+                const value: number = req.body.value;
+                const date: Date = dayjs.utc(req.body.date).toDate();
+                const description: string | undefined = req.body.description ?? undefined;
+
+                await this.transferService.transfer(idUser, from, to, value, date, description);
+                res.status(201).send(this.translator.translate("transfers.success.transferAdded"));
+            } catch (err: any) {
+                if (err instanceof Error) res.status(400).send(err.message);
+            }
+        });
+        this.router.delete("/transfer/:id", UserAuthenticate, async (req, res) => {
+            try {
+                const idUser: string = req.user!.id;
+                const id: string = this.getQueryString(req.params.id!);
+
+                await this.transferService.deleteTransfer(idUser, id);
+                res.send(this.translator.translate("transfers.success.transferDeleted"));
+            } catch (err: any) {
+                if (err instanceof Error) res.status(400).send(err.message);
+            }
+        });
         this.router.post("/add", UserAuthenticate, async (req, res) => {
             if (!req.body.date || 
                 (req.body.type === undefined || req.body.type === null) || 

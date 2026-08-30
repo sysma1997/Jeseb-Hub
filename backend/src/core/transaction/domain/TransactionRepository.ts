@@ -11,6 +11,9 @@ export interface TransactionRepository {
     delete(idUser: string, id: string): Promise<void>;
 
     get(idUser: string, id: string): Promise<Transaction>;
+    getByIds(idUser: string, ids: string[]): Promise<Transaction[]>;
+    getByTransferId(idUser: string, transferId: string): Promise<Transaction[]>;
+    deleteByIds(idUser: string, ids: string[]): Promise<void>;
 
     getList(idUser: string, limit?: number, page?: number): Promise<Pagination<Transaction>>;
     getCount(idUser: string): Promise<number>;

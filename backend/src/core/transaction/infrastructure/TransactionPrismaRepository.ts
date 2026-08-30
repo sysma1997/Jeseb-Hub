@@ -30,7 +30,9 @@ export class TransactionPrismaRepository implements TransactionRepository {
                 value: transaction.value,
 
                 category: transaction.category ?? null, 
-                description: transaction.description ?? null
+                description: transaction.description ?? null,
+                transferId: transaction.transferId ?? null,
+                isTransfer: transaction.isTransfer
             }
         });
     }
@@ -45,7 +47,9 @@ export class TransactionPrismaRepository implements TransactionRepository {
                 value: transaction.value,
 
                 category: transaction.category ?? null, 
-                description: transaction.description ?? null
+                description: transaction.description ?? null,
+                transferId: transaction.transferId ?? null,
+                isTransfer: transaction.isTransfer
             }
         })));
     }
@@ -59,13 +63,48 @@ export class TransactionPrismaRepository implements TransactionRepository {
                 value: transaction.value,
 
                 category: transaction.category ?? null,
-                description: transaction.description ?? null
+                description: transaction.description ?? null,
+                transferId: transaction.transferId ?? null,
+                isTransfer: transaction.isTransfer
             }
         });
     }
     async delete(idUser: string, id: string): Promise<void> {
         await this.prisma.transaction.delete({ 
             where: { id: id, idUser: idUser } 
+        });
+    }
+    async getByIds(idUser: string, ids: string[]): Promise<Transaction[]> {
+        const transactions = await this.prisma.transaction.findMany({
+            where: { idUser, id: { in: ids } },
+        });
+        return transactions.map(t => new Transaction(this.translator, t.date, t.type, t.account, 
+            Number(t.value), 
+            t.id ?? undefined, 
+            t.idUser ?? undefined, 
+            t.category ?? undefined, 
+            t.description ?? undefined, 
+            t.transferId ?? undefined, 
+            t.isTransfer, 
+            undefined));
+    }
+    async getByTransferId(idUser: string, transferId: string): Promise<Transaction[]> {
+        const transactions = await this.prisma.transaction.findMany({
+            where: { idUser, transferId },
+        });
+        return transactions.map(t => new Transaction(this.translator, t.date, t.type, t.account, 
+            Number(t.value), 
+            t.id ?? undefined, 
+            t.idUser ?? undefined, 
+            t.category ?? undefined, 
+            t.description ?? undefined, 
+            t.transferId ?? undefined, 
+            t.isTransfer, 
+            undefined));
+    }
+    async deleteByIds(idUser: string, ids: string[]): Promise<void> {
+        await this.prisma.transaction.deleteMany({
+            where: { idUser, id: { in: ids } }
         });
     }
 
@@ -81,6 +120,8 @@ export class TransactionPrismaRepository implements TransactionRepository {
             transaction.idUser ?? undefined, 
             transaction.category ?? undefined, 
             transaction.description ?? undefined, 
+            transaction.transferId ?? undefined, 
+            transaction.isTransfer, 
             undefined);
     }
 
@@ -108,6 +149,8 @@ export class TransactionPrismaRepository implements TransactionRepository {
             t.idUser ?? undefined, 
             t.category ?? undefined, 
             t.description ?? undefined, 
+            t.transferId ?? undefined, 
+            t.isTransfer, 
             undefined
         ));
         pagination.pages = (limit) ? Pagination.PageLength(total, limit) : 1;
@@ -156,6 +199,8 @@ export class TransactionPrismaRepository implements TransactionRepository {
             t.idUser ?? undefined, 
             t.category ?? undefined, 
             t.description ?? undefined, 
+            t.transferId ?? undefined, 
+            t.isTransfer, 
             undefined
         ));
         pagination.pages = (limit) ? Pagination.PageLength(total, limit) : 1;
@@ -163,7 +208,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
     }
 
     async getMonthlyIncome(idUser: string, filter?: TransactionFilter, compareLastMonth?: boolean): Promise<TransactionComparison> {
-        let where: any = { idUser, type: true };
+        let where: any = { idUser, type: true, isTransfer: false };
         if (filter) {
             if (filter.dateFrom) where.date = { gte: filter.dateFrom };
             if (filter.dateTo) {
@@ -202,7 +247,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
             percentageChange: 0
         };
 
-        let previousWhere: any = { idUser, type: true };
+        let previousWhere: any = { idUser, type: true, isTransfer: false };
         if (filter) {
             if (filter.dateFrom) {
                 let dateFrom = dayjs(filter.dateFrom);
@@ -254,7 +299,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
         };
     }
     async getMonthlyExpenses(idUser: string, filter?: TransactionFilter, compareLastMonth?: boolean): Promise<TransactionComparison> {
-        let where: any = { idUser, type: false };
+        let where: any = { idUser, type: false, isTransfer: false };
         if (filter) {
             if (filter.dateFrom) where.date = { gte: filter.dateFrom };
             if (filter.dateTo) {
@@ -293,7 +338,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
             percentageChange: 0
         };
 
-        let previousWhere: any = { idUser, type: false };
+        let previousWhere: any = { idUser, type: false, isTransfer: false };
         if (filter) {
             if (filter.dateFrom) {
                 let dateFrom = dayjs(filter.dateFrom);
@@ -349,6 +394,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
         const transactions = await this.prisma.transaction.findMany({
             where: {
                 idUser, 
+                isTransfer: false, 
                 date: {
                     gte: currentDate.startOf("month").toDate(), 
                     lte: currentDate.endOf("month").toDate()

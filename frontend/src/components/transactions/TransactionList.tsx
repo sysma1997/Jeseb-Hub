@@ -108,13 +108,29 @@ export const TransactionList = () => {
     const clickUpdate = (transaction: Transaction) => {
         Notify("transaction:showUpdate", transaction);
     };
-    const clickDelete = (id: string) => {
+    const clickDelete = (transactionDeleted: Transaction) => {
         window.showConfirm(t("transactions.delete.description"), t("transactions.delete.title"), async () => {
             try {
-                await repository.delete(id);
+                if (transactionDeleted.isTransfer && transactionDeleted.transferId) {
+                    await repository.deleteTransfer(transactionDeleted.transferId);
+                    let del: Transaction[] = [...pagination.list!];
+                    del = del.filter(t => t.transferId !== transactionDeleted.transferId);
+                    if (del.length === 0 && pagination.pages > 1 && page > 1) {
+                        onChangePagination(limit, page - 1);
+                        return;
+                    }
+                    const newPagination = new Pagination<Transaction>();
+                    newPagination.list = del;
+                    newPagination.pages = pagination.pages;
+                    setPagination(newPagination);
+                    window.showAlert(t("transactions.delete.success"), t("transactions.delete.title"));
+                    return;
+                }
+
+                await repository.delete(transactionDeleted.id!);
                 let tra: Transaction[] = [...pagination.list!];
 
-                tra = tra.filter(t => t.id! !== id);
+                tra = tra.filter(t => t.id! !== transactionDeleted.id!);
                 if (tra.length === 0 && pagination.pages > 1 && page > 1) {
                     onChangePagination(limit, page - 1);
                     return;
@@ -124,7 +140,7 @@ export const TransactionList = () => {
                 newPagination.list = tra;
                 newPagination.pages = pagination.pages;
                 setPagination(newPagination);
-                Notify("transaction:delete", id);
+                Notify("transaction:delete", transactionDeleted.id!);
                 window.showAlert(t("transactions.delete.success"), t("transactions.delete.title"));
             } catch (err: any) {
                 if (err instanceof Error) {
@@ -165,26 +181,41 @@ export const TransactionList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {pagination.list.map((transaction: Transaction) => <tr key={transaction.id} className="transactionRow">
-                            <td className="transactionAccount">{transaction.account}</td>
-                            <td className="transactionDate">{dayjs.utc(transaction.date).format("DD/MM/YYYY HH:mm:ss")}</td>
-                            <td className="transactionValue" style={{ color: (transaction.type) ? "#00d1b2" : "#ff3860" }}>
-                                {((transaction.type) ? "" : "-") + FormatNumber(transaction.value)}
+                        {pagination.list.map((transaction: Transaction) => {
+                            const counterpart: Transaction | undefined = (transaction.isTransfer) ?
+                                pagination.list.find(t => t.transferId === transaction.transferId && t.id !== transaction.id) :
+                                undefined;
+                            const neutralColor = "#7f8c8d";
+                            return <tr key={transaction.id} className="transactionRow">
+                            <td className="transactionAccount">
+                                {(transaction.isTransfer && counterpart)
+                                    ? `${transaction.account} → ${counterpart.account}`
+                                    : transaction.account}
+                            </td>
+                            <td className="transactionDate">
+                                <div className="transactionDateCell">
+                                    {dayjs.utc(transaction.date).format("DD/MM/YYYY HH:mm:ss")}
+                                    {transaction.isTransfer && <Icon icon="mdi:swap-horizontal" className="transferIcon" />}
+                                </div>
+                            </td>
+                            <td className="transactionValue" style={{ color: (transaction.isTransfer) ? neutralColor : ((transaction.type) ? "#00d1b2" : "#ff3860") }}>
+                                {FormatNumber(transaction.value)}
                             </td>
                             <td>
                                 <div className="transactionOptions">
                                     <button className="view" onClick={() => clickShow(transaction)}>
                                         <Icon icon="ic:baseline-remove-red-eye" />
                                     </button>
-                                    <button className="edit" onClick={() => clickUpdate(transaction)}>
+                                    {!transaction.isTransfer && <button className="edit" onClick={() => clickUpdate(transaction)}>
                                         <Icon icon="material-symbols:edit-rounded" />
-                                    </button>
-                                    <button className="btnDelete" onClick={() => clickDelete(transaction.id!)}>
+                                    </button>}
+                                    <button className="btnDelete" onClick={() => clickDelete(transaction)}>
                                         <Icon icon="solar:trash-bin-2-bold" />
                                     </button>
                                 </div>
                             </td>
-                        </tr>)}
+                        </tr>
+                        })}
                     </tbody>
                 </table>
                 <CPagination updatePages={pagination.pages} onChange={onChangePagination} />

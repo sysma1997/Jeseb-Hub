@@ -106,7 +106,15 @@ const t = createTranslations(locale);
         </div>
 	</Base>
 	<Base id="modalAddTransaction" title={t("transactions.add")}>
-		<div id="sMAT1" class="modal-body" style="display: block;">
+		<div class="modal-body">
+			<div class="field">
+				<label class="label">{t("transactions.operation")}:</label>
+				<div class="segment" id="gMATOperation">
+					<button type="button" id="btnMATOpTransaction" class="segment-btn is-active">{t("transactions.operationTransaction")}</button>
+					<button type="button" id="btnMATOpTransfer" class="segment-btn">{t("transactions.operationTransfer")}</button>
+				</div>
+			</div>
+
 			<div class="field">
 				<label class="label">{t("transactions.account")}:</label>
 				<div class="control">
@@ -114,37 +122,51 @@ const t = createTranslations(locale);
 						<select id="sMATAccount"></select>
 					</div>
 				</div>
+				<label id="lMATAccountBalance">{t("shared.balance")}: 0</label>
 			</div>
-			<label id="lMATAccountBalance">{t("shared.balance")}: 0</label>
-		</div>
-		<div id="sMAT2" class="modal-body" style="display: none;">
-			<div class="field">
-				<label class="label">{t("transactions.type")}:</label>
+
+			<div class="field" id="dMATFrom">
+				<label class="label">{t("transfers.from")}:</label>
 				<div class="control">
 					<div class="select is-fullwidth">
-						<select id="sMATType">
-							<option value="true">{t("transactions.ingress")}</option>
-							<option value="false">{t("transactions.egress")}</option>
-						</select>
+						<select id="sMATFrom"></select>
+					</div>
+				</div>
+				<label id="lMATFromBalance">{t("shared.balance")}: 0</label>
+			</div>
+
+			<div class="field" id="dMATTo">
+				<label class="label">{t("transfers.to")}:</label>
+				<div class="control">
+					<div class="select is-fullwidth">
+						<select id="sMATTo"></select>
 					</div>
 				</div>
 			</div>
+
+			<div class="field" id="dMATType">
+				<label class="label">{t("transactions.type")}:</label>
+				<div class="segment" id="gMATType">
+					<button type="button" id="btnMATIngress" class="segment-btn is-active">{t("transactions.ingress")}</button>
+					<button type="button" id="btnMATEgress" class="segment-btn">{t("transactions.egress")}</button>
+				</div>
+			</div>
+
 			<div class="field">
 				<label class="label">{t("transactions.value")}:</label>
 				<div class="control">
-					<input id="iMATValue" class="input" type="number" />
+					<input id="iMATValue" class="input" type="number" placeholder="0.00" autofocus />
 				</div>
 			</div>
-		</div>
-		<div id="sMAT3" class="modal-body" style="display: none;">
-			<p style="margin-bottom: 1rem;">{t("transactions.optional")}</p>
+
 			<div class="field">
 				<label class="label">{t("transactions.date")}:</label>
 				<div class="control">
 					<input id="iMATDate" class="input" type="datetime-local" />
 				</div>
 			</div>
-			<div class="field">
+
+			<div class="field" id="dMATCategory">
 				<label class="label">{t("transactions.category")}:</label>
 				<div class="control">
 					<div class="select is-fullwidth">
@@ -152,46 +174,18 @@ const t = createTranslations(locale);
 					</div>
 				</div>
 			</div>
+
 			<div class="field">
 				<label class="label">{t("transactions.description")}:</label>
 				<div class="control">
 					<textarea id="taMATDescription" class="textarea"></textarea>
 				</div>
 			</div>
-		</div>
-		<div id="sMAT4" class="modal-body" style="display: none;">
-			<p style="margin-bottom: 1rem;">{t("transactions.confirm")}:</p>
-			<div class="item">
-				<label>{t("transactions.account")}:</label>
-				<p id="pMATAccountConfirm">.</p>
-			</div>
-			<div class="item">
-				<label>{t("transactions.type")}:</label>
-				<p id="pMATTypeConfirm">.</p>
-			</div>
-			<div class="item">
-				<label>{t("transactions.value")}:</label>
-				<p id="pMATValueConfirm">.</p>
-			</div>
-			<div class="item">
-				<label>{t("transactions.date")}:</label>
-				<p id="pMATDateConfirm">.</p>
-			</div>
-			<div id="dMATCategoryConfirm" class="item" style="display: none;">
-				<label>{t("transactions.category")}:</label>
-				<p id="pMATCategoryConfirm">.</p>
-			</div>
-			<div id="dMATDescriptionConfirm" class="item" style="display: none;">
-				<label>{t("transactions.description")}:</label>
-				<p id="pMATDescriptionConfirm">.</p>
-			</div>
-		</div>
-		<div id="sMAT5" class="modal-body" style="display: none;">
-			<p id="pMATMessage">{t("transactions.created")}</p>
+			<p id="pMATMessage" class="mat-message"></p>
 		</div>
 		<div class="modal-footer">
             <button id="btnMATCancel" class="btn-danger">{t("shared.cancel")}</button>
-            <button id="btnMATAccept" class="btn-primary">{t("shared.next")}</button>
+            <button id="btnMATAccept" class="btn-primary">{t("shared.add")}</button>
         </div>
 	</Base>
 	<Base id="modalTransaction" title={t("transactions.title")}>

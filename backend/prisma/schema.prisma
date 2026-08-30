@@ -32,6 +32,8 @@ model Transaction {
     value Decimal
     category String?
     description String?
+    transferId String?
+    isTransfer Boolean @default(false)
 
     user User @relation(fields: [idUser], references: [id])
 

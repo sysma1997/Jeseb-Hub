@@ -26,24 +26,40 @@
         }
     }, 
     "transactions": {
-        "errors": {
-            "idRequired": "The date for transaction is required.", 
-            "dateRequired": "The date for transaction is required.",
-            "typeRequired": "The type (ingress, egress) for transaction is required.", 
-            "accountRequired": "The account for transaction is required.", 
-            "valueRequired": "The value must be greater than 0.", 
-            "notFound": "Transaction not found or not exists.", 
-            "invalidFormat": "Invalid transactions format.",
-            "exceedLimit": "The number of transactions entered in chunks cannot exceed 500.", 
-            "noTransactionsToExport": "There are no transactions to export."
-        }, 
-        "success": {
-            "transactionAdded": "Transaction added successfully.", 
-            "transactionUpdated": "Transaction updated successfully.", 
-            "transactionDeleted": "Transaction deleted successfully.", 
-            "transactionsAdded": "Transactions added successfully."
-        }
-    }, 
+      "errors": {
+        "idRequired": "The date for transaction is required.",
+        "dateRequired": "The date for transaction is required.",
+        "typeRequired": "The type (ingress, egress) for transaction is required.",
+        "accountRequired": "The account for transaction is required.",
+        "valueRequired": "The value must be greater than 0.",
+        "notFound": "Transaction not found or not exists.",
+        "invalidFormat": "Invalid transactions format.",
+        "exceedLimit": "The number of transactions entered in chunks cannot exceed 500.",
+        "noTransactionsToExport": "There are no transactions to export."
+      },
+      "success": {
+        "transactionAdded": "Transaction added successfully.",
+        "transactionUpdated": "Transaction updated successfully.",
+        "transactionDeleted": "Transaction deleted successfully.",
+        "transactionsAdded": "Transactions added successfully."
+      }
+    },
+    "transfers": {
+      "errors": {
+        "fromRequired": "The origin account is required.",
+        "toRequired": "The destination account is required.",
+        "valueRequired": "The value must be greater than 0.",
+        "dateRequired": "The date for the transfer is required.",
+        "sameAccount": "The origin and destination accounts cannot be the same.",
+        "accountNotFound": "The account '{{account}}' does not exist.",
+        "insufficientBalance": "The origin account does not have enough balance.",
+        "notFound": "Transfer not found or not exists."
+      },
+      "success": {
+        "transferAdded": "Transfer completed successfully.",
+        "transferDeleted": "Transfer deleted successfully."
+      }
+    },
     "users": {
         "errors": {
             "nameRequired": "The name for user is required.", 
