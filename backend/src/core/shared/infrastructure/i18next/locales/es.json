@@ -44,6 +44,22 @@
             "transactionsAdded": "Transacciones agregadas exitosamente."
         }
     }, 
+    "transfers": {
+        "errors": {
+            "fromRequired": "La cuenta de origen es requerida.",
+            "toRequired": "La cuenta de destino es requerida.",
+            "valueRequired": "El valor debe ser mayor que 0.", 
+            "dateRequired": "La fecha para el traslado es requerida.", 
+            "sameAccount": "La cuenta de origen y destino no pueden ser la misma.", 
+            "accountNotFound": "La cuenta '{{account}}' no existe.", 
+            "insufficientBalance": "La cuenta de origen no tiene saldo suficiente.", 
+            "notFound": "Traslado no encontrado o no existe."
+        }, 
+        "success": {
+            "transferAdded": "Traslado realizado exitosamente.", 
+            "transferDeleted": "Traslado eliminado exitosamente."
+        }
+    }, 
     "users": {
         "errors": {
             "nameRequired": "El nombre para el usuario es requerido.", 

@@ -43,26 +43,25 @@ const mftClearFilters = document.getElementById("btnMFTClearFilters") as HTMLBut
 const modalAddTransaction = document.getElementById("modalAddTransaction") as HTMLDivElement;
 const matTitle = modalAddTransaction.querySelector(".modal-header h3") as HTMLHeadingElement;
 const matClose = modalAddTransaction.querySelector(".modal-close") as HTMLButtonElement;
-const matSection1 = document.getElementById("sMAT1") as HTMLElement;
+const matOperationGroup = document.getElementById("gMATOperation") as HTMLDivElement;
+const matOpTransaction = document.getElementById("btnMATOpTransaction") as HTMLButtonElement;
+const matOpTransfer = document.getElementById("btnMATOpTransfer") as HTMLButtonElement;
 const matAccount = document.getElementById("sMATAccount") as HTMLSelectElement;
 const matAccountBalance = document.getElementById("lMATAccountBalance") as HTMLLabelElement;
-const matSection2 = document.getElementById("sMAT2") as HTMLElement;
-const matType = document.getElementById("sMATType") as HTMLSelectElement;
+const matFrom = document.getElementById("sMATFrom") as HTMLSelectElement;
+const matFromBalance = document.getElementById("lMATFromBalance") as HTMLLabelElement;
+const matTo = document.getElementById("sMATTo") as HTMLSelectElement;
+const dmatFrom = document.getElementById("dMATFrom") as HTMLDivElement;
+const dmatTo = document.getElementById("dMATTo") as HTMLDivElement;
+const dmatType = document.getElementById("dMATType") as HTMLDivElement;
+const dmatCategory = document.getElementById("dMATCategory") as HTMLDivElement;
+const matTypeGroup = document.getElementById("gMATType") as HTMLDivElement;
+const matTypeIngress = document.getElementById("btnMATIngress") as HTMLButtonElement;
+const matTypeEgress = document.getElementById("btnMATEgress") as HTMLButtonElement;
 const matValue = document.getElementById("iMATValue") as HTMLInputElement;
-const matSection3 = document.getElementById("sMAT3") as HTMLElement;
 const matDate = document.getElementById("iMATDate") as HTMLInputElement;
 const matCategory = document.getElementById("sMATCategory") as HTMLSelectElement;
 const matDescription = document.getElementById("taMATDescription") as HTMLTextAreaElement;
-const matSection4 = document.getElementById("sMAT4") as HTMLElement;
-const matAccountConfirm = document.getElementById("pMATAccountConfirm") as HTMLParagraphElement;
-const matTypeConfirm = document.getElementById("pMATTypeConfirm") as HTMLParagraphElement;
-const matValueConfirm = document.getElementById("pMATValueConfirm") as HTMLParagraphElement;
-const matDateConfirm = document.getElementById("pMATDateConfirm") as HTMLParagraphElement;
-const dmatCategoryConfirm = document.getElementById("dMATCategoryConfirm") as HTMLDivElement;
-const matCategoryConfirm = document.getElementById("pMATCategoryConfirm") as HTMLParagraphElement;
-const dmatDescriptionConfirm = document.getElementById("dMATDescriptionConfirm") as HTMLDivElement;
-const matDescriptionConfirm = document.getElementById("pMATDescriptionConfirm") as HTMLParagraphElement;
-const matSection5 = document.getElementById("sMAT5") as HTMLDivElement;
 const matMessage = document.getElementById("pMATMessage") as HTMLParagraphElement;
 const matCancel = document.getElementById("btnMATCancel") as HTMLButtonElement;
 const matAccept = document.getElementById("btnMATAccept") as HTMLButtonElement;
@@ -90,8 +89,12 @@ try {
             option.innerText = account.name;
             matAccount.appendChild(option);
             mftAccount.appendChild(option.cloneNode(true));
+            matFrom.appendChild(option.cloneNode(true));
+            matTo.appendChild(option.cloneNode(true));
         });
         matAccountBalance.innerText = `${t("shared.balance")}: ${FormatNumber(accounts[0].balance)}`;
+        matFromBalance.innerText = `${t("shared.balance")}: ${FormatNumber(accounts[0].balance)}`;
+        if (accounts.length > 1) matTo.value = accounts[1].id!;
     });
     categoryRepository.getList().then((pagination: Pagination<Category>) => {
         categories = pagination.list;
@@ -120,6 +123,42 @@ try {
     }
 }
 
+const matGetType = (): boolean => matTypeIngress.classList.contains("is-active");
+const matGetTransfer = (): boolean => matOpTransfer.classList.contains("is-active");
+const matSetOperation = (transfer: boolean) => {
+    matOpTransaction.classList.toggle("is-active", !transfer);
+    matOpTransfer.classList.toggle("is-active", transfer);
+
+    dmatFrom.style.display = (transfer) ? "block" : "none";
+    dmatTo.style.display = (transfer) ? "block" : "none";
+    dmatType.style.display = (transfer) ? "none" : "block";
+    dmatCategory.style.display = (transfer) ? "none" : "block";
+};
+const matSetType = (type: boolean) => {
+    matTypeIngress.classList.toggle("is-active", type);
+    matTypeEgress.classList.toggle("is-active", !type);
+};
+const matReset = () => {
+    matValue.value = "";
+    matDescription.value = "";
+    matSetType(true);
+    matSetOperation(false);
+    matOperationGroup.style.display = "block";
+    matDate.value = dayjs().format("YYYY-MM-DDTHH:mm");
+    if (accounts.length > 0) {
+        matAccount.value = accounts[0].id!;
+        matAccountBalance.innerText = `${t("shared.balance")}: ${FormatNumber(accounts[0].balance)}`;
+        matFrom.value = accounts[0].id!;
+        matFromBalance.innerText = `${t("shared.balance")}: ${FormatNumber(accounts[0].balance)}`;
+        if (accounts.length > 1) matTo.value = accounts[1].id!;
+    }
+    if (categories.length > 0)
+        matCategory.value = "";
+    matCancel.innerText = t("shared.cancel");
+    matMessage.innerText = "";
+    matClose.style.display = "block";
+};
+
 const transactionShowUpdate = (_transaction: Transaction) => {
     transaction = _transaction;
     const account: Account | undefined = accounts.find(a => a.name === transaction!.account);
@@ -131,7 +170,7 @@ const transactionShowUpdate = (_transaction: Transaction) => {
         matAccount.value = accounts[0].id!;
         matAccountBalance.innerText = `${t("shared.balance")}: ${FormatNumber(accounts[0].balance)}`;
     }
-    matType.value = transaction.type ? "true" : "false";
+    matSetType(transaction.type);
     matValue.value = transaction.value.toString();
     if (transaction.category) {
         const category: Category | undefined = categories.find(c => c.name === transaction!.category);
@@ -141,9 +180,14 @@ const transactionShowUpdate = (_transaction: Transaction) => {
     if (transaction.description)
         matDescription.value = transaction.description;
     else matDescription.value = "";
+    matDate.value = dayjs(transaction.date).format("YYYY-MM-DDTHH:mm");
+    matMessage.innerText = "";
+    matSetOperation(false);
+    matOperationGroup.style.display = "none";
     
     modalAddTransaction.classList.add("is-active");
     matTitle.innerText = t("transactions.update");
+    matAccept.innerText = t("shared.update");
 };
 const transactionShowView = (_transaction: Transaction) => {
     transaction = _transaction;
@@ -171,9 +215,12 @@ Attach("sidebar:add", () => {
         return;
     }
 
-    modalAddTransaction.classList.add("is-active");
-    matTitle.innerText = t("transactions.add");
     transaction = undefined;
+    matReset();
+    matTitle.innerText = t("transactions.add");
+    matAccept.innerText = t("shared.add");
+    modalAddTransaction.classList.add("is-active");
+    matValue.focus();
 });
 Attach("transaction:filter:show", () => {
     const modal = document.getElementById("modalFilterTransactions") as HTMLDivElement;
@@ -201,26 +248,8 @@ Attach("transaction:showUpdate", transactionShowUpdate);
 Attach("transaction:showView", transactionShowView);
 
 const matClickClose = () => {
-    matSection5.style.display = "none";
-    matSection4.style.display = "none";
-    dmatDescriptionConfirm.style.display = "none";
-    dmatCategoryConfirm.style.display = "none";
-    matSection3.style.display = "none";
-    matDescription.value = "";
-    if (categories.length > 0) 
-        matCategory.value = "";
-    matSection2.style.display = "none";
-    matValue.value = "";
-    matType.value = "true";
-    matSection1.style.display = "block";
-    if (accounts.length > 0) {
-        matAccount.value = accounts[0].id!;
-        matAccountBalance.innerText = `${t("shared.balance")}: ${FormatNumber(accounts[0].balance)}`;
-    }
-    matCancel.innerText = t("shared.cancel");
-    matAccept.innerText = t("shared.next");
-    matCancel.style.display = "block";
-    matClose.style.display = "block";
+    transaction = undefined;
+    matReset();
     modalAddTransaction.classList.remove("is-active");
 };
 const mtClickClose = () => {
@@ -287,133 +316,109 @@ matDescription.addEventListener("keydown", (event: KeyboardEvent) => {
         matAccept.click();
     }
 });
+matTypeIngress.onclick = () => matSetType(true);
+matTypeEgress.onclick = () => matSetType(false);
+matOpTransaction.onclick = () => matSetOperation(false);
+matOpTransfer.onclick = () => matSetOperation(true);
+matFrom.onchange = (event: Event) => {
+    const id = (event.target as HTMLSelectElement).value;
+    const account: Account | undefined = accounts.find(a => a.id === id);
+    if (!account) return;
+    matFromBalance.innerText = `${t("shared.balance")}: ${FormatNumber(account.balance)}`;
+};
+
 matCancel.onclick = () => {
-    if (matSection1.style.display === "block") matClickClose();
-    if (matSection2.style.display === "block") {
-        matSection2.style.display = "none";
-        matSection1.style.display = "block";
-        matCancel.innerText = t("shared.cancel");
-    }
-    if (matSection3.style.display === "block") {
-        matSection3.style.display = "none";
-        matSection2.style.display = "block";
-        matCancel.innerText = t("shared.back");
-        matAccept.innerText = t("shared.next");
-    }
-    if (matSection4.style.display === "block") {
-        matSection4.style.display = "none";
-        matSection3.style.display = "block";
-        matCancel.innerText = t("shared.back");
-        matAccept.innerText = t("shared.next");
-    }
+    matClickClose();
 };
 matAccept.onclick = async () => {
-    if (matSection1.style.display === "block") {
-        matSection1.style.display = "none";
-        matSection2.style.display = "block";
-        matCancel.innerText = t("shared.back");
+    if (matValue.value === "" || isNaN(Number(matValue.value)) || Number(matValue.value) <= 0) {
+        window.showAlert(t("transactions.valueInvalid"));
         return;
     }
-    if (matSection2.style.display === "block") {
-        if (matValue.value === "" || isNaN(Number(matValue.value)) || Number(matValue.value) <= 0) {
-            window.showAlert(t("transactions.valueInvalid"));
+
+    matAccept.classList.add("is-loading");
+    matAccept.disabled = true;
+
+    const value: number = Number(matValue.value);
+    const date: Date = dayjs.utc(matDate.value).toDate();
+    const description: string | undefined = matDescription.value ? matDescription.value : undefined;
+
+    try {
+        if (matGetTransfer()) {
+            const from: string = accounts.find(a => a.id === matFrom.value)!.name;
+            const to: string = accounts.find(a => a.id === matTo.value)!.name;
+            if (from === to) {
+                window.showAlert(t("transfers.sameAccount"));
+                matAccept.classList.remove("is-loading");
+                matAccept.disabled = false;
+                return;
+            }
+
+            await transactionRepository.transfer(from, to, value, date, description);
+
+            accounts = accounts.map(a => {
+                if (a.name === from) return a.egressBalance(value);
+                if (a.name === to) return a.ingressBalance(value);
+                return a;
+            });
+
+            matReset();
+            matMessage.innerText = t("transfers.added");
+            matValue.focus();
+            matAccept.classList.remove("is-loading");
+            matAccept.disabled = false;
             return;
         }
-        const account = accounts.find(a => a.id === matAccount.value)!;
-        
-        matDate.value = (!transaction) ? 
-            dayjs().format("YYYY-MM-DD HH:mm:ss") : 
-            matDate.value = dayjs.utc(transaction.date).format("YYYY-MM-DD HH:mm:ss");
-        matSection2.style.display = "none";
-        matSection3.style.display = "block";
-        matCancel.innerText = t("shared.back");
-        matAccept.innerText = t("shared.next");
-        return;
-    }
-    if (matSection3.style.display === "block") {
-        matSection3.style.display = "none";
-        matSection4.style.display = "block";
-
-        const account = accounts.find(a => a.id === matAccount.value)!;
-        matAccountConfirm.innerText = account.name;
-        matTypeConfirm.innerText = matType.value === "true" ? t("transactions.ingress") : t("transactions.egress");
-        matValueConfirm.innerText = FormatNumber(Number(matValue.value));
-        matDateConfirm.innerText = dayjs(matDate.value).format("DD/MM/YYYY HH:mm:ss");
-        if (matCategory.value) {
-            dmatCategoryConfirm.style.display = "flex";
-            matCategoryConfirm.innerText = categories.find(c => c.id === matCategory.value)!.name;
-        }
-        else dmatCategoryConfirm.style.display = "none";
-        if (matDescription.value) {
-            dmatDescriptionConfirm.style.display = "block";
-            matDescriptionConfirm.innerText = matDescription.value;
-        }
-        else dmatDescriptionConfirm.style.display = "none";
-        matCancel.innerText = t("shared.back");
-        matAccept.innerText = (!transaction) ? t("shared.add") : t("shared.update");
-        return;
-    }
-    if (matSection4.style.display === "block") {
-        matAccept.classList.add("is-loading");
-        matAccept.disabled = true;
 
         const id: string = (!transaction) ? Uuid() : transaction.id!;
         const account: string = accounts.find(a => a.id === matAccount.value)!.name;
-        const type: boolean = matType.value === "true" ? true : false;
-        const value: number = Number(matValue.value);
-        const date: Date = dayjs.utc(matDate.value).toDate();
+        const type: boolean = matGetType();
         const category: string | undefined = (matCategory.value) ? categories.find(c => c.id === matCategory.value)!.name : undefined;
-        const description: string | undefined = matDescription.value ?? undefined;
 
-        try {
-            const _transaction = new Transaction(date, type, account, value, 
-                id, undefined, 
-                category, description);
-            if (!transaction){
-                await transactionRepository.add(_transaction);
-                Notify("transaction:add", _transaction);
-            }
-            else {
-                await transactionRepository.update(_transaction);
-                Notify("transaction:update", _transaction);
-            }
-            accounts = accounts.map(a => {
-                if (a.name === account) {
-                    if (!transaction) {
-                        a = (type) ? a.ingressBalance(value) : a.egressBalance(value);
-                    }
-                    else {
-                        a = (transaction.type) ? a.egressBalance(transaction.value) : a.ingressBalance(transaction.value);
-                        a = (type) ? a.ingressBalance(value) : a.egressBalance(value);
-                    }
-                }
-
-                return a;
-            });
-            matMessage.innerText = (!transaction) ? 
-                t("transactions.added") : 
-                t("transactions.updated");
-
-            matSection4.style.display = "none";
-            matSection5.style.display = "block";
-            matClose.style.display = "none";
-            matCancel.style.display = "none";
-            matAccept.innerText = "Ok";
-        } catch (err: any) {
-            if (err instanceof Error) {
-                console.error(err);
-                window.showAlert(err.message);
-            }
+        const _transaction = new Transaction(date, type, account, value,
+            id, undefined,
+            category, description);
+        if (!transaction) {
+            await transactionRepository.add(_transaction);
+            Notify("transaction:add", _transaction);
         }
-        matAccept.classList.remove("is-loading");
-        matAccept.disabled = false;
-        return;
+        else {
+            await transactionRepository.update(_transaction);
+            Notify("transaction:update", _transaction);
+        }
+        accounts = accounts.map(a => {
+            if (a.name === account) {
+                if (!transaction) {
+                    a = (type) ? a.ingressBalance(value) : a.egressBalance(value);
+                }
+                else {
+                    a = (transaction.type) ? a.egressBalance(transaction.value) : a.ingressBalance(transaction.value);
+                    a = (type) ? a.ingressBalance(value) : a.egressBalance(value);
+                }
+            }
+
+            return a;
+        });
+
+        if (!transaction) {
+            matReset();
+            matMessage.innerText = t("transactions.added");
+            matValue.focus();
+        }
+        else {
+            transaction = undefined;
+            matClickClose();
+        }
+    } catch (err: any) {
+        if (err instanceof Error) {
+            console.error(err);
+            window.showAlert(err.message);
+        }
     }
-    if (matSection5.style.display === "block") {
-        if (transaction) transaction = undefined;
-        matClickClose();
-    }
+    matAccept.classList.remove("is-loading");
+    matAccept.disabled = false;
 };
+
 
 mtClose.onclick = mtClickClose;
 mtOk.onclick = mtClickClose;

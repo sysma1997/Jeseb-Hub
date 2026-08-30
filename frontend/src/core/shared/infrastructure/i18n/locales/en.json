@@ -100,9 +100,12 @@
                 "dateTo": "Date to"
             }
         },
-        "noItems": "There are not transactions to show.", 
-        "title": "Transactions", 
-        "account": "Account", 
+  "noItems": "There are not transactions to show.",
+  "title": "Transactions",
+  "operation": "Operation",
+  "operationTransaction": "Transaction",
+  "operationTransfer": "Transfer",
+  "account": "Account",
         "value": "Value", 
         "valueInvalid": "Please enter a valid value for the transaction.", 
         "date": "Date", 
@@ -125,13 +128,19 @@
             "description": "Delete this transaction?", 
             "success": "Delete transaction successfully."
         }, 
-        "accountsRequired": "You need to create at least one account to add a transaction.", 
-        "filter": {
-            "dateRange": "Date range", 
-            "all": "All", 
-            "noSelectFilters": "No filters selected to apply."
-        }
-    },
+  "accountsRequired": "You need to create at least one account to add a transaction.",
+  "filter": {
+    "dateRange": "Date range",
+    "all": "All",
+    "noSelectFilters": "No filters selected to apply."
+  }
+},
+  "transfers": {
+    "from": "From",
+    "to": "To",
+    "sameAccount": "The origin and destination accounts cannot be the same.",
+    "added": "The transfer has been completed successfully."
+  },
     "account": {
         "title": "Accounts", 
         "noItems": "There are not accounts to show.", 

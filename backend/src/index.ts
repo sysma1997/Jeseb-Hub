@@ -16,6 +16,7 @@ import { UserController } from "./core/user/infrastructure/UserController";
 import { TransactionRepository } from "./core/transaction/domain/TransactionRepository";
 import { TransactionPrismaRepository } from "./core/transaction/infrastructure/TransactionPrismaRepository";
 import { TransactionService } from "./core/transaction/application/TransactionService";
+import { TransferService } from "./core/transaction/application/TransferService";
 import { TransactionController } from "./core/transaction/infrastructure/TransactionController";
 import { AccountRepository } from "./core/account/domain/AccountRepository";
 import { AccountPrismaRepository } from "./core/account/infrastructure/AccountPrismaRepository";
@@ -63,7 +64,8 @@ const accountController: ControllerBase = new AccountController(accountRepositor
 const categoryRepository: CategoryRepository = new CategoryPrismaRepository(prisma, translator);
 const categoryController: ControllerBase = new CategoryController(categoryRepository, translator);
 const transactionService: TransactionService = new TransactionService(transactionRepository, accountRepository, categoryRepository, translator);
-const transactionController: ControllerBase = new TransactionController(transactionRepository, transactionService, translator);
+const transferService: TransferService = new TransferService(transactionRepository, accountRepository, translator);
+const transactionController: ControllerBase = new TransactionController(transactionRepository, transactionService, transferService, translator);
 
 userController.setup();
 transactionController.setup();

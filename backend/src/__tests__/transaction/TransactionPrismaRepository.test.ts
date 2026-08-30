@@ -32,7 +32,9 @@ describe("Transaction Prisma Repository", () => {
         prismaMock.transaction.create.mockResolvedValue({
             id, idUser, date, type, account, 
             value: Decimal(value), 
-            category, description
+            category, description,
+            transferId: null,
+            isTransfer: false
         });
 
         await expect(repository.add(transaction)).resolves.toBeUndefined();
@@ -41,7 +43,9 @@ describe("Transaction Prisma Repository", () => {
                 id, idUser, 
                 date, type, account, 
                 value, 
-                category, description
+                category, description,
+                transferId: null,
+                isTransfer: false
             },
         });
     });
@@ -62,7 +66,9 @@ describe("Transaction Prisma Repository", () => {
         prismaMock.transaction.update.mockResolvedValue({
             id, idUser, date, type, account, 
             value: Decimal(value), 
-            category, description
+            category, description,
+            transferId: null,
+            isTransfer: false
         });
 
         await expect(repository.update(transaction)).resolves.toBeUndefined();
@@ -71,7 +77,9 @@ describe("Transaction Prisma Repository", () => {
             data: { 
                 date, type, account, 
                 value, 
-                category, description
+                category, description,
+                transferId: null,
+                isTransfer: false
             },
         });
     });
@@ -88,7 +96,9 @@ describe("Transaction Prisma Repository", () => {
         prismaMock.transaction.delete.mockResolvedValue({
             id, idUser, date, type, account, 
             value: Decimal(value), 
-            category, description
+            category, description,
+            transferId: null,
+            isTransfer: false
         });
 
         await expect(repository.delete(idUser, id)).resolves.toBeUndefined();
@@ -114,7 +124,9 @@ describe("Transaction Prisma Repository", () => {
         prismaMock.transaction.findUnique.mockResolvedValue({
             id, idUser, date, type, account, 
             value: Decimal(value), 
-            category, description
+            category, description,
+            transferId: null,
+            isTransfer: false
         });
 
         const result = await repository.get(idUser, id);
@@ -137,7 +149,9 @@ describe("Transaction Prisma Repository", () => {
                 account: "Bank",
                 value: Decimal(25.3), 
                 category: "Groceries",
-                description: null 
+                description: null,
+                transferId: null,
+                isTransfer: false
             },
             { 
                 id: "c40b4cff-407b-4d43-80b4-e885de34ac97", 
@@ -147,7 +161,9 @@ describe("Transaction Prisma Repository", () => {
                 account: "Cash",
                 value: Decimal(12.99), 
                 category: "Utilities",
-                description: "Movies and musics"
+                description: "Movies and musics",
+                transferId: null,
+                isTransfer: false
             },
         ]);
         prismaMock.transaction.count.mockResolvedValue(2);

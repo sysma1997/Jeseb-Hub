@@ -127,6 +127,7 @@ export class CategoryPrismaRepository implements CategoryRepository {
             by: ["category"], 
             where: {
                 idUser, type, 
+                isTransfer: false, 
                 category: {
                     not: null
                 }, 

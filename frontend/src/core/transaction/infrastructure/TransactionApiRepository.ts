@@ -7,6 +7,10 @@ import type { ApiResponse } from "../../shared/infrastructure/Api";
 import { Pagination } from "../../shared/domain/Pagination";
 import type { TransactionFilter } from "../domain/TransactionFilter";
 import type { TransactionComparison } from "../domain/TransactionComparison";
+import dayjs from "dayjs";
+import dayjsUtc from "dayjs/plugin/utc";
+
+dayjs.extend(dayjsUtc);
 
 export class TransactionApiRepository extends Api implements TransactionRepository {
     async add(transaction: Transaction): Promise<void> {
@@ -21,6 +25,20 @@ export class TransactionApiRepository extends Api implements TransactionReposito
     }
     async delete(id: string): Promise<void> {
         const response: ApiResponse = await this.fetch(ApiMethods.DELETE, `transaction/delete/${id}`);
+        if (response.status >= 400) 
+            throw new Error(response.data);
+    }
+    async transfer(from: string, to: string, value: number, date: Date, description?: string): Promise<void> {
+        const response: ApiResponse = await this.fetch(ApiMethods.POST, "transaction/transfer", {
+            from, to, value, 
+            date: dayjs.utc(date).toISOString(), 
+            description
+        });
+        if (response.status >= 400) 
+            throw new Error(response.data);
+    }
+    async deleteTransfer(transferId: string): Promise<void> {
+        const response: ApiResponse = await this.fetch(ApiMethods.DELETE, `transaction/transfer/${transferId}`);
         if (response.status >= 400) 
             throw new Error(response.data);
     }

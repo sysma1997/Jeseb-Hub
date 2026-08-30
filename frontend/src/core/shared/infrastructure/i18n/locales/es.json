@@ -102,6 +102,9 @@
         },
         "noItems": "No hay transacciones para mostrar.", 
         "title": "Transacciones", 
+        "operation": "Operación", 
+        "operationTransaction": "Transacción", 
+        "operationTransfer": "Traslado", 
         "account": "Cuenta", 
         "value": "Valor", 
         "valueInvalid": "Por favor, introduzca un valor válido para la transacción.", 
@@ -131,6 +134,12 @@
             "all": "Todas", 
             "noSelectFilters": "No selecciono ningun filtro para aplicar."
         }
+    },
+    "transfers": {
+        "from": "Desde", 
+        "to": "Hacia", 
+        "sameAccount": "La cuenta de origen y destino no pueden ser la misma.", 
+        "added": "El traslado se ha realizado correctamente."
     },
     "account": {
         "title": "Cuentas", 

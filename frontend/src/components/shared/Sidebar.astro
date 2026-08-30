@@ -135,7 +135,7 @@ const hideAddButton = Astro.props?.hideAddButton || false;
         fetch(`${Api.ApiUrl}/version`)
             .then((res) => (res.ok ? res.json() : Promise.reject(res.status)))
             .then((data: any) => {
-                versionEl.textContent = `v${data.version}` + (data.commit ? ` · ${data.commit}` : "");
+                versionEl.textContent = `v${data.version}`;
             })
             .catch(() => versionEl.remove());
     });
