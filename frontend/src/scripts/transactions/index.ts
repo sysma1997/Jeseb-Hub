@@ -238,7 +238,6 @@ Attach("sidebar:add", () => {
     matTitle.innerText = t("transactions.add");
     matAccept.innerText = t("shared.add");
     modalAddTransaction.classList.add("is-active");
-    matValue.focus();
 });
 Attach("transaction:filter:show", () => {
     const modal = document.getElementById("modalFilterTransactions") as HTMLDivElement;
@@ -388,7 +387,6 @@ matAccept.onclick = async () => {
 
             matReset();
             matMessage.innerText = t("transfers.added");
-            matValue.focus();
             matAccept.classList.remove("is-loading");
             matAccept.disabled = false;
             return;
@@ -427,7 +425,6 @@ matAccept.onclick = async () => {
         if (!transaction) {
             matReset();
             matMessage.innerText = t("transactions.added");
-            matValue.focus();
         }
         else {
             transaction = undefined;
