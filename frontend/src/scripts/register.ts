@@ -50,7 +50,7 @@ confirmPassword.addEventListener("keydown", (event: KeyboardEvent) => {
 });
 register.onclick = async () => {
     if (!name.value || !email.value || !password.value || !confirmPassword.value) {
-        const message = new MessageBuilder(true);
+        const message = new MessageBuilder();
 
         if (!name.value) message.add(t("shared.nameRequired"));
         if (!email.value) message.add(t("shared.emailRequired"));

@@ -37,7 +37,7 @@ const title = Astro.props?.title ?? t("shared.warning");
     window.showPrompt = (message: string, title: string = "Warning", 
         acceptAction?: (value: string) => void, 
         cancelAction?: () => void) => {
-        if (modalMessage) modalMessage.innerHTML = message;
+        if (modalMessage) modalMessage.textContent = message;
         if (modal!.querySelector('.modal-header h3')) {
             const tTitle = (title === "Warning") ? t("shared.warning") : title;
             modal!.querySelector('.modal-header h3')!.textContent = tTitle;
@@ -67,7 +67,7 @@ const title = Astro.props?.title ?? t("shared.warning");
             if (!modalInput.value) {
                 modalInput.classList.add("is-danger");
                 modalSpan.style.display = "block";
-                modalSpan.innerHTML = t("shared.inputEmpty");
+                modalSpan.textContent = t("shared.inputEmpty");
                 return;
             }
             modalInput.classList.remove("is-danger");

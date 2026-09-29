@@ -15,7 +15,7 @@ i18next.init({
     lng: defaultLanguage, 
     fallbackLng: defaultLanguage, 
     interpolation: {
-        escapeValue: false
+        escapeValue: true
     }
 });
 

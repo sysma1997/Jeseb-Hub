@@ -92,8 +92,9 @@ const t = createTranslations(locale);
                                 <div id="dIEECodeVerification" class="field" style="display: none;">
                                     <label class="label">{t("shared.codeVerification")}</label>
                                     <div class="control">
-                                        <input id="iIEECVInput" class="input" type="number" />
+                                        <input id="iIEECVInput" class="input" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" />
                                     </div>
+                                    <button id="btnIEEResend" class="btn-resend">{t("shared.codeVerificationResend")}</button>
                                 </div>
                                 <div class="profileFormActions">
                                     <button id="btnIEECancel" class="btn-danger">{t("shared.cancel")}</button>

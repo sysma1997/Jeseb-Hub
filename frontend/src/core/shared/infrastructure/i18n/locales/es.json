@@ -274,6 +274,8 @@
         "codeVerification": "Código de verificación", 
         "codeVerificationRequired": "Se requiere el código de verificación.", 
         "codeVerificationInvalid": "El código de verificación no tiene 6 dígitos.", 
+        "codeVerificationResend": "¿No recibiste el código? Envíalo de nuevo",
+        "codeVerificationResent": "Hemos enviado un nuevo código de verificación a tu correo electrónico.", 
         "inputEmpty": "La entrada de texto no puede estar vacía.", 
         "menu": {
             "home": "Inicio", 

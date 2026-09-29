@@ -76,7 +76,7 @@ if (search.get("token")) {
     });
     recover.onclick = async () => {
         if (!password.value || !confirmPassword.value) {
-            const message = new MessageBuilder(true);
+            const message = new MessageBuilder();
 
             if (!password.value) message.add(t("shared.passwordRequired"));
             if (!confirmPassword.value) message.add(t("shared.passwordConfirmRequired"));

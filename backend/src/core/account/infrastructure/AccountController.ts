@@ -39,7 +39,7 @@ export class AccountController extends ControllerBase {
         this.router.put("/update", UserAuthenticate, async (req, res) => {
             if (!req.body.id || 
                 !req.body.name) {
-                const message = new MessageBuilder(true);
+                const message = new MessageBuilder();
 
                 if (!req.body.id) message.add(this.translator.translate("accounts.errors.idRequired"));
                 if (!req.body.name) message.add(this.translator.translate("accounts.errors.nameRequired"));

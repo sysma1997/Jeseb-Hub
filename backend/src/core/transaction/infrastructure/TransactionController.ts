@@ -36,7 +36,7 @@ export class TransactionController extends ControllerBase {
                 !req.body.to || 
                 !req.body.value || 
                 !req.body.date) {
-                const message = new MessageBuilder(true);
+                const message = new MessageBuilder();
 
                 if (!req.body.from) message.add(this.translator.translate("transfers.errors.fromRequired"));
                 if (!req.body.to) message.add(this.translator.translate("transfers.errors.toRequired"));
@@ -76,7 +76,7 @@ export class TransactionController extends ControllerBase {
                 (req.body.type === undefined || req.body.type === null) || 
                 !req.body.account || 
                 !req.body.value) {
-                const message = new MessageBuilder(true);
+                const message = new MessageBuilder();
 
                 if (!req.body.date) {
                     message.add(this.translator.translate("transactions.errors.dateRequired"));

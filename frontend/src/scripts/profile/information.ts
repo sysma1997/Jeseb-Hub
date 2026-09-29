@@ -25,6 +25,7 @@ const ieeInput = document.getElementById("iIEEInput") as HTMLInputElement;
 const ieeiVerify = document.getElementById("btnIEEVerify") as HTMLButtonElement;
 const ieeCodeVerification = document.getElementById("dIEECodeVerification") as HTMLDivElement;
 const ieecvInput = document.getElementById("iIEECVInput") as HTMLInputElement;
+const ieeResend = document.getElementById("btnIEEResend") as HTMLButtonElement;
 const ieeCancel = document.getElementById("btnIEECancel") as HTMLButtonElement;
 const ieeUpdate = document.getElementById("btnIEEUpdate") as HTMLButtonElement;
 
@@ -163,7 +164,7 @@ export const setup = (user: User, repository: UserRepository) => {
             ieeiVerify.click();
         }
     });
-    ieeiVerify.onclick = () => {
+    const ieeSendCode = async (button: HTMLButtonElement, withConfirm: boolean) => {
         if (!ieeInput.value) {
             window.showAlert(t("shared.emailRequired"));
             return;
@@ -177,21 +178,35 @@ export const setup = (user: User, repository: UserRepository) => {
             return;
         }
 
-        window.showConfirm(t("profile.information.updateEmail.confirm", { email: ieeInput.value }), t("profile.information.updateEmail.title"), async () => {
+        const send = async () => {
+            button.classList.add("is-loading");
+            button.disabled = true;
             try {
                 const result = await repository.requestUpdateEmail(ieeInput.value);
 
                 window.showAlert(result, t("shared.codeVerification"));
                 ieeCodeVerification.style.display = "block";
                 ieeUpdate.disabled = false;
+                ieecvInput.value = "";
+                ieecvInput.focus();
             } catch (err: any) {
                 if (err instanceof Error) {
                     console.error(err);
                     window.showAlert(err.message);
                 }
             }
-        });
+
+            button.classList.remove("is-loading");
+            button.disabled = false;
+        };
+
+        if (withConfirm) 
+            window.showConfirm(t("profile.information.updateEmail.confirm", { email: ieeInput.value }), t("profile.information.updateEmail.title"), send);
+        else 
+            await send();
     };
+    ieeiVerify.onclick = () => ieeSendCode(ieeiVerify, true);
+    ieeResend.onclick = () => ieeSendCode(ieeResend, false);
     ieeCancel.onclick = () => {
         informationEditEmail.style.display = "none";
         informationShow.style.display = "block";
@@ -199,7 +214,7 @@ export const setup = (user: User, repository: UserRepository) => {
     };
     ieeUpdate.onclick = async () => {
         if (!ieeInput.value || !ieecvInput.value) {
-            const message = new MessageBuilder(true);
+            const message = new MessageBuilder();
 
             if (!ieeInput.value) message.add(t("shared.emailRequired"));
             if (!ieecvInput.value) message.add(t("shared.codeVerificationRequired"));
@@ -219,7 +234,7 @@ export const setup = (user: User, repository: UserRepository) => {
         ieeUpdate.classList.add("is-loading");
         ieeUpdate.disabled = true;
         try {
-            const result = await repository.updateEmail(ieeInput.value, Number(ieecvInput.value));
+            const result = await repository.updateEmail(ieeInput.value, ieecvInput.value.trim());
 
             window.showAlert(result, t("profile.information.updateEmail.title"), () => {
                 user = user.setEmail(ieeInput.value)

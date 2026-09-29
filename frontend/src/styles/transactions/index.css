@@ -119,6 +119,11 @@
     color: #fff;
     box-shadow: 0 2px 6px rgba(0, 209, 178, 0.3);
 }
+.segment-btn.is-active-egress {
+    background: #ff3860;
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 209, 178, 0.3);
+}
 
 .mat-message {
     margin: 0.25rem 1.25rem 0.75rem;

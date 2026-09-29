@@ -66,7 +66,8 @@ export class User implements Base {
         return createHash("sha256").update(value).digest("hex");
     }
     static IsValidEmail(email: string): boolean {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        if (email.length > 254) return false;
+        return /^[A-Za-z0-9._%+-]{1,64}@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$/.test(email);
     }
 
     toDto(showPassword: boolean = false): UserDto {

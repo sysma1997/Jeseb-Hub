@@ -96,7 +96,7 @@ function renderTopExpenses(breakdowns: any[]) {
                 <span class="rank-number" style="background: ${rankColors[i] || '#95a5a6'}">${i + 1}</span>
             </div>
             <div class="top-expense-info">
-                <div class="top-expense-category">${b.name}</div>
+                <div class="top-expense-category"></div>
                 <div class="top-expense-amount">${FormatNumber(b.total)}</div>
             </div>
             <div class="top-expense-percentage">
@@ -105,6 +105,8 @@ function renderTopExpenses(breakdowns: any[]) {
                     <span class="percentage-text">${FormatNumber(b.percentage)}%</span>
                 </span>
             </div>`;
+        const categoryName = li.querySelector('.top-expense-category');
+        if (categoryName) categoryName.textContent = b.name;
         topExpenses.appendChild(li);
     }
 }

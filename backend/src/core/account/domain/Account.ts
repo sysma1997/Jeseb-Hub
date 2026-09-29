@@ -37,7 +37,7 @@ export class Account implements Base {
     static FromDto(translator: TranslatorRepository, dto: AccountDto): Account {
         if (!dto.name || 
             !dto.balance) {
-            const message = new MessageBuilder(true);
+            const message = new MessageBuilder();
 
             if (!dto.name) message.add(translator.translate("accounts.errors.nameRequired"));
             if (!dto.balance) message.add(translator.translate("accounts.errors.balanceRequired"));

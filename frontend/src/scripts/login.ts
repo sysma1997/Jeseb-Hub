@@ -21,6 +21,7 @@ const mtsMessage = document.getElementById("mtsMessage") as HTMLLabelElement;
 const mtsCode = document.getElementById("iMTSCode") as HTMLInputElement;
 const mtsCancel = document.getElementById("btnMTSCancel") as HTMLButtonElement;
 const mtsAccept = document.getElementById("btnMTSAccept") as HTMLButtonElement;
+const mtsResend = document.getElementById("btnMTSResend") as HTMLButtonElement;
 
 const locale: Locale = getLocale();
 
@@ -43,7 +44,7 @@ password.addEventListener("keydown", (event: KeyboardEvent) => {
 });
 login.onclick = async () => {
     if (!email.value || !password.value) {
-        const message = new MessageBuilder(true);
+        const message = new MessageBuilder();
 
         if (!email.value) message.add(t("shared.emailRequired"));
         if (!password.value) message.add(t("shared.passwordRequired"));
@@ -95,12 +96,30 @@ mtsCode.addEventListener("keydown", (event: KeyboardEvent) => {
     }
 });
 mtsCancel.onclick = () => tsClickCancel();
+const tsRequestCode = async (button: HTMLButtonElement) => {
+    button.classList.add("is-loading");
+    button.disabled = true;
+    try {
+        const resend = await repository.login(email.value, password.value);
+
+        mtsMessage.innerText = resend.message ?? t("shared.codeVerificationResent");
+        mtsCode.value = "";
+        mtsCode.focus();
+    } catch (err: any) {
+        if (err instanceof Error) window.showAlert(err.message);
+    }
+
+    button.classList.remove("is-loading");
+    button.disabled = false;
+};
+mtsResend.onclick = () => tsRequestCode(mtsResend);
 mtsAccept.onclick = async () => {
-    if (!mtsCode.value) {
+    const code: string = mtsCode.value.trim();
+    if (!code) {
         window.showAlert(t("shared.codeVerificationRequired"));
         return;
     }
-    if (mtsCode.value.length !== 6) {
+    if (code.length !== 6) {
         window.showAlert(t("shared.codeVerificationInvalid"));
         return;
     }
@@ -108,9 +127,16 @@ mtsAccept.onclick = async () => {
     mtsAccept.classList.add("is-loading");
     mtsAccept.disabled = true;
     try {
-        const login = await repository.login(email.value, password.value, Number(mtsCode.value));
+        const login = await repository.login(email.value, password.value, code);
+        if (!login.token) {
+            window.showAlert(login.message ?? t("shared.codeVerificationInvalid"));
 
-        window.localStorage.setItem("token", login.token!);
+            mtsAccept.classList.remove("is-loading");
+            mtsAccept.disabled = false;
+            return;
+        }
+
+        window.localStorage.setItem("token", login.token);
         window.location.href = `/${locale}`;
     } catch (err: any) {
         if (err instanceof Error) {

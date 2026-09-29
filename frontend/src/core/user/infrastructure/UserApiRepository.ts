@@ -53,8 +53,8 @@ export class UserApiRepository extends Api implements UserRepository {
 
         return response.data;
     }
-    async updateEmail(email: string, code: number): Promise<string> {
-        const response: ApiResponse = await this.fetch(ApiMethods.PUT, "user/update/email", { email, code });
+    async updateEmail(email: string, code: string): Promise<string> {
+        const response: ApiResponse = await this.fetch(ApiMethods.PUT, "user/update/email", { email, code: code.trim() });
         if (response.status >= 400) 
             throw new Error(response.data);
 
@@ -86,11 +86,12 @@ export class UserApiRepository extends Api implements UserRepository {
         return response.data;
     }
 
-    async login(email: string, password: string, code?: number): Promise<{ token: string | undefined, message?: string | undefined }> {
+    async login(email: string, password: string, code?: string): Promise<{ token: string | undefined, message?: string | undefined }> {
         const params: any = {
             email, password
         };
-        if (code) params.code = code;
+        const cleanCode: string = (code ?? "").trim();
+        if (cleanCode !== "") params.code = cleanCode;
         const response: ApiResponse = await this.fetch(ApiMethods.POST, "user/login", params);
         if (response.status >= 400) 
             throw new Error(response.data);

@@ -146,7 +146,7 @@ const matSetOperation = (transfer: boolean) => {
 };
 const matSetType = (type: boolean) => {
     matTypeIngress.classList.toggle("is-active", type);
-    matTypeEgress.classList.toggle("is-active", !type);
+    matTypeEgress.classList.toggle("is-active-egress", !type);
 };
 const matReset = () => {
     matValue.value = "";

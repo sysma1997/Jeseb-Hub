@@ -35,7 +35,7 @@ export class Transaction implements Base {
 
         if (!account || 
             value <= 0) {
-            const message = new MessageBuilder(true);
+            const message = new MessageBuilder();
 
             if (!account) message.add(translator.translate("transactions.errors.accountRequired"));
             if (value <= 0) message.add(translator.translate("transactions.errors.valueRequired"));

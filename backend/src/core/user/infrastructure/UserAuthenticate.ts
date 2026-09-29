@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+
+import { UserToken, TokenType } from "./UserToken";
 
 export const UserAuthenticate = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
@@ -8,11 +9,13 @@ export const UserAuthenticate = (req: Request, res: Response, next: NextFunction
 
     const token = authHeader.split(" ")[1]!;
     try {
-        const payload = jwt.verify(token, process.env.JWT_SECRET!) as any;
+        const payload = UserToken.verify(token);
+        if (payload.typ !== TokenType.Session) 
+            return res.status(401).send("Unauthorized");
+
         req.user = payload;
         next();
     } catch (err: any) {
-        if (err instanceof jwt.TokenExpiredError) res.status(401).send(err.message);
-        if (err instanceof Error) res.status(400).send(err.message);
+        if (err instanceof Error) res.status(401).send("Unauthorized");
     }
 };

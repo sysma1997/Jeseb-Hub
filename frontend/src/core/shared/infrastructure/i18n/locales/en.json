@@ -274,6 +274,8 @@
         "codeVerification": "Code verification", 
         "codeVerificationRequired": "The code verification is required.", 
         "codeVerificationInvalid": "The code does not have 6 digits.", 
+        "codeVerificationResend": "Didn't get the code? Send it again",
+        "codeVerificationResent": "We have sent a new verification code to your email.", 
         "inputEmpty": "The input cannot be empty.", 
         "menu": {
             "home": "Home", 

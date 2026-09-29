@@ -78,11 +78,14 @@
             "imageRequired": "The image file is required.", 
             "codeRequired": "The code verification is required.", 
             "codeInvalid": "The code does not have 6 digits.", 
+            "tooManyAttempts": "Too many failed attempts, please request a new verification code.", 
+            "twoStepTypeNotSupported": "The configured two step verification method is not supported.", 
             "currentPasswordRequired": "The current password is required.",
             "newPasswordRequired": "The new password is required.", 
             "activeRequired": "Active is required.", 
             "typeRequired": "The type is required.", 
-            "currentUserError": "Error to get current user."
+            "currentUserError": "Error to get current user.",
+    "invalidToken": "The token is invalid or has expired."
         }, 
         "success": {
             "registrationSent": "We have sent an email to {{email}} to confirm your registration.", 

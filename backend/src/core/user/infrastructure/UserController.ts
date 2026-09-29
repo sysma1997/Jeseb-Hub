@@ -1,6 +1,5 @@
 import { v4 as Uuid } from "uuid";
 import path from "path";
-import jwt from "jsonwebtoken";
 import dayjs from "dayjs";
 import "dayjs/plugin/utc";
 import { Resend } from "resend";
@@ -8,8 +7,10 @@ import { Resend } from "resend";
 import { ControllerBase } from "../../shared/infrastructure/ControllerBase";
 import { User } from "../domain/User";
 import type { UserConfig } from "../domain/User";
+import { VerificationCode } from "../domain/VerificationCode";
 import { UserRepository } from "../domain/UserRepository";
 import { UserAuthenticate } from "./UserAuthenticate";
+import { UserToken, TokenType } from "./UserToken";
 import { FileStorage } from "../../shared/infrastructure/FileStorage";
 import { EmailTemplates } from "../../shared/domain/EmailTemplate";
 import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
@@ -25,45 +26,10 @@ export class UserController extends ControllerBase {
     private readonly repository: UserRepository;
     private readonly translator: TranslatorRepository;
 
-    private static CodesVerifications: Map<string, {
-        code: number, 
-        expires: number
-    }> = new Map();
-
     constructor(repository: UserRepository, translator: TranslatorRepository) {
         super();
         this.repository = repository;
         this.translator = translator;
-    }
-
-    private cleanExpiresCodesVerificatons() {
-        const now: number = new Date().getTime();
-
-        for (const [id, code] of UserController.CodesVerifications.entries()) {
-            if (now > code.expires) 
-                UserController.CodesVerifications.delete(id);
-        }
-    }
-    private generateCodeVerification(id: string): number {
-        UserController.CodesVerifications.delete(id);
-
-        const code = Math.floor(100000 + Math.random() * 900000);
-        UserController.CodesVerifications.set(id, {
-            code: code, 
-            expires: dayjs.utc().add(10, "minutes").toDate().getTime()
-        });
-
-        return code;
-    }
-    private validateCodeVerification(id: string, code: number): boolean {
-        this.cleanExpiresCodesVerificatons();
-        const item = UserController.CodesVerifications.get(id);
-        if (!item) throw new Error(this.translator.translate("users.errors.codeNotFound"));
-        if (code !== item.code) 
-            throw new Error(this.translator.translate("users.errors.codeNotMatch"));
-
-        UserController.CodesVerifications.delete(id);
-        return true;
     }
 
     setup() {
@@ -71,7 +37,7 @@ export class UserController extends ControllerBase {
             if (!req.body.name || 
                 !req.body.email || 
                 !req.body.password) {
-                const message = new MessageBuilder(true);
+                const message = new MessageBuilder();
 
                 if (!req.body.name) message.add(this.translator.translate("users.errors.nameRequired"));
                 if (!req.body.email) message.add(this.translator.translate("users.errors.emailRequired"));
@@ -90,15 +56,12 @@ export class UserController extends ControllerBase {
 
                 const cryptoPassword = User.ConvertPassword(password);
                 const user = new User(this.translator, name, email, cryptoPassword, dayjs.utc().toDate(), id ?? Uuid());
-                const jwtParams: any = {
+                const token = UserToken.sign({
                     id: user.id,
                     name: user.name,
                     email: user.email,
                     password: user.password,
-                };
-                const token = jwt.sign(jwtParams, process.env.JWT_SECRET!, {
-                    expiresIn: "1d"
-                });
+                }, TokenType.Activation, "1d");
                 const { data, error } = await resend.emails.send({
                     from: "no-reply@jeseb.com", 
                     to: [email], 
@@ -116,7 +79,10 @@ export class UserController extends ControllerBase {
         this.router.get("/validate/:token", async (req, res) => {
             const { token } = req.params;
             try {
-                const payload = jwt.verify(token, process.env.JWT_SECRET!) as any;
+                const payload = UserToken.verify(token);
+                if (payload.typ !== TokenType.Activation)
+                    return res.status(400).send(this.translator.translate("users.errors.invalidToken"));
+
                 const user = new User(this.translator, payload.name, payload.email, payload.password, dayjs.utc().toDate());
                 
                 await this.repository.register(user);
@@ -136,7 +102,7 @@ export class UserController extends ControllerBase {
         this.router.post("/login", async (req, res) => {
             if (!req.body.email || 
                 !req.body.password) {
-                const message = new MessageBuilder(true);
+                const message = new MessageBuilder();
 
                 if (!req.body.email) message.add(this.translator.translate("users.errors.emailRequired"));
                 if (!req.body.password) message.add(this.translator.translate("users.errors.passwordRequired"));
@@ -147,40 +113,41 @@ export class UserController extends ControllerBase {
                 return res.status(400).send(this.translator.translate("users.errors.emailInvalid", { email: req.body.email }));
             
             const { email, password, code } = req.body;
+            const hasCode: boolean = !((code === undefined) || (code === null) || (String(code).trim() === ""));
             try {
                 const cryptoPassword = User.ConvertPassword(password);
                 const user: User = await this.repository.login(email, cryptoPassword);
 
-                if (!code && user.config && user.config.twoStep && user.config.twoStep.active) {
-                    if (user.config.twoStep.type === "Email") {
-                        const codeV = this.generateCodeVerification(user.id!);
-    
+                if (user.config && user.config.twoStep && user.config.twoStep.active) {
+                    if (user.config.twoStep.type !== "Email") 
+                        return res.status(400).send(this.translator.translate("users.errors.twoStepTypeNotSupported"));
+
+                    if (!hasCode) {
+                        const codeV = VerificationCode.build();
+
                         const { data, error } = await resend.emails.send({
                             from: "no-reply@jeseb.com",  
                             to: [user.email], 
                             subject: `Jeseb Hub - ${this.translator.translate("users.email.twoFactor")}`, 
-                            html: EmailTemplates.TwoFactorCodeEmail(this.translator, user.name, codeV.toString())
+                            html: EmailTemplates.TwoFactorCodeEmail(this.translator, user.name, codeV)
                         });
                         if (error) return res.status(400).json({ error });
-                        
+
+                        VerificationCode.save("login", user.id!, codeV);
+
                         return res.json({ 
                             token: undefined, 
                             message: this.translator.translate("users.success.loginTwoFactor", { email: email }) 
                         });
                     }
+
+                    VerificationCode.validate(this.translator, "login", user.id!, code);
                 }
-                else if (user.config && user.config.twoStep && user.config.twoStep.active) 
-                    this.validateCodeVerification(user.id!, code);
     
-                const jwtParams: any = {
+                const token = UserToken.sign({
                     id: user.id, 
                     expiresToken: dayjs.utc().add(7, "days").toDate().toString()
-                };
-                const token = jwt.sign(
-                    jwtParams, 
-                    process.env.JWT_SECRET!, {
-                    expiresIn: "7d"
-                });
+                }, TokenType.Session, "7d");
     
                 res.json({ token });
             } catch (err: any) {
@@ -198,11 +165,9 @@ export class UserController extends ControllerBase {
                 if (!user) 
                     return res.status(400).send(this.translator.translate("users.errors.emailNotFound", { email }));
 
-                const token = jwt.sign({ 
+                const token = UserToken.sign({ 
                     id: user.id 
-                    }, process.env.JWT_SECRET!, {
-                        expiresIn: "1d"
-                    });
+                    }, TokenType.Recovery, "1d");
                 
                 const { data, error } = await resend.emails.send({
                     from: "no-reply@jeseb.com",  
@@ -221,7 +186,7 @@ export class UserController extends ControllerBase {
         this.router.put("/recover/password", async (req, res) => {
             if (!req.body.token || 
                 !req.body.password) {
-                const message = new MessageBuilder(true);
+                const message = new MessageBuilder();
 
                 if (!req.body.token) message.add(this.translator.translate("users.errors.tokenRequired"));
                 if (!req.body.password) message.add(this.translator.translate("users.errors.passwordRequired"));
@@ -232,7 +197,10 @@ export class UserController extends ControllerBase {
             const { token, password } = req.body;
             try {
                 const cryptoPassword = User.ConvertPassword(password);
-                const payload = jwt.verify(token, process.env.JWT_SECRET!) as any;
+                const payload = UserToken.verify(token);
+                if (payload.typ !== TokenType.Recovery)
+                    return res.status(400).send(this.translator.translate("users.errors.invalidToken"));
+
                 const id: string = payload.id;
                 
                 await this.repository.recoverPassword(id, cryptoPassword);
@@ -252,15 +220,17 @@ export class UserController extends ControllerBase {
                 return res.status(400).send(this.translator.translate("users.errors.emailInvalid", { email: _email }));
 
             try {
-                const code = this.generateCodeVerification(req.user!.id);
+                const code = VerificationCode.build();
                 
                 const { data, error } = await resend.emails.send({
                     from: "no-reply@jeseb.com", 
                     to: [_email], 
                     subject: `Jeseb Hub - ${this.translator.translate("users.email.updateEmail")}`, 
-                    html: EmailTemplates.TwoFactorCodeEmail(this.translator, _email, code.toString())
+                    html: EmailTemplates.TwoFactorCodeEmail(this.translator, _email, code)
                 });
                 if (error) return res.status(400).json({ error });
+
+                VerificationCode.save("email", req.user!.id, code);
 
                 res.send(this.translator.translate("users.success.emailUpdated", { email: _email }));
             } catch (err: any) {
@@ -294,19 +264,19 @@ export class UserController extends ControllerBase {
         });
         this.router.put("/update/email", UserAuthenticate, async (req, res) => {
             const { email, code } = req.body;
-            if (!email || !code) {
-                const message = new MessageBuilder(true);
+            const hasCode: boolean = !((code === undefined) || (code === null) || (String(code).trim() === ""));
+            if (!email || !hasCode) {
+                const message = new MessageBuilder();
 
                 if (!email) message.add(this.translator.translate("users.errors.emailRequired"));
-                if (!code) message.add(this.translator.translate("users.errors.codeRequired"));
+                if (!hasCode) message.add(this.translator.translate("users.errors.codeRequired"));
                 
                 return res.status(400).send(message.toString());
             }
             if (!User.IsValidEmail(email)) return res.status(400).send(this.translator.translate("users.errors.emailInvalid", { email }));
-            if (code.toString().length !== 6) return res.status(400).send(this.translator.translate("users.errors.codeInvalid"));
             
             try {
-                this.validateCodeVerification(req.user!.id, code);
+                VerificationCode.validate(this.translator, "email", req.user!.id, code);
                 await this.repository.updateEmail(req.user!.id, email);
 
                 res.status(201).send(this.translator.translate("users.success.emailUpdateSuccessful"));
@@ -317,7 +287,7 @@ export class UserController extends ControllerBase {
         this.router.put("/update/password", UserAuthenticate, async (req, res) => {
             if (!req.body.currentPassword || 
                 !req.body.newPassword) {
-                const message = new MessageBuilder(true);
+                const message = new MessageBuilder();
 
                 if (!req.body.currentPassword) message.add(this.translator.translate("users.errors.currentPasswordRequired"));
                 if (!req.body.newPassword) message.add(this.translator.translate("users.errors.newPasswordRequired"));
@@ -339,7 +309,7 @@ export class UserController extends ControllerBase {
         this.router.put("/update/two-step", UserAuthenticate, async (req, res) => {
             const { active, type } = req.body;
             if ((active === undefined || active === null) || !type) {
-                const message = new MessageBuilder(true);
+                const message = new MessageBuilder();
 
                 if (active === undefined || active === null) 
                     message.add(this.translator.translate("users.errors.activeRequired"));
@@ -373,15 +343,10 @@ export class UserController extends ControllerBase {
 
             let token: string | undefined = undefined;
             if (diff <= 3) {
-                const jwtParams: any = {
+                token = UserToken.sign({
                     id: user.id, 
                     expiresToken: dayjs.utc().add(7, "days").toDate().toString()
-                };
-                token = jwt.sign(
-                    jwtParams, 
-                    process.env.JWT_SECRET!, {
-                    expiresIn: "7d"
-                });
+                }, TokenType.Session, "7d");
             }
             
             const result: any = user.toDto();

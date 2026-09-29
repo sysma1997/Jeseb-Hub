@@ -62,7 +62,7 @@ export const setup = (user: User, repository: UserRepository) => {
     mupCancel.onclick = () => mupClickCancel();
     mupAccept.onclick = async () => {
         if (!mupCurrentPassword.value || !mupNewPassword.value || !mupConfirmPassword.value) {
-            const message = new MessageBuilder(true);
+            const message = new MessageBuilder();
 
             if (!mupCurrentPassword.value) message.add(t("shared.passwordCurrentRequired"));
             if (!mupNewPassword.value) message.add(t("shared.passwordNewRequired"));

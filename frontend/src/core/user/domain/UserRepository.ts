@@ -11,13 +11,13 @@ export interface UserRepository {
     updateProfile(image: File): Promise<string>;
     updateName(name: string): Promise<string>;
     requestUpdateEmail(email: string): Promise<string>;
-    updateEmail(email: string, code: number): Promise<string>;
+    updateEmail(email: string, code: string): Promise<string>;
     updatePassword(currentPassword: string, newPassword: string): Promise<string>;
     updateTwoStep(config: UserConfig): Promise<string>;
 
     deleteAllData(): Promise<string>;
     
-    login(email: string, password: string, code?: number): Promise<{ token: string | undefined, message?: string | undefined }>;
+    login(email: string, password: string, code?: string): Promise<{ token: string | undefined, message?: string | undefined }>;
 
     get(): Promise<User | undefined>;
 }

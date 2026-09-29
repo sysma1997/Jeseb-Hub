@@ -65,8 +65,9 @@ const t = createTranslations(locale);
             <div class="field">
                 <label id="mtsMessage" class="label">{t("shared.codeVerification")}</label>
                 <div class="control">
-                    <input id="iMTSCode" class="input" type="number" />
+                    <input id="iMTSCode" class="input" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" />
                 </div>
+                <button id="btnMTSResend" class="btn-resend">{t("shared.codeVerificationResend")}</button>
             </div>
         </div>
         <div class="modal-footer">

@@ -18,6 +18,10 @@ const translations: Record<string, string> = {
     "users.errors.notFound": "User not found or not exists.",
     "users.errors.passwordIncorrect": "The current password is incorrect.",
     "users.errors.emailExists": "The email '{{email}}' already exists.",
+    "users.errors.codeInvalid": "The code does not have 6 digits.",
+    "users.errors.codeNotFound": "Verification code not found or not exists.",
+    "users.errors.codeNotMatch": "The code entered does not match the verification code.",
+    "users.errors.tooManyAttempts": "Too many failed attempts, please request a new verification code.",
 };
 
 export const mockTranslator: TranslatorRepository = {

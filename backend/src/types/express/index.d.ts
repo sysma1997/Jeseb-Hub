@@ -1,10 +1,9 @@
+import type { TokenPayload } from "../../core/user/infrastructure/UserToken";
+
 declare global {
     namespace Express {
         interface Request {
-            user?: {
-                id: string;
-                expiresToken: string;
-            };
+            user?: TokenPayload;
         }
     }
 }

@@ -79,6 +79,7 @@
     color: var(--global-text);
     font-size: 0.95rem;
     line-height: 1.5;
+    white-space: pre-line;
 }
 .modal-body label {
     display: block;
@@ -86,6 +87,7 @@
     font-weight: 600;
     color: var(--global-text);
     font-size: 0.9rem;
+    white-space: pre-line;
 }
 .modal-body .field:not(:last-child) {
     margin-bottom: 0.75rem;
@@ -290,28 +292,4 @@
 .btn-info {
     background: #3b82f6;
     color: #fff;
-}
-
-.is-loading {
-    position: relative;
-    color: transparent !important;
-    pointer-events: none;
-}
-.is-loading::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 16px;
-    height: 16px;
-    margin: -8px 0 0 -8px;
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: modalSpin 0.8s linear infinite;
-}
-@keyframes modalSpin {
-    to {
-        transform: rotate(360deg);
-    }
 }

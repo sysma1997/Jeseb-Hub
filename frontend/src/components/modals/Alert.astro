@@ -29,7 +29,7 @@ const title = Astro.props?.title ?? t("shared.warning");
     modalOk!.onclick = () => modal!.classList.remove('is-active');
 
     window.showAlert = (message: string, title: string = "Warning", okAction?: () => void) => {
-        if (modalMessage) modalMessage.innerHTML = message;
+        if (modalMessage) modalMessage.textContent = message;
         if (modal!.querySelector('.modal-header h3')) {
             const tTitle = (title === "Warning") ? t("shared.warning") : title;
             modal!.querySelector('.modal-header h3')!.textContent = tTitle;
