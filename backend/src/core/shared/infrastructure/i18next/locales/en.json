@@ -92,6 +92,7 @@
             "emailStepNewRequired": "You must first verify the code sent to the new email.", 
             "emailChangeRestart": "Your email changed while you were verifying the change. Please start the process again.", 
             "codeRequiredToDisableTwoStep": "A verification code is required to disable two-step verification.", 
+            "refreshTokenRequired": "The refresh token is required to log out.",
     "invalidToken": "The token is invalid or has expired."
         }, 
         "success": {
@@ -106,7 +107,8 @@
             "nameUpdated": "User updating name successful.", 
             "emailUpdateSuccessful": "Email update successful.", 
             "passwordUpdateSuccessful": "Password update successful.", 
-            "twoFactorUpdated": "Two factor update successful."
+            "twoFactorUpdated": "Two factor update successful.",
+            "logout": "Logged out."
         }, 
         "email": {
             "confirmRegister": "Confirm your registration", 

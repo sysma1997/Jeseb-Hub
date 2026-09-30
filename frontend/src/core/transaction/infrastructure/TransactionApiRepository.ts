@@ -9,6 +9,7 @@ import type { TransactionFilter } from "../domain/TransactionFilter";
 import type { TransactionComparison } from "../domain/TransactionComparison";
 import dayjs from "dayjs";
 import dayjsUtc from "dayjs/plugin/utc";
+import { Session } from "../../shared/infrastructure/Session";
 
 dayjs.extend(dayjsUtc);
 
@@ -140,7 +141,7 @@ export class TransactionApiRepository extends Api implements TransactionReposito
             throw new Error(response.data);
     }
     async export(action: (chunk: any, progress: number) => void): Promise<void> {
-        const token: string | undefined = window.localStorage.getItem("token") ?? undefined;
+        const token: string | undefined = Session.getAccess();
         const response = await fetch(`${Api.ApiUrl}/transaction/export`, {
             headers: {
                 "Authorization": (token) ? `Bearer ${token}` : "", 

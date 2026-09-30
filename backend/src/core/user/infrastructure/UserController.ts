@@ -14,6 +14,8 @@ import { ActivationToken } from "../domain/ActivationToken";
 import type { PendingUser } from "../domain/ActivationToken";
 import { UserRepository } from "../domain/UserRepository";
 import { UserAuthenticate } from "./UserAuthenticate";
+import { SessionContext } from "./SessionContext";
+import { SessionService } from "../domain/SessionService";
 import { UserToken, TokenType } from "./UserToken";
 import { FileStorage, ValidateImageUpload } from "../../shared/infrastructure/FileStorage";
 import { AuthRateLimit, EmailRateLimit } from "../../shared/infrastructure/RateLimit";
@@ -163,13 +165,53 @@ export class UserController extends ControllerBase {
 
                     VerificationCode.validate(this.translator, "login", user.id!, code);
                 }
-    
+
+                const session = await SessionContext.get().open(user.id!, req.ip, req.get("user-agent") ?? undefined);
                 const token = UserToken.sign({
-                    id: user.id, 
-                    expiresToken: dayjs.utc().add(7, "days").toDate().toString()
-                }, TokenType.Session, "7d");
-    
-                res.json({ token });
+                    id: user.id,
+                    sid: session.id
+                }, TokenType.Session, SessionService.accessExpiry());
+
+                res.json({ accessToken: token, refreshToken: session.token });
+            } catch (err: any) {
+                if (err instanceof Error) res.status(400).send(err.message);
+            }
+        });
+        this.router.post("/refresh", async (req, res) => {
+            const { refreshToken } = req.body;
+            if (!refreshToken)
+                return res.status(401).send(this.translator.translate("users.errors.invalidToken"));
+
+            try {
+                const result = await SessionContext.get().redeem(refreshToken, req.ip, req.get("user-agent") ?? undefined);
+
+                if (result.status === "reused") {
+                    const killed: number = await SessionContext.get().revokeFamily(result.session.family);
+                    console.warn(`Refresh token reuse detected for user ${result.session.idUser}; revoked ${killed} session(s) in family ${result.session.family}.`);
+
+                    return res.status(401).send(this.translator.translate("users.errors.invalidToken"));
+                }
+                if (result.status !== "rotated")
+                    return res.status(401).send(this.translator.translate("users.errors.invalidToken"));
+
+                const token = UserToken.sign({
+                    id: result.session.idUser,
+                    sid: result.id
+                }, TokenType.Session, SessionService.accessExpiry());
+
+                res.json({ accessToken: token, refreshToken: result.token });
+            } catch (err: any) {
+                if (err instanceof Error) res.status(401).send(this.translator.translate("users.errors.invalidToken"));
+            }
+        });
+        this.router.post("/logout", UserAuthenticate, async (req, res) => {
+            const { refreshToken } = req.body;
+            if (!refreshToken)
+                return res.status(400).send(this.translator.translate("users.errors.refreshTokenRequired"));
+
+            try {
+                await SessionContext.get().revoke(refreshToken);
+                res.status(201).send(this.translator.translate("users.success.logout"));
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
@@ -224,6 +266,9 @@ export class UserController extends ControllerBase {
                 const id: string = payload.id;
                 
                 await this.repository.recoverPassword(id, cryptoPassword);
+                const revoked: number = await SessionContext.get().revokeAllForUser(id);
+                console.log(`Password recovered for user ${id}; revoked ${revoked} active session(s).`);
+
                 res.status(201).send(this.translator.translate("users.success.passwordUpdated"));
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
@@ -378,6 +423,8 @@ export class UserController extends ControllerBase {
                 const cryptoCurrentPassword = User.ConvertPassword(currentPassword);
                 const cryptoNewPassword = User.ConvertPassword(newPassword);
                 await this.repository.updatePassword(req.user!.id, cryptoCurrentPassword, cryptoNewPassword);
+                const revoked: number = await SessionContext.get().revokeAllForUser(req.user!.id);
+                console.log(`Password changed for user ${req.user!.id}; revoked ${revoked} active session(s).`);
 
                 res.status(201).send(this.translator.translate("users.success.passwordUpdateSuccessful"));
             } catch (err: any) {
@@ -432,24 +479,10 @@ export class UserController extends ControllerBase {
         });
 
         this.router.get("/", UserAuthenticate, async (req, res) => {
-            const expireIn = dayjs.utc(req.user!.expiresToken);
-            const current = dayjs.utc();
-            const diff = expireIn.diff(current, "days");
-            
             const user: User = await this.repository.get(req.user!.id);
             if (!user) throw new Error(this.translator.translate("users.errors.currentUserError"));
 
-            let token: string | undefined = undefined;
-            if (diff <= 3) {
-                token = UserToken.sign({
-                    id: user.id, 
-                    expiresToken: dayjs.utc().add(7, "days").toDate().toString()
-                }, TokenType.Session, "7d");
-            }
-            
-            const result: any = user.toDto();
-            if (token) result.newToken = token;
-            res.json(result);
+            res.json(user.toDto());
         });
 
         this.router.delete("/delete/all/data", UserAuthenticate, async (req, res) => {

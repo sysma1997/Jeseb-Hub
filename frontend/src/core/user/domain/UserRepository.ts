@@ -1,6 +1,11 @@
 import { User } from "./User";
 import type { UserConfig } from "./User";
 
+export interface LoginResult {
+    accessToken: string | undefined;
+    refreshToken: string | undefined;
+    message?: string | undefined;
+}
 export interface UserRepository {
     register(user: User): Promise<void>;
     validate(token: string): Promise<void>;
@@ -20,7 +25,9 @@ export interface UserRepository {
 
     deleteAllData(): Promise<string>;
     
-    login(email: string, password: string, code?: string): Promise<{ token: string | undefined, message?: string | undefined }>;
+login(email: string, password: string, code?: string): Promise<LoginResult>;
 
-    get(): Promise<User | undefined>;
+logout(): Promise<void>;
+
+get(): Promise<User | undefined>;
 }

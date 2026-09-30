@@ -92,6 +92,7 @@
             "emailStepNewRequired": "Primero debes verificar el código enviado al nuevo correo electrónico.", 
             "emailChangeRestart": "Tu correo electrónico cambió mientras verificabas el cambio. Vuelve a iniciar el proceso.", 
             "codeRequiredToDisableTwoStep": "Para desactivar la verificación en dos pasos se requiere un código de verificación.", 
+            "refreshTokenRequired": "Se requiere el token de refresco para cerrar la sesión.",
     "invalidToken": "El token es inválido o ha expirado."
         }, 
         "success": {
@@ -106,7 +107,8 @@
             "nameUpdated": "Actualización de nombre exitosa.", 
             "emailUpdateSuccessful": "Actualización de email exitosa.", 
             "passwordUpdateSuccessful": "Actualización de contraseña exitosa.", 
-            "twoFactorUpdated": "Actualización de autenticación de dos factores exitosa."
+            "twoFactorUpdated": "Actualización de autenticación de dos factores exitosa.",
+            "logout": "Sesión cerrada."
         }, 
         "email": {
             "confirmRegister": "Confirma tu registro", 

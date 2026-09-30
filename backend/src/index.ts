@@ -13,6 +13,9 @@ import { translateMiddleware } from "./core/shared/infrastructure/express/transl
 import { UserRepository } from "./core/user/domain/UserRepository";
 import { UserPrismaRepository } from "./core/user/infrastructure/UserPrismaRepository";
 import { UserController } from "./core/user/infrastructure/UserController";
+import { SessionService } from "./core/user/domain/SessionService";
+import { PrismaSessionStore } from "./core/user/infrastructure/PrismaSessionStore";
+import { SessionContext } from "./core/user/infrastructure/SessionContext";
 import { TransactionRepository } from "./core/transaction/domain/TransactionRepository";
 import { TransactionPrismaRepository } from "./core/transaction/infrastructure/TransactionPrismaRepository";
 import { TransactionService } from "./core/transaction/application/TransactionService";
@@ -57,6 +60,7 @@ const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
 const userRepository: UserRepository = new UserPrismaRepository(prisma, translator);
+SessionContext.configure(new SessionService(new PrismaSessionStore(prisma)));
 const userController: ControllerBase = new UserController(userRepository, translator);
 const transactionRepository: TransactionRepository = new TransactionPrismaRepository(prisma, translator);
 const accountRepository: AccountRepository = new AccountPrismaRepository(prisma, translator);

@@ -88,6 +88,8 @@ const t = createTranslations(locale);
     import { UserApiRepository } from "../../core/user/infrastructure/UserApiRepository";
     import { type Locale, getLocale, setLocale } from "../../core/shared/infrastructure/i18n";
     import { Notify } from "../../core/shared/domain/Subject";
+    import { Session } from "../../core/shared/infrastructure/Session";
+    import { SessionRefresher } from "../../core/shared/infrastructure/SessionRefresher";
 
     (async () => {
         const userRepository: UserRepository = new UserApiRepository();
@@ -197,10 +199,17 @@ const t = createTranslations(locale);
                 mobileUserAvatar.appendChild(img);
             }
             
-            // Logout
-            const handleLogout = () => {
-                localStorage.removeItem("token");
-                window.location.href = `/${currentLocale}/login`;
+            // Logout: se revoca la sesion en el backend y solo entonces se borra del navegador
+            const handleLogout = async () => {
+                try {
+                    await userRepository.logout();
+                } catch (error) {
+                    console.error("Error revoking session:", error);
+                } finally {
+                    Session.clear();
+                    SessionRefresher.invalidate();
+                    window.location.href = `/${currentLocale}/login`;
+                }
             };
             
             if (desktopLogout) desktopLogout.onclick = handleLogout;

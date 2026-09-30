@@ -6,6 +6,7 @@ import type { UserRepository } from "../core/user/domain/UserRepository";
 import { UserApiRepository } from "../core/user/infrastructure/UserApiRepository";
 import { getLocale, t, type Locale } from "../core/shared/infrastructure/i18n";
 import { MessageBuilder } from "../core/shared/domain/MessageBuilder";
+import { Session } from "../core/shared/infrastructure/Session";
 
 dayjs.extend(dayjsUtc);
 
@@ -67,7 +68,7 @@ login.onclick = async () => {
             return;
         }
 
-        window.localStorage.setItem("token", login.token!);
+        Session.save(login.accessToken!, login.refreshToken!);
         window.location.href = `/${locale}`;
     } catch (err: any) {
         if (err instanceof Error) {
@@ -128,7 +129,7 @@ mtsAccept.onclick = async () => {
     mtsAccept.disabled = true;
     try {
         const login = await repository.login(email.value, password.value, code);
-        if (!login.token) {
+        if (!login.accessToken || !login.refreshToken) {
             window.showAlert(login.message ?? t("shared.codeVerificationInvalid"));
 
             mtsAccept.classList.remove("is-loading");
@@ -136,7 +137,7 @@ mtsAccept.onclick = async () => {
             return;
         }
 
-        window.localStorage.setItem("token", login.token);
+        Session.save(login.accessToken, login.refreshToken);
         window.location.href = `/${locale}`;
     } catch (err: any) {
         if (err instanceof Error) {

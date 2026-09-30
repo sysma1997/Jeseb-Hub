@@ -1,8 +1,9 @@
 import { User } from "../domain/User";
 import type { UserConfig, UserDto } from "../domain/User";
-import type { UserRepository } from "../domain/UserRepository";
+import type { UserRepository, LoginResult } from "../domain/UserRepository";
 import { Api, ApiMethods } from "../../shared/infrastructure/Api";
 import type { ApiResponse } from "../../shared/infrastructure/Api";
+import { Session } from "../../shared/infrastructure/Session";
 
 export class UserApiRepository extends Api implements UserRepository {
     async register(user: User): Promise<void> {
@@ -111,7 +112,7 @@ export class UserApiRepository extends Api implements UserRepository {
         return response.data;
     }
 
-    async login(email: string, password: string, code?: string): Promise<{ token: string | undefined, message?: string | undefined }> {
+    async login(email: string, password: string, code?: string): Promise<LoginResult> {
         const params: any = {
             email, password
         };
@@ -131,11 +132,22 @@ export class UserApiRepository extends Api implements UserRepository {
         if (response.status >= 400)
             throw new Error(response.data);
 
-        const data: any = JSON.parse(response.data);
-        if (data.newToken) 
-            window.localStorage.setItem("token", data.newToken);
-
-        const userDto: UserDto = data as UserDto;
+        const userDto: UserDto = JSON.parse(response.data) as UserDto;
         return User.FromDto(userDto);
+    }
+    async logout(): Promise<void> {
+        const refresh: string | undefined = Session.getRefresh();
+        if (!refresh) {
+            Session.clear();
+            return;
+        }
+
+        try {
+            const response: ApiResponse = await this.fetch(ApiMethods.POST, "user/logout", { refreshToken: refresh });
+            if (response.status >= 400)
+                throw new Error(response.data);
+        } finally {
+            Session.clear();
+        }
     }
 }

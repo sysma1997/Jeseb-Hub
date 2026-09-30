@@ -20,8 +20,29 @@ model User {
     transactions Transaction[]
     accounts Account[]
     categories Category[]
+    sessions Session[]
 
     @@map("users")
+}
+model Session {
+    id String @id @default(uuid())
+    idUser String
+    family String
+    secretHash String
+    createdAt DateTime @default(now())
+    lastSeenAt DateTime @default(now())
+    expiresAt DateTime
+    revokedAt DateTime?
+    rotatedAt DateTime?
+    ip String?
+    userAgent String?
+
+    user User @relation(fields: [idUser], references: [id])
+
+    @@index([idUser])
+    @@index([family])
+    @@index([expiresAt])
+    @@map("sessions")
 }
 model Transaction {
     id String @id @default(uuid())
