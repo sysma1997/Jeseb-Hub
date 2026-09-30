@@ -42,7 +42,7 @@ export class CategoryController extends ControllerBase {
                 if (!req.body.id) message.add(this.translator.translate("categories.errors.idRequired"));
                 if (!req.body.name) message.add(this.translator.translate("categories.errors.nameRequired"));
                 
-                return res.status(400).send(message);
+                return res.status(400).send(message.toString());
             }
 
             try {

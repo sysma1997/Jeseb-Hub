@@ -43,7 +43,7 @@ export class TransactionController extends ControllerBase {
                 if (!req.body.value) message.add(this.translator.translate("transfers.errors.valueRequired"));
                 if (!req.body.date) message.add(this.translator.translate("transfers.errors.dateRequired"));
 
-                return res.status(400).send(message);
+                return res.status(400).send(message.toString());
             }
 
             try {
@@ -86,7 +86,7 @@ export class TransactionController extends ControllerBase {
                 if (!req.body.account) message.add(this.translator.translate("transactions.errors.accountRequired"));
                 if (!req.body.value) message.add(this.translator.translate("transactions.errors.valueRequired"));
 
-                return res.status(400).send(message);
+                return res.status(400).send(message.toString());
             }
 
             try {
@@ -125,7 +125,7 @@ export class TransactionController extends ControllerBase {
                 if (!req.body.account) message.add(this.translator.translate("transactions.errors.accountRequired"));
                 if (!req.body.value) message.add(this.translator.translate("transactions.errors.valueRequired"));
                 
-                return res.status(400).send(message);
+                return res.status(400).send(message.toString());
             }
 
             try {

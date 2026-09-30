@@ -44,7 +44,7 @@ export class AccountController extends ControllerBase {
                 if (!req.body.id) message.add(this.translator.translate("accounts.errors.idRequired"));
                 if (!req.body.name) message.add(this.translator.translate("accounts.errors.nameRequired"));
                 
-                return res.status(400).send(message);
+                return res.status(400).send(message.toString());
             }
 
             try {

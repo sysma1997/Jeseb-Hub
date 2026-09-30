@@ -8,10 +8,13 @@ import { ControllerBase } from "../../shared/infrastructure/ControllerBase";
 import { User } from "../domain/User";
 import type { UserConfig } from "../domain/User";
 import { VerificationCode } from "../domain/VerificationCode";
+import { ActivationToken } from "../domain/ActivationToken";
+import type { PendingUser } from "../domain/ActivationToken";
 import { UserRepository } from "../domain/UserRepository";
 import { UserAuthenticate } from "./UserAuthenticate";
 import { UserToken, TokenType } from "./UserToken";
-import { FileStorage } from "../../shared/infrastructure/FileStorage";
+import { FileStorage, ValidateImageUpload } from "../../shared/infrastructure/FileStorage";
+import { AuthRateLimit, EmailRateLimit } from "../../shared/infrastructure/RateLimit";
 import { EmailTemplates } from "../../shared/domain/EmailTemplate";
 import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
 import { MessageBuilder } from "../../shared/domain/MessageBuilder";
@@ -33,7 +36,7 @@ export class UserController extends ControllerBase {
     }
 
     setup() {
-        this.router.post("/register", async (req, res) => {
+        this.router.post("/register", EmailRateLimit, async (req, res) => {
             if (!req.body.name || 
                 !req.body.email || 
                 !req.body.password) {
@@ -56,12 +59,13 @@ export class UserController extends ControllerBase {
 
                 const cryptoPassword = User.ConvertPassword(password);
                 const user = new User(this.translator, name, email, cryptoPassword, dayjs.utc().toDate(), id ?? Uuid());
-                const token = UserToken.sign({
-                    id: user.id,
+                const token = UserToken.sign({ id: user.id }, TokenType.Activation, "1d");
+                ActivationToken.save(token, {
+                    id: user.id!,
                     name: user.name,
                     email: user.email,
-                    password: user.password,
-                }, TokenType.Activation, "1d");
+                    password: user.password
+                });
                 const { data, error } = await resend.emails.send({
                     from: "no-reply@jeseb.com", 
                     to: [email], 
@@ -83,7 +87,8 @@ export class UserController extends ControllerBase {
                 if (payload.typ !== TokenType.Activation)
                     return res.status(400).send(this.translator.translate("users.errors.invalidToken"));
 
-                const user = new User(this.translator, payload.name, payload.email, payload.password, dayjs.utc().toDate());
+                const pending: PendingUser = ActivationToken.consume(this.translator, token);
+                const user = new User(this.translator, pending.name, pending.email, pending.password, dayjs.utc().toDate(), pending.id);
                 
                 await this.repository.register(user);
                 const { data, error } = await resend.emails.send({
@@ -99,7 +104,7 @@ export class UserController extends ControllerBase {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
         });
-        this.router.post("/login", async (req, res) => {
+        this.router.post("/login", AuthRateLimit, async (req, res) => {
             if (!req.body.email || 
                 !req.body.password) {
                 const message = new MessageBuilder();
@@ -154,16 +159,16 @@ export class UserController extends ControllerBase {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
         });
-        this.router.get("/recover/password/:email", async (req, res) => {
-            const { email } = req.params;
+        this.router.get("/recover/password/:email", EmailRateLimit, async (req, res) => {
+            const _email: string = this.getQueryString(req.params.email);
             
-            if (!User.IsValidEmail(email)) 
-                return res.status(400).send(this.translator.translate("users.errors.emailInvalid", { email }));
+            if (!User.IsValidEmail(_email)) 
+                return res.status(400).send(this.translator.translate("users.errors.emailInvalid", { email: _email }));
 
             try {
-                const user: User | undefined = await this.repository.getWithEmail(email);
+                const user: User | undefined = await this.repository.getWithEmail(_email);
                 if (!user) 
-                    return res.status(400).send(this.translator.translate("users.errors.emailNotFound", { email }));
+                    return res.status(400).send(this.translator.translate("users.errors.emailNotFound", { email: _email }));
 
                 const token = UserToken.sign({ 
                     id: user.id 
@@ -178,7 +183,7 @@ export class UserController extends ControllerBase {
                 });
                 if (error) return res.status(400).json({ error });
 
-                res.send(this.translator.translate("users.success.passwordRecovery", { email: email }));
+                res.send(this.translator.translate("users.success.passwordRecovery", { email: _email }));
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
@@ -238,11 +243,11 @@ export class UserController extends ControllerBase {
             }
         });
 
-        this.router.put("/update/profile", UserAuthenticate, FileStorage.single("image"), async (req, res) => {
+        this.router.put("/update/profile", UserAuthenticate, FileStorage.single("image"), ValidateImageUpload, async (req, res) => {
             try {
                 if (!req.file) return res.status(400).send(this.translator.translate("users.errors.imageRequired"));
 
-                const ext = path.extname(req.file!.originalname).toLocaleLowerCase();
+                const ext = path.extname(req.file!.path).toLocaleLowerCase();
                 const filePath = `/uploads/${req.user!.id}/profile${ext}`;
                 await this.repository.updateProfile(req.user!.id, filePath);
 
@@ -292,7 +297,7 @@ export class UserController extends ControllerBase {
                 if (!req.body.currentPassword) message.add(this.translator.translate("users.errors.currentPasswordRequired"));
                 if (!req.body.newPassword) message.add(this.translator.translate("users.errors.newPasswordRequired"));
 
-                return res.status(400).send(message);
+                return res.status(400).send(message.toString());
             }
             
             const { currentPassword, newPassword } = req.body;
