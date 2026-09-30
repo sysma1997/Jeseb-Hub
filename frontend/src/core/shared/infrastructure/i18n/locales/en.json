@@ -204,7 +204,11 @@
                 "title": "Update email", 
                 "same": "The email is the same one you are using on this account.", 
                 "confirm": "Update the email to '{{email}}'?", 
-                "verify": "Verify"
+                "verify": "Verify", 
+                "stepCurrent": "Code sent to {{email}}", 
+                "hintCurrent": "Enter the code we sent to {{email}}, your current email, to confirm you still have access to the account.", 
+                "stepNew": "Code sent to {{email}}", 
+                "hintNew": "Enter the code we sent to {{email}}, the new email, to complete the change."
             }, 
             "createAt": "Account created: {{date}}", 
             "lastUpdate": "Information last updated: {{date}}"
@@ -215,7 +219,8 @@
             "type": "Type", 
             "confirm": "Then you can {{value}} it again.",
             "passwordDesc": "Change the password of your account.",
-            "twoStepDesc": "Manage two-step verification for your account."
+            "twoStepDesc": "Manage two-step verification for your account.", 
+            "disablePrompt": "Enter the 6-digit code we sent to your email to confirm the deactivation."
         }, 
         "data": {
             "import": {

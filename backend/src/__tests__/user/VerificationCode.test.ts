@@ -58,7 +58,7 @@ describe("VerificationCode domain", () => {
         const code = VerificationCode.build();
         VerificationCode.save("login", userId, code);
 
-        expect(() => VerificationCode.validate(mockTranslator, "email", userId, code)).toThrow(codeNotFound);
+        expect(() => VerificationCode.validate(mockTranslator, "emailNew", userId, code)).toThrow(codeNotFound);
         expect(VerificationCode.count("login", userId)).toBe(1);
     });
     it("Should not validate a code saved for another user.", () => {
@@ -119,10 +119,10 @@ describe("VerificationCode domain", () => {
     });
     it("Should clear the codes of a purpose without touching the other.", () => {
         VerificationCode.save("login", userId, VerificationCode.build());
-        VerificationCode.save("email", userId, VerificationCode.build());
+        VerificationCode.save("emailNew", userId, VerificationCode.build());
         VerificationCode.clear("login", userId);
 
         expect(VerificationCode.count("login", userId)).toBe(0);
-        expect(VerificationCode.count("email", userId)).toBe(1);
+        expect(VerificationCode.count("emailNew", userId)).toBe(1);
     });
 });

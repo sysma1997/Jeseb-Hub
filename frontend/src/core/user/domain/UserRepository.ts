@@ -11,9 +11,12 @@ export interface UserRepository {
     updateProfile(image: File): Promise<string>;
     updateName(name: string): Promise<string>;
     requestUpdateEmail(email: string): Promise<string>;
-    updateEmail(email: string, code: string): Promise<string>;
+    resendUpdateEmail(): Promise<string>;
+    getEmailChangeStatus(): Promise<{ step: "current" | "new", email: string }>;
+    updateEmail(step: "current" | "new", code: string): Promise<string>;
     updatePassword(currentPassword: string, newPassword: string): Promise<string>;
-    updateTwoStep(config: UserConfig): Promise<string>;
+    requestTwoStepCode(): Promise<string>;
+    updateTwoStep(config: UserConfig, code?: string): Promise<string>;
 
     deleteAllData(): Promise<string>;
     

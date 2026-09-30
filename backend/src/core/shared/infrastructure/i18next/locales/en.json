@@ -85,6 +85,13 @@
             "activeRequired": "Active is required.", 
             "typeRequired": "The type is required.", 
             "currentUserError": "Error to get current user.",
+            "emailSameAsCurrent": "The email '{{email}}' is the one you already use in this account.", 
+            "emailSendFailed": "The verification code email could not be sent.", 
+            "emailChangeNotStarted": "There is no email change request in progress.", 
+            "emailStepCurrentRequired": "You must first verify the code sent to your current email.", 
+            "emailStepNewRequired": "You must first verify the code sent to the new email.", 
+            "emailChangeRestart": "Your email changed while you were verifying the change. Please start the process again.", 
+            "codeRequiredToDisableTwoStep": "A verification code is required to disable two-step verification.", 
     "invalidToken": "The token is invalid or has expired."
         }, 
         "success": {
@@ -92,8 +99,10 @@
             "userAdded": "User added successfully.", 
             "loginTwoFactor": "We have sent an email to {{email}} to login with two-factor authentication.", 
             "passwordRecovery": "We have sent an email to {{email}} to recover your user.", 
+            "emailCodeSentCurrent": "We sent a verification code to {{email}}, your current email, to confirm the change.", 
+            "emailCodeSentNew": "Your current email is verified. We sent a second code to {{email}} to complete the change.", 
+            "twoStepCodeSent": "We sent a verification code to {{email}}.", 
             "passwordUpdated": "User updating password success.", 
-            "emailUpdated": "We have sent an email to {{email}} to update to your new email address.", 
             "nameUpdated": "User updating name successful.", 
             "emailUpdateSuccessful": "Email update successful.", 
             "passwordUpdateSuccessful": "Password update successful.", 
@@ -104,7 +113,9 @@
             "validateToken": "Validate token", 
             "twoFactor": "Two factor", 
             "passwordRecovery": "Recover your user", 
-            "updateEmail": "Updating email", 
+            "updateEmailCurrent": "Confirm your current email", 
+            "updateEmailNew": "Confirm your new email", 
+            "disableTwoStep": "Disable two-step verification", 
             "verificationEmail": {
                 "welcome": "Welcome to Jeseb Hub", 
                 "confirmation": "Thanks for signing up. Please confirm your email address to start managing your finances.", 
@@ -130,6 +141,14 @@
                 "description": "Use the code below to complete your login. This code is valid for 10 minutes.", 
                 "warning": "🔒 <strong>Security notice:</strong> If you didn't try to log in, change your password immediately.", 
                 "footer": "Never share this code with anyone."
+            }, 
+            "emailChangeCode": {
+                "description": "We confirmed you still have access to your current email. Use this code to confirm the new email address.", 
+                "warning": "🔒 <strong>Security notice:</strong> If you did not request this change, ignore this message and do not continue."
+            }, 
+            "twoStepCode": {
+                "description": "Use this code to confirm that you want to disable two-step verification on your account. It is valid for 10 minutes.", 
+                "warning": "🔒 <strong>Security notice:</strong> Disabling two-step verification leaves your account less protected. If you did not request it, change your password immediately."
             }, 
             "shared": {
                 "hi": "Hi {{name}}!", 

@@ -53,8 +53,22 @@ export class UserApiRepository extends Api implements UserRepository {
 
         return response.data;
     }
-    async updateEmail(email: string, code: string): Promise<string> {
-        const response: ApiResponse = await this.fetch(ApiMethods.PUT, "user/update/email", { email, code: code.trim() });
+    async resendUpdateEmail(): Promise<string> {
+        const response: ApiResponse = await this.fetch(ApiMethods.POST, "user/request/update/email/resend");
+        if (response.status >= 400) 
+            throw new Error(response.data);
+
+        return response.data;
+    }
+    async getEmailChangeStatus(): Promise<{ step: "current" | "new", email: string }> {
+        const response: ApiResponse = await this.fetch(ApiMethods.GET, "user/update/email/status");
+        if (response.status >= 400) 
+            throw new Error(response.data);
+
+        return JSON.parse(response.data);
+    }
+    async updateEmail(step: "current" | "new", code: string): Promise<string> {
+        const response: ApiResponse = await this.fetch(ApiMethods.PUT, "user/update/email", { step, code: code.trim() });
         if (response.status >= 400) 
             throw new Error(response.data);
 
@@ -67,11 +81,22 @@ export class UserApiRepository extends Api implements UserRepository {
 
         return response.data;
     }
-    async updateTwoStep(config: UserConfig): Promise<string> {
-        const response: ApiResponse = await this.fetch(ApiMethods.PUT, "user/update/two-step", { 
+    async requestTwoStepCode(): Promise<string> {
+        const response: ApiResponse = await this.fetch(ApiMethods.POST, "user/request/two-step/code");
+        if (response.status >= 400) 
+            throw new Error(response.data);
+
+        return response.data;
+    }
+    async updateTwoStep(config: UserConfig, code?: string): Promise<string> {
+        const params: any = { 
             active: config.twoStep.active, 
             type: config.twoStep.type
-        });
+        };
+        const cleanCode: string = (code ?? "").trim();
+        if (cleanCode !== "") params.code = cleanCode;
+
+        const response: ApiResponse = await this.fetch(ApiMethods.PUT, "user/update/two-step", params);
         if (response.status >= 400) 
             throw new Error(response.data);
 

@@ -4,7 +4,6 @@ import { Api } from "../../core/shared/infrastructure/Api";
 import { User } from "../../core/user/domain/User";
 import type { UserRepository } from "../../core/user/domain/UserRepository";
 import { t } from "../../core/shared/infrastructure/i18n";
-import { MessageBuilder } from "../../core/shared/domain/MessageBuilder";
 
 const icon = document.getElementById("iIPIcon") as HTMLElement;
 const photo = document.getElementById("iIPPhoto") as HTMLImageElement;
@@ -24,6 +23,8 @@ const informationEditEmail = document.getElementById("dInformationEditEmail") as
 const ieeInput = document.getElementById("iIEEInput") as HTMLInputElement;
 const ieeiVerify = document.getElementById("btnIEEVerify") as HTMLButtonElement;
 const ieeCodeVerification = document.getElementById("dIEECodeVerification") as HTMLDivElement;
+const ieeCodeLabel = document.getElementById("lIEECodeLabel") as HTMLLabelElement;
+const ieeCodeHint = document.getElementById("pIEECodeHint") as HTMLParagraphElement;
 const ieecvInput = document.getElementById("iIEECVInput") as HTMLInputElement;
 const ieeResend = document.getElementById("btnIEEResend") as HTMLButtonElement;
 const ieeCancel = document.getElementById("btnIEECancel") as HTMLButtonElement;
@@ -37,6 +38,37 @@ const createdAt = document.getElementById("sICreatedAt") as HTMLSpanElement;
 const lastUpdate = document.getElementById("sILastUpdate") as HTMLSpanElement;
 
 const mimesValid = [ 'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp' ];
+
+let emailStep: "current" | "new" = "current";
+
+const resetEmailForm = () => {
+    emailStep = "current";
+    ieeCodeVerification.style.display = "none";
+    ieeCodeLabel.textContent = t("shared.codeVerification");
+    ieeCodeHint.textContent = "";
+    ieecvInput.value = "";
+    ieeUpdate.disabled = true;
+    ieeInput.disabled = false;
+    ieeiVerify.style.display = "";
+};
+const showEmailStep = (step: "current" | "new", email: string) => {
+    emailStep = step;
+    ieeCodeVerification.style.display = "block";
+    ieeUpdate.disabled = false;
+    ieeInput.disabled = true;
+    ieeiVerify.style.display = "none";
+
+    if (step === "current") {
+        ieeCodeLabel.textContent = t("profile.information.updateEmail.stepCurrent", { email });
+        ieeCodeHint.textContent = t("profile.information.updateEmail.hintCurrent", { email });
+    }
+    else {
+        ieeCodeLabel.textContent = t("profile.information.updateEmail.stepNew", { email });
+        ieeCodeHint.textContent = t("profile.information.updateEmail.hintNew", { email });
+    }
+    ieecvInput.value = "";
+    ieecvInput.focus();
+};
 
 const setImageProfile = (profile: string | undefined) => {
     if (profile) {
@@ -104,6 +136,12 @@ export const setup = (user: User, repository: UserRepository) => {
         informationShow.style.display = "none";
         informationOptions.style.display = "none";
         informationEditEmail.style.display = "block";
+
+        repository.getEmailChangeStatus().then((status) => {
+            showEmailStep(status.step, status.step === "current" ? user.email : status.email);
+        }).catch(() => {
+            resetEmailForm();
+        });
     };
 
     ienInput.addEventListener("keydown", (event: KeyboardEvent) => {
@@ -185,10 +223,7 @@ export const setup = (user: User, repository: UserRepository) => {
                 const result = await repository.requestUpdateEmail(ieeInput.value);
 
                 window.showAlert(result, t("shared.codeVerification"));
-                ieeCodeVerification.style.display = "block";
-                ieeUpdate.disabled = false;
-                ieecvInput.value = "";
-                ieecvInput.focus();
+                showEmailStep("current", user.email);
             } catch (err: any) {
                 if (err instanceof Error) {
                     console.error(err);
@@ -206,24 +241,36 @@ export const setup = (user: User, repository: UserRepository) => {
             await send();
     };
     ieeiVerify.onclick = () => ieeSendCode(ieeiVerify, true);
-    ieeResend.onclick = () => ieeSendCode(ieeResend, false);
+    ieeResend.onclick = async () => {
+        ieeResend.classList.add("is-loading");
+        ieeResend.disabled = true;
+        try {
+            const result = await repository.resendUpdateEmail();
+
+            window.showAlert(result, t("shared.codeVerification"));
+            ieecvInput.value = "";
+            ieecvInput.focus();
+        } catch (err: any) {
+            if (err instanceof Error) {
+                console.error(err);
+                window.showAlert(err.message);
+            }
+
+            resetEmailForm();
+        }
+
+        ieeResend.classList.remove("is-loading");
+        ieeResend.disabled = false;
+    };
     ieeCancel.onclick = () => {
+        resetEmailForm();
         informationEditEmail.style.display = "none";
         informationShow.style.display = "block";
         informationOptions.style.display = "flex";
     };
     ieeUpdate.onclick = async () => {
-        if (!ieeInput.value || !ieecvInput.value) {
-            const message = new MessageBuilder();
-
-            if (!ieeInput.value) message.add(t("shared.emailRequired"));
-            if (!ieecvInput.value) message.add(t("shared.codeVerificationRequired"));
-            
-            window.showAlert(message.toString());
-            return;
-        }
-        if (!User.IsValidEmail(ieeInput.value)) {
-            window.showAlert(t("shared.emailInvalid"));
+        if (!ieecvInput.value) {
+            window.showAlert(t("shared.codeVerificationRequired"));
             return;
         }
         if (ieecvInput.value.length !== 6) {
@@ -233,16 +280,26 @@ export const setup = (user: User, repository: UserRepository) => {
 
         ieeUpdate.classList.add("is-loading");
         ieeUpdate.disabled = true;
+        const pendingEmail: string = ieeInput.value;
         try {
-            const result = await repository.updateEmail(ieeInput.value, ieecvInput.value.trim());
+            const result = await repository.updateEmail(emailStep, ieecvInput.value.trim());
+
+            if (emailStep === "current") {
+                window.showAlert(result, t("profile.information.updateEmail.title"), () => {
+                    showEmailStep("new", pendingEmail);
+                    ieeUpdate.classList.remove("is-loading");
+                    ieeUpdate.disabled = false;
+                });
+                return;
+            }
 
             window.showAlert(result, t("profile.information.updateEmail.title"), () => {
-                user = user.setEmail(ieeInput.value)
+                user = user.setEmail(pendingEmail)
                     .setLastUpdate(dayjs().toDate());
                 setInformation(user);
 
                 ieeInput.value = "";
-                ieecvInput.value = "";
+                resetEmailForm();
                 ieeCancel.click();
                 ieeUpdate.classList.remove("is-loading");
                 ieeUpdate.disabled = false;

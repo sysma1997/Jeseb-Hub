@@ -85,6 +85,13 @@
             "activeRequired": "El estado es requerido.", 
             "typeRequired": "El tipo es requerido.", 
             "currentUserError": "Error al obtener el usuario actual.",
+            "emailSameAsCurrent": "El correo electrónico '{{email}}' es el que ya usas en esta cuenta.", 
+            "emailSendFailed": "No se pudo enviar el correo electrónico con el código de verificación.", 
+            "emailChangeNotStarted": "No hay ninguna solicitud de cambio de correo electrónico en curso.", 
+            "emailStepCurrentRequired": "Primero debes verificar el código enviado a tu correo electrónico actual.", 
+            "emailStepNewRequired": "Primero debes verificar el código enviado al nuevo correo electrónico.", 
+            "emailChangeRestart": "Tu correo electrónico cambió mientras verificabas el cambio. Vuelve a iniciar el proceso.", 
+            "codeRequiredToDisableTwoStep": "Para desactivar la verificación en dos pasos se requiere un código de verificación.", 
     "invalidToken": "El token es inválido o ha expirado."
         }, 
         "success": {
@@ -92,8 +99,10 @@
             "userAdded": "Usuario registrado exitosamente.", 
             "loginTwoFactor": "Hemos enviado un email a {{email}} para iniciar sesión con autenticación de dos factores.", 
             "passwordRecovery": "Hemos enviado un email a {{email}} para recuperar tu usuario.", 
+            "emailCodeSentCurrent": "Te enviamos un código de verificación a {{email}}, tu correo actual, para confirmar el cambio.", 
+            "emailCodeSentNew": "Verificamos tu correo actual. Te enviamos un segundo código a {{email}} para completar el cambio.", 
+            "twoStepCodeSent": "Te enviamos un código de verificación a {{email}}.", 
             "passwordUpdated": "Actualización de contraseña exitosa.", 
-            "emailUpdated": "Hemos enviado un email a {{email}} para actualizar a tu nueva dirección de email.", 
             "nameUpdated": "Actualización de nombre exitosa.", 
             "emailUpdateSuccessful": "Actualización de email exitosa.", 
             "passwordUpdateSuccessful": "Actualización de contraseña exitosa.", 
@@ -104,7 +113,9 @@
             "validateToken": "Validar token", 
             "twoFactor": "Autenticación de dos factores", 
             "passwordRecovery": "Recupera tu usuario", 
-            "updateEmail": "Actualizando correo electrónico", 
+            "updateEmailCurrent": "Confirma tu correo actual", 
+            "updateEmailNew": "Confirma tu nuevo correo electrónico", 
+            "disableTwoStep": "Desactivar la verificación en dos pasos", 
             "verificationEmail": {
                 "welcome": "Bienvenido a Jeseb Hub", 
                 "confirmation": "Gracias por registrarte. Confirma tu dirección de correo electrónico para empezar a gestionar tus finanzas.", 
@@ -130,6 +141,14 @@
                 "description": "Utiliza el código a continuación para completar tu inicio de sesión. Este código es válido durante 10 minutos.", 
                 "warning": "🔒 <strong>Aviso de seguridad:</strong> Si no has intentado iniciar sesión, cambia tu contraseña inmediatamente.", 
                 "footer": "Nunca compartas este código con nadie."
+            }, 
+            "emailChangeCode": {
+                "description": "Confirmamos que sigues teniendo acceso a tu correo actual. Usa este código para confirmar la nueva dirección de correo electrónico.", 
+                "warning": "🔒 <strong>Aviso de seguridad:</strong> Si no solicitaste este cambio, ignora este mensaje y no continúes."
+            }, 
+            "twoStepCode": {
+                "description": "Usa este código para confirmar que quieres desactivar la verificación en dos pasos de tu cuenta. Es válido durante 10 minutos.", 
+                "warning": "🔒 <strong>Aviso de seguridad:</strong> Desactivar la verificación en dos pasos deja tu cuenta menos protegida. Si no lo solicitaste, cambia tu contraseña inmediatamente."
             }, 
             "shared": {
                 "hi": "¡Hola {{name}}!", 

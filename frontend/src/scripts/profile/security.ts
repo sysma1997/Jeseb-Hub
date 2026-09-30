@@ -109,31 +109,71 @@ export const setup = (user: User, repository: UserRepository) => {
         mutsAccept.classList.add("is-loading");
         mutsAccept.disabled = true;
         let message =  `${((active) ? t("profile.security.active") : t("profile.security.deactivate"))} ` + 
-            `${t("shared.codeVerification").toLocaleLowerCase()}?</br>` + 
+            `${t("shared.codeVerification").toLocaleLowerCase()}?\n` + 
             t("profile.security.confirm", { value: ((active) ? t("profile.security.deactivate") : t("profile.security.active")).toLocaleLowerCase() });
         window.showConfirm(message, t("shared.codeVerification"), async () => {
-            try {
-                const config: UserConfig = {
-                    twoStep: {
-                        active: active, 
-                        type: type
-                    }
-                };
-                const result = await repository.updateTwoStep(config);
+            const config: UserConfig = {
+                twoStep: {
+                    active: active, 
+                    type: type
+                }
+            };
 
-                window.showAlert(result, t("shared.codeVerification"), () => {
-                    user = user.setConfig(config);
-                    mutsActive.checked = config.twoStep.active;
+            const finish = async (code?: string) => {
+                try {
+                    const result = await repository.updateTwoStep(config, code);
+
+                    window.showAlert(result, t("shared.codeVerification"), () => {
+                        user = user.setConfig(config);
+                        mutsActive.checked = config.twoStep.active;
+                        mutsAccept.classList.remove("is-loading");
+                        mutsAccept.disabled = false;
+                        mutsClickCancel();
+                    });
+                } catch (err: any) {
+                    if (err instanceof Error) {
+                        console.error(err);
+                        window.showAlert(err.message);
+                    }
+
                     mutsAccept.classList.remove("is-loading");
                     mutsAccept.disabled = false;
-                    mutsClickCancel();
+                }
+            };
+
+            if (active) {
+                await finish();
+                return;
+            }
+
+            try {
+                const sent = await repository.requestTwoStepCode();
+
+                window.showAlert(sent, t("shared.codeVerification"), () => {
+                    window.showPrompt(
+                        t("profile.security.disablePrompt"),
+                        t("shared.codeVerification"),
+                        async (value: string) => {
+                            const clean: string = value.trim();
+                            if (clean.length !== 6) {
+                                window.showAlert(t("shared.codeVerificationInvalid"));
+                                mutsAccept.classList.remove("is-loading");
+                                mutsAccept.disabled = false;
+                                return;
+                            }
+                            await finish(clean);
+                        },
+                        () => {
+                            mutsAccept.classList.remove("is-loading");
+                            mutsAccept.disabled = false;
+                        });
                 });
             } catch (err: any) {
                 if (err instanceof Error) {
                     console.error(err);
                     window.showAlert(err.message);
                 }
-                
+
                 mutsAccept.classList.remove("is-loading");
                 mutsAccept.disabled = false;
             }

@@ -8,6 +8,8 @@ import { ControllerBase } from "../../shared/infrastructure/ControllerBase";
 import { User } from "../domain/User";
 import type { UserConfig } from "../domain/User";
 import { VerificationCode } from "../domain/VerificationCode";
+import type { VerificationPurpose } from "../domain/VerificationCode";
+import { EmailChange } from "../domain/EmailChange";
 import { ActivationToken } from "../domain/ActivationToken";
 import type { PendingUser } from "../domain/ActivationToken";
 import { UserRepository } from "../domain/UserRepository";
@@ -33,6 +35,19 @@ export class UserController extends ControllerBase {
         super();
         this.repository = repository;
         this.translator = translator;
+    }
+
+    private sendEmailCode = async (idUser: string, name: string, to: string, purpose: VerificationPurpose, subjectKey: string, messageKey: string = "users.email.twoFactorCode"): Promise<void> => {
+        const code = VerificationCode.build();
+        const { error } = await resend.emails.send({
+            from: "no-reply@jeseb.com",
+            to: [to],
+            subject: `Jeseb Hub - ${this.translator.translate(subjectKey)}`,
+            html: EmailTemplates.TwoFactorCodeEmail(this.translator, name, code, messageKey)
+        });
+        if (error) throw new Error(this.translator.translate("users.errors.emailSendFailed"));
+
+        VerificationCode.save(purpose, idUser, code);
     }
 
     setup() {
@@ -225,19 +240,55 @@ export class UserController extends ControllerBase {
                 return res.status(400).send(this.translator.translate("users.errors.emailInvalid", { email: _email }));
 
             try {
-                const code = VerificationCode.build();
-                
-                const { data, error } = await resend.emails.send({
-                    from: "no-reply@jeseb.com", 
-                    to: [_email], 
-                    subject: `Jeseb Hub - ${this.translator.translate("users.email.updateEmail")}`, 
-                    html: EmailTemplates.TwoFactorCodeEmail(this.translator, _email, code)
-                });
-                if (error) return res.status(400).json({ error });
+                const idUser: string = req.user!.id;
+                const user: User = await this.repository.get(idUser);
 
-                VerificationCode.save("email", req.user!.id, code);
+                if (_email.toLocaleLowerCase() === user.email.toLocaleLowerCase())
+                    return res.status(400).send(this.translator.translate("users.errors.emailSameAsCurrent", { email: user.email }));
 
-                res.send(this.translator.translate("users.success.emailUpdated", { email: _email }));
+                const exists: User | undefined = await this.repository.getWithEmail(_email);
+                if (exists) 
+                    return res.status(400).send(this.translator.translate("users.errors.emailAlreadyExists", { email: _email }));
+
+                VerificationCode.clear("emailCurrent", idUser);
+                VerificationCode.clear("emailNew", idUser);
+                EmailChange.start({ idUser: idUser, currentEmail: user.email, newEmail: _email });
+                await this.sendEmailCode(idUser, user.name, user.email, "emailCurrent", "users.email.updateEmailCurrent");
+
+                res.send(this.translator.translate("users.success.emailCodeSentCurrent", { email: user.email }));
+            } catch (err: any) {
+                if (err instanceof Error) res.status(400).send(err.message);
+            }
+        });
+
+        this.router.get("/update/email/status", UserAuthenticate, async (req, res) => {
+            try {
+                const challenge = EmailChange.get(this.translator, req.user!.id);
+
+                res.json({ step: challenge.step, email: challenge.newEmail });
+            } catch (err: any) {
+                if (err instanceof Error) res.status(400).send(err.message);
+            }
+        });
+
+        this.router.post("/request/update/email/resend", UserAuthenticate, async (req, res) => {
+            try {
+                const idUser: string = req.user!.id;
+                const challenge = EmailChange.get(this.translator, idUser);
+                const user: User = await this.repository.get(idUser);
+
+                if (challenge.currentEmail !== user.email)
+                    throw new Error(this.translator.translate("users.errors.emailChangeRestart"));
+
+                if (challenge.step === "current") {
+                    await this.sendEmailCode(idUser, user.name, user.email, "emailCurrent", "users.email.updateEmailCurrent");
+
+                    return res.send(this.translator.translate("users.success.emailCodeSentCurrent", { email: user.email }));
+                }
+
+                await this.sendEmailCode(idUser, user.name, challenge.newEmail, "emailNew", "users.email.updateEmailNew", "users.email.emailChangeCode");
+
+                res.send(this.translator.translate("users.success.emailCodeSentNew", { email: challenge.newEmail }));
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
@@ -268,21 +319,43 @@ export class UserController extends ControllerBase {
             }
         });
         this.router.put("/update/email", UserAuthenticate, async (req, res) => {
-            const { email, code } = req.body;
+            const { code, step } = req.body;
             const hasCode: boolean = !((code === undefined) || (code === null) || (String(code).trim() === ""));
-            if (!email || !hasCode) {
-                const message = new MessageBuilder();
+            if (!hasCode) 
+                return res.status(400).send(this.translator.translate("users.errors.codeRequired"));
 
-                if (!email) message.add(this.translator.translate("users.errors.emailRequired"));
-                if (!hasCode) message.add(this.translator.translate("users.errors.codeRequired"));
-                
-                return res.status(400).send(message.toString());
-            }
-            if (!User.IsValidEmail(email)) return res.status(400).send(this.translator.translate("users.errors.emailInvalid", { email }));
-            
             try {
-                VerificationCode.validate(this.translator, "email", req.user!.id, code);
-                await this.repository.updateEmail(req.user!.id, email);
+                const idUser: string = req.user!.id;
+                const challenge = EmailChange.get(this.translator, idUser);
+                const expected: "current" | "new" = (step === "new") ? "new" : "current";
+
+                if (challenge.step !== expected)
+                    return res.status(400).send(this.translator.translate(
+                        (challenge.step === "current") ? "users.errors.emailStepCurrentRequired" : "users.errors.emailStepNewRequired"));
+
+                if (expected === "current") {
+                    VerificationCode.validate(this.translator, "emailCurrent", idUser, code);
+
+                    const user: User = await this.repository.get(idUser);
+                    if (challenge.currentEmail !== user.email)
+                        throw new Error(this.translator.translate("users.errors.emailChangeRestart"));
+
+                    const advanced = EmailChange.advance(this.translator, idUser, "new");
+                    VerificationCode.clear("emailNew", idUser);
+                    await this.sendEmailCode(idUser, user.name, advanced.newEmail, "emailNew", "users.email.updateEmailNew", "users.email.emailChangeCode");
+
+                    return res.send(this.translator.translate("users.success.emailCodeSentNew", { email: advanced.newEmail }));
+                }
+
+                VerificationCode.validate(this.translator, "emailNew", idUser, code);
+
+                const user: User = await this.repository.get(idUser);
+                if (challenge.currentEmail !== user.email)
+                    throw new Error(this.translator.translate("users.errors.emailChangeRestart"));
+
+                await this.repository.updateEmail(idUser, challenge.newEmail);
+                EmailChange.clear(idUser);
+                VerificationCode.clear("emailCurrent", idUser);
 
                 res.status(201).send(this.translator.translate("users.success.emailUpdateSuccessful"));
             } catch (err: any) {
@@ -311,8 +384,21 @@ export class UserController extends ControllerBase {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
         });
+        this.router.post("/request/two-step/code", UserAuthenticate, async (req, res) => {
+            try {
+                const idUser: string = req.user!.id;
+                const user: User = await this.repository.get(idUser);
+
+                await this.sendEmailCode(idUser, user.name, user.email, "twoStep", "users.email.disableTwoStep", "users.email.twoStepCode");
+
+                res.send(this.translator.translate("users.success.twoStepCodeSent", { email: user.email }));
+            } catch (err: any) {
+                if (err instanceof Error) res.status(400).send(err.message);
+            }
+        });
+
         this.router.put("/update/two-step", UserAuthenticate, async (req, res) => {
-            const { active, type } = req.body;
+            const { active, type, code } = req.body;
             if ((active === undefined || active === null) || !type) {
                 const message = new MessageBuilder();
 
@@ -323,7 +409,14 @@ export class UserController extends ControllerBase {
                 return res.status(400).send(message.toString());
             }
 
+            const hasCode: boolean = !((code === undefined) || (code === null) || (String(code).trim() === ""));
+            if (!active && !hasCode)
+                return res.status(400).send(this.translator.translate("users.errors.codeRequiredToDisableTwoStep"));
+
             try {
+                if (!active)
+                    VerificationCode.validate(this.translator, "twoStep", req.user!.id, code);
+
                 const config: UserConfig = {
                     twoStep: {
                         active: active, 

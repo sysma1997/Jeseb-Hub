@@ -2,7 +2,7 @@ import { randomInt } from "crypto";
 
 import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
 
-export type VerificationPurpose = "login" | "email";
+export type VerificationPurpose = "login" | "emailCurrent" | "emailNew" | "twoStep";
 
 interface VerificationChallenge {
     code: string;

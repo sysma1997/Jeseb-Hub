@@ -229,7 +229,7 @@ export class EmailTemplates {
                 </body>
             </html>`;
     }
-    static TwoFactorCodeEmail(translator: TranslatorRepository, name: string, code: string): string {
+    static TwoFactorCodeEmail(translator: TranslatorRepository, name: string, code: string, messageKey: string = "users.email.twoFactorCode"): string {
         return `<!DOCTYPE html>
             <html>
                 <head>
@@ -264,9 +264,9 @@ export class EmailTemplates {
                     <div class="container">
                         <h1>${translator.translate("users.email.twoFactorCode.verification")}</h1>
                         <div class="greeting">🔑 ${translator.translate("users.email.shared.hi", { name })}</div>
-                        <p>${translator.translate("users.email.twoFactorCode.description")}</p>
+                        <p>${translator.translate(`${messageKey}.description`)}</p>
                         <div class="code-box">${code}</div>
-                        <div class="warning">${translator.translate("users.email.twoFactorCode.warning")}</div>
+                        <div class="warning">${translator.translate(`${messageKey}.warning`)}</div>
                         <hr>
                         <div class="footer">
                             <p>${translator.translate("users.email.twoFactorCode.footer")}</p>

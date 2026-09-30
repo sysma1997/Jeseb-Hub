@@ -42,7 +42,7 @@
             "link": "Inicio de sesión"
         }, 
         "recover": "Recuperar", 
-        "emailRequest": "Solicitud correo electrónico de recuperación", 
+        "emailRequired": "Solicitud correo electrónico de recuperación", 
         "recoverPassword": "Recuperar contraseña"
     }, 
     "validation": {
@@ -197,14 +197,18 @@
         "information": {
             "updateName": {
                 "title": "Actualizar el nombre", 
-                "sameName": "El nombre es el mismo que estás utilizando en esta cuenta.", 
+                "same": "El nombre es el mismo que estás utilizando en esta cuenta.", 
                 "confirm": "¿Actualizar el nombre a '{{name}}'?"
             }, 
             "updateEmail": {
                 "title": "Actualizar correo electrónico", 
                 "same": "El correo electrónico es el mismo que estás utilizando en esta cuenta.", 
                 "confirm": "¿Actualizar el correo electrónico a '{{email}}'?", 
-                "verify": "Verificar"
+                "verify": "Verificar", 
+                "stepCurrent": "Código enviado a {{email}}", 
+                "hintCurrent": "Escribe el código que enviamos a {{email}}, tu correo actual, para confirmar que sigues teniendo acceso a la cuenta.", 
+                "stepNew": "Código enviado a {{email}}", 
+                "hintNew": "Escribe el código que enviamos a {{email}}, el nuevo correo, para completar el cambio."
             }, 
             "createAt": "Cuenta creada: <small>{{date}}</small>", 
             "lastUpdate": "Información ultima vez actualizada: <small>{{date}}</small>"
@@ -215,7 +219,8 @@
             "type": "Tipo", 
             "confirm": "Luego podras {{value}} de nuevo.",
             "passwordDesc": "Cambia la contraseña de tu cuenta.",
-            "twoStepDesc": "Gestiona la verificación en dos pasos de tu cuenta."
+            "twoStepDesc": "Gestiona la verificación en dos pasos de tu cuenta.", 
+            "disablePrompt": "Ingresa el código de 6 dígitos que enviamos a tu correo electrónico para confirmar la desactivación."
         }, 
         "data": {
             "import": {
