@@ -33,6 +33,7 @@
         "accountRequired": "The account for transaction is required.",
         "valueRequired": "The value must be greater than 0.",
         "notFound": "Transaction not found or not exists.",
+        "accountNotFound": "The account for the transaction was not found.",
         "invalidFormat": "Invalid transactions format.",
         "exceedLimit": "The number of transactions entered in chunks cannot exceed 500.",
         "noTransactionsToExport": "There are no transactions to export."

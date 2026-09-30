@@ -105,7 +105,7 @@ export class TransactionController extends ControllerBase {
                     category, description);
                 await this.service.add(transaction);
 
-                res.status(201).send(this.translator.translate("transaction.success.transactionAdded"));
+                res.status(201).send(this.translator.translate("transactions.success.transactionAdded"));
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
@@ -144,7 +144,7 @@ export class TransactionController extends ControllerBase {
                     category, description);
                 await this.service.update(transaction);
 
-                res.status(201).send(this.translator.translate("transaction.success.transactionUpdated"));
+                res.status(201).send(this.translator.translate("transactions.success.transactionUpdated"));
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
@@ -155,7 +155,7 @@ export class TransactionController extends ControllerBase {
                 const id: string = this.getQueryString(req.params.id!);
 
                 await this.service.delete(idUser, id);
-                res.send(this.translator.translate("transaction.success.transactionDeleted"));
+                res.send(this.translator.translate("transactions.success.transactionDeleted"));
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }

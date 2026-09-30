@@ -33,6 +33,7 @@
             "accountRequired": "La cuenta para la transacción es requerida.", 
             "valueRequired": "El valor debe ser mayor que 0.", 
             "notFound": "Transacción no encontrada o no existe.", 
+            "accountNotFound": "La cuenta de la transacción no se encontró.", 
             "invalidFormat": "Formato de transacciones inválido.",
             "exceedLimit": "El número de transacciones ingresadas en bloques no puede exceder 500.", 
             "noTransactionsToExport": "No hay transacciones para exportar."

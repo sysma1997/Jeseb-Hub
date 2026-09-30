@@ -66,7 +66,7 @@ export class UserController extends ControllerBase {
                 return res.status(400).send(message.toString());
             }
             if (!User.IsValidEmail(req.body.email)) 
-                return res.status(400).send(this.translator.translate("users.errors.emailNotValid", { email: req.body.email }));
+                return res.status(400).send(this.translator.translate("users.errors.emailInvalid", { email: req.body.email }));
 
             
             const { name, email, password, id } = req.body;
@@ -92,7 +92,7 @@ export class UserController extends ControllerBase {
                 });
                 if (error) return res.status(400).json({ error });
 
-                res.send(this.translator.translate("users.success.registrationSend", { email }));
+                res.send(this.translator.translate("users.success.registrationSent", { email }));
             } catch (err: any) {
                 if (err instanceof Error) res.status(400).send(err.message);
             }

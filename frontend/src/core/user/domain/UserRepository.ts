@@ -25,9 +25,9 @@ export interface UserRepository {
 
     deleteAllData(): Promise<string>;
     
-login(email: string, password: string, code?: string): Promise<LoginResult>;
+    login(email: string, password: string, code?: string): Promise<LoginResult>;
 
-logout(): Promise<void>;
+    logout(): Promise<void>;
 
-get(): Promise<User | undefined>;
+    get(): Promise<User | undefined>;
 }

@@ -37,7 +37,7 @@ recover.onclick = async () => {
     try {
         const result = await repository.requestRecoverPassword(email.value);
 
-        window.showAlert(result, t("recover.emailRequest"));
+        window.showAlert(result, t("recover.emailRequired"));
         recover.classList.remove("is-loading");
         recover.disabled = false;
     } catch (err: any) {

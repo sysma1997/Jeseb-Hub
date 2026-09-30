@@ -76,7 +76,7 @@ export class TransactionService {
     }
     async update(transaction: Transaction): Promise<void> {
         let lastTransaction: Transaction = await this.repository.get(transaction.idUser!, transaction.id!);
-        if (!lastTransaction) throw new Error(this.translator.translate("transactions.errors.transactionNotFound"));
+        if (!lastTransaction) throw new Error(this.translator.translate("transactions.errors.notFound"));
         let account: Account | undefined = await this.accountRepository.search(lastTransaction.idUser!, lastTransaction.account);
         if (account) {
             account = (lastTransaction.type) ? 
@@ -97,7 +97,7 @@ export class TransactionService {
     }
     async delete(idUser: string, id: string): Promise<void> {
         let lastTransaction: Transaction = await this.repository.get(idUser, id);
-        if (!lastTransaction) throw new Error(this.translator.translate("transactions.errors.transactionNotFound"));
+        if (!lastTransaction) throw new Error(this.translator.translate("transactions.errors.notFound"));
         let account: Account | undefined = await this.accountRepository.search(idUser, lastTransaction.account);
         if (account) account = (lastTransaction.type) ? 
             account.egressBalance(lastTransaction.value) : 
