@@ -8,10 +8,13 @@ export abstract class SessionRefresher {
         SessionRefresher.refreshing = undefined;
     }
     private static redirectToLogin(): void {
+        // los tokens muertos se limpian siempre; desde el propio login solo se evita navegar
         Session.clear();
         SessionRefresher.invalidate();
 
         const lang: string = window.location.pathname.split("/")[1] ?? "es";
+        if (window.location.pathname === `/${lang}/login`) return;
+
         window.location.replace(`/${lang}/login`);
     }
     public static refresh(): Promise<boolean> {
@@ -24,10 +27,8 @@ export abstract class SessionRefresher {
     }
     private static async run(): Promise<boolean> {
         const refresh: string | undefined = Session.getRefresh();
-        if (!refresh) {
-            SessionRefresher.redirectToLogin();
+        if (!refresh)
             return false;
-        }
 
         try {
             const response: Response = await fetch(`${ApiUrl}/user/refresh`, {
@@ -58,6 +59,8 @@ export abstract class SessionRefresher {
         }
     }
     public static async beforeRequest(): Promise<boolean> {
+        // sin sesion guardada no hay nada que renovar: la peticion sale y el backend responde 401
+        if (!Session.isStored()) return true;
         if (!Session.needsRefresh()) return true;
 
         return SessionRefresher.refresh();

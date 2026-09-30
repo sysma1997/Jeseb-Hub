@@ -86,14 +86,35 @@ describe("SessionRefresher", () => {
         expect(await SessionRefresher.beforeRequest()).toBe(false);
         expect(Session.isStored()).toBe(false);
         expect(replaceMock).toHaveBeenCalled();
+        expect(replaceMock).toHaveBeenCalledWith("/es/login");
     });
-    it("Should redirect without calling the backend when there is no refresh token.", async () => {
-        const expired: string = btoa(JSON.stringify({ exp: Math.floor(Date.now() / 1000) - 10 }));
-        Session.save(`h.${expired}.s`, "");
-        window.localStorage.removeItem("refreshToken");
+    it("Should let the request through when there is no session at all.", async () => {
+        // la pagina de login consulta el usuario al cargar; si esto redirigia, se recargaba en bucle
+        expect(await SessionRefresher.beforeRequest()).toBe(true);
+        expect(fetchMock).not.toHaveBeenCalled();
+        expect(replaceMock).not.toHaveBeenCalled();
+    });
+    it("Should use a leftover refresh token to restore a lost access token.", async () => {
+        // quedo el refresh pero se perdio el access: hay que canjearlo, no rendirse
+        window.localStorage.setItem("refreshToken", "refresh-xyz");
+        fetchMock.mockResolvedValue(ok("new-access", "new-refresh"));
+
+        expect(await SessionRefresher.beforeRequest()).toBe(true);
+        expect(fetchMock).toHaveBeenCalledTimes(1);
+        expect(Session.getAccess()).toBe("new-access");
+    });
+    it("Should not redirect when already sitting on the login page.", async () => {
+        window.localStorage.setItem("token", "access-abc");
+        window.localStorage.setItem("refreshToken", "refresh-xyz");
+        fetchMock.mockResolvedValue(fail());
+        Object.defineProperty(window, "location", {
+            value: { ...window.location, replace: replaceMock, pathname: "/es/login" },
+            writable: true,
+            configurable: true
+        });
 
         expect(await SessionRefresher.beforeRequest()).toBe(false);
-        expect(fetchMock).not.toHaveBeenCalled();
+        expect(replaceMock).not.toHaveBeenCalled();
     });
     it("Should clear the tokens when the response has no tokens.", async () => {
         const expired: string = btoa(JSON.stringify({ exp: Math.floor(Date.now() / 1000) - 10 }));
