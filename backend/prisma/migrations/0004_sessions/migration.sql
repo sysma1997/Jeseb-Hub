@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "public"."sessions" (
+CREATE TABLE "sessions" (
     "id" TEXT NOT NULL,
     "idUser" TEXT NOT NULL,
     "family" TEXT NOT NULL,
@@ -16,13 +16,13 @@ CREATE TABLE "public"."sessions" (
 );
 
 -- CreateIndex
-CREATE INDEX "sessions_idUser_idx" ON "public"."sessions"("idUser");
+CREATE INDEX "sessions_idUser_idx" ON "sessions"("idUser");
 
 -- CreateIndex
-CREATE INDEX "sessions_family_idx" ON "public"."sessions"("family");
+CREATE INDEX "sessions_family_idx" ON "sessions"("family");
 
 -- CreateIndex
-CREATE INDEX "sessions_expiresAt_idx" ON "public"."sessions"("expiresAt");
+CREATE INDEX "sessions_expiresAt_idx" ON "sessions"("expiresAt");
 
 -- AddForeignKey
-ALTER TABLE "public"."sessions" ADD CONSTRAINT "sessions_idUser_fkey" FOREIGN KEY ("idUser") REFERENCES "public"."users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "sessions" ADD CONSTRAINT "sessions_idUser_fkey" FOREIGN KEY ("idUser") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

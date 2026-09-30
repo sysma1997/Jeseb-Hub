@@ -178,7 +178,7 @@ export class UserController extends ControllerBase {
             }
         });
         this.router.post("/refresh", async (req, res) => {
-            const { refreshToken } = req.body;
+            const refreshToken: string | undefined = req.body?.refreshToken;
             if (!refreshToken)
                 return res.status(401).send(this.translator.translate("users.errors.invalidToken"));
 
@@ -205,7 +205,7 @@ export class UserController extends ControllerBase {
             }
         });
         this.router.post("/logout", UserAuthenticate, async (req, res) => {
-            const { refreshToken } = req.body;
+            const refreshToken: string | undefined = req.body?.refreshToken;
             if (!refreshToken)
                 return res.status(400).send(this.translator.translate("users.errors.refreshTokenRequired"));
 
