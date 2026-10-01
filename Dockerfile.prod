@@ -6,12 +6,6 @@ FROM base AS backend-build
 COPY backend/package.json backend/pnpm-lock.yaml backend/pnpm-workspace.yaml ./
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store pnpm install --frozen-lockfile
 COPY backend/. ./
-COPY .git .git
-RUN apk add --no-cache git && \
-    printf '{"version":"%s","commit":"%s"}' \
-        "$(git describe --tags --always --dirty | sed 's/^v//')" \
-        "$(git rev-parse --short HEAD)" > /usr/local/app/version.json && \
-    apk del git && rm -rf .git
 RUN mkdir -p /usr/local/app/uploads
 RUN DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy" pnpm exec prisma generate
 RUN pnpm run build
@@ -23,7 +17,6 @@ COPY --from=backend-build /usr/local/app/node_modules ./node_modules
 COPY --from=backend-build /usr/local/app/package.json ./
 COPY --from=backend-build /usr/local/app/prisma ./prisma
 COPY --from=backend-build /usr/local/app/prisma.config.ts ./
-COPY --from=backend-build /usr/local/app/version.json ./version.json
 RUN mkdir -p /usr/local/app/uploads
 CMD ["sh", "-c", "./node_modules/.bin/prisma migrate deploy && node dist/index.js"]
 

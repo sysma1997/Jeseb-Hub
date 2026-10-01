@@ -87,7 +87,7 @@ app.use(express.urlencoded({ limit: "5mb", extended: true }));
 app.use("/uploads", express.static("uploads"));
 
 app.get("/", (_, res) => {
-    res.send(`Jeseb Api: v${APP_VERSION.version}${APP_VERSION.commit ? ` (${APP_VERSION.commit})` : ""}`);
+    res.send(`Jeseb Api: v${APP_VERSION.version}`);
 });
 
 app.get("/api/version", (_, res) => {
@@ -109,7 +109,7 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 });
 
 app.listen(PORT, () => {
-    console.log(`Jeseb Api: v${APP_VERSION.version}${APP_VERSION.commit ? ` (${APP_VERSION.commit})` : ""}`);
+    console.log(`Jeseb Api: v${APP_VERSION.version}`);
     console.log(`Listen to port: ${PORT}`);
     console.log(`CORS Allowed Origins: ${allowedOrigins.join(", ")}`);
 });
