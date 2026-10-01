@@ -138,7 +138,9 @@ export const setup = (user: User, repository: UserRepository) => {
         informationEditEmail.style.display = "block";
 
         repository.getEmailChangeStatus().then((status) => {
-            showEmailStep(status.step, status.step === "current" ? user.email : status.email);
+              const pending: string = (status.step === "current") ? user.email : status.email;
+              ieeInput.value = pending;
+              showEmailStep(status.step, pending);
         }).catch(() => {
             resetEmailForm();
         });
