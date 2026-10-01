@@ -31,9 +31,13 @@ class InMemoryStore implements SessionStore {
         const row = this.rows.get(id);
         if (row) row.revokedAt = revokedAt;
     }
-    async markRotated(id: string, rotatedAt: Date): Promise<void> {
+    async claim(id: string, at: Date): Promise<boolean> {
         const row = this.rows.get(id);
-        if (row) row.rotatedAt = rotatedAt;
+        if (!row || row.rotatedAt || row.revokedAt || row.expiresAt.getTime() <= at.getTime()) return false;
+        row.rotatedAt = at;
+        row.lastSeenAt = at;
+
+        return true;
     }
     async revokeFamily(family: string, revokedAt: Date): Promise<number> {
         let count = 0;
@@ -147,6 +151,33 @@ describe("SessionService domain", () => {
             const expiresAt = store.rows.get(result.id)!.expiresAt.getTime();
             expect(expiresAt).toBeGreaterThan(Date.now());
         }
+    });
+    it("Should let only one of two simultaneous redemptions of the same token win.", async () => {
+        const opened = await sessions.open(userId);
+
+        // claim se hace await para forzar el solapamiento: las dos peticiones leen la
+        // misma fila sin rotar antes de que ninguna escriba. Sin un reclamo atomico las
+        // dos emitirian su propio token y el robo de un refresh seria indetectable.
+        const real = store.claim.bind(store);
+        let waiting = 0;
+        let release = () => {};
+        const bothInside = new Promise<void>(resolve => { release = resolve; });
+        store.claim = async (id: string, at: Date): Promise<boolean> => {
+            waiting++;
+            if (waiting === 2) release();
+            await bothInside;
+
+            return real(id, at);
+        };
+
+        const [a, b] = await Promise.all([sessions.redeem(opened.token), sessions.redeem(opened.token)]);
+        const statuses = [a.status, b.status].sort();
+
+        expect(statuses).toEqual(["reused", "rotated"]);
+        // el que perdio no debe haber creado ninguna sesion hijastra
+        const family = store.rows.get(opened.id)!.family;
+        const inFamily = [...store.rows.values()].filter(row => row.family === family && !row.rotatedAt);
+        expect(inFamily).toHaveLength(1);
     });
     it("Should detect reuse of an already rotated refresh token.", async () => {
         const opened = await sessions.open(userId);

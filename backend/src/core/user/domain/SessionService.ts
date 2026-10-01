@@ -22,7 +22,7 @@ export interface SessionStore {
     get(id: string): Promise<SessionRow | undefined>;
     touch(id: string, lastSeenAt: Date): Promise<void>;
     revoke(id: string, revokedAt: Date): Promise<void>;
-    markRotated(id: string, rotatedAt: Date): Promise<void>;
+    claim(id: string, at: Date): Promise<boolean>;
     revokeFamily(family: string, revokedAt: Date): Promise<number>;
     revokeAllForUser(idUser: string, revokedAt: Date): Promise<number>;
     deleteOlderThan(cutoff: Date): Promise<number>;
@@ -127,8 +127,22 @@ export class SessionService {
         if (session.revokedAt)
             return { status: "revoked" };
 
+        // el token se reclama ANTES de emitir el siguiente. Si dos peticiones con el
+        // mismo refresh llegan a la vez, el updateMany solo confirmara una; la otra ve el
+        // count a 0 y la trata como reutilizacion, revocando la familia entera.
+        // Reclamar despues dejaria que ambas emitieran un token vivo, que es justo lo
+        // que la rotacion debe impedir.
+        if (!await this.store.claim(session.id, new Date())) {
+            const current = await this.store.get(session.id);
+            const latest = current ? SessionService.find(current, parts.secret) : undefined;
+            if (latest?.rotatedAt) return { status: "reused", session: latest };
+            if (latest?.revokedAt) return { status: "revoked" };
+            if (latest && latest.expiresAt.getTime() <= Date.now()) return { status: "expired" };
+
+            return { status: "invalid" };
+        }
+
         const next = await this.issue(session.idUser, session.family, ip ?? session.ip, userAgent ?? session.userAgent);
-        await this.store.markRotated(session.id, new Date());
 
         return { status: "rotated", session: session, id: next.id, token: next.token };
     }

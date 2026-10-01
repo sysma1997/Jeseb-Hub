@@ -75,9 +75,13 @@ class AuthStore implements SessionStore {
         const row = this.active.get(id);
         if (row) row.revokedAt = revokedAt;
     }
-    async markRotated(id: string, rotatedAt: Date): Promise<void> {
+    async claim(id: string, at: Date): Promise<boolean> {
         const row = this.active.get(id);
-        if (row) row.rotatedAt = rotatedAt;
+        if (!row || row.rotatedAt || row.revokedAt || row.expiresAt.getTime() <= at.getTime()) return false;
+        row.rotatedAt = at;
+        row.lastSeenAt = at;
+
+        return true;
     }
     async revokeFamily(family: string, revokedAt: Date): Promise<number> {
         let count = 0;

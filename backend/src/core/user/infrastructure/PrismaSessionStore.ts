@@ -57,8 +57,20 @@ export class PrismaSessionStore implements SessionStore {
     async revoke(id: string, revokedAt: Date): Promise<void> {
         await this.prisma.session.update({ where: { id }, data: { revokedAt: revokedAt } });
     }
-    async markRotated(id: string, rotatedAt: Date): Promise<void> {
-        await this.prisma.session.update({ where: { id }, data: { rotatedAt: rotatedAt } });
+    // el filtro con rotatedAt/revokedAt nulos hace el reclamo atomico: solo la primera
+    // peticion obtiene count 1 y las demas 0, sin necesidad de bloqueos ni transacciones
+    async claim(id: string, at: Date): Promise<boolean> {
+        const result = await this.prisma.session.updateMany({
+            where: {
+                id: id,
+                rotatedAt: null,
+                revokedAt: null,
+                expiresAt: { gt: at }
+            },
+            data: { rotatedAt: at, lastSeenAt: at }
+        });
+
+        return result.count === 1;
     }
     async revokeFamily(family: string, revokedAt: Date): Promise<number> {
         const result = await this.prisma.session.updateMany({

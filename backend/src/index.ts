@@ -80,6 +80,16 @@ categoryController.setup();
 
 const app = express();
 
+const TRUST_PROXY: string | undefined = process.env.TRUST_PROXY;
+
+// nginx solo sirve el frontend estatico y no hace proxy hacia la API: el navegador
+// llama a este servicio directamente, asi que req.ip ya es la direccion real del
+// cliente y los limites por IP funcionan sin tocar nada.
+// Activar "trust proxy" sin un proxy delante permitiria a cualquiera falsificar
+// X-Forwarded-For y evadir esos limites, por eso queda desactivado. Si algun dia
+// se pone nginx o un CDN delante, se indica cuantos saltos hay con TRUST_PROXY=1.
+if (TRUST_PROXY) app.set("trust proxy", Number(TRUST_PROXY) || TRUST_PROXY);
+
 app.use(translateMiddleware);
 app.use(cors(corsOptions));
 app.use(express.json({ limit: "5mb" }));
