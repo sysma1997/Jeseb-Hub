@@ -21,6 +21,8 @@ import { TransactionPrismaRepository } from "./core/transaction/infrastructure/T
 import { TransactionService } from "./core/transaction/application/TransactionService";
 import { TransferService } from "./core/transaction/application/TransferService";
 import { TransactionController } from "./core/transaction/infrastructure/TransactionController";
+import { PrismaUnitOfWork } from "./core/shared/infrastructure/PrismaUnitOfWork";
+import type { UnitOfWork } from "./core/shared/domain/UnitOfWork";
 import { AccountRepository } from "./core/account/domain/AccountRepository";
 import { AccountPrismaRepository } from "./core/account/infrastructure/AccountPrismaRepository";
 import { AccountController } from "./core/account/infrastructure/AccountController";
@@ -69,8 +71,9 @@ const accountRepository: AccountRepository = new AccountPrismaRepository(prisma,
 const accountController: ControllerBase = new AccountController(accountRepository, translator);
 const categoryRepository: CategoryRepository = new CategoryPrismaRepository(prisma, translator);
 const categoryController: ControllerBase = new CategoryController(categoryRepository, translator);
-const transactionService: TransactionService = new TransactionService(transactionRepository, accountRepository, categoryRepository, translator);
-const transferService: TransferService = new TransferService(transactionRepository, accountRepository, translator);
+const unitOfWork: UnitOfWork = new PrismaUnitOfWork(prisma, translator);
+const transactionService: TransactionService = new TransactionService(transactionRepository, accountRepository, categoryRepository, translator, unitOfWork);
+const transferService: TransferService = new TransferService(unitOfWork, translator);
 const transactionController: ControllerBase = new TransactionController(transactionRepository, transactionService, transferService, translator);
 
 userController.setup();

@@ -10,6 +10,7 @@ import { TransactionService } from "../application/TransactionService";
 import { TransferService } from "../application/TransferService";
 import { UserAuthenticate } from "../../user/infrastructure/UserAuthenticate";
 import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
+import { Money } from "../../shared/domain/Money";
 import { MessageBuilder } from "../../shared/domain/MessageBuilder"; 
 import { compare } from "bcryptjs";
 
@@ -50,7 +51,8 @@ export class TransactionController extends ControllerBase {
                 const idUser: string = req.user!.id;
                 const from: string = req.body.from;
                 const to: string = req.body.to;
-                const value: number = req.body.value;
+                // la API habla en decimales y el dominio en centavos
+                const value: number = Money.toCents(req.body.value);
                 const date: Date = dayjs.utc(req.body.date).toDate();
                 const description: string | undefined = req.body.description ?? undefined;
 
@@ -95,7 +97,8 @@ export class TransactionController extends ControllerBase {
                 const date: Date = dayjs.utc(req.body.date).toDate();
                 const type: boolean = req.body.type;
                 const account: string = req.body.account;
-                const value: number = req.body.value;
+                // la API habla en decimales y el dominio en centavos
+                const value: number = Money.toCents(req.body.value);
                 const category: string | undefined = req.body.category ?? undefined;
                 const description: string | undefined = req.body.description ?? undefined;
 
@@ -134,7 +137,8 @@ export class TransactionController extends ControllerBase {
                 const date: Date = dayjs.utc(req.body.date).toDate();
                 const type: boolean = req.body.type;
                 const account: string = req.body.account;
-                const value: number = req.body.value;
+                // la API habla en decimales y el dominio en centavos
+                const value: number = Money.toCents(req.body.value);
                 const category: string | undefined = req.body.category ?? undefined;
                 const description: string | undefined = req.body.description ?? undefined;
 
@@ -309,7 +313,7 @@ export class TransactionController extends ControllerBase {
                     const date: Date = dayjs.utc(item.date).toDate();
                     const type: boolean = item.type;
                     const account: string = item.account;
-                    const value: number = item.value;
+                    const value: number = Money.toCents(item.value);
                     const category: string | undefined = item.category ?? undefined;
                     const description: string | undefined = item.description ?? undefined;
 

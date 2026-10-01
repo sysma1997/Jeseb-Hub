@@ -1,16 +1,19 @@
-import { PrismaClient } from "../../../generated/prisma/client";
+import { PrismaClient, Prisma } from "../../../generated/prisma/client";
 import { v4 as Uuid } from "uuid";
 
 import { Account } from "../domain/Account";
 import { AccountRepository } from "../domain/AccountRepository";
 import { Pagination } from "../../shared/domain/Pagination";
 import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
+import { Money } from "../../shared/domain/Money";
 
 export class AccountPrismaRepository implements AccountRepository {
-    private readonly prisma: PrismaClient;
+    // admite el cliente transaccional de Prisma para que este repositorio pueda
+    // participar en una unit of work sin cambiar su interfaz
+    private readonly prisma: PrismaClient | Prisma.TransactionClient;
     private readonly translator: TranslatorRepository;
 
-    constructor(prisma: PrismaClient, translator: TranslatorRepository) {
+    constructor(prisma: PrismaClient | Prisma.TransactionClient, translator: TranslatorRepository) {
         this.prisma = prisma;
         this.translator = translator;
     }
@@ -29,7 +32,7 @@ export class AccountPrismaRepository implements AccountRepository {
                 id: account.id ?? Uuid(), 
                 idUser: account.idUser!, 
                 name: account.name, 
-                balance: account.balance
+                balance: Money.toDecimalString(account.balance)
             }
         });
     }
@@ -37,13 +40,13 @@ export class AccountPrismaRepository implements AccountRepository {
         await this.prisma.$transaction(accounts.map(account => this.prisma.account.upsert({
             where: { idUser: account.idUser!, id: account.id! },
             update: {
-                balance: account.balance
+                balance: Money.toDecimalString(account.balance)
             },
             create: {
                 id: account.id ?? Uuid(), 
                 idUser: account.idUser!, 
                 name: account.name, 
-                balance: account.balance
+                balance: Money.toDecimalString(account.balance)
             }
         })));
     }
@@ -52,7 +55,7 @@ export class AccountPrismaRepository implements AccountRepository {
             where: { idUser: account.idUser!, id: account.id! }, 
             data: {
                 name: account.name, 
-                balance: account.balance
+                balance: Money.toDecimalString(account.balance)
             }
         });
     }
@@ -60,6 +63,32 @@ export class AccountPrismaRepository implements AccountRepository {
         await this.prisma.account.delete({
             where: { idUser, id }
         });
+    }
+
+    // Suma o resta un importe (en centavos) con increment/decrement de Postgres.
+    // El saldo lo calcula la base dentro de la propia sentencia, asi que dos
+    // operaciones concurrentes se acumulan en vez de pisarse. Es la diferencia con
+    // leer el saldo, restarlo en JavaScript y escribir el absoluto.
+    async adjust(idUser: string, id: string, cents: number): Promise<void> {
+        await this.prisma.account.update({
+            where: { idUser, id },
+            data: { balance: { increment: Money.toDecimalString(cents) } }
+        });
+    }
+
+    // Igual que adjust pero con la condicion de saldo suficiente en el propio filtro.
+    // Devuelve false si no habia saldo, sin haber tocado nada. Es lo que evita que dos
+    // transferencias simultaneas gasten dos veces el mismo dinero.
+    async adjustIfEnough(idUser: string, id: string, cents: number): Promise<boolean> {
+        const result = await this.prisma.account.updateMany({
+            where: {
+                idUser, id,
+                balance: { gte: Money.toDecimalString(cents) }
+            },
+            data: { balance: { decrement: Money.toDecimalString(cents) } }
+        });
+
+        return result.count === 1;
     }
 
     async get(idUser: string, id: string): Promise<Account> {
@@ -136,6 +165,6 @@ export class AccountPrismaRepository implements AccountRepository {
             _sum: { balance: true }
         });
 
-        return (total._sum.balance !== null && total._sum.balance !== undefined) ? Number(total._sum.balance) : 0;
+        return Money.fromDecimal(total._sum.balance);
     }
 }

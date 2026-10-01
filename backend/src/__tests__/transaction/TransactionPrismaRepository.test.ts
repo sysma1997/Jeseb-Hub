@@ -21,7 +21,7 @@ describe("Transaction Prisma Repository", () => {
         const date = new Date(2025, 8, 12);
         const type = true;
         const account = "Bank";
-        const value = 12.57;
+        const value = 1257;
         const category = "Savings";
         const description = "Testing with Jest";
         
@@ -31,7 +31,7 @@ describe("Transaction Prisma Repository", () => {
 
         prismaMock.transaction.create.mockResolvedValue({
             id, idUser, date, type, account, 
-            value: Decimal(value), 
+            value: Decimal("12.57"), 
             category, description,
             transferId: null,
             isTransfer: false
@@ -55,7 +55,7 @@ describe("Transaction Prisma Repository", () => {
         const date = new Date(2025, 8, 12);
         const type = true;
         const account = "Bank";
-        const value = 12.57;
+        const value = 1257;
         const category = "Savings";
         const description = "Testing with Jest";
         
@@ -65,7 +65,7 @@ describe("Transaction Prisma Repository", () => {
 
         prismaMock.transaction.update.mockResolvedValue({
             id, idUser, date, type, account, 
-            value: Decimal(value), 
+            value: Decimal("12.57"), 
             category, description,
             transferId: null,
             isTransfer: false
@@ -89,13 +89,13 @@ describe("Transaction Prisma Repository", () => {
         const date = new Date(2025, 8, 12);
         const type = true;
         const account = "Bank";
-        const value = 12.57;
+        const value = 1257;
         const category = "Savings";
         const description = "Testing with Jest";
 
         prismaMock.transaction.delete.mockResolvedValue({
             id, idUser, date, type, account, 
-            value: Decimal(value), 
+            value: Decimal("12.57"), 
             category, description,
             transferId: null,
             isTransfer: false
@@ -113,7 +113,7 @@ describe("Transaction Prisma Repository", () => {
         const date = new Date(2025, 8, 12);
         const type = true;
         const account = "Bank";
-        const value = 12.57;
+        const value = 1257;
         const category = "Savings";
         const description = "Testing with Jest";
         
@@ -123,7 +123,7 @@ describe("Transaction Prisma Repository", () => {
 
         prismaMock.transaction.findUnique.mockResolvedValue({
             id, idUser, date, type, account, 
-            value: Decimal(value), 
+            value: Decimal("12.57"), 
             category, description,
             transferId: null,
             isTransfer: false
@@ -147,7 +147,7 @@ describe("Transaction Prisma Repository", () => {
                 date: new Date(2025, 8, 12), 
                 type: true, 
                 account: "Bank",
-                value: Decimal(25.3), 
+                value: Decimal("25.30"), 
                 category: "Groceries",
                 description: null,
                 transferId: null,
@@ -159,7 +159,7 @@ describe("Transaction Prisma Repository", () => {
                 date: new Date(2025, 8, 13), 
                 type: false, 
                 account: "Cash",
-                value: Decimal(12.99), 
+                value: Decimal("12.99"), 
                 category: "Utilities",
                 description: "Movies and musics",
                 transferId: null,
@@ -172,10 +172,10 @@ describe("Transaction Prisma Repository", () => {
 
         expect(result.list).toEqual([
             new Transaction(mockTranslator, new Date(2025, 8, 12), true, "Bank", 
-                25.3, "4d511d6e-ea14-4b9b-a40b-b63231e6bb911", idUser, 
+                2530, "4d511d6e-ea14-4b9b-a40b-b63231e6bb911", idUser, 
                 "Groceries"),
             new Transaction(mockTranslator, new Date(2025, 8, 13), false, "Cash", 
-                12.99, "c40b4cff-407b-4d43-80b4-e885de34ac97", idUser, 
+                1299, "c40b4cff-407b-4d43-80b4-e885de34ac97", idUser, 
                 "Utilities", "Movies and musics"),
         ]);
         expect(result.pages).toBe(1);

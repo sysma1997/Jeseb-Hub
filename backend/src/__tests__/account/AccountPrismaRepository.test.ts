@@ -36,20 +36,20 @@ describe("Account Prisma Repository", () => {
             data: {
                 id, idUser, 
                 name: "Bank", 
-                balance: 0
+                balance: "0.00"
             }
         });
     });
     it("Should update an account.", async () => {
         const id = "4d511d6e-ea14-4b9b-a40b-b63231e6bb91";
         const idUser = "3bff1d1b-e647-47cc-a151-e54b52c1e673";
-        const account = new Account(mockTranslator, "Cash", 120.4, id, idUser);
+        const account = new Account(mockTranslator, "Cash", 12040, id, idUser);
 
         prismaMock.account.update.mockResolvedValue({
             id, 
             idUser, 
             name: "Cash", 
-            balance: Decimal(120.4)
+            balance: Decimal("120.40")
         });
 
         await expect(repository.update(account)).resolves.toBeUndefined();
@@ -57,7 +57,7 @@ describe("Account Prisma Repository", () => {
             where: { idUser, id }, 
             data: {
                 name: "Cash", 
-                balance: 120.4
+                balance: "120.40"
             }
         });
     });
@@ -117,7 +117,7 @@ describe("Account Prisma Repository", () => {
         const idUser = "3bff1d1b-e647-47cc-a151-e54b52c1e673";
 
         prismaMock.account.findMany.mockResolvedValue([
-            { id: "b3180f4e-445a-491f-8e2c-ef234b5c0314", idUser, name: "Bank", balance: Decimal(120.4) }, 
+            { id: "b3180f4e-445a-491f-8e2c-ef234b5c0314", idUser, name: "Bank", balance: Decimal("120.40") }, 
             { id: "030e06a5-b557-423a-b8a5-98c49778c156", idUser, name: "Cash", balance: Decimal(232.32) }
         ]);
         prismaMock.account.count.mockResolvedValue(2);
@@ -125,8 +125,8 @@ describe("Account Prisma Repository", () => {
         const result = await repository.getList(idUser);
 
         expect(result.list).toEqual([
-            new Account(mockTranslator, "Bank", 120.4, "b3180f4e-445a-491f-8e2c-ef234b5c0314", idUser), 
-            new Account(mockTranslator, "Cash", 232.32, "030e06a5-b557-423a-b8a5-98c49778c156", idUser)
+            new Account(mockTranslator, "Bank", 12040, "b3180f4e-445a-491f-8e2c-ef234b5c0314", idUser), 
+            new Account(mockTranslator, "Cash", 23232, "030e06a5-b557-423a-b8a5-98c49778c156", idUser)
         ]);
         expect(result.pages).toBe(1);
 

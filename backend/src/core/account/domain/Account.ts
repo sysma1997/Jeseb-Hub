@@ -3,11 +3,14 @@ import { User, UserDto } from "../../user/domain/User";
 
 import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
 import { MessageBuilder } from "../../shared/domain/MessageBuilder";
+import { Money } from "../../shared/domain/Money";
 
 export class Account implements Base {
     private readonly translator: TranslatorRepository;
     
     public readonly name: string;
+    // el saldo se maneja en CENTAVOS enteros dentro del dominio. AccountDto.balance es
+    // el mismo importe en decimales, que es lo que viaja por la API
     public readonly balance: number;
 
     public readonly id?: string | undefined;
@@ -35,35 +38,42 @@ export class Account implements Base {
     }
 
     static FromDto(translator: TranslatorRepository, dto: AccountDto): Account {
+        // 0 es un saldo valido: el chequeo va sobre null/undefined y no sobre la
+        // falsia del numero, que antes hacia fallar cualquier cuenta sin saldo
+        const sinSaldo = (dto.balance === null || dto.balance === undefined || 
+            (typeof dto.balance === "number" && Number.isNaN(dto.balance)));
+
         if (!dto.name || 
-            !dto.balance) {
+            sinSaldo) {
             const message = new MessageBuilder();
 
             if (!dto.name) message.add(translator.translate("accounts.errors.nameRequired"));
-            if (!dto.balance) message.add(translator.translate("accounts.errors.balanceRequired"));
+            if (sinSaldo) message.add(translator.translate("accounts.errors.balanceRequired"));
 
             throw new Error(message.toString());
         }
 
         let user: User | undefined = (dto.user) ? User.FromDto(translator, dto.user) : undefined;
-        return new Account(translator, dto.name, Number(dto.balance), 
+        return new Account(translator, dto.name, Money.toCents(dto.balance), 
             dto.id, dto.idUser,
             user);
     }
 
     setName(name: string): Account {
-        return new Account(this.translator, name, Number(this.balance), 
+        return new Account(this.translator, name, this.balance, 
             this.id, this.idUser, 
             this.user);
     }
 
+    // value llega en centavos, igual que balance: sumar enteros no acumula error de
+    // coma flotante, a diferencia de sumar 0.1 + 0.2
     ingressBalance(value: number): Account {
-        return new Account(this.translator, this.name, Number(this.balance) + Number(value), 
+        return new Account(this.translator, this.name, this.balance + value, 
             this.id, this.idUser, 
             this.user);
     }
     egressBalance(value: number): Account {
-        return new Account(this.translator, this.name, Number(this.balance) - Number(value), 
+        return new Account(this.translator, this.name, this.balance - value, 
             this.id, this.idUser, 
             this.user);
     }
@@ -71,7 +81,7 @@ export class Account implements Base {
     toDto(): AccountDto {
         const dto: AccountDto = {
             name: this.name, 
-            balance: this.balance
+            balance: Money.fromCents(this.balance)
         };
 
         if (this.id) dto.id = this.id;

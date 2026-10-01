@@ -7,6 +7,7 @@ import { CategoryRepository } from "../domain/CategoryRepository";
 import type { CategoryBreakdown } from "../domain/CategoryBreakdown";
 import { Pagination } from "../../shared/domain/Pagination";
 import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
+import { Money } from "../../shared/domain/Money";
 
 export class CategoryPrismaRepository implements CategoryRepository {
     private readonly prisma: PrismaClient;
@@ -139,15 +140,19 @@ export class CategoryPrismaRepository implements CategoryRepository {
             _sum: { value: true }, 
             _count: { id: true }
         });
+        // el total se acumula en centavos enteros y solo se convierte a decimal al
+        // construir el DTO, para que la suma por categoria no acumule error de coma
+        // flotante
         const totalExpenses = grouped.reduce((sum, item) => 
-            sum + Number(item._sum.value ?? 0), 0);
+            sum + Money.fromDecimal(item._sum.value), 0);
 
         return grouped.map(item => {
+            const total = Money.fromDecimal(item._sum.value);
             const categoryBreakdown: CategoryBreakdown = {
                 name: item.category ?? "None", 
-                total: Number(item._sum.value ?? 0), 
+                total: Money.fromCents(total), 
                 percentage: (totalExpenses > 0) ? 
-                    (Number(item._sum.value ?? 0) / totalExpenses) * 100 : 0, 
+                    (total / totalExpenses) * 100 : 0, 
                 transactionsCount: item._count.id
             };
 

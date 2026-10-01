@@ -6,6 +6,7 @@ import { User, UserDto } from "../../user/domain/User";
 
 import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
 import { MessageBuilder } from "../../shared/domain/MessageBuilder";
+import { Money } from "../../shared/domain/Money";
 
 export class Transaction implements Base {
     private readonly translator: TranslatorRepository;
@@ -13,6 +14,8 @@ export class Transaction implements Base {
     public readonly date: Date;
     public readonly type: boolean;
     public readonly account: string;
+    // el importe se maneja en CENTAVOS enteros dentro del dominio; TransactionDto.value
+    // es el mismo importe en decimales, que es lo que viaja por la API
     public readonly value: number;
 
     public readonly id?: string | undefined;
@@ -77,7 +80,7 @@ export class Transaction implements Base {
         const date = dayjs.utc(dto.date).toDate();
         let user: User | undefined = (dto.user) ? User.FromDto(translator, dto.user) : undefined;
         return new Transaction(translator, date, dto.type, dto.account, 
-            Number(dto.value), 
+            Money.toCents(dto.value), 
             dto.id, dto.idUser, 
             dto.category, dto.description, 
             dto.transferId, dto.isTransfer, 
@@ -89,7 +92,7 @@ export class Transaction implements Base {
             date: dayjs.utc(this.date).format("YYYY-MM-DDTHH:mm:ss[Z]"), 
             type: this.type, 
             account: this.account, 
-            value: this.value, 
+            value: Money.fromCents(this.value), 
             isTransfer: this.isTransfer
         };
 

@@ -12,8 +12,8 @@ model User {
     name String
     email String @unique
     password String
-    createAt DateTime @default(now())
-    lastUpdate DateTime?
+    createAt DateTime @default(now()) @storage.Timestamptz(3)
+    lastUpdate DateTime? @storage.Timestamptz(3)
     profile String?
     config Json?
 
@@ -29,11 +29,11 @@ model Session {
     idUser String
     family String
     secretHash String
-    createdAt DateTime @default(now())
-    lastSeenAt DateTime @default(now())
-    expiresAt DateTime
-    revokedAt DateTime?
-    rotatedAt DateTime?
+    createdAt DateTime @default(now()) @storage.Timestamptz(3)
+    lastSeenAt DateTime @default(now()) @storage.Timestamptz(3)
+    expiresAt DateTime @storage.Timestamptz(3)
+    revokedAt DateTime? @storage.Timestamptz(3)
+    rotatedAt DateTime? @storage.Timestamptz(3)
     ip String?
     userAgent String?
 
@@ -47,10 +47,10 @@ model Session {
 model Transaction {
     id String @id @default(uuid())
     idUser String
-    date DateTime @default(now())
+    date DateTime @default(now()) @storage.Timestamptz(3)
     type Boolean
     account String
-    value Decimal
+    value Decimal @storage.Decimal(65, 2)
     category String?
     description String?
     transferId String?
@@ -58,16 +58,26 @@ model Transaction {
 
     user User @relation(fields: [idUser], references: [id])
 
+    // toda consulta de este usuario ordena por fecha, asi que el indice compuesto
+    // cubre a la vez el filtro por idUser y el ORDER BY date
+    @@index([idUser, date(sort: Desc)])
+    // getByTransferId y deleteTransfer buscan siempre por idUser + transferId
+    @@index([idUser, transferId])
     @@map("transactions")
 }
 model Account {
     id String @id @default(uuid())
     idUser String
     name String
-    balance Decimal
+    balance Decimal @storage.Decimal(65, 2)
 
     user User @relation(fields: [idUser], references: [id])
 
+    // el primary key esta solo sobre id, pero el codigo siempre filtra por
+    // idUser + id: sin este indice la busqueda no aprovecha ninguno
+    @@index([idUser, id])
+    // search() y getListSearch() filtran por idUser + name
+    @@index([idUser, name])
     @@map("accounts")
 }
 model Category {
@@ -77,5 +87,7 @@ model Category {
 
     user User @relation(fields: [idUser], references: [id])
 
+    // search() busca por idUser + name y el listado filtra por nombre
+    @@index([idUser, name])
     @@map("categories")
 }

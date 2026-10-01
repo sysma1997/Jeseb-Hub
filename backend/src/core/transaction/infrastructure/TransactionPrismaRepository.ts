@@ -1,6 +1,7 @@
-import { PrismaClient } from "../../../generated/prisma/client";
+import { PrismaClient, Prisma } from "../../../generated/prisma/client";
 import { v4 as Uuid } from "uuid";
 import dayjs from "dayjs";
+import dayjsUtc from "dayjs/plugin/utc";
 
 import { Transaction } from "../domain/Transaction";
 import type { TransactionFilter } from "../domain/TransactionFilter";
@@ -9,12 +10,14 @@ import type { BalanceEvolution } from "../domain/BalanceEvolution";
 import { TransactionRepository } from "../domain/TransactionRepository";
 import { Pagination } from "../../shared/domain/Pagination";
 import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
+import { Money } from "../../shared/domain/Money";
 
 export class TransactionPrismaRepository implements TransactionRepository {
-    private readonly prisma: PrismaClient;
+    // admite el cliente transaccional para poder participar en una unit of work
+    private readonly prisma: PrismaClient | Prisma.TransactionClient;
     private readonly translator: TranslatorRepository;
 
-    constructor(prisma: PrismaClient, translator: TranslatorRepository) {
+    constructor(prisma: PrismaClient | Prisma.TransactionClient, translator: TranslatorRepository) {
         this.prisma = prisma;
         this.translator = translator;
     }
@@ -79,7 +82,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
             where: { idUser, id: { in: ids } },
         });
         return transactions.map(t => new Transaction(this.translator, t.date, t.type, t.account, 
-            Number(t.value), 
+            Money.fromDecimal(t.value), 
             t.id ?? undefined, 
             t.idUser ?? undefined, 
             t.category ?? undefined, 
@@ -93,7 +96,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
             where: { idUser, transferId },
         });
         return transactions.map(t => new Transaction(this.translator, t.date, t.type, t.account, 
-            Number(t.value), 
+            Money.fromDecimal(t.value), 
             t.id ?? undefined, 
             t.idUser ?? undefined, 
             t.category ?? undefined, 
@@ -115,7 +118,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
         if (!transaction) throw new Error(this.translator.translate("transactions.errors.notFound"));
 
         return new Transaction(this.translator, transaction.date, transaction.type, transaction.account, 
-            Number(transaction.value), 
+            Money.fromDecimal(transaction.value), 
             transaction.id ?? undefined, 
             transaction.idUser ?? undefined, 
             transaction.category ?? undefined, 
@@ -144,7 +147,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
 
         const pagination = new Pagination<Transaction>();
         pagination.list = transactions.map(t => new Transaction(this.translator, t.date, t.type, t.account, 
-            Number(t.value), 
+            Money.fromDecimal(t.value), 
             t.id ?? undefined, 
             t.idUser ?? undefined, 
             t.category ?? undefined, 
@@ -194,7 +197,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
 
         const pagination = new Pagination<Transaction>();
         pagination.list = transactions.map(t => new Transaction(this.translator, t.date, t.type, t.account, 
-            Number(t.value), 
+            Money.fromDecimal(t.value), 
             t.id ?? undefined, 
             t.idUser ?? undefined, 
             t.category ?? undefined, 
@@ -239,9 +242,9 @@ export class TransactionPrismaRepository implements TransactionRepository {
             }
         });
 
-        const currentValue: number = Number(income._sum.value ?? 0.0);
+        const currentValue: number = Money.fromDecimal(income._sum.value);
         if (!compareLastMonth) return {
-            current: currentValue, 
+            current: Money.fromCents(currentValue), 
             previous: 0,
             difference: 0, 
             percentageChange: 0
@@ -287,14 +290,14 @@ export class TransactionPrismaRepository implements TransactionRepository {
             }
         });
         
-        const previousValue: number = Number(previousIncome._sum.value ?? 0.0);
+        const previousValue: number = Money.fromDecimal(previousIncome._sum.value);
         const difference = currentValue - previousValue;
         const percentageChange = (previousValue === 0) ? 0 : (difference / previousValue) * 100;
 
         return {
-            current: currentValue, 
-            previous: previousValue,
-            difference, 
+            current: Money.fromCents(currentValue), 
+            previous: Money.fromCents(previousValue),
+            difference: Money.fromCents(difference), 
             percentageChange
         };
     }
@@ -330,9 +333,9 @@ export class TransactionPrismaRepository implements TransactionRepository {
             }
         });
 
-        const currentValue: number = Number(expenses._sum.value ?? 0.0);
+        const currentValue: number = Money.fromDecimal(expenses._sum.value);
         if (!compareLastMonth) return {
-            current: currentValue, 
+            current: Money.fromCents(currentValue), 
             previous: 0,
             difference: 0, 
             percentageChange: 0
@@ -378,14 +381,14 @@ export class TransactionPrismaRepository implements TransactionRepository {
             }
         });
         
-        const previousValue: number = Number(previousExpenses._sum.value ?? 0.0);
+        const previousValue: number = Money.fromDecimal(previousExpenses._sum.value);
         const difference = currentValue - previousValue;
         const percentageChange = (previousValue === 0) ? 0 : (difference / previousValue) * 100;
 
         return {
-            current: currentValue, 
-            previous: previousValue,
-            difference, 
+            current: Money.fromCents(currentValue), 
+            previous: Money.fromCents(previousValue),
+            difference: Money.fromCents(difference), 
             percentageChange
         };
     }
@@ -410,11 +413,16 @@ export class TransactionPrismaRepository implements TransactionRepository {
 
         const dailyMap = new Map<string, { income: number, expenses: number }>();
         for (const tx of transactions) {
-            const day = dayjs(tx.date).format("YYYY-MM-DD");
+            // .utc() porque dayjs() agruparia por la zona del proceso: una transaccion
+            // cercana a medianoche caeria en el dia anterior o siguiente segun donde
+            // corra el servidor, y el acumulado del balance descuadraria
+            const day = dayjs.utc(tx.date).format("YYYY-MM-DD");
             const current = dailyMap.get(day) || { income: 0, expenses: 0 };
 
-            if (tx.type === true) current.income += Number(tx.value);
-            else current.expenses += Number(tx.value);
+            // los importes se acumulan en centavos enteros: sumar miles de coma flotante
+            // deriva y el acumulado del balance dejaria de cuadrar
+            if (tx.type === true) current.income += Money.fromDecimal(tx.value);
+            else current.expenses += Money.fromDecimal(tx.value);
 
             dailyMap.set(day, current);
         }

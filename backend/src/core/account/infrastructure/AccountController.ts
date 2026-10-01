@@ -4,6 +4,7 @@ import { ControllerBase } from "../../shared/infrastructure/ControllerBase";
 import { UserAuthenticate } from "../../user/infrastructure/UserAuthenticate";
 import { Pagination } from "../../shared/domain/Pagination";
 import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
+import { Money } from "../../shared/domain/Money";
 import { MessageBuilder } from "../../shared/domain/MessageBuilder";
 
 export class AccountController extends ControllerBase {
@@ -24,7 +25,7 @@ export class AccountController extends ControllerBase {
             try {
                 const idUser: string = req.user!.id;
                 const name: string = req.body.name;
-                const balance: number = req.body.balance ?? 0.0;
+                const balance: number = Money.toCents(req.body.balance ?? 0.0);
                 const id: string | undefined = req.body.id ?? undefined;
 
                 const account = new Account(this.translator, name, balance, 
@@ -162,7 +163,8 @@ export class AccountController extends ControllerBase {
         this.router.get("/total/balance", UserAuthenticate, async (req, res) => {
             try {
                 const idUser: string = req.user!.id;
-                const totalBalance: number = await this.repository.getTotalBalance(idUser);
+                // el repositorio devuelve centavos; la API responde en decimales
+                const totalBalance: number = Money.fromCents(await this.repository.getTotalBalance(idUser));
                 
                 res.json({ totalBalance });
             } catch (err: any) {
