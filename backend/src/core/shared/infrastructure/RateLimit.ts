@@ -1,4 +1,4 @@
-import rateLimit, { type Options } from "express-rate-limit";
+import rateLimit, { ipKeyGenerator, type Options } from "express-rate-limit";
 import type express from "express";
 
 import { TranslatorI18nRepository } from "./i18next";
@@ -22,8 +22,10 @@ function build(windowMs: number, limit: number, key?: (req: express.Request) => 
         }
     };
     // cuando la sesion ya esta autenticada conviene contar por usuario: por IP todos los
-    // clientes de un proxy inverso comparten un unico cubo y se bloquean entre si
-    if (key) options.keyGenerator = (req: express.Request) => key(req) ?? req.ip ?? "unknown";
+    // clientes de un proxy inverso comparten un unico cubo y se bloquean entre si.
+    // el respaldo por IP tiene que pasar por ipKeyGenerator o un atacante con IPv6
+    // podría rotar direcciones dentro de su /64 para reiniciar el cubo.
+    if (key) options.keyGenerator = (req: express.Request) => key(req) ?? ipKeyGenerator(req.ip ?? "unknown");
 
     return rateLimit(options as Options);
 }
