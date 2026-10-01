@@ -198,7 +198,7 @@ export const TransactionList = () => {
                                 </div>
                             </td>
                             <td className="transactionDate">
-                                {dayjs.utc(transaction.date).format("DD/MM/YYYY HH:mm:ss")}
+                                {dayjs(transaction.date).format("DD/MM/YYYY HH:mm:ss")}
                             </td>
                             <td className="transactionValue" style={{ color: (transaction.isTransfer) ? neutralColor : ((transaction.type) ? "#00d1b2" : "#ff3860") }}>
                                 {FormatNumber(transaction.value)}

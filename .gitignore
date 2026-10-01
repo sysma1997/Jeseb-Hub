@@ -17,3 +17,4 @@ landing/dist
 landing/package-lock.json
 .env
 Dockerfile
+backups/

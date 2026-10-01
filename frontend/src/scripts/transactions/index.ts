@@ -363,7 +363,11 @@ matAccept.onclick = async () => {
     matAccept.disabled = true;
 
     const value: number = Number(matValue.value);
-    const date: Date = dayjs.utc(matDate.value).toDate();
+    // <input type="datetime-local"> entrega una hora de pared sin zona ("2026-10-01T14:30").
+    // dayjs.utc la interpretaria como UTC y correria el dato segun donde este el
+    // dispositivo. dayjs() la lee en la zona del navegador, que es justo lo que el
+    // usuario escribio, y toDate() devuelve el instante correcto.
+    const date: Date = dayjs(matDate.value).toDate();
     const description: string | undefined = matDescription.value ? matDescription.value : undefined;
 
     try {

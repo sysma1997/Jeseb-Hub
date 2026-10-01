@@ -53,7 +53,7 @@ export const TransactionListMini = () => {
                             <span className="account-badge">{transaction.account}</span>
                         </td>
                         <td className="transaction-date-modern">
-                            {dayjs.utc(transaction.date).format("DD/MM/YYYY HH:mm:ss")}
+                            {dayjs(transaction.date).format("DD/MM/YYYY HH:mm:ss")}
                         </td>
                         <td className={`transaction-amount-modern ${transaction.type ? 'positive' : 'negative'}`}>
                             {transaction.type ? '+' : '-'}
