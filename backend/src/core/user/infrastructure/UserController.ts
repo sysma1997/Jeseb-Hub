@@ -18,7 +18,7 @@ import { SessionContext } from "./SessionContext";
 import { SessionService } from "../domain/SessionService";
 import { UserToken, TokenType } from "./UserToken";
 import { FileStorage, ValidateImageUpload } from "../../shared/infrastructure/FileStorage";
-import { AuthRateLimit, EmailRateLimit } from "../../shared/infrastructure/RateLimit";
+import { AuthRateLimit, EmailRateLimit, EmailChangeRateLimit, TwoStepCodeRateLimit } from "../../shared/infrastructure/RateLimit";
 import { EmailTemplates } from "../../shared/domain/EmailTemplate";
 import { TranslatorRepository } from "../../shared/domain/TranslatorRepository";
 import { MessageBuilder } from "../../shared/domain/MessageBuilder";
@@ -275,7 +275,7 @@ export class UserController extends ControllerBase {
             }
         });
 
-        this.router.get("/request/update/email/:email", UserAuthenticate, async (req, res) => {
+        this.router.get("/request/update/email/:email", UserAuthenticate, EmailChangeRateLimit, async (req, res) => {
             if (!req.params.email) 
                 return res.status(400).send(this.translator.translate("users.errors.emailRequired"));
 
@@ -316,7 +316,7 @@ export class UserController extends ControllerBase {
             }
         });
 
-        this.router.post("/request/update/email/resend", UserAuthenticate, async (req, res) => {
+        this.router.post("/request/update/email/resend", UserAuthenticate, EmailChangeRateLimit, async (req, res) => {
             try {
                 const idUser: string = req.user!.id;
                 const challenge = EmailChange.get(this.translator, idUser);
@@ -363,7 +363,7 @@ export class UserController extends ControllerBase {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
         });
-        this.router.put("/update/email", UserAuthenticate, async (req, res) => {
+        this.router.put("/update/email", UserAuthenticate, EmailChangeRateLimit, async (req, res) => {
             const { code, step } = req.body;
             const hasCode: boolean = !((code === undefined) || (code === null) || (String(code).trim() === ""));
             if (!hasCode) 
@@ -431,7 +431,7 @@ export class UserController extends ControllerBase {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
         });
-        this.router.post("/request/two-step/code", UserAuthenticate, async (req, res) => {
+        this.router.post("/request/two-step/code", UserAuthenticate, TwoStepCodeRateLimit, async (req, res) => {
             try {
                 const idUser: string = req.user!.id;
                 const user: User = await this.repository.get(idUser);
