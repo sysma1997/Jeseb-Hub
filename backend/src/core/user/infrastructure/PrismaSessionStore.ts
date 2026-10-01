@@ -76,4 +76,19 @@ export class PrismaSessionStore implements SessionStore {
 
         return result.count;
     }
+    async deleteOlderThan(cutoff: Date): Promise<number> {
+        // las filas se conservan como prueba de que un refresh ya fue canjeado, asi que
+        // solo se purga lo que lleva 90 dias cerrado (revocado o rotado) o caducado
+        const result = await this.prisma.session.deleteMany({
+            where: {
+                OR: [
+                    { revokedAt: { lte: cutoff } },
+                    { rotatedAt: { lte: cutoff } },
+                    { expiresAt: { lte: cutoff } }
+                ]
+            }
+        });
+
+        return result.count;
+    }
 }

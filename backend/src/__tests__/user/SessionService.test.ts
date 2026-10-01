@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from "@jest/globals";
 import { createHash } from "crypto";
 
-import { SessionService, SessionRecord, SessionRow, SessionStore, Redeemed } from "../../core/user/domain/SessionService";
+import { SessionService, SessionRecord, SessionRow, SessionStore, Redeemed, SessionSweeper } from "../../core/user/domain/SessionService";
 
 class InMemoryStore implements SessionStore {
     public readonly rows: Map<string, SessionRow> = new Map();
@@ -47,6 +47,17 @@ class InMemoryStore implements SessionStore {
         for (const row of this.rows.values())
             if (row.idUser === idUser && !row.revokedAt) { row.revokedAt = revokedAt; count++; }
 
+        return count;
+    }
+    async deleteOlderThan(cutoff: Date): Promise<number> {
+        // replica exacta del where de PrismaSessionStore: un null nunca casa con lte
+        let count = 0;
+        for (const [id, row] of this.rows) {
+            const old: boolean = ((row.revokedAt !== undefined) && (row.revokedAt <= cutoff))
+                || ((row.rotatedAt !== undefined) && (row.rotatedAt <= cutoff))
+                || (row.expiresAt <= cutoff);
+            if (old) { this.rows.delete(id); count++; }
+        }
         return count;
     }
 }
@@ -226,5 +237,79 @@ describe("SessionService domain", () => {
 
         expect(store.rows.get(opened.id)!.secretHash).not.toBe(parts.secret);
         expect(store.rows.get(opened.id)!.secretHash).toHaveLength(64);
+      });
+
+    describe("SessionSweeper", () => {
+        const daysAgo = (days: number): Date => new Date(Date.now() - (days * 24 * 60 * 60 * 1000));
+
+        it("Should keep a closed session for the whole retention window.", async () => {
+            const opened = await sessions.open(userId);
+            await sessions.revoke(opened.token);
+            const row = store.rows.get(opened.id)!;
+            row.expiresAt = daysAgo(10);
+
+            expect(await new SessionSweeper(store).run()).toBe(0);
+            expect(store.rows.get(opened.id)).toBeDefined();
+        });
+        it("Should delete a closed session once it falls outside the window.", async () => {
+            const opened = await sessions.open(userId);
+            await sessions.revoke(opened.token);
+            store.rows.get(opened.id)!.expiresAt = daysAgo(SessionSweeper.RetentionDays + 1);
+
+            expect(await new SessionSweeper(store).run()).toBe(1);
+            expect(store.rows.get(opened.id)).toBeUndefined();
+        });
+        it("Should delete a rotated session that fell out of the window.", async () => {
+            const opened = await sessions.open(userId);
+            const result = await sessions.redeem(opened.token);
+            if (result.status !== "rotated") throw new Error("expected rotation");
+
+            store.rows.get(result.id)!.expiresAt = daysAgo(SessionSweeper.RetentionDays + 1);
+            store.rows.get(opened.id)!.expiresAt = daysAgo(SessionSweeper.RetentionDays + 1);
+
+            expect(await new SessionSweeper(store).run()).toBe(2);
+        });
+        it("Should delete a session revoked long ago even if it had not expired yet.", async () => {
+            const opened = await sessions.open(userId);
+            const row = store.rows.get(opened.id)!;
+            await sessions.revoke(opened.token);
+            row.revokedAt = daysAgo(SessionSweeper.RetentionDays + 1);
+            row.expiresAt = new Date(Date.now() + (5 * 24 * 60 * 60 * 1000));
+
+            expect(await new SessionSweeper(store).run()).toBe(1);
+        });
+        it("Should never delete a session that is still valid.", async () => {
+            const opened = await sessions.open(userId);
+            const row = store.rows.get(opened.id)!;
+            row.expiresAt = new Date(Date.now() + (5 * 24 * 60 * 60 * 1000));
+
+            expect(await new SessionSweeper(store).run()).toBe(0);
+            expect(store.rows.get(opened.id)).toBeDefined();
+        });
+        it("Should delete a long abandoned session that already expired.", async () => {
+            const opened = await sessions.open(userId);
+
+            store.rows.get(opened.id)!.expiresAt = daysAgo(SessionSweeper.RetentionDays + 30);
+
+            expect(await new SessionSweeper(store).run()).toBe(1);
+            expect(store.rows.get(opened.id)).toBeUndefined();
+        });
+        it("Should compute a cutoff ninety days back.", () => {
+            const days: number = (SessionSweeper.cutoff().getTime() - Date.now()) / (24 * 60 * 60 * 1000);
+
+            expect(SessionSweeper.RetentionDays).toBe(90);
+            expect(days).toBeCloseTo(-90, 1);
+        });
+        it("Should survive a store failure without throwing at startup.", async () => {
+            const broken: SessionStore = {
+                ...store,
+                deleteOlderThan: async () => { throw new Error("database is down"); }
+            } as unknown as SessionStore;
+
+            let handle: NodeJS.Timeout | undefined;
+            expect(() => { handle = new SessionSweeper(broken, 100000).start(); }).not.toThrow();
+            expect(handle).toBeDefined();
+            if (handle) clearInterval(handle);
+        });
     });
 });

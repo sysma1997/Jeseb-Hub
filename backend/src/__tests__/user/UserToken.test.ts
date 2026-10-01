@@ -91,6 +91,12 @@ class AuthStore implements SessionStore {
             if (row.idUser === idUser && !row.revokedAt) { row.revokedAt = revokedAt; count++; }
         return count;
     }
+    async deleteOlderThan(cutoff: Date): Promise<number> {
+        let count = 0;
+        for (const [id, row] of this.active)
+            if (row.expiresAt <= cutoff) { this.active.delete(id); count++; }
+        return count;
+    }
 }
 
 describe("UserAuthenticate", () => {

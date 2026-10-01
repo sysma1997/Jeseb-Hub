@@ -25,6 +25,7 @@ export interface SessionStore {
     markRotated(id: string, rotatedAt: Date): Promise<void>;
     revokeFamily(family: string, revokedAt: Date): Promise<number>;
     revokeAllForUser(idUser: string, revokedAt: Date): Promise<number>;
+    deleteOlderThan(cutoff: Date): Promise<number>;
 }
 
 export type Redeemed =
@@ -149,5 +150,30 @@ export class SessionService {
     }
     public async touch(id: string): Promise<void> {
         await this.store.touch(id, new Date());
+    }
+}
+
+export class SessionSweeper {
+    public static readonly RetentionDays: number = 90;
+    public static readonly IntervalMs: number = 6 * 60 * 60 * 1000;
+
+    constructor(private readonly store: SessionStore, private readonly intervalMs: number = SessionSweeper.IntervalMs) {}
+
+    // se conservan las filas un tiempo porque son la unica prueba de que un refresh
+    // token ya fue canjeado: borrarlas de inmediato dejaria la reutilizacion sin detectar
+    public static cutoff(now: Date = new Date()): Date {
+        return new Date(now.getTime() - (SessionSweeper.RetentionDays * 24 * 60 * 60 * 1000));
+    }
+    public async run(now: Date = new Date()): Promise<number> {
+        return this.store.deleteOlderThan(SessionSweeper.cutoff(now));
+    }
+    public start(now: Date = new Date()): NodeJS.Timeout {
+        this.run(now).catch((err: any) => 
+            console.warn(`Could not sweep old sessions: ${err?.message ?? "unknown error"}.`));
+
+        return setInterval(() => {
+            this.run().catch((err: any) => 
+                console.warn(`Could not sweep old sessions: ${err?.message ?? "unknown error"}.`));
+        }, this.intervalMs);
     }
 }
