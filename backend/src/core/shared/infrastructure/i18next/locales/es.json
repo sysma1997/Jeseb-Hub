@@ -94,7 +94,7 @@
             "emailChangeRestart": "Tu correo electrónico cambió mientras verificabas el cambio. Vuelve a iniciar el proceso.", 
             "codeRequiredToDisableTwoStep": "Para desactivar la verificación en dos pasos se requiere un código de verificación.", 
             "refreshTokenRequired": "Se requiere el token de refresco para cerrar la sesión.",
-    "invalidToken": "El token es inválido o ha expirado."
+            "invalidToken": "El token es inválido o ha expirado."
         }, 
         "success": {
             "registrationSent": "Hemos enviado un email a {{email}} para confirmar tu registro.", 

@@ -30,7 +30,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
                 date: transaction.date, 
                 type: transaction.type, 
                 account: transaction.account, 
-                value: transaction.value,
+                value: Money.toDecimalString(transaction.value),
 
                 category: transaction.category ?? null, 
                 description: transaction.description ?? null,
@@ -47,7 +47,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
                 date: transaction.date, 
                 type: transaction.type, 
                 account: transaction.account, 
-                value: transaction.value,
+                value: Money.toDecimalString(transaction.value),
 
                 category: transaction.category ?? null, 
                 description: transaction.description ?? null,
@@ -63,7 +63,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
                 date: transaction.date, 
                 type: transaction.type, 
                 account: transaction.account, 
-                value: transaction.value,
+                value: Money.toDecimalString(transaction.value),
 
                 category: transaction.category ?? null,
                 description: transaction.description ?? null,

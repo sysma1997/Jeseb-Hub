@@ -7,7 +7,7 @@ import { AccountApiRepository } from "../../core/account/infrastructure/AccountA
 
 import { Pagination } from "../../core/shared/domain/Pagination";
 import { FormatNumber } from "../../core/shared/domain/FormatNumber";
-import { Attach, Detach } from "../../core/shared/domain/Subject";
+import { Attach, Detach, Notify } from "../../core/shared/domain/Subject";
 import { t } from "../../core/shared/infrastructure/i18n";
 
 import { Pagination as CPagination } from "../shared/Pagination";
@@ -45,10 +45,26 @@ export const List = () => {
             newPagination.pages = pagination.pages;
             setPagination(newPagination);
         };
+        const update = (account: Account) => {
+            let acc: Account[] = [];
+            if (pagination.list.length > 0) acc = [...pagination.list];
+
+            const index = acc.findIndex(ac => ac.id === account.id);
+            if (index !== -1) {
+                acc[index] = account;
+                _sortAccounts(acc);
+                const newPagination = new Pagination<Account>();
+                newPagination.list = acc;
+                newPagination.pages = pagination.pages;
+                setPagination(newPagination);
+            }
+        };
         
         Attach("account:add", add);
+        Attach("account:update", update);
         return () => {
             Detach("account:add", add);
+            Detach("account:update", update);
         };
     }, [pagination.list]);
 
@@ -67,34 +83,8 @@ export const List = () => {
                 setPagination(pagination);
             });
         };
-    const clickUpdate = (account: Account) => {
-        window.showPrompt(t("account.update.description"), t("account.update.title"), (value: string) => {
-            window.showConfirm(t("account.update.confirm", { name: value }), t("account.update.title"), async () => {
-                account = account.setName(value);
-                try {
-                    await repository.update(account);
-                    window.showAlert(t("account.update.response"), t("account.update.title"), () => {
-                        let acc: Account[] = [...pagination.list!];
-
-                        acc = acc.map(ac => {
-                            if (ac.id! === account.id!) 
-                                return account;
-                            return ac;
-                        });
-                        _sortAccounts(acc);
-                        const newPagination = new Pagination<Account>();
-                        newPagination.list = acc;
-                        newPagination.pages = pagination.pages;
-                        setPagination(newPagination);
-                    });
-                } catch (err: any) {
-                    if (err instanceof Error) {
-                        console.error(err);
-                        window.showAlert(err.message);
-                    }
-                }
-            });
-        });
+      const clickUpdate = (account: Account) => {
+        Notify("account:update", account);
     };
     const clickDelete = (id: string, name: string) => {
         window.showConfirm(t("account.delete.confirm", { name }), t("account.delete.title"), async () => {

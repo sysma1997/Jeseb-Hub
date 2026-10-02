@@ -1,85 +1,85 @@
 {
     "og": {
-        "title": "Jeseb Hub", 
+        "title": "Jeseb Hub",
         "description": "Jeseb Hub es una aplicación de gestión de finanzas personales que te permite administrar fácilmente tus cuentas, transacciones y categorías. Con una interfaz sencilla e intuitiva, puedes agregar y editar rápidamente tu información financiera, así como consultar informes y estadísticas detalladas sobre tus finanzas."
-    }, 
+    },
     "theme": {
-        "title": "Tema", 
-        "light": "Claro", 
+        "title": "Tema",
+        "light": "Claro",
         "dark": "Oscuro"
-    }, 
+    },
     "locales": {
-        "title": "Idioma", 
-        "en": "Inglés", 
+        "title": "Idioma",
+        "en": "Inglés",
         "es": "Español"
-    }, 
+    },
     "login": {
-        "title": "Iniciar sesión en Jeseb Hub", 
+        "title": "Iniciar sesión en Jeseb Hub",
         "passwordRecovery": {
-            "description": "¿Olvidaste tu contraseña?", 
+            "description": "¿Olvidaste tu contraseña?",
             "link": "Recupérala"
-        }, 
+        },
         "register": {
-            "description": "¿No tienes cuenta?", 
+            "description": "¿No tienes cuenta?",
             "link": "Regístrate"
-        }, 
+        },
         "signIn": "Iniciar sesión"
-    }, 
+    },
     "register": {
-        "title": "Regístrate en Jeseb Hub", 
+        "title": "Regístrate en Jeseb Hub",
         "login": {
-            "description": "¿Ya tienes una cuenta de usuario?", 
+            "description": "¿Ya tienes una cuenta de usuario?",
             "link": "Iniciar sesión"
-        }, 
-        "register": "Regístrate", 
+        },
+        "register": "Regístrate",
         "registerSuccessfully": "Le hemos enviado un correo electrónico para confirmar su registro."
-    }, 
+    },
     "recover": {
-        "title": "Recupera tu usuario en Jeseb Hub", 
-        "email": "Introduce el correo electrónico asociado a tu cuenta registrada para recuperarla.", 
+        "title": "Recupera tu usuario en Jeseb Hub",
+        "email": "Introduce el correo electrónico asociado a tu cuenta registrada para recuperarla.",
         "back": {
-            "description": "Volver al", 
+            "description": "Volver al",
             "link": "Inicio de sesión"
-        }, 
-        "recover": "Recuperar", 
-        "emailRequired": "Solicitud correo electrónico de recuperación", 
+        },
+        "recover": "Recuperar",
+        "emailRequired": "Solicitud correo electrónico de recuperación",
         "recoverPassword": "Recuperar contraseña"
-    }, 
+    },
     "validation": {
-        "title": "Validando token de Jeseb Hub", 
-        "description": "Por favor, espere mientras validamos su token...", 
-        "response": "El usuario fue validado con éxito.", 
+        "title": "Validando token de Jeseb Hub",
+        "description": "Por favor, espere mientras validamos su token...",
+        "response": "El usuario fue validado con éxito.",
         "invalid": "Token inválido o caducado."
-    }, 
+    },
     "index": {
         "kpi": {
             "balance": {
-                "title": "Saldo total", 
+                "title": "Saldo total",
                 "subtitle": "En todas tus cuentas"
-            }, 
+            },
             "income": {
                 "title": "Ingresos del mes"
-            }, 
+            },
             "expenses": {
                 "title": "Gastos del mes"
-            }, 
+            },
             "netSaving": {
                 "title": "Ahorro neto"
             },
             "shared": {
                 "lastMonth": "Mes pasado"
             }
-        }, 
+        },
         "graphics": {
-            "income": "Ingresos por categoría", 
-            "expenses": "Gastos por categoría", 
+            "income": "Ingresos por categoría",
+            "expenses": "Gastos por categoría",
             "evolution": "Evolución del balance",
             "total": "Total",
             "totalIncome": "Ingresos",
             "totalExpenses": "Gastos",
             "totalBalance": "Balance"
-        }, 
-        "transactions": "Transacciones Recientes", 
+        },
+        "transactions": "Transacciones Recientes",
         "top": "Top 3 gastos del mes",
         "empty": {
             "balance": "Aún no hay cuentas. Agrega una para comenzar.",
@@ -87,214 +87,218 @@
             "transactions": "No hay transacciones recientes.",
             "top": "Aún no hay gastos para mostrar."
         }
-    }, 
+    },
     "transactions": {
         "summary": {
-            "title": "Resumen", 
-            "income": "Ingresos", 
-            "expenses": "Gastos", 
-            "diff": "Diferencia", 
-            "thisMonth": "Este mes", 
+            "title": "Resumen",
+            "income": "Ingresos",
+            "expenses": "Gastos",
+            "diff": "Diferencia",
+            "thisMonth": "Este mes",
             "filter": {
-                "dateFrom": "Fecha desde", 
+                "dateFrom": "Fecha desde",
                 "dateTo": "Fecha hasta"
             }
         },
-        "noItems": "No hay transacciones para mostrar.", 
-        "title": "Transacciones", 
-        "operation": "Operación", 
-        "operationTransaction": "Transacción", 
-        "operationTransfer": "Traslado", 
-        "account": "Cuenta", 
-        "value": "Valor", 
-        "valueInvalid": "Por favor, introduzca un valor válido para la transacción.", 
-        "date": "Fecha", 
-        "options": "Opciones", 
-        "type": "Tipo", 
-        "ingress": "Entrada", 
-        "egress": "Salida", 
-        "category": "Categoría", 
-        "categoryNone": "Sin categoría", 
-        "description": "Descripción", 
-        "optional": "Las siguientes opciones son opcionales.", 
-        "confirm": "Por favor, confirme la siguiente información para crear la transacción", 
+        "noItems": "No hay transacciones para mostrar.",
+        "title": "Transacciones",
+        "operation": "Operación",
+        "operationTransaction": "Transacción",
+        "operationTransfer": "Traslado",
+        "account": "Cuenta",
+        "value": "Valor",
+        "valueInvalid": "Por favor, introduzca un valor válido para la transacción.",
+        "date": "Fecha",
+        "options": "Opciones",
+        "type": "Tipo",
+        "ingress": "Entrada",
+        "egress": "Salida",
+        "category": "Categoría",
+        "categoryNone": "Sin categoría",
+        "description": "Descripción",
+        "optional": "Las siguientes opciones son opcionales.",
+        "confirm": "Por favor, confirme la siguiente información para crear la transacción",
         "created": "La transacción se ha creado correctamente.",
-        "add": "Agregar transacción", 
-        "added": "La transacción se ha agregado correctamente.", 
-        "update": "Actualizar transacción", 
-        "updated": "La transacción se ha creado correctamente.", 
+        "add": "Agregar transacción",
+        "added": "La transacción se ha agregado correctamente.",
+        "update": "Actualizar transacción",
+        "updated": "La transacción se ha creado correctamente.",
         "delete": {
-            "title": "Eliminar transacción", 
-            "description": "¿Eliminar esta transacción?", 
+            "title": "Eliminar transacción",
+            "description": "¿Eliminar esta transacción?",
             "success": "Transacción eliminada correctamente."
-        }, 
-        "accountsRequired": "Necesitas crear al menos una cuenta para añadir una transacción.", 
+        },
+        "accountsRequired": "Necesitas crear al menos una cuenta para añadir una transacción.",
         "filter": {
-            "dateRange": "Rango de fechas", 
-            "all": "Todas", 
+            "dateRange": "Rango de fechas",
+            "all": "Todas",
             "noSelectFilters": "No selecciono ningun filtro para aplicar."
         }
     },
     "transfers": {
-        "from": "Desde", 
-        "to": "Hacia", 
-        "sameAccount": "La cuenta de origen y destino no pueden ser la misma.", 
+        "from": "Desde",
+        "to": "Hacia",
+        "sameAccount": "La cuenta de origen y destino no pueden ser la misma.",
         "added": "El traslado se ha realizado correctamente."
     },
     "account": {
-        "title": "Cuentas", 
-        "noItems": "No hay cuentas para mostrar.", 
+        "title": "Cuentas",
+        "noItems": "No hay cuentas para mostrar.",
         "search": "Buscar cuenta",
-        "total": "Total", 
+        "total": "Total",
         "add": {
-            "title": "Agregar cuenta", 
-            "description": "Ingrese el nombre para la cuenta", 
-            "confirm": "¿Agregar cuenta con el nombre '{{name}}'?", 
+            "title": "Agregar cuenta",
+            "description": "Ingrese el nombre para la cuenta",
+            "confirm": "¿Agregar cuenta con el nombre '{{name}}'?",
             "response": "Cuenta agregada correctamente."
-        }, 
+        },
         "update": {
-            "title": "Actualizar cuenta", 
-            "description": "Ingrese el nuevo nombre para la cuenta", 
-            "confirm": "¿Actualizar el nombre de la cuenta con '{{name}}'?", 
-            "response": "Cuenta actualizada correctamente."
-        }, 
+            "title": "Actualizar cuenta",
+            "description": "Ingrese los nuevos valores para la cuenta",
+            "confirm": "¿Actualizar el nombre de la cuenta con '{{name}}'?",
+            "response": "Cuenta actualizada correctamente.",
+            "balance": "Saldo",
+            "name": "Nombre", 
+            "sameValues": "Los valores ingresados son los mismos que estás utilizando en esta cuenta."
+        },
         "delete": {
-            "title": "Eliminar cuenta", 
-            "confirm": "¿Eliminar esta cuenta '{{name}}'?", 
+            "title": "Eliminar cuenta",
+            "confirm": "¿Eliminar esta cuenta '{{name}}'?",
             "response": "Cuenta eliminada correctamente."
-        }
-    }, 
+        },
+        "balance": "Saldo"
+    },
     "category": {
-        "title": "Categorias", 
-        "noItems": "No hay categorías para mostrar.", 
+        "title": "Categorias",
+        "noItems": "No hay categorías para mostrar.",
         "search": "Buscar categoría",
         "add": {
-            "title": "Agregar categoria", 
-            "description": "Ingrese el nombre para la categoria", 
-            "confirm": "¿Agregar categoria con el nombre '{{name}}'?", 
+            "title": "Agregar categoria",
+            "description": "Ingrese el nombre para la categoria",
+            "confirm": "¿Agregar categoria con el nombre '{{name}}'?",
             "response": "Categoria agregada correctamente."
-        }, 
+        },
         "update": {
-            "title": "Actualizar categoria", 
-            "description": "Ingrese el nuevo nombre para la categoria", 
-            "confirm": "¿Actualizar el nombre de la categoria con '{{name}}'?", 
+            "title": "Actualizar categoria",
+            "description": "Ingrese el nuevo nombre para la categoria",
+            "confirm": "¿Actualizar el nombre de la categoria con '{{name}}'?",
             "response": "Categoria actualizada correctamente."
-        }, 
+        },
         "delete": {
-            "title": "Eliminar categoria", 
-            "confirm": "¿Eliminar esta categoria '{{name}}'?", 
+            "title": "Eliminar categoria",
+            "confirm": "¿Eliminar esta categoria '{{name}}'?",
             "response": "Categoria eliminada correctamente."
         }
-    }, 
+    },
     "profile": {
-        "title": "Perfil", 
+        "title": "Perfil",
         "menu": {
-            "title": "Menu", 
-            "information": "Información", 
-            "security": "Seguridad", 
+            "title": "Menu",
+            "information": "Información",
+            "security": "Seguridad",
             "data": "Datos"
-        }, 
+        },
         "information": {
             "updateName": {
-                "title": "Actualizar el nombre", 
-                "same": "El nombre es el mismo que estás utilizando en esta cuenta.", 
+                "title": "Actualizar el nombre",
+                "same": "El nombre es el mismo que estás utilizando en esta cuenta.",
                 "confirm": "¿Actualizar el nombre a '{{name}}'?"
-            }, 
+            },
             "updateEmail": {
-                "title": "Actualizar correo electrónico", 
-                "same": "El correo electrónico es el mismo que estás utilizando en esta cuenta.", 
-                "confirm": "¿Actualizar el correo electrónico a '{{email}}'?", 
-                "verify": "Verificar", 
-                "stepCurrent": "Código enviado a {{email}}", 
-                "hintCurrent": "Escribe el código que enviamos a {{email}}, tu correo actual, para confirmar que sigues teniendo acceso a la cuenta.", 
-                "stepNew": "Código enviado a {{email}}", 
+                "title": "Actualizar correo electrónico",
+                "same": "El correo electrónico es el mismo que estás utilizando en esta cuenta.",
+                "confirm": "¿Actualizar el correo electrónico a '{{email}}'?",
+                "verify": "Verificar",
+                "stepCurrent": "Código enviado a {{email}}",
+                "hintCurrent": "Escribe el código que enviamos a {{email}}, tu correo actual, para confirmar que sigues teniendo acceso a la cuenta.",
+                "stepNew": "Código enviado a {{email}}",
                 "hintNew": "Escribe el código que enviamos a {{email}}, el nuevo correo, para completar el cambio."
-            }, 
-            "createAt": "Cuenta creada: <small>{{date}}</small>", 
+            },
+            "createAt": "Cuenta creada: <small>{{date}}</small>",
             "lastUpdate": "Información ultima vez actualizada: <small>{{date}}</small>"
-        }, 
+        },
         "security": {
-            "active": "Activar", 
-            "deactivate": "Desactivar", 
-            "type": "Tipo", 
+            "active": "Activar",
+            "deactivate": "Desactivar",
+            "type": "Tipo",
             "confirm": "Luego podras {{value}} de nuevo.",
             "passwordDesc": "Cambia la contraseña de tu cuenta.",
-            "twoStepDesc": "Gestiona la verificación en dos pasos de tu cuenta.", 
+            "twoStepDesc": "Gestiona la verificación en dos pasos de tu cuenta.",
             "disablePrompt": "Ingresa el código de 6 dígitos que enviamos a tu correo electrónico para confirmar la desactivación."
-        }, 
+        },
         "data": {
             "import": {
-                "title": "Importar desde archivo", 
+                "title": "Importar desde archivo",
                 "response": "Importación completada con éxito.",
                 "desc": "Importa transacciones desde un archivo CSV."
-            }, 
+            },
             "export": {
-                "title": "Exportar a un archivo", 
+                "title": "Exportar a un archivo",
                 "confirm": "¿Exportar sus transacciones a un archivo CSV?",
                 "desc": "Exporta todas tus transacciones a un archivo CSV."
-            }, 
+            },
             "deleteAll": {
-                "title": "Eliminar todos los datos", 
-                "action": "Eliminar", 
-                "confirm": "¿Eliminar todos los datos? Esta acción no se puede deshacer.", 
+                "title": "Eliminar todos los datos",
+                "action": "Eliminar",
+                "confirm": "¿Eliminar todos los datos? Esta acción no se puede deshacer.",
                 "desc": "Elimina permanentemente todos tus datos."
-            }, 
+            },
             "apiUrl": {
-                "title": "API del backend", 
+                "title": "API del backend",
                 "desc": "Muestra la URL de la API utilizada por esta aplicación."
-            }, 
-            "backendShow": "Mostrar", 
+            },
+            "backendShow": "Mostrar",
             "backend": "La URL actual de la API es: <a href=\"{{url}}\" target=\"_blank\">{{url}}</a>"
         }
-    }, 
+    },
     "shared": {
-        "warning": "Advertencia", 
-        "accept": "Aceptar", 
+        "warning": "Advertencia",
+        "accept": "Aceptar",
         "cancel": "Cancelar",
-        "no": "No", 
-        "yes": "Sí", 
-        "next": "Continuar", 
-        "back": "Volver", 
-        "add": "Agregar", 
-        "update": "Actualizar", 
-        "edit": "Editar", 
-        "remove": "Eliminar", 
-        "manage": "Administrar", 
-        "name": "Nombre", 
-        "nameRequired": "Se requiere el nombre.", 
-        "email": "Correo electrónico", 
-        "emailRequired":"Se requiere el correo electrónico.", 
+        "no": "No",
+        "yes": "Sí",
+        "next": "Continuar",
+        "back": "Volver",
+        "add": "Agregar",
+        "update": "Actualizar",
+        "edit": "Editar",
+        "remove": "Eliminar",
+        "manage": "Administrar",
+        "name": "Nombre",
+        "nameRequired": "Se requiere el nombre.",
+        "email": "Correo electrónico",
+        "emailRequired": "Se requiere el correo electrónico.",
         "emailInvalid": "Por favor, introduzca un correo electrónico válido.",
-        "password": "Contraseña", 
-        "passwordRequired": "Se requiere la contraseña.", 
-        "passwordConfirm": "Confirmar contraseña", 
-        "passwordConfirmRequired": "Se requiere la confirmación de la contraseña.", 
-        "passwordDontMatch": "Las contraseñas no coinciden.", 
-        "passwordUpdate": "Actualizar contraseña", 
-        "passwordCurrent": "Contraseña actual", 
-        "passwordCurrentRequired": "Se requiere la contraseña actual.", 
-        "passwordNew": "Nueva contraseña", 
-        "passwordNewRequired": "Se requiere la nueva contraseña.", 
-        "passwordNewDontMatch": "La contraseña nueva y la confirmación no coinciden.", 
-        "codeVerification": "Código de verificación", 
-        "codeVerificationRequired": "Se requiere el código de verificación.", 
-        "codeVerificationInvalid": "El código de verificación no tiene 6 dígitos.", 
+        "password": "Contraseña",
+        "passwordRequired": "Se requiere la contraseña.",
+        "passwordConfirm": "Confirmar contraseña",
+        "passwordConfirmRequired": "Se requiere la confirmación de la contraseña.",
+        "passwordDontMatch": "Las contraseñas no coinciden.",
+        "passwordUpdate": "Actualizar contraseña",
+        "passwordCurrent": "Contraseña actual",
+        "passwordCurrentRequired": "Se requiere la contraseña actual.",
+        "passwordNew": "Nueva contraseña",
+        "passwordNewRequired": "Se requiere la nueva contraseña.",
+        "passwordNewDontMatch": "La contraseña nueva y la confirmación no coinciden.",
+        "codeVerification": "Código de verificación",
+        "codeVerificationRequired": "Se requiere el código de verificación.",
+        "codeVerificationInvalid": "El código de verificación no tiene 6 dígitos.",
         "codeVerificationResend": "¿No recibiste el código? Envíalo de nuevo",
-        "codeVerificationResent": "Hemos enviado un nuevo código de verificación a tu correo electrónico.", 
-        "inputEmpty": "La entrada de texto no puede estar vacía.", 
+        "codeVerificationResent": "Hemos enviado un nuevo código de verificación a tu correo electrónico.",
+        "inputEmpty": "La entrada de texto no puede estar vacía.",
         "menu": {
-            "home": "Inicio", 
-            "accounts": "Cuentas", 
-            "categories": "Categorías", 
-            "profile": "Perfil", 
-            "logout": "Cerrar sesión", 
+            "home": "Inicio",
+            "accounts": "Cuentas",
+            "categories": "Categorías",
+            "profile": "Perfil",
+            "logout": "Cerrar sesión",
             "settings": "Configuración"
-        }, 
-        "balance": "Saldo", 
-        "limit": "Límite", 
-        "page": "Página", 
-        "search": "Buscar", 
-        "filter": "Filtro", 
+        },
+        "balance": "Saldo",
+        "limit": "Límite",
+        "page": "Página",
+        "search": "Buscar",
+        "filter": "Filtro",
         "clear": "Limpiar"
     }
 }

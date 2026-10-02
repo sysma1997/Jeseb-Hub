@@ -1,85 +1,85 @@
 {
     "og": {
-        "title": "Jeseb Hub", 
+        "title": "Jeseb Hub",
         "description": "Jeseb Hub is a personal finance management application that allows you to easily manage your accounts, transactions and categories. With a simple and intuitive interface, you can quickly add and edit your financial information, as well as view detailed reports and statistics about your finances."
-    }, 
+    },
     "theme": {
-        "title": "Theme", 
-        "light": "Light", 
+        "title": "Theme",
+        "light": "Light",
         "dark": "Dark"
-    }, 
+    },
     "locales": {
-        "title": "Language", 
-        "en": "English", 
+        "title": "Language",
+        "en": "English",
         "es": "Spanish"
-    }, 
+    },
     "login": {
-        "title": "Login in Jeseb Hub", 
+        "title": "Login in Jeseb Hub",
         "passwordRecovery": {
-            "description": "Forgot your password?", 
+            "description": "Forgot your password?",
             "link": "Recover it"
-        }, 
+        },
         "register": {
-            "description": "You don't have an account?", 
+            "description": "You don't have an account?",
             "link": "Register"
-        }, 
+        },
         "signIn": "Sign in"
-    }, 
+    },
     "register": {
-        "title": "Register in Jeseb Hub", 
+        "title": "Register in Jeseb Hub",
         "login": {
-            "description": "Do you already have a user account?", 
+            "description": "Do you already have a user account?",
             "link": "Login"
-        }, 
-        "register": "Register", 
+        },
+        "register": "Register",
         "registerSuccessfully": "We have sent you an email to confirm your registration."
-    }, 
+    },
     "recover": {
-        "title": "Recover user in Jeseb Hub", 
-        "email": "Enter your email with the registered account to recover it.", 
+        "title": "Recover user in Jeseb Hub",
+        "email": "Enter your email with the registered account to recover it.",
         "back": {
-            "description": "Back to", 
+            "description": "Back to",
             "link": "Login"
-        }, 
-        "recover": "Recover", 
-        "emailRequired":"The email is required.", 
+        },
+        "recover": "Recover",
+        "emailRequired": "The email is required.",
         "recoverPassword": "Recover password"
     },
     "validation": {
-        "title": "Validating token in Jeseb Hub", 
-        "description": "Please wait while we validate your token...", 
-        "response": "The user was successfully validated.", 
+        "title": "Validating token in Jeseb Hub",
+        "description": "Please wait while we validate your token...",
+        "response": "The user was successfully validated.",
         "invalid": "Invalid or expired token."
-    }, 
+    },
     "index": {
         "kpi": {
             "balance": {
-                "title": "Total balance", 
+                "title": "Total balance",
                 "subtitle": "In all your accounts"
-            }, 
+            },
             "income": {
                 "title": "Monthly income"
-            }, 
+            },
             "expenses": {
                 "title": "Monthly expenses"
-            }, 
+            },
             "netSaving": {
                 "title": "Net saving"
             },
             "shared": {
                 "lastMonth": "Last month"
             }
-        }, 
+        },
         "graphics": {
-            "income": "Revenue by category", 
-            "expenses": "Expenses by category", 
+            "income": "Revenue by category",
+            "expenses": "Expenses by category",
             "evolution": "Balance evolution",
             "total": "Total",
             "totalIncome": "Income",
             "totalExpenses": "Expenses",
             "totalBalance": "Balance"
-        }, 
-        "transactions": "Recent transactions", 
+        },
+        "transactions": "Recent transactions",
         "top": "Top 3 expenses of the month",
         "empty": {
             "balance": "No accounts yet. Add one to get started.",
@@ -87,214 +87,218 @@
             "transactions": "No recent transactions.",
             "top": "No expenses to show yet."
         }
-    }, 
+    },
     "transactions": {
         "summary": {
-            "title": "Summary", 
-            "income": "Income", 
-            "expenses": "Expenses", 
-            "diff": "Diff", 
-            "thisMonth": "This month", 
+            "title": "Summary",
+            "income": "Income",
+            "expenses": "Expenses",
+            "diff": "Diff",
+            "thisMonth": "This month",
             "filter": {
-                "dateFrom": "Date from", 
+                "dateFrom": "Date from",
                 "dateTo": "Date to"
             }
         },
-  "noItems": "There are not transactions to show.",
-  "title": "Transactions",
-  "operation": "Operation",
-  "operationTransaction": "Transaction",
-  "operationTransfer": "Transfer",
-  "account": "Account",
-        "value": "Value", 
-        "valueInvalid": "Please enter a valid value for the transaction.", 
-        "date": "Date", 
-        "options": "Options", 
-        "type": "Type", 
-        "ingress": "Ingress", 
-        "egress": "Egress", 
-        "category": "Category", 
-        "categoryNone": "Without category", 
-        "description": "Description", 
-        "optional": "The following options are optional.", 
-        "confirm": "Please confirm the following information to create the transaction", 
-        "created": "The transaction has been created successfully.", 
-        "add": "Add transaction", 
-        "added": "The transaction has been created successfully.", 
-        "update": "Update transaction", 
-        "updated": "The transaction has been updated successfully.", 
+        "noItems": "There are not transactions to show.",
+        "title": "Transactions",
+        "operation": "Operation",
+        "operationTransaction": "Transaction",
+        "operationTransfer": "Transfer",
+        "account": "Account",
+        "value": "Value",
+        "valueInvalid": "Please enter a valid value for the transaction.",
+        "date": "Date",
+        "options": "Options",
+        "type": "Type",
+        "ingress": "Ingress",
+        "egress": "Egress",
+        "category": "Category",
+        "categoryNone": "Without category",
+        "description": "Description",
+        "optional": "The following options are optional.",
+        "confirm": "Please confirm the following information to create the transaction",
+        "created": "The transaction has been created successfully.",
+        "add": "Add transaction",
+        "added": "The transaction has been created successfully.",
+        "update": "Update transaction",
+        "updated": "The transaction has been updated successfully.",
         "delete": {
-            "title": "Delete transaction", 
-            "description": "Delete this transaction?", 
+            "title": "Delete transaction",
+            "description": "Delete this transaction?",
             "success": "Delete transaction successfully."
-        }, 
-  "accountsRequired": "You need to create at least one account to add a transaction.",
-  "filter": {
-    "dateRange": "Date range",
-    "all": "All",
-    "noSelectFilters": "No filters selected to apply."
-  }
-},
-  "transfers": {
-    "from": "From",
-    "to": "To",
-    "sameAccount": "The origin and destination accounts cannot be the same.",
-    "added": "The transfer has been completed successfully."
-  },
-    "account": {
-        "title": "Accounts", 
-        "noItems": "There are not accounts to show.", 
-        "search": "Search account",
-        "total": "Total", 
-        "add": {
-            "title": "Add account", 
-            "description": "Enter the name for the account", 
-            "confirm": "Create account with the name '{{name}}'?", 
-            "response": "Add account successfully."
-        }, 
-        "update": {
-            "title": "Update account", 
-            "description": "Enter the new name for this account", 
-            "confirm": "Update name account with '{{name}}'?", 
-            "response": "Update account successfully."
-        }, 
-        "delete": {
-            "title": "Delete account", 
-            "confirm": "Delete this account '{{name}}'?", 
-            "response": "Delete account successfully."
+        },
+        "accountsRequired": "You need to create at least one account to add a transaction.",
+        "filter": {
+            "dateRange": "Date range",
+            "all": "All",
+            "noSelectFilters": "No filters selected to apply."
         }
-    }, 
+    },
+    "transfers": {
+        "from": "From",
+        "to": "To",
+        "sameAccount": "The origin and destination accounts cannot be the same.",
+        "added": "The transfer has been completed successfully."
+    },
+    "account": {
+        "title": "Accounts",
+        "noItems": "There are not accounts to show.",
+        "search": "Search account",
+        "total": "Total",
+        "add": {
+            "title": "Add account",
+            "description": "Enter the name for the account",
+            "confirm": "Create account with the name '{{name}}'?",
+            "response": "Add account successfully."
+        },
+        "update": {
+            "title": "Update account",
+            "description": "Enter the new values for this account",
+            "confirm": "Update name account with '{{name}}'?",
+            "response": "Update account successfully.",
+            "balance": "Balance",
+            "name": "Name", 
+            "sameValues": "The values entered are the same as the ones you are using in this account."
+        },
+        "delete": {
+            "title": "Delete account",
+            "confirm": "Delete this account '{{name}}'?",
+            "response": "Delete account successfully."
+        },
+        "balance": "Balance"
+    },
     "category": {
-        "title": "Categories", 
-        "noItems": "There are not categories to show.", 
+        "title": "Categories",
+        "noItems": "There are not categories to show.",
         "search": "Search category",
         "add": {
-            "title": "Add category", 
-            "description": "Enter the name for the category", 
-            "confirm": "Create category with the name '{{name}}'?", 
+            "title": "Add category",
+            "description": "Enter the name for the category",
+            "confirm": "Create category with the name '{{name}}'?",
             "response": "Add category successfully."
-        }, 
+        },
         "update": {
-            "title": "Update category", 
-            "description": "Enter the new name for this category", 
-            "confirm": "Update name category with '{{name}}'?", 
+            "title": "Update category",
+            "description": "Enter the new name for this category",
+            "confirm": "Update name category with '{{name}}'?",
             "response": "Update category successfully."
-        }, 
+        },
         "delete": {
-            "title": "Delete category", 
-            "confirm": "Delete this category '{{name}}'?", 
+            "title": "Delete category",
+            "confirm": "Delete this category '{{name}}'?",
             "response": "Delete category successfully."
         }
-    }, 
+    },
     "profile": {
-        "title": "Profile", 
+        "title": "Profile",
         "menu": {
-            "title": "Menu", 
-            "information": "Information", 
-            "security": "Security", 
+            "title": "Menu",
+            "information": "Information",
+            "security": "Security",
             "data": "Data"
-        }, 
+        },
         "information": {
             "updateName": {
-                "title": "Update name", 
-                "same": "The name is the same one you are using on this account.", 
+                "title": "Update name",
+                "same": "The name is the same one you are using on this account.",
                 "confirm": "Update the name to '{{name}}'?"
-            }, 
+            },
             "updateEmail": {
-                "title": "Update email", 
-                "same": "The email is the same one you are using on this account.", 
-                "confirm": "Update the email to '{{email}}'?", 
-                "verify": "Verify", 
-                "stepCurrent": "Code sent to {{email}}", 
-                "hintCurrent": "Enter the code we sent to {{email}}, your current email, to confirm you still have access to the account.", 
-                "stepNew": "Code sent to {{email}}", 
+                "title": "Update email",
+                "same": "The email is the same one you are using on this account.",
+                "confirm": "Update the email to '{{email}}'?",
+                "verify": "Verify",
+                "stepCurrent": "Code sent to {{email}}",
+                "hintCurrent": "Enter the code we sent to {{email}}, your current email, to confirm you still have access to the account.",
+                "stepNew": "Code sent to {{email}}",
                 "hintNew": "Enter the code we sent to {{email}}, the new email, to complete the change."
-            }, 
-            "createAt": "Account created: {{date}}", 
+            },
+            "createAt": "Account created: {{date}}",
             "lastUpdate": "Information last updated: {{date}}"
-        }, 
+        },
         "security": {
-            "active": "Activate", 
-            "deactivate": "Deactivate", 
-            "type": "Type", 
+            "active": "Activate",
+            "deactivate": "Deactivate",
+            "type": "Type",
             "confirm": "Then you can {{value}} it again.",
             "passwordDesc": "Change the password of your account.",
-            "twoStepDesc": "Manage two-step verification for your account.", 
+            "twoStepDesc": "Manage two-step verification for your account.",
             "disablePrompt": "Enter the 6-digit code we sent to your email to confirm the deactivation."
-        }, 
+        },
         "data": {
             "import": {
-                "title": "Import from file", 
+                "title": "Import from file",
                 "response": "Import completed successfully.",
                 "desc": "Import transactions from a CSV file."
-            }, 
+            },
             "export": {
-                "title": "Export to file", 
+                "title": "Export to file",
                 "confirm": "Do you want to export your transactions to a CSV file?",
                 "desc": "Export all your transactions to a CSV file."
-            }, 
+            },
             "deleteAll": {
-                "title": "Delete all data", 
-                "action": "Delete", 
-                "confirm": "Delete all data? This action cannot be reversed.", 
+                "title": "Delete all data",
+                "action": "Delete",
+                "confirm": "Delete all data? This action cannot be reversed.",
                 "desc": "Permanently remove all your data."
-            }, 
+            },
             "apiUrl": {
-                "title": "Backend API", 
+                "title": "Backend API",
                 "desc": "View the API URL used by this application."
-            }, 
-            "backendShow": "Show", 
+            },
+            "backendShow": "Show",
             "backend": "The current API url is: <a href=\"{{url}}\" target=\"_blank\">{{url}}</a>"
         }
-    }, 
+    },
     "shared": {
-        "warning": "Warning", 
-        "accept": "Accept", 
-        "cancel": "Cancel", 
-        "no": "No", 
-        "yes": "Yes", 
-        "next": "Next", 
-        "back": "Back", 
-        "add": "Add", 
-        "update": "Update", 
-        "edit": "Edit", 
-        "remove": "Remove", 
-        "manage": "Manage", 
-        "name": "Name", 
-        "nameRequired": "The name is required.", 
-        "email": "Email", 
-        "emailRequired":"The email is required.", 
-        "emailInvalid": "Please enter a valid email.", 
-        "password": "Password", 
-        "passwordRequired":"The password is required.", 
-        "passwordConfirm": "Confirm password", 
-        "passwordConfirmRequired": "The confirm password is required.", 
-        "passwordDontMatch": "Passwords do not match.", 
-        "passwordUpdate": "Update password", 
-        "passwordCurrent": "Current password", 
-        "passwordCurrentRequired": "The current password is required.", 
-        "passwordNew": "New password", 
-        "passwordNewRequired": "The new password is required.", 
-        "passwordNewDontMatch": "New password and confirm do not match.", 
-        "codeVerification": "Code verification", 
-        "codeVerificationRequired": "The code verification is required.", 
-        "codeVerificationInvalid": "The code does not have 6 digits.", 
+        "warning": "Warning",
+        "accept": "Accept",
+        "cancel": "Cancel",
+        "no": "No",
+        "yes": "Yes",
+        "next": "Next",
+        "back": "Back",
+        "add": "Add",
+        "update": "Update",
+        "edit": "Edit",
+        "remove": "Remove",
+        "manage": "Manage",
+        "name": "Name",
+        "nameRequired": "The name is required.",
+        "email": "Email",
+        "emailRequired": "The email is required.",
+        "emailInvalid": "Please enter a valid email.",
+        "password": "Password",
+        "passwordRequired": "The password is required.",
+        "passwordConfirm": "Confirm password",
+        "passwordConfirmRequired": "The confirm password is required.",
+        "passwordDontMatch": "Passwords do not match.",
+        "passwordUpdate": "Update password",
+        "passwordCurrent": "Current password",
+        "passwordCurrentRequired": "The current password is required.",
+        "passwordNew": "New password",
+        "passwordNewRequired": "The new password is required.",
+        "passwordNewDontMatch": "New password and confirm do not match.",
+        "codeVerification": "Code verification",
+        "codeVerificationRequired": "The code verification is required.",
+        "codeVerificationInvalid": "The code does not have 6 digits.",
         "codeVerificationResend": "Didn't get the code? Send it again",
-        "codeVerificationResent": "We have sent a new verification code to your email.", 
-        "inputEmpty": "The input cannot be empty.", 
+        "codeVerificationResent": "We have sent a new verification code to your email.",
+        "inputEmpty": "The input cannot be empty.",
         "menu": {
-            "home": "Home", 
-            "accounts": "Accounts", 
-            "categories": "Categories", 
-            "profile": "Profile", 
-            "logout": "Log out", 
+            "home": "Home",
+            "accounts": "Accounts",
+            "categories": "Categories",
+            "profile": "Profile",
+            "logout": "Log out",
             "settings": "Settings"
-        }, 
-        "balance": "Balance", 
-        "limit": "Limit", 
-        "page": "Page", 
-        "search": "Search", 
-        "filter": "Filter", 
+        },
+        "balance": "Balance",
+        "limit": "Limit",
+        "page": "Page",
+        "search": "Search",
+        "filter": "Filter",
         "clear": "Clear"
     }
 }

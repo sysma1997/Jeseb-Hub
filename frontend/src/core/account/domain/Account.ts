@@ -41,6 +41,11 @@ export class Account implements Base {
             this.id, this.idUser, 
             this.user);
     }
+    setBalance(balance: number): Account {
+        return new Account(this.name, balance, 
+            this.id, this.idUser, 
+            this.user);
+    }
 
     ingressBalance(value: number): Account {
         return new Account(this.name, Number(this.balance) + Number(value), 

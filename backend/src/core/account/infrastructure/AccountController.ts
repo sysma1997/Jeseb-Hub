@@ -37,35 +37,33 @@ export class AccountController extends ControllerBase {
                 if (err instanceof Error) res.status(400).send(err.message);
             }
         });
-        this.router.put("/update", UserAuthenticate, async (req, res) => {
-            if (!req.body.id || 
-                !req.body.name) {
-                const message = new MessageBuilder();
-
-                if (!req.body.id) message.add(this.translator.translate("accounts.errors.idRequired"));
-                if (!req.body.name) message.add(this.translator.translate("accounts.errors.nameRequired"));
-                
-                return res.status(400).send(message.toString());
-            }
-
-            try {
-                const idUser: string = req.user!.id;
-                const id: string = req.body.id;
-                const name: string = req.body.name;
-
-                let account: Account = await this.repository.get(idUser, id);
-                account = account.setName(name);
-
-                const exists = await this.repository.search(idUser, name);
-                if (exists) 
-                    return res.status(400).send(this.translator.translate("accounts.errors.nameAlreadyExists", { name: account.name }));
-                    
-                await this.repository.update(account);
-                res.send(this.translator.translate("accounts.success.accountUpdated"));
-            } catch (err: any) {
-                if (err instanceof Error) res.status(400).send(err.message);
-            }
-        });
+          this.router.put("/update", UserAuthenticate, async (req, res) => {
+              if (!req.body.id || 
+                  (!req.body.name && req.body.balance === undefined)) {
+                  const message = new MessageBuilder();
+  
+                  if (!req.body.id) message.add(this.translator.translate("accounts.errors.idRequired"));
+                  if (!req.body.name && req.body.balance === undefined) message.add(this.translator.translate("accounts.errors.nameRequired"));
+                  
+                  return res.status(400).send(message.toString());
+              }
+  
+              try {
+                  const idUser: string = req.user!.id;
+                  const id: string = req.body.id;
+                  const name: string | undefined = req.body.name;
+                  const balance: number | undefined = req.body.balance;
+  
+                  let account: Account = await this.repository.get(idUser, id);
+                  if (name) account = account.setName(name);
+                  if (balance !== undefined) account = account.setBalance(Money.toCents(balance));
+      
+                  await this.repository.update(account);
+                  res.send(this.translator.translate("accounts.success.accountUpdated"));
+              } catch (err: any) {
+                  if (err instanceof Error) res.status(400).send(err.message);
+              }
+          });
         this.router.delete("/delete/:id", UserAuthenticate, async (req, res) => {
             try {
                 const idUser: string = req.user!.id;

@@ -64,6 +64,11 @@ export class Account implements Base {
             this.id, this.idUser, 
             this.user);
     }
+    setBalance(balance: number): Account {
+        return new Account(this.translator, this.name, balance, 
+            this.id, this.idUser, 
+            this.user);
+    }
 
     // value llega en centavos, igual que balance: sumar enteros no acumula error de
     // coma flotante, a diferencia de sumar 0.1 + 0.2

@@ -7,6 +7,7 @@ import { Icon } from "astro-icon/components";
 import Layout from "../../layouts/Layout.astro";
 import Content from "../../components/shared/Content.astro";
 
+import Base from "../../components/modals/Base.astro";
 import Alert from "../../components/modals/Alert.astro";
 import Prompt from "../../components/modals/Prompt.astro";
 import Confirm from "../../components/modals/Confirm.astro";
@@ -35,6 +36,29 @@ const t = createTranslations(locale);
         </div>
     </Content>
 
+    <Base id="modalUpdateAccount" title={t("account.update.title")}>
+        <div class="modal-body">
+            <div class="field">
+                <label class="label">{t("account.update.description")}</label>
+            </div>
+            <div class="field">
+				<label class="label">{t("account.update.name")}:</label>
+				<div class="control">
+					<input id="imuaName" class="input" type="text" />
+				</div>
+			</div>
+            <div class="field">
+                <label class="label">{t("account.update.balance")}:</label>
+                <div class="control">
+                    <input id="imuaBalance" class="input" type="number" />
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="btnmuaCancel" class="btn-danger">{t("shared.cancel")}</button>
+            <button id="btnmuaAccept" class="btn-primary">{t("shared.accept")}</button>
+        </div>
+    </Base>
     <Prompt locale={locale} />
     <Confirm locale={locale} />
     <Alert locale={locale} />

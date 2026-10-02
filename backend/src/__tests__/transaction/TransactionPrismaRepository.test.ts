@@ -42,7 +42,7 @@ describe("Transaction Prisma Repository", () => {
             data: {
                 id, idUser, 
                 date, type, account, 
-                value, 
+                value: "12.57", 
                 category, description,
                 transferId: null,
                 isTransfer: false
@@ -76,7 +76,7 @@ describe("Transaction Prisma Repository", () => {
             where: { idUser, id },
             data: { 
                 date, type, account, 
-                value, 
+                value: "12.57", 
                 category, description,
                 transferId: null,
                 isTransfer: false
