@@ -161,5 +161,12 @@
                 "ignore": "Si no has creado una cuenta, puedes ignorar este correo electrónico sin problema."
             }
         }
+    }, 
+    "report": {
+        "generate": {
+            "dateInitRequired": "La fecha desde cual para generar el reporte es requerida.", 
+            "dateEndRequired": "La fecha hasta cual para generar el reporte es requerida.",
+            "filtersInvalid": "Los filtros del reporte no son válidos."
+        }
     }
 }

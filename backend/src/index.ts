@@ -29,6 +29,9 @@ import { AccountController } from "./core/account/infrastructure/AccountControll
 import { CategoryRepository } from "./core/category/domain/CategoryRepository";
 import { CategoryPrismaRepository } from "./core/category/infrastructure/CategoryPrismaRepository";
 import { CategoryController } from "./core/category/infrastructure/CategoryController";
+import { ReportRepository } from "./core/reports/domain/ReportRepository";
+import { ReportPrismaRepository } from "./core/reports/infrastructure/ReportPrismaRepository";
+import { ReportController } from "./core/reports/infrastructure/ReportController";
 
 import { TranslatorRepository } from "./core/shared/domain/TranslatorRepository";
 import { TranslatorI18nRepository } from "./core/shared/infrastructure/i18next/index";
@@ -75,11 +78,14 @@ const unitOfWork: UnitOfWork = new PrismaUnitOfWork(prisma, translator);
 const transactionService: TransactionService = new TransactionService(transactionRepository, accountRepository, categoryRepository, translator, unitOfWork);
 const transferService: TransferService = new TransferService(unitOfWork, translator);
 const transactionController: ControllerBase = new TransactionController(transactionRepository, transactionService, transferService, translator);
+const reportRepository: ReportRepository = new ReportPrismaRepository(prisma, translator);
+const reportController: ControllerBase = new ReportController(reportRepository, translator);
 
 userController.setup();
 transactionController.setup();
 accountController.setup();
 categoryController.setup();
+reportController.setup();
 
 const app = express();
 
@@ -111,6 +117,7 @@ app.use("/api/user", userController.getRouter());
 app.use("/api/transaction", transactionController.getRouter());
 app.use("/api/account", accountController.getRouter());
 app.use("/api/category", categoryController.getRouter());
+app.use("/api/report", reportController.getRouter());
 
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (err instanceof multer.MulterError) {

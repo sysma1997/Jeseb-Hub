@@ -1,0 +1,60 @@
+@media (max-width: 700px) {
+    .totals {
+        flex-direction: column;
+    }
+    .totals .box {
+        flex-direction: row;
+    }
+    .report-actions {
+        justify-content: stretch;
+    }
+    .report-actions button {
+        flex: 1;
+    }
+    .report-custom-range,
+    .report-filter-grid {
+        grid-template-columns: 1fr;
+    }
+    .report-multi-filter-panel {
+        width: 100%;
+        min-width: 0;
+    }
+    .report-block-filters {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .report-block-filters label {
+        align-items: flex-start;
+    }
+    .box {
+        padding: 0.85rem;
+    }
+    .totals .box {
+        padding: 0.75rem;
+    }
+    .totals .box-heading {
+        gap: 0.4rem;
+    }
+    .totals .box-heading > .title {
+        font-size: 0.9rem;
+    }
+    .box-collapse-toggle {
+        flex-basis: 32px;
+        width: 32px;
+        height: 32px;
+    }
+    .detail-table-wrapper {
+        max-height: min(320px, 45vh);
+        scrollbar-gutter: auto;
+    }
+    .report-table th,
+    .report-table td {
+        padding: 0.6rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .box-collapse-content:not([hidden]) {
+        animation: none;
+    }
+}

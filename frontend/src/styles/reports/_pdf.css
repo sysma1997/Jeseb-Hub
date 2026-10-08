@@ -1,0 +1,190 @@
+@page {
+    margin: 1.25cm 1.35cm 1.7cm;
+}
+@media print {
+    html,
+    body {
+        width: 100% !important;
+        height: auto !important;
+        margin: 0 !important;
+        background: #fff !important;
+    }
+    body.report-pdf-active {
+        display: block !important;
+    }
+    body.report-pdf-active > :not(#reportPdf) {
+        display: none !important;
+    }
+    body.report-pdf-active > #reportPdf {
+        display: flex !important;
+    }
+    .report-pdf {
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 100%;
+        padding: 0 0 1.5cm;
+        flex-direction: column;
+        gap: 0.65rem;
+        background: #fff !important;
+        color: #111 !important;
+        font-family: Arial, sans-serif;
+        font-size: 10pt;
+    }
+    .report-pdf-header {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        column-gap: 1rem;
+        padding-bottom: 0.6rem;
+        border-bottom: 2px solid #00b89c;
+        break-inside: avoid;
+    }
+    .report-pdf-brand {
+        grid-row: span 2;
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+    }
+    .report-pdf-brand img {
+        width: 38px;
+        height: 38px;
+        object-fit: contain;
+    }
+    .report-pdf-brand div {
+        display: flex;
+        flex-direction: column;
+        gap: 0.1rem;
+    }
+    .report-pdf-brand span {
+        color: #64748b;
+        font-size: 8pt;
+    }
+    .report-pdf-header h1 {
+        margin: 0;
+        color: #0f172a;
+        font-size: 20pt;
+    }
+    .report-pdf-header p {
+        grid-column: 2;
+        margin: 0;
+        color: #475569;
+        font-size: 9pt;
+    }
+    .report-pdf-summary {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.5rem;
+        break-inside: avoid;
+    }
+    .report-pdf-summary > div {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        padding: 0.55rem 0.7rem;
+        border: 1px solid #d7dee8;
+        border-radius: 8px;
+    }
+    .report-pdf-summary span {
+        color: #64748b;
+        font-size: 8pt;
+        text-transform: uppercase;
+    }
+    .report-pdf-summary strong {
+        color: #0f172a;
+        font-size: 12pt;
+        text-align: right;
+    }
+    .report-pdf-charts,
+    .report-pdf-tables {
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+    }
+    .report-pdf-charts[hidden],
+    .report-pdf-tables[hidden] {
+        display: none !important;
+    }
+    .report-pdf-tables {
+        break-before: page;
+        page-break-before: always;
+    }
+    .report-pdf h2 {
+        margin: 0.2rem 0;
+        padding-bottom: 0.35rem;
+        border-bottom: 1px solid #cbd5e1;
+        color: #0f172a;
+        font-size: 15pt;
+    }
+    .report-pdf-block,
+    .report-pdf-table-block {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        break-inside: avoid;
+    }
+    .report-pdf-block[hidden],
+    .report-pdf-table-block[hidden] {
+        display: none !important;
+    }
+    .report-pdf-block h3,
+    .report-pdf-table-block h3 {
+        margin: 0;
+        color: #1e293b;
+        font-size: 11pt;
+    }
+    .report-pdf-block img {
+        display: block;
+        width: 100%;
+        max-height: 8.5cm;
+        object-fit: contain;
+        object-position: left center;
+    }
+    .report-pdf-block img[hidden],
+    .report-pdf-block p[hidden] {
+        display: none !important;
+    }
+    .report-pdf-block p {
+        margin: 0;
+        padding: 1rem;
+        color: #64748b;
+        text-align: center;
+    }
+    .report-pdf .report-table {
+        width: 100%;
+        min-width: 0 !important;
+        color: #111;
+        font-size: 8.5pt;
+    }
+    .report-pdf .report-table th,
+    .report-pdf .report-table td {
+        padding: 0.35rem 0.45rem;
+        border-color: #cbd5e1 !important;
+    }
+    .report-pdf .report-table thead th,
+    .report-pdf .report-table tfoot th {
+        position: static;
+        background: #f1f5f9;
+        color: #334155;
+    }
+    .report-pdf .report-table tbody tr {
+        break-inside: avoid;
+    }
+    .report-pdf-footer {
+        position: fixed;
+        right: 0;
+        bottom: -1.15cm;
+        left: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding-top: 0.25rem;
+        border-top: 1px solid #cbd5e1;
+        background: #fff;
+        color: #475569;
+        font-size: 8pt;
+    }
+    .report-pdf-footer img {
+        width: 16px;
+        height: 16px;
+    }
+}

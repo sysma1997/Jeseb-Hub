@@ -9,7 +9,7 @@ const t = createTranslations(locale);
 const hideAddButton = Astro.props?.hideAddButton || false;
 ---
 
-<section id="sidebar" class="sidebar">
+<section id="sidebar" class="sidebar" aria-label={t("shared.menu.modules")}>
     <div class="sidebar-header">
         <div class="sidebar-logo-container">
             <div class="sidebar-logo-icon">
@@ -17,9 +17,12 @@ const hideAddButton = Astro.props?.hideAddButton || false;
             </div>
             <span class="sidebar-logo-text"><b>Jeseb Hub</b></span>
         </div>
+        <button id="sidebarMobileClose" class="sidebar-mobile-close" type="button" aria-label={t("shared.menu.closeModules")}>
+            <Icon class="iIcon" name="material-symbols:close-rounded" />
+        </button>
     </div>
 
-    <div class="sidebar-nav">
+    <nav class="sidebar-nav" aria-label={t("shared.menu.modules")}>
         <a id="sbHome" class="sidebar-nav-item" href={`/${locale}`} data-tooltip={t("shared.menu.home")}>
             <Icon class="iIcon" name="solar:home-2-bold" />
             <span><b>{t("shared.menu.home")}</b></span>
@@ -36,7 +39,11 @@ const hideAddButton = Astro.props?.hideAddButton || false;
             <Icon class="iIcon" name="solar:widget-4-bold" />
             <span><b>{t("shared.menu.categories")}</b></span>
         </a>
-    </div>
+        <a id="sbReports" class="sidebar-nav-item" href={`/${locale}/reports`} data-tooltip={t("shared.menu.reports")}>
+            <Icon class="iIcon" name="solar:chart-2-bold" />
+            <span><b>{t("shared.menu.reports")}</b></span>
+        </a>
+    </nav>
 
     <div class="sidebar-footer">
         <a id="sbProfile" class="sidebar-nav-item" href={`/${locale}/profile`} data-tooltip={t("shared.menu.settings")}>
@@ -54,6 +61,8 @@ const hideAddButton = Astro.props?.hideAddButton || false;
         <Icon name="material-symbols:add-2-rounded" width={24} height={24} />
     </button>}
 </section>
+
+<button id="sidebarDrawerBackdrop" class="sidebar-drawer-backdrop" type="button" aria-label={t("shared.menu.closeModules")} hidden></button>
 
 <nav class="sidebar-mobile">
     <div class="sidebar-mobile-container">
@@ -89,11 +98,13 @@ const hideAddButton = Astro.props?.hideAddButton || false;
     const accountsLink = document.getElementById("sbAccounts") as HTMLAnchorElement | null;
     const categoriesLink = document.getElementById("sbCategories") as HTMLAnchorElement | null;
     const profileLink = document.getElementById("sbProfile") as HTMLAnchorElement | null;
+    const reportsLink = document.getElementById("sbReports") as HTMLAnchorElement | null;
     
     if (path.includes("/transactions") && transactionsLink) transactionsLink.classList.add("active");
     else if (path.includes("/accounts") && accountsLink) accountsLink.classList.add("active");
     else if (path.includes("/categories") && categoriesLink) categoriesLink.classList.add("active");
     else if (path.includes("/profile") && profileLink) profileLink.classList.add("active");
+    else if (path.includes("/reports") && reportsLink) reportsLink.classList.add("active");
     else if (homeLink) homeLink.classList.add("active");
     
     // Resaltar en bottom nav móvil

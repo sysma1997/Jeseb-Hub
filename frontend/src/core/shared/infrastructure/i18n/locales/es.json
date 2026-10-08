@@ -190,6 +190,106 @@
             "response": "Categoria eliminada correctamente."
         }
     },
+    "reports": {
+        "title": "Generar reportes", 
+        "noItems": "Escoja los filtros y genere el informe.",
+        "emptyBlock": "Sin datos para este periodo.",
+        "loading": "Generando reporte…",
+        "visibleRange": "Periodo del reporte",
+        "collapse": {
+            "minimize": "Contraer bloque",
+            "expand": "Expandir bloque"
+        },
+        "exportCsv": "Exportar CSV",
+        "print": "Imprimir reporte",
+        "exportPdf": "Exportar PDF",
+        "quickRanges": {
+            "title": "Rangos rápidos",
+            "thisMonth": "Este mes",
+            "previousMonth": "Mes anterior",
+            "lastThreeMonths": "Últimos 3 meses",
+            "lastSixMonths": "Últimos 6 meses",
+            "yearToDate": "Año actual",
+            "previousYear": "Año anterior"
+        },
+        "filters": {
+            "accounts": "Cuentas",
+            "categories": "Categorías",
+            "all": "Todas",
+            "none": "Ninguna seleccionada",
+            "selected": "{{count}} seleccionadas",
+            "selectAll": "Seleccionar todas",
+            "clear": "Limpiar selección",
+            "searchAccounts": "Buscar cuentas",
+            "searchCategories": "Buscar categorías",
+            "changedNotice": "Los filtros cambiaron. Genera de nuevo el reporte para actualizar las exportaciones."
+        },
+        "content": {
+            "title": "Bloques del reporte"
+        },
+        "pdf": {
+            "title": "Reporte financiero",
+            "chartsTitle": "Gráficos",
+            "tablesTitle": "Detalle y comparación"
+        },
+        "comparison": {
+            "title": "Comparación con el periodo anterior",
+            "periods": "Actual: {{current}} · Anterior: {{previous}}",
+            "metric": "Indicador",
+            "current": "Periodo actual",
+            "previous": "Periodo anterior",
+            "absoluteChange": "Variación absoluta",
+            "percentageChange": "Variación porcentual",
+            "income": "Ingresos",
+            "expenses": "Gastos",
+            "diff": "Diferencia",
+            "notAvailable": "No disponible"
+        },
+        "dateRange": {
+            "title": "Rango de fechas",
+            "year": "Año",
+            "month": "Mes",
+            "from": "Desde",
+            "to": "Hasta", 
+            "selectYear": "Seleccionar un año.", 
+            "selectFrom": "Seleccionar fecha desde.",
+            "selectTo": "Seleccionar fecha hasta.",
+            "selectDateRangeValid": "La fecha inicial no puede ser posterior a la fecha final."
+        }, 
+        "generate": "Generar reporte", 
+        "table": {
+            "date": "Fecha",
+            "name": "Nombre",
+            "amount": "Importe",
+            "total": "Total de la tabla",
+            "expensePercentage": "% del gasto"
+        },
+        "csv": {
+            "period": "Periodo actual",
+            "previousPeriod": "Periodo anterior",
+            "accounts": "Cuentas incluidas",
+            "categories": "Categorías incluidas",
+            "section": "Bloque",
+            "totals": "Totales del reporte",
+            "date": "Fecha",
+            "name": "Nombre",
+            "currentAmount": "Importe actual",
+            "previousAmount": "Importe anterior",
+            "absoluteChange": "Variación absoluta",
+            "percentageChange": "Variación porcentual",
+            "expensePercentage": "Porcentaje del gasto"
+        },
+        "totals": {
+            "ingress": "Total ingresos", 
+            "egress": "Total egresos", 
+            "diff": "Diferencia"
+        }, 
+        "graphics": {
+            "balanceEvolution": "Evolución de balance", 
+            "accounts": "Cuentas", 
+            "categories": "Categorías"
+        }
+    }, 
     "profile": {
         "title": "Perfil",
         "menu": {
@@ -292,13 +392,31 @@
             "categories": "Categorías",
             "profile": "Perfil",
             "logout": "Cerrar sesión",
-            "settings": "Configuración"
+            "settings": "Configuración", 
+            "reports": "Reportes",
+            "modules": "Módulos",
+            "openModules": "Abrir menú de módulos",
+            "closeModules": "Cerrar menú de módulos"
         },
         "balance": "Saldo",
         "limit": "Límite",
         "page": "Página",
         "search": "Buscar",
         "filter": "Filtro",
-        "clear": "Limpiar"
+        "clear": "Limpiar", 
+        "months": {
+            "january": "Enero",
+            "february": "Febrero",
+            "march": "Marzo",
+            "april": "Abril",
+            "may": "Mayo",
+            "june": "Junio",
+            "july": "Julio",
+            "august": "Agosto",
+            "september": "Septiembre",
+            "october": "Octubre",
+            "november": "Noviembre",
+            "december": "Diciembre"
+        }
     }
 }

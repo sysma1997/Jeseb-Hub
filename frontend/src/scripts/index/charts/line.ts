@@ -2,6 +2,7 @@ import { Chart } from "chart.js";
 import type { BalanceEvolution } from "../../../core/transaction/domain/BalanceEvolution";
 import { FormatNumber } from "../../../core/shared/domain/FormatNumber";
 import { lineChartTotals } from "./plugins";
+import { t } from "../../../core/shared/infrastructure/i18n";
 
 export const createGraphicsLine = (
     canvas: HTMLCanvasElement,
@@ -21,7 +22,7 @@ export const createGraphicsLine = (
             }),
             datasets: [
                 {
-                    label: "Ingresos",
+                    label: t("index.graphics.totalIncome"),
                     data: evolutions.map(item => item.income),
                     borderColor: "#00d1b2",
                     backgroundColor: "rgba(0, 209, 178, 0.05)",
@@ -33,7 +34,7 @@ export const createGraphicsLine = (
                     borderWidth: 2,
                 },
                 {
-                    label: "Gastos",
+                    label: t("index.graphics.totalExpenses"),
                     data: evolutions.map(item => item.expenses),
                     borderColor: '#ff3860',
                     backgroundColor: 'rgba(255, 56, 96, 0.05)',
@@ -45,7 +46,7 @@ export const createGraphicsLine = (
                     borderWidth: 2,
                 },
                 {
-                    label: 'Balance',
+                    label: t("index.graphics.totalBalance"),
                     data: evolutions.map(item => item.balance),
                     borderColor: '#3273dc',
                     backgroundColor: 'rgba(50, 115, 220, 0.03)',
@@ -97,9 +98,6 @@ export const createGraphicsLine = (
                 }
             },
             plugins: {
-                lineChartTotals: {
-                    textColor: (theme === "light") ? "#64748b" : "#94a3b8",
-                },
                 legend: {
                     position: 'bottom',
                     labels: {
@@ -108,12 +106,6 @@ export const createGraphicsLine = (
                         padding: 20,
                         font: { size: 12, weight: 'bold' },
                         color: (theme === "light") ? "#1e293b" : "#f1f5f9"
-                    },
-                    onClick: (_e: any, legendItem: any, legend: any) => {
-                        const index = legendItem.datasetIndex;
-                        const ci = legend.chart;
-                        ci.setDatasetVisibility(index, ci.isDatasetVisible(index));
-                        ci.update();
                     }
                 },
                 tooltip: {

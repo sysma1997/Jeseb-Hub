@@ -161,5 +161,12 @@
                 "ignore": "If you didn't create an account, you can safely ignore this email."
             }
         }
+    }, 
+    "report": {
+        "generate": {
+            "dateInitRequired": "The start date for generating the report is required.", 
+            "dateEndRequired": "The end date for generating the report is required.",
+            "filtersInvalid": "The report filters are invalid."
+        }
     }
 }

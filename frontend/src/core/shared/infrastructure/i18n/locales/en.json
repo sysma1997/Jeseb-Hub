@@ -190,6 +190,106 @@
             "response": "Delete category successfully."
         }
     },
+    "reports": {
+        "title": "Generate reports", 
+        "noItems": "Select the filters and generate the report.",
+        "emptyBlock": "No data for this period.",
+        "loading": "Generating report…",
+        "visibleRange": "Report period",
+        "collapse": {
+            "minimize": "Collapse section",
+            "expand": "Expand section"
+        },
+        "exportCsv": "Export CSV",
+        "print": "Print report",
+        "exportPdf": "Export PDF",
+        "quickRanges": {
+            "title": "Quick ranges",
+            "thisMonth": "This month",
+            "previousMonth": "Previous month",
+            "lastThreeMonths": "Last 3 months",
+            "lastSixMonths": "Last 6 months",
+            "yearToDate": "Current year",
+            "previousYear": "Previous year"
+        },
+        "filters": {
+            "accounts": "Accounts",
+            "categories": "Categories",
+            "all": "All",
+            "none": "None selected",
+            "selected": "{{count}} selected",
+            "selectAll": "Select all",
+            "clear": "Clear selection",
+            "searchAccounts": "Search accounts",
+            "searchCategories": "Search categories",
+            "changedNotice": "Filters changed. Generate the report again to update its exports."
+        },
+        "content": {
+            "title": "Report sections"
+        },
+        "pdf": {
+            "title": "Financial report",
+            "chartsTitle": "Charts",
+            "tablesTitle": "Details and comparison"
+        },
+        "comparison": {
+            "title": "Comparison with previous period",
+            "periods": "Current: {{current}} · Previous: {{previous}}",
+            "metric": "Metric",
+            "current": "Current period",
+            "previous": "Previous period",
+            "absoluteChange": "Absolute change",
+            "percentageChange": "Percentage change",
+            "income": "Income",
+            "expenses": "Expenses",
+            "diff": "Difference",
+            "notAvailable": "N/A"
+        },
+        "dateRange": {
+            "title": "Date Range",
+            "year": "Year",
+            "month": "Month",
+            "from": "From",
+            "to": "To", 
+            "selectYear": "Select a year.", 
+            "selectFrom": "Select date from.",
+            "selectTo": "Select date to.", 
+            "selectDateRangeValid": "The start date cannot be later than the end date."
+        }, 
+        "generate": "Generate Report", 
+        "table": {
+            "date": "Date",
+            "name": "Name",
+            "amount": "Amount",
+            "total": "Table total",
+            "expensePercentage": "% of expenses"
+        },
+        "csv": {
+            "period": "Current period",
+            "previousPeriod": "Previous period",
+            "accounts": "Included accounts",
+            "categories": "Included categories",
+            "section": "Section",
+            "totals": "Report totals",
+            "date": "Date",
+            "name": "Name",
+            "currentAmount": "Current amount",
+            "previousAmount": "Previous amount",
+            "absoluteChange": "Absolute change",
+            "percentageChange": "Percentage change",
+            "expensePercentage": "Expense percentage"
+        },
+        "totals": {
+            "ingress": "Total ingress", 
+            "egress": "Total egress", 
+            "diff": "Diff"
+        }, 
+        "graphics": {
+            "balanceEvolution": "Balance evolution", 
+            "accounts": "Accounts", 
+            "categories": "Categories"
+        }
+    }, 
     "profile": {
         "title": "Profile",
         "menu": {
@@ -292,13 +392,31 @@
             "categories": "Categories",
             "profile": "Profile",
             "logout": "Log out",
-            "settings": "Settings"
+            "settings": "Settings", 
+            "reports": "Reports",
+            "modules": "Modules",
+            "openModules": "Open modules menu",
+            "closeModules": "Close modules menu"
         },
         "balance": "Balance",
         "limit": "Limit",
         "page": "Page",
         "search": "Search",
         "filter": "Filter",
-        "clear": "Clear"
+        "clear": "Clear", 
+        "months": {
+            "january": "January",
+            "february": "February",
+            "march": "March",
+            "april": "April",
+            "may": "May",
+            "june": "June",
+            "july": "July",
+            "august": "August",
+            "september": "September",
+            "october": "October",
+            "november": "November",
+            "december": "December"
+        }
     }
 }

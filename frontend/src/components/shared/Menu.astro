@@ -49,6 +49,9 @@ const t = createTranslations(locale);
         </div>
 
         <div class="menu-mobile">
+            <button id="mobileNavToggle" class="mobile-nav-toggle" type="button" aria-controls="sidebar" aria-expanded="false" aria-label={t("shared.menu.openModules")}>
+                <Icon name="material-symbols:menu-rounded" width={24} height={24} />
+            </button>
             <a class="sidebar-logo-icon" href={`/${locale}`}>
                 <img id="logoImg" src="/favicon/icon-dark.svg" alt="Jeseb Hub" />
             </a>
@@ -86,10 +89,52 @@ const t = createTranslations(locale);
     import { User } from "../../core/user/domain/User";
     import type { UserRepository } from "../../core/user/domain/UserRepository";
     import { UserApiRepository } from "../../core/user/infrastructure/UserApiRepository";
-    import { type Locale, getLocale, setLocale } from "../../core/shared/infrastructure/i18n";
+    import { type Locale, getLocale, setLocale, t } from "../../core/shared/infrastructure/i18n";
     import { Notify } from "../../core/shared/domain/Subject";
     import { Session } from "../../core/shared/infrastructure/Session";
     import { SessionRefresher } from "../../core/shared/infrastructure/SessionRefresher";
+
+    const mobileNavToggle = document.getElementById("mobileNavToggle") as HTMLButtonElement | null;
+    const mobileSidebar = document.getElementById("sidebar") as HTMLElement | null;
+    const sidebarDrawerBackdrop = document.getElementById("sidebarDrawerBackdrop") as HTMLButtonElement | null;
+    const sidebarMobileClose = document.getElementById("sidebarMobileClose") as HTMLButtonElement | null;
+
+    const closeMobileNavigation = (restoreFocus = false) => {
+        mobileSidebar?.classList.remove("mobile-open");
+        if (sidebarDrawerBackdrop) sidebarDrawerBackdrop.hidden = true;
+        document.body.classList.remove("mobile-menu-open");
+        mobileNavToggle?.setAttribute("aria-expanded", "false");
+        mobileNavToggle?.setAttribute("aria-label", t("shared.menu.openModules"));
+        if (restoreFocus) mobileNavToggle?.focus();
+    };
+
+    const openMobileNavigation = () => {
+        if (!mobileSidebar || !sidebarDrawerBackdrop) return;
+        mobileSidebar.classList.add("mobile-open");
+        sidebarDrawerBackdrop.hidden = false;
+        document.body.classList.add("mobile-menu-open");
+        mobileNavToggle?.setAttribute("aria-expanded", "true");
+        mobileNavToggle?.setAttribute("aria-label", t("shared.menu.closeModules"));
+        mobileSidebar.querySelector<HTMLAnchorElement>(".sidebar-nav-item")?.focus();
+    };
+
+    mobileNavToggle?.addEventListener("click", () => {
+        if (mobileSidebar?.classList.contains("mobile-open")) closeMobileNavigation();
+        else openMobileNavigation();
+    });
+    sidebarDrawerBackdrop?.addEventListener("click", () => closeMobileNavigation(true));
+    sidebarMobileClose?.addEventListener("click", () => closeMobileNavigation(true));
+    mobileSidebar?.querySelectorAll<HTMLAnchorElement>(".sidebar-nav-item").forEach((link) => {
+        link.addEventListener("click", () => closeMobileNavigation());
+    });
+    window.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && mobileSidebar?.classList.contains("mobile-open")) {
+            closeMobileNavigation(true);
+        }
+    });
+    window.addEventListener("resize", () => {
+        if (window.innerWidth > 768) closeMobileNavigation();
+    });
 
     (async () => {
         const userRepository: UserRepository = new UserApiRepository();

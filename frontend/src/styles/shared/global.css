@@ -7,6 +7,8 @@
     --global-hover: #f0fdfa;
     --global-accent: #00d1b2;
     --global-page-bg: #ffffff;
+    --global-text-accept: #00d1b2;
+    --global-text-reject: #ff3860;
 }
 
 :root[data-theme="dark"] {
@@ -18,6 +20,8 @@
     --global-hover: #1e293b;
     --global-accent: #00d1b2;
     --global-page-bg: #0b1220;
+    --global-text-accept: #00d1b2;
+    --global-text-reject: #ff3860;
 }
 
 .is-loading {
@@ -42,6 +46,44 @@
     to {
         transform: rotate(360deg);
     }
+}
+
+.btn-primary,
+.btn-danger,
+.btn-info {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 1rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.btn-primary:hover,
+.btn-danger:hover,
+.btn-info:hover {
+    opacity: 0.85;
+}
+.btn-primary:disabled,
+.btn-danger:disabled,
+.btn-info:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+.btn-primary {
+    background: var(--global-accent);
+    color: #fff;
+}
+.btn-danger {
+    background: #ff3860;
+    color: #fff;
+}
+.btn-info {
+    background: #3b82f6;
+    color: #fff;
 }
 
 .btn-resend {

@@ -1,5 +1,11 @@
 import { FormatNumber } from "../../../core/shared/domain/FormatNumber";
 import { t } from "../../../core/shared/infrastructure/i18n";
+import { Attach } from "../../../core/shared/domain/Subject";
+
+let theme: string = window.localStorage.getItem("theme") ?? "light";
+Attach("menu:theme", (newTheme: string) => {
+    theme = newTheme;
+});
 
 export const createDoughnutCenterText = (accentColor: string) => ({
     id: 'doughnutCenterText',
@@ -39,7 +45,7 @@ export const lineChartTotals = {
     afterDraw(chart: any) {
         const { ctx, chartArea } = chart;
         if (!chartArea) return;
-        const textColor = (chart.options.plugins as any)?.lineChartTotals?.textColor ?? '#999';
+        const textColor = (theme === "light") ? "#1e293b" : "#f1f5f9";
         const datasets = chart.data.datasets;
         const totals = datasets.map((ds: any, i: number) => {
             const meta = chart.getDatasetMeta(i);
@@ -54,7 +60,7 @@ export const lineChartTotals = {
         ctx.textAlign = 'left';
         ctx.textBaseline = 'top';
         let x = chartArea.left;
-        const y = chartArea.top - 2;
+        const y = chartArea.top - 20;
         for (let i = 0; i < labels.length; i++) {
             if (totals[i] === null) continue;
             ctx.font = `bold ${fontSize}px sans-serif`;

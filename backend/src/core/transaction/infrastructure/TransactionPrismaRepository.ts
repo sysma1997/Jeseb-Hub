@@ -424,6 +424,8 @@ export class TransactionPrismaRepository implements TransactionRepository {
             if (tx.type === true) current.income += Money.fromDecimal(tx.value);
             else current.expenses += Money.fromDecimal(tx.value);
 
+            current.income = Money.fromCents(current.income);
+            current.expenses = Money.fromCents(current.expenses);
             dailyMap.set(day, current);
         }
 

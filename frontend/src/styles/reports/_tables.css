@@ -1,0 +1,77 @@
+.report-comparison {
+    display: none;
+}
+.comparison-periods {
+    margin: 0;
+    color: var(--global-text-muted);
+}
+.comparison-table {
+    min-width: 680px;
+}
+.comparison-table th:not(:first-child),
+.comparison-table td:not(:first-child),
+#tableCategories th:nth-child(3),
+#tableCategories td:nth-child(3) {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.report-table {
+    width: 100%;
+    min-width: 560px;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-variant-numeric: tabular-nums;
+}
+.report-table th,
+.report-table td {
+    padding: 0.7rem 0.75rem;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: var(--global-border);
+}
+.report-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--global-bg);
+    color: var(--global-text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+.report-table tbody tr:last-child td {
+    border-bottom: none;
+}
+.report-table tbody tr:hover td {
+    background: var(--global-hover);
+}
+.report-table tfoot th {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    background: var(--global-bg);
+    font-weight: 700;
+    border-top: var(--global-border);
+    border-bottom: 0;
+}
+.report-table th:last-child,
+.report-table td:last-child {
+    text-align: right;
+    white-space: nowrap;
+}
+#tableCategories {
+    min-width: 620px;
+}
+.report-table .is-positive {
+    color: #00d1b2;
+    font-weight: 700;
+}
+.report-table .is-negative {
+    color: #ff3860;
+    font-weight: 700;
+}
+.report-table .is-neutral {
+    color: var(--global-text-muted);
+}
