@@ -13,81 +13,176 @@ const hideAddButton = Astro.props?.hideAddButton || false;
     <div class="sidebar-header">
         <div class="sidebar-logo-container">
             <div class="sidebar-logo-icon">
-                <img id="logoImg" src="/favicon/icon-dark.svg" alt="Jeseb Hub" />
+                <img
+                    id="logoImg"
+                    src="/favicon/icon-dark.svg"
+                    alt="Jeseb Hub"
+                />
             </div>
-            <span class="sidebar-logo-text"><b>Jeseb Hub</b></span>
+            <span class="sidebar-logo-text">
+                <b>Jeseb Hub</b>
+            </span>
         </div>
-        <button id="sidebarMobileClose" class="sidebar-mobile-close" type="button" aria-label={t("shared.menu.closeModules")}>
+        <button
+            id="sidebarMobileClose"
+            class="sidebar-mobile-close"
+            type="button"
+            aria-label={t("shared.menu.closeModules")}
+        >
             <Icon class="iIcon" name="material-symbols:close-rounded" />
         </button>
     </div>
 
     <nav class="sidebar-nav" aria-label={t("shared.menu.modules")}>
-        <a id="sbHome" class="sidebar-nav-item" href={`/${locale}`} data-tooltip={t("shared.menu.home")}>
+        <a
+            id="sbHome"
+            class="sidebar-nav-item"
+            href={`/${locale}`}
+            data-tooltip={t("shared.menu.home")}
+        >
             <Icon class="iIcon" name="solar:home-2-bold" />
-            <span><b>{t("shared.menu.home")}</b></span>
+            <span>
+                <b>{t("shared.menu.home")}</b>
+            </span>
         </a>
-        <a id="sbTransactions" class="sidebar-nav-item" href={`/${locale}/transactions`} data-tooltip={t("transactions.title")}>
+        <a
+            id="sbTransactions"
+            class="sidebar-nav-item"
+            href={`/${locale}/transactions`}
+            data-tooltip={t("transactions.title")}
+        >
             <Icon class="iIcon" name="material-symbols:list-rounded" />
-            <span><b>{t("transactions.title")}</b></span>
+            <span>
+                <b>{t("transactions.title")}</b>
+            </span>
         </a>
-        <a id="sbAccounts" class="sidebar-nav-item" href={`/${locale}/accounts`} data-tooltip={t("shared.menu.accounts")}>
+        <a
+            id="sbAccounts"
+            class="sidebar-nav-item"
+            href={`/${locale}/accounts`}
+            data-tooltip={t("shared.menu.accounts")}
+        >
             <Icon class="iIcon" name="solar:wallet-2-bold" />
-            <span><b>{t("shared.menu.accounts")}</b></span>
+            <span>
+                <b>{t("shared.menu.accounts")}</b>
+            </span>
         </a>
-        <a id="sbDebts" class="sidebar-nav-item" href={`/${locale}/debts`} data-tooltip={t("shared.menu.debts")}>
+        <a
+            id="sbDebts"
+            class="sidebar-nav-item"
+            href={`/${locale}/debts`}
+            data-tooltip={t("shared.menu.debts")}
+        >
             <Icon class="iIcon" name="solar:hand-money-bold" />
-            <span><b>{t("shared.menu.debts")}</b></span>
+            <span>
+                <b>{t("shared.menu.debts")}</b>
+            </span>
         </a>
-        <a id="sbCategories" class="sidebar-nav-item" href={`/${locale}/categories`} data-tooltip={t("shared.menu.categories")}>
+        <a
+            id="sbCategories"
+            class="sidebar-nav-item"
+            href={`/${locale}/categories`}
+            data-tooltip={t("shared.menu.categories")}
+        >
             <Icon class="iIcon" name="solar:widget-4-bold" />
-            <span><b>{t("shared.menu.categories")}</b></span>
+            <span>
+                <b>{t("shared.menu.categories")}</b>
+            </span>
         </a>
-        <a id="sbReports" class="sidebar-nav-item" href={`/${locale}/reports`} data-tooltip={t("shared.menu.reports")}>
+        <a
+            id="sbReports"
+            class="sidebar-nav-item"
+            href={`/${locale}/reports`}
+            data-tooltip={t("shared.menu.reports")}
+        >
             <Icon class="iIcon" name="solar:chart-2-bold" />
-            <span><b>{t("shared.menu.reports")}</b></span>
+            <span>
+                <b>{t("shared.menu.reports")}</b>
+            </span>
         </a>
     </nav>
 
     <div class="sidebar-footer">
-        <a id="sbProfile" class="sidebar-nav-item" href={`/${locale}/profile`} data-tooltip={t("shared.menu.settings")}>
+        <a
+            id="sbProfile"
+            class="sidebar-nav-item"
+            href={`/${locale}/profile`}
+            data-tooltip={t("shared.menu.settings")}
+        >
             <Icon class="iIcon" name="solar:settings-bold" />
-            <span><b>{t("shared.menu.settings")}</b></span>
+            <span>
+                <b>{t("shared.menu.settings")}</b>
+            </span>
         </a>
         <span id="appVersion" class="sidebar-version"></span>
     </div>
-    
-    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Colapsar sidebar">
-        <Icon class="iIcon" name="solar:alt-arrow-left-bold" style="width: 16px; height: 16px;" />
+
+    <button
+        class="sidebar-toggle"
+        id="sidebarToggle"
+        aria-label="Colapsar sidebar"
+    >
+        <Icon
+            class="iIcon"
+            name="solar:alt-arrow-left-bold"
+            style="width: 16px; height: 16px;"
+        />
     </button>
 
-    {!hideAddButton && <button id="sidebarAdd" class="sidebar-add-button">
-        <Icon name="material-symbols:add-2-rounded" width={24} height={24} />
-    </button>}
+    {!hideAddButton && (
+        <button id="sidebarAdd" class="sidebar-add-button">
+            <Icon
+                name="material-symbols:add-2-rounded"
+                width={24}
+                height={24}
+            />
+        </button>
+    )}
 </section>
 
-<button id="sidebarDrawerBackdrop" class="sidebar-drawer-backdrop" type="button" aria-label={t("shared.menu.closeModules")} hidden></button>
+<button
+    id="sidebarDrawerBackdrop"
+    class="sidebar-drawer-backdrop"
+    type="button"
+    aria-label={t("shared.menu.closeModules")}
+    hidden
+></button>
 
 <nav class="sidebar-mobile">
     <div class="sidebar-mobile-container">
-        <a id="sidebarMobileHome" class="sidebar-mobile-item" href={`/${locale}`}>
+        <a
+            id="sidebarMobileHome"
+            class="sidebar-mobile-item"
+            href={`/${locale}`}
+        >
             <Icon class="iIcon" name="solar:home-2-bold" />
         </a>
-        <a id="sidebarMobileTransactions" class="sidebar-mobile-item" href={`/${locale}/transactions`}>
+        <a
+            id="sidebarMobileTransactions"
+            class="sidebar-mobile-item"
+            href={`/${locale}/transactions`}
+        >
             <Icon class="iIcon" name="material-symbols:list-rounded" />
         </a>
-        {(!hideAddButton) && <div class="sidebar-mobile-item">
-            <button id="sidebarAddMobile" class="sidebar-add-button">
-                <Icon class="iIcon" name="material-symbols:add-2-rounded" />
-            </button>
-        </div>}
-        <a id="sidebarMobileAccounts" class="sidebar-mobile-item" href={`/${locale}/accounts`}>
+        {!hideAddButton && (
+            <div class="sidebar-mobile-item">
+                <button id="sidebarAddMobile" class="sidebar-add-button">
+                    <Icon class="iIcon" name="material-symbols:add-2-rounded" />
+                </button>
+            </div>
+        )}
+        <a
+            id="sidebarMobileAccounts"
+            class="sidebar-mobile-item"
+            href={`/${locale}/accounts`}
+        >
             <Icon class="iIcon" name="solar:wallet-2-bold" />
         </a>
-        <a id="sidebarMobileDebts" class="sidebar-mobile-item" href={`/${locale}/debts`}>
-            <Icon class="iIcon" name="solar:hand-money-bold" />
-        </a>
-        <a id="sidebarMobileCategories" class="sidebar-mobile-item" href={`/${locale}/categories`}>
+        <a
+            id="sidebarMobileCategories"
+            class="sidebar-mobile-item"
+            href={`/${locale}/categories`}
+        >
             <Icon class="iIcon" name="solar:widget-4-bold" />
         </a>
     </div>
@@ -98,56 +193,99 @@ const hideAddButton = Astro.props?.hideAddButton || false;
 
     // Detect current path to highlight active menu item
     const path = window.location.pathname;
-    
+
     // Resaltar en sidebar desktop
-    const homeLink = document.getElementById("sbHome") as HTMLAnchorElement | null;
-    const transactionsLink = document.getElementById("sbTransactions") as HTMLAnchorElement | null;
-    const accountsLink = document.getElementById("sbAccounts") as HTMLAnchorElement | null;
-    const debtsLink = document.getElementById("sbDebts") as HTMLAnchorElement | null;
-    const categoriesLink = document.getElementById("sbCategories") as HTMLAnchorElement | null;
-    const profileLink = document.getElementById("sbProfile") as HTMLAnchorElement | null;
-    const reportsLink = document.getElementById("sbReports") as HTMLAnchorElement | null;
-    
-    if (path.includes("/transactions") && transactionsLink) transactionsLink.classList.add("active");
-    else if (path.includes("/accounts") && accountsLink) accountsLink.classList.add("active");
-    else if (path.includes("/debts") && debtsLink) debtsLink.classList.add("active");
-    else if (path.includes("/categories") && categoriesLink) categoriesLink.classList.add("active");
-    else if (path.includes("/profile") && profileLink) profileLink.classList.add("active");
-    else if (path.includes("/reports") && reportsLink) reportsLink.classList.add("active");
+    const homeLink = document.getElementById(
+        "sbHome",
+    ) as HTMLAnchorElement | null;
+    const transactionsLink = document.getElementById(
+        "sbTransactions",
+    ) as HTMLAnchorElement | null;
+    const accountsLink = document.getElementById(
+        "sbAccounts",
+    ) as HTMLAnchorElement | null;
+    const debtsLink = document.getElementById(
+        "sbDebts",
+    ) as HTMLAnchorElement | null;
+    const categoriesLink = document.getElementById(
+        "sbCategories",
+    ) as HTMLAnchorElement | null;
+    const profileLink = document.getElementById(
+        "sbProfile",
+    ) as HTMLAnchorElement | null;
+    const reportsLink = document.getElementById(
+        "sbReports",
+    ) as HTMLAnchorElement | null;
+
+    if (path.includes("/transactions") && transactionsLink)
+        transactionsLink.classList.add("active");
+    else if (path.includes("/accounts") && accountsLink)
+        accountsLink.classList.add("active");
+    else if (path.includes("/debts") && debtsLink)
+        debtsLink.classList.add("active");
+    else if (path.includes("/categories") && categoriesLink)
+        categoriesLink.classList.add("active");
+    else if (path.includes("/profile") && profileLink)
+        profileLink.classList.add("active");
+    else if (path.includes("/reports") && reportsLink)
+        reportsLink.classList.add("active");
     else if (homeLink) homeLink.classList.add("active");
-    
+
     // Resaltar en bottom nav móvil
-    const mobileHome = document.getElementById("sidebarMobileHome") as HTMLAnchorElement | null;
-    const mobileTransactions = document.getElementById("sidebarMobileTransactions") as HTMLAnchorElement | null;
-    const mobileAccounts = document.getElementById("sidebarMobileAccounts") as HTMLAnchorElement | null;
-    const mobileDebts = document.getElementById("sidebarMobileDebts") as HTMLAnchorElement | null;
-    const mobileCategories = document.getElementById("sidebarMobileCategories") as HTMLAnchorElement | null;
-    
-    if (path.includes("/transactions") && mobileTransactions) mobileTransactions.classList.add("active");
-    else if (path.includes("/accounts") && mobileAccounts) mobileAccounts.classList.add("active");
-    else if (path.includes("/debts") && mobileDebts) mobileDebts.classList.add("active");
-    else if (path.includes("/categories") && mobileCategories) mobileCategories.classList.add("active");
+    const mobileHome = document.getElementById(
+        "sidebarMobileHome",
+    ) as HTMLAnchorElement | null;
+    const mobileTransactions = document.getElementById(
+        "sidebarMobileTransactions",
+    ) as HTMLAnchorElement | null;
+    const mobileAccounts = document.getElementById(
+        "sidebarMobileAccounts",
+    ) as HTMLAnchorElement | null;
+    const mobileDebts = document.getElementById(
+        "sidebarMobileDebts",
+    ) as HTMLAnchorElement | null;
+    const mobileCategories = document.getElementById(
+        "sidebarMobileCategories",
+    ) as HTMLAnchorElement | null;
+
+    if (path.includes("/transactions") && mobileTransactions)
+        mobileTransactions.classList.add("active");
+    else if (path.includes("/accounts") && mobileAccounts)
+        mobileAccounts.classList.add("active");
+    else if (path.includes("/debts") && mobileDebts)
+        mobileDebts.classList.add("active");
+    else if (path.includes("/categories") && mobileCategories)
+        mobileCategories.classList.add("active");
     else if (mobileHome) mobileHome.classList.add("active");
-    
+
     // Funcionalidad para colapsar sidebar (desktop)
     const sidebar = document.getElementById("sidebar") as HTMLElement | null;
-    const toggleBtn = document.getElementById("sidebarToggle") as HTMLButtonElement | null;
-    
+    const toggleBtn = document.getElementById(
+        "sidebarToggle",
+    ) as HTMLButtonElement | null;
+
     if (toggleBtn && sidebar && window.innerWidth > 768) {
         const savedState = localStorage.getItem("sidebarCollapsed");
         if (savedState === "true") sidebar.classList.add("collapsed");
-        
+
         toggleBtn.addEventListener("click", (e) => {
             e.stopPropagation();
             sidebar.classList.toggle("collapsed");
-            localStorage.setItem("sidebarCollapsed", sidebar.classList.contains("collapsed") ? "true" : "false");
+            localStorage.setItem(
+                "sidebarCollapsed",
+                sidebar.classList.contains("collapsed") ? "true" : "false",
+            );
         });
     }
-    
+
     // Envia un evento al hacer click en el boton de agregar (tanto desktop como móvil)
-    const addBtn = document.getElementById("sidebarAdd") as HTMLButtonElement | null;
+    const addBtn = document.getElementById(
+        "sidebarAdd",
+    ) as HTMLButtonElement | null;
     if (addBtn) addBtn.onclick = () => Notify("sidebar:add");
-    const mobileAddBtn = document.getElementById("sidebarAddMobile") as HTMLButtonElement | null;
+    const mobileAddBtn = document.getElementById(
+        "sidebarAddMobile",
+    ) as HTMLButtonElement | null;
     if (mobileAddBtn) mobileAddBtn.onclick = () => Notify("sidebar:add");
 
     // Muestra la versión del proyecto obtenida de la API
@@ -161,7 +299,7 @@ const hideAddButton = Astro.props?.hideAddButton || false;
             })
             .catch(() => versionEl.remove());
     });
-    
+
     // Manejar resize: si pasamos de móvil a desktop, recargar lógica
     window.addEventListener("resize", () => {
         if (window.innerWidth > 768 && sidebar && toggleBtn) {
