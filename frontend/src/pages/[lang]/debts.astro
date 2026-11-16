@@ -1,0 +1,44 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getLocaleFromUrl, createTranslations } from "../../core/shared/infrastructure/i18n/server";
+
+import Layout from "../../layouts/Layout.astro";
+import Content from "../../components/shared/Content.astro";
+
+import Alert from "../../components/modals/Alert.astro";
+import Confirm from "../../components/modals/Confirm.astro";
+
+import { Summary } from "../../components/debts/Summary";
+import { List } from "../../components/debts/List";
+import { Form } from "../../components/debts/Form";
+import { Detail } from "../../components/debts/Detail";
+
+import "../../styles/debts/index.css";
+
+export const getStaticPaths = (() => {
+    return [
+        { params: { lang: "en" } }, 
+        { params: { lang: "es" } }
+    ];
+}) satisfies GetStaticPaths;
+
+const locale = getLocaleFromUrl(Astro.url);
+const t = createTranslations(locale);
+---
+
+<Layout locale={locale} title={t("debt.title")}>
+    <Content locale={locale}>
+        <div class="debts">
+            <div class="debtsContent">
+                <Summary client:only="react" />
+                <List client:only="react" />
+            </div>
+        </div>
+    </Content>
+
+    <Form client:only="react" />
+    <Detail client:only="react" />
+
+    <Confirm locale={locale} />
+    <Alert locale={locale} />
+</Layout>

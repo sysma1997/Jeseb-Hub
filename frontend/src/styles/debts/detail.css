@@ -1,0 +1,250 @@
+@import url("./badges.css");
+
+:root[data-theme="light"] {
+    --debt-soft-bg: rgba(0, 0, 0, 0.025);
+    --debt-progress-bg: #e2e8f0;
+}
+:root[data-theme="dark"] {
+    --debt-soft-bg: rgba(255, 255, 255, 0.04);
+    --debt-progress-bg: #1e293b;
+}
+
+.debtDetailBadges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.debtDetailGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem 1rem;
+}
+
+.debtDetailItem {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+}
+.debtDetailItem.full {
+    margin-top: 0.85rem;
+}
+
+.debtDetailLabel {
+    color: var(--global-text-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.debtDetailValue {
+    color: var(--global-text);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    word-break: break-word;
+}
+.debtDetailValue.paid {
+    color: var(--global-text-accept);
+}
+.debtDetailValue.pending {
+    color: var(--global-text-reject);
+}
+.debtDetailValue.description {
+    font-weight: 400;
+    white-space: pre-line;
+}
+
+.debtProgress {
+    height: 10px;
+    margin-top: 1.1rem;
+    border-radius: 999px;
+    background: var(--debt-progress-bg);
+    overflow: hidden;
+}
+.debtProgressBar {
+    height: 100%;
+    background: var(--global-accent);
+    transition: width 0.3s ease;
+}
+.debtProgressLabel {
+    margin-top: 0.35rem;
+    color: var(--global-text-muted);
+    font-size: 0.8rem;
+    text-align: right;
+}
+
+.debtPayments {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: var(--global-border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.debtPayments h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--global-text);
+}
+
+.debtPaymentForm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.85rem;
+    border: var(--global-border);
+    border-radius: 10px;
+    background: var(--debt-soft-bg);
+}
+.debtPaymentForm .field {
+    margin: 0;
+}
+.debtPaymentFields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+.debtPaymentAdd {
+    align-self: flex-end;
+}
+
+.debtPaymentsEmpty {
+    padding: 1rem;
+    text-align: center;
+    color: var(--global-text-muted);
+    font-size: 0.9rem;
+}
+
+.debtPaymentsTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.debtPaymentsTable th,
+.debtPaymentsTable td {
+    padding: 0.55rem 0.5rem;
+    text-align: left;
+    border-bottom: var(--global-border);
+}
+.debtPaymentsTable th {
+    color: var(--global-text-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: var(--debt-soft-bg);
+}
+.debtPaymentsTable tr:last-child td {
+    border-bottom: none;
+}
+.debtPaymentAmount {
+    text-align: right !important;
+    font-weight: 700;
+    color: var(--global-text);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+.debtPaymentDescription {
+    color: var(--global-text-muted);
+    font-size: 0.85rem;
+    word-break: break-word;
+}
+.debtPaymentAccount {
+    color: var(--global-text);
+    font-size: 0.85rem;
+}
+.debtPaymentAccount small {
+    display: block;
+    color: var(--global-text-muted);
+    font-size: 0.72rem;
+}
+.debtPaymentNotice {
+    color: var(--global-text-reject);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+.debtPaymentActions {
+    text-align: right;
+}
+.debtPaymentActions button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 8px;
+    background: #ff3860;
+    color: #fff;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.debtPaymentActions button:hover {
+    opacity: 0.8;
+}
+
+@media screen and (max-width: 600px) {
+    .debtDetailGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .debtPaymentFields {
+        grid-template-columns: 1fr;
+    }
+    .debtPaymentAdd {
+        align-self: stretch;
+    }
+
+    .debtPaymentsTable,
+    .debtPaymentsTable tbody {
+        display: block;
+    }
+    .debtPaymentsTable thead {
+        display: none;
+    }
+    .debtPaymentsTable tr {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-areas:
+            "date actions"
+            "amount actions"
+            "account account"
+            "desc desc";
+        gap: 0.15rem 0.5rem;
+        padding: 0.6rem 0;
+        border-bottom: var(--global-border);
+    }
+    .debtPaymentsTable tr:last-child {
+        border-bottom: none;
+    }
+    .debtPaymentsTable td {
+        display: block;
+        padding: 0;
+        border: none;
+    }
+    .debtPaymentsTable td:nth-child(1) {
+        grid-area: date;
+        color: var(--global-text-muted);
+        font-size: 0.8rem;
+    }
+    .debtPaymentsTable td:nth-child(2) {
+        grid-area: amount;
+        text-align: left !important;
+        font-size: 1rem;
+    }
+    .debtPaymentsTable td:nth-child(3) {
+        grid-area: account;
+        margin-top: 0.2rem;
+    }
+    .debtPaymentsTable td:nth-child(4) {
+        grid-area: desc;
+        margin-top: 0.2rem;
+    }
+    .debtPaymentsTable td:nth-child(5) {
+        grid-area: actions;
+        align-self: start;
+        justify-self: end;
+    }
+}

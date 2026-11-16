@@ -35,7 +35,8 @@ export class TransactionPrismaRepository implements TransactionRepository {
                 category: transaction.category ?? null,
                 description: transaction.description ?? null,
                 transferId: transaction.transferId ?? null,
-                isTransfer: transaction.isTransfer
+                isTransfer: transaction.isTransfer,
+                debtPaymentId: transaction.debtPaymentId ?? null
             }
         });
     }
@@ -52,7 +53,8 @@ export class TransactionPrismaRepository implements TransactionRepository {
                 category: transaction.category ?? null,
                 description: transaction.description ?? null,
                 transferId: transaction.transferId ?? null,
-                isTransfer: transaction.isTransfer
+                isTransfer: transaction.isTransfer,
+                debtPaymentId: transaction.debtPaymentId ?? null
             }
         })));
     }
@@ -89,7 +91,8 @@ export class TransactionPrismaRepository implements TransactionRepository {
             t.description ?? undefined,
             t.transferId ?? undefined,
             t.isTransfer,
-            undefined));
+            undefined,
+            t.debtPaymentId ?? undefined));
     }
     async getByTransferId(idUser: string, transferId: string): Promise<Transaction[]> {
         const transactions = await this.prisma.transaction.findMany({
@@ -103,7 +106,8 @@ export class TransactionPrismaRepository implements TransactionRepository {
             t.description ?? undefined,
             t.transferId ?? undefined,
             t.isTransfer,
-            undefined));
+            undefined,
+            t.debtPaymentId ?? undefined));
     }
     async deleteByIds(idUser: string, ids: string[]): Promise<void> {
         await this.prisma.transaction.deleteMany({
@@ -125,7 +129,26 @@ export class TransactionPrismaRepository implements TransactionRepository {
             transaction.description ?? undefined,
             transaction.transferId ?? undefined,
             transaction.isTransfer,
-            undefined);
+            undefined,
+            transaction.debtPaymentId ?? undefined);
+    }
+
+    async getByDebtPaymentId(idUser: string, debtPaymentId: string): Promise<Transaction | undefined> {
+        const transaction = await this.prisma.transaction.findFirst({
+            where: { idUser, debtPaymentId }
+        });
+        if (!transaction) return undefined;
+
+        return new Transaction(this.translator, transaction.date, transaction.type, transaction.account,
+            Money.fromDecimal(transaction.value),
+            transaction.id ?? undefined,
+            transaction.idUser ?? undefined,
+            transaction.category ?? undefined,
+            transaction.description ?? undefined,
+            transaction.transferId ?? undefined,
+            transaction.isTransfer,
+            undefined,
+            transaction.debtPaymentId ?? undefined);
     }
 
     async getList(idUser: string, limit?: number, page?: number): Promise<Pagination<Transaction>> {
@@ -154,7 +177,8 @@ export class TransactionPrismaRepository implements TransactionRepository {
             t.description ?? undefined,
             t.transferId ?? undefined,
             t.isTransfer,
-            undefined
+            undefined,
+            t.debtPaymentId ?? undefined
         ));
         pagination.pages = (limit) ? Pagination.PageLength(total, limit) : 1;
         return pagination;
@@ -204,7 +228,8 @@ export class TransactionPrismaRepository implements TransactionRepository {
             t.description ?? undefined,
             t.transferId ?? undefined,
             t.isTransfer,
-            undefined
+            undefined,
+            t.debtPaymentId ?? undefined
         ));
         pagination.pages = (limit) ? Pagination.PageLength(total, limit) : 1;
         return pagination;

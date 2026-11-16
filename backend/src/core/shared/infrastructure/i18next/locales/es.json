@@ -25,6 +25,36 @@
             "categoryDeleted": "Categoría eliminada exitosamente."
         }
     }, 
+    "debts": {
+        "errors": {
+            "idRequired": "El id es requerido.",
+            "personRequired": "La persona es requerida.",
+            "typeRequired": "El tipo de deuda es requerido.",
+            "amountRequired": "El monto debe ser mayor que 0.",
+            "dateRequired": "La fecha de la deuda es requerida.",
+            "dueDateInvalid": "La fecha de vencimiento no es válida.",
+            "dueDateBeforeDate": "La fecha de vencimiento no puede ser anterior a la fecha de la deuda.",
+            "paidAmountInvalid": "El monto abonado no es válido.",
+            "amountBelowPaid": "El monto no puede ser menor que lo ya abonado ({{paid}}).",
+            "notFound": "Deuda no encontrada.",
+            "paymentDebtRequired": "La deuda es requerida.",
+            "paymentAmountRequired": "El monto del abono debe ser mayor que 0.",
+            "paymentDateRequired": "La fecha del abono es requerida.",
+            "paymentExceedsPending": "El abono no puede superar el saldo pendiente de {{pending}}.",
+            "paymentAccountRequired": "Selecciona una cuenta para este abono.",
+            "paymentInsufficientBalance": "La cuenta seleccionada no tiene saldo suficiente.",
+            "typeCannotChangeAfterPayment": "No se puede cambiar el tipo de deuda después de registrar abonos.",
+            "paymentNotFound": "Abono no encontrado."
+        },
+        "success": {
+            "debtAdded": "Deuda agregada exitosamente.",
+            "debtUpdated": "Deuda actualizada exitosamente.",
+            "debtDeleted": "Deuda eliminada exitosamente.",
+            "paymentAdded": "Abono registrado exitosamente.",
+            "paymentDeleted": "Abono eliminado exitosamente."
+        },
+        "paymentTransactionDescription": "Abono de deuda con {{person}}"
+    },
     "transactions": {
         "errors": {
             "idRequired": "El id es requerido.",
@@ -33,6 +63,7 @@
             "accountRequired": "La cuenta para la transacción es requerida.", 
             "valueRequired": "El valor debe ser mayor que 0.", 
             "notFound": "Transacción no encontrada o no existe.", 
+            "debtPaymentLinked": "Esta transacción está vinculada a un abono. Adminístrala desde el detalle de la deuda.",
             "accountNotFound": "La cuenta de la transacción no se encontró.", 
             "invalidFormat": "Formato de transacciones inválido.",
             "exceedLimit": "El número de transacciones ingresadas en bloques no puede exceder 500.", 

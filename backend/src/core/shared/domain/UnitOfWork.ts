@@ -1,14 +1,14 @@
 import type { AccountRepository } from "../../account/domain/AccountRepository";
 import type { TransactionRepository } from "../../transaction/domain/TransactionRepository";
+import type { DebtRepository } from "../../debt/domain/DebtRepository";
 
 // Unidad de trabajo: una forma de ejecutar varios repositorios contra la MISMA
 // transaccion de base de datos.
 //
-// El problema que resuelve: una transfierencia toca cuentas y transacciones a la vez.
-// Con repositorios independientes no hay forma de decir "o se guardan las dos cosas o
-// ninguna", asi que un fallo a mitad camino dejaba el saldo debitado sin el movimiento
-// que lo explicara. Aqui los repositorios que se reciben ya estan enlazados a la
-// transaccion abierta, de modo que el commit y el rollback los decide el bloque.
+// Resuelve operaciones que modifican varias piezas financieras a la vez:
+// transferencias, y abonos de deuda que tocan deuda, cuenta y transaccion.
+// Los repositorios que se reciben ya estan enlazados a la transaccion abierta,
+// de modo que un fallo en cualquier paso revierte todos los cambios.
 //
 // Vive en el dominio como interfaz, igual que los repositorios: el dominio depende de
 // esta abstraccion y la implementacion con Prisma vive en infraestructura.
@@ -16,6 +16,7 @@ import type { TransactionRepository } from "../../transaction/domain/Transaction
 export interface UnitOfWorkContext {
     accounts: AccountRepository;
     transactions: TransactionRepository;
+    debts: DebtRepository;
 }
 
 export interface UnitOfWork {

@@ -31,8 +31,17 @@
     transform: scale(0.95);
     transition: transform 0.25s ease;
 }
+.modal-dialog.is-wide {
+    max-width: 680px;
+}
 .modal-overlay.is-active .modal-dialog {
     transform: scale(1);
+}
+
+@media screen and (max-width: 600px) {
+    .modal-dialog.is-wide {
+        max-width: 420px;
+    }
 }
 
 .modal-header {

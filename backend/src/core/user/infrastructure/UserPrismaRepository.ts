@@ -130,6 +130,12 @@ export class UserPrismaRepository implements UserRepository {
     }
 
     async deleteAllData(id: string): Promise<void> {
+        await this.prisma.debtPayment.deleteMany({
+            where: { idUser: id }
+        });
+        await this.prisma.debt.deleteMany({
+            where: { idUser: id }
+        });
         await this.prisma.transaction.deleteMany({
             where: { idUser: id }
         });

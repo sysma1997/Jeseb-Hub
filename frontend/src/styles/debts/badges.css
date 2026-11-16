@@ -1,0 +1,61 @@
+:root[data-theme="light"] {
+    --debt-pending-bg: #fef3c7;
+    --debt-pending-text: #92400e;
+    --debt-overdue-bg: #fee2e2;
+    --debt-overdue-text: #b91c1c;
+    --debt-paid-bg: #d1fae5;
+    --debt-paid-text: #047857;
+    --debt-receivable-bg: #ccfbf1;
+    --debt-receivable-text: #0f766e;
+    --debt-payable-bg: #ffe4e6;
+    --debt-payable-text: #be123c;
+}
+
+:root[data-theme="dark"] {
+    --debt-pending-bg: #3b2f15;
+    --debt-pending-text: #fbbf24;
+    --debt-overdue-bg: #451a1d;
+    --debt-overdue-text: #fca5a5;
+    --debt-paid-bg: #0f3d32;
+    --debt-paid-text: #6ee7b7;
+    --debt-receivable-bg: #123b36;
+    --debt-receivable-text: #5eead4;
+    --debt-payable-bg: #451a24;
+    --debt-payable-text: #fda4af;
+}
+
+.debtsTypeBadge,
+.debtsStatusBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    border-radius: 999px;
+    padding: 0.18rem 0.55rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.debtsTypeBadge.receivable {
+    background: var(--debt-receivable-bg);
+    color: var(--debt-receivable-text);
+}
+.debtsTypeBadge.payable {
+    background: var(--debt-payable-bg);
+    color: var(--debt-payable-text);
+}
+
+.debtsStatusBadge.pending {
+    background: var(--debt-pending-bg);
+    color: var(--debt-pending-text);
+}
+.debtsStatusBadge.overdue {
+    background: var(--debt-overdue-bg);
+    color: var(--debt-overdue-text);
+}
+.debtsStatusBadge.paid {
+    background: var(--debt-paid-bg);
+    color: var(--debt-paid-text);
+}

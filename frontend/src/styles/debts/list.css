@@ -1,0 +1,329 @@
+@import url("./badges.css");
+
+:root[data-theme="light"] {
+    --debts-row-color: #e0e0e0;
+}
+:root[data-theme="dark"] {
+    --debts-row-color: #192336;
+}
+
+.debtsCard {
+    background: var(--global-bg);
+    border-radius: 12px;
+    border: var(--global-border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+}
+
+.debtsCard-header {
+    padding: 1rem 1.25rem;
+    border-bottom: var(--global-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--global-text);
+}
+
+.debtsAddButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.45rem 0.8rem;
+    border-radius: 8px;
+    border: none;
+    background: var(--global-accent);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.debtsAddButton:hover {
+    opacity: 0.85;
+}
+.debtsAddButton svg {
+    width: 18px;
+    height: 18px;
+}
+
+.debtsCard-content {
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.debtsSearch {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.debtsSearch-input {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    border: var(--global-border);
+    background: var(--global-bg);
+    color: var(--global-text);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.debtsSearch-input:focus {
+    border-color: var(--global-accent);
+}
+.debtsSearch-input::placeholder {
+    color: var(--global-text-muted);
+}
+
+.debtsSearch-button {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: none;
+    background: var(--global-accent);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.debtsSearch-button:hover {
+    opacity: 0.85;
+}
+
+.debtsEmpty {
+    padding: 2.5rem 1rem;
+    text-align: center;
+    color: var(--global-text-muted);
+    font-size: 0.95rem;
+}
+
+.debtsTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.debtsTable th,
+.debtsTable td {
+    padding: 0.7rem 0.75rem;
+    text-align: left;
+    border-bottom: var(--global-border);
+}
+.debtsTable th {
+    font-weight: 600;
+    color: var(--global-text-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: rgba(0, 0, 0, 0.02);
+}
+.debtsTable tr:last-child td {
+    border-bottom: none;
+}
+.debtsTable tr:hover td {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.debtsPerson {
+    min-width: 0;
+}
+.debtsPersonName {
+    display: block;
+    font-weight: 600;
+    color: var(--global-text);
+    word-break: break-word;
+    margin-bottom: 0.25rem;
+}
+
+.debtsAmount,
+.debtsPending {
+    text-align: right !important;
+    font-variant-numeric: tabular-nums;
+}
+.debtsAmountValue {
+    display: block;
+    font-weight: 600;
+    color: var(--global-text);
+}
+.debtsAmountCell {
+    display: block;
+}
+.debtsAmountPaid {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--global-text-muted);
+    margin-top: 0.15rem;
+}
+.debtsPendingValue {
+    display: block;
+    font-weight: 700;
+    color: var(--global-text);
+}
+
+.debtsDueDate {
+    color: var(--global-text-muted);
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.debtsCellLabel {
+    display: none;
+}
+
+.debtsActions {
+    display: flex;
+    gap: 0.4rem;
+    justify-content: flex-end;
+}
+.debtsActions button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s, background 0.2s;
+    font-size: 1rem;
+}
+.debtsActions button:hover {
+    opacity: 0.8;
+}
+.debtsActions button.view {
+    background: #3b82f6;
+    color: #fff;
+}
+.debtsActions button.edit {
+    background: var(--global-accent);
+    color: #fff;
+}
+.debtsActions button.btnDelete {
+    background: #ff3860;
+    color: #fff;
+}
+
+@media screen and (max-width: 480px) {
+    .debtsSearch {
+        flex-direction: column;
+    }
+    .debtsSearch-input,
+    .debtsSearch-button {
+        width: 100%;
+    }
+    .debtsCard-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+    .debtsAddButton {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .debtsCard-content {
+        padding: 0.75rem;
+    }
+
+    .debtsTable {
+        display: block;
+    }
+    .debtsTable thead {
+        display: none;
+    }
+    .debtsTable tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .debtsTable td,
+    .debtsTable th {
+        padding: 0;
+        border: none;
+        background: none;
+    }
+    .debtsTable tr:hover td {
+        background: none;
+    }
+
+    .debtsRow {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-areas:
+            "person actions"
+            "amount amount"
+            "pending pending"
+            "due status";
+        gap: 0.4rem 0.5rem;
+        align-items: center;
+        padding: 0.75rem;
+        border: 1px solid var(--debts-row-color);
+        border-radius: 10px;
+    }
+    .debtsPerson {
+        grid-area: person;
+    }
+    .debtsPersonName {
+        margin-bottom: 0.2rem;
+    }
+    .debtsActions-cell {
+        grid-area: actions;
+    }
+    .debtsAmount {
+        grid-area: amount;
+    }
+    .debtsPending {
+        grid-area: pending;
+    }
+    .debtsDueDate {
+        grid-area: due;
+    }
+    .debtsStatus {
+        grid-area: status;
+        text-align: right;
+    }
+
+    .debtsAmount,
+    .debtsPending,
+    .debtsDueDate {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        width: 100%;
+        padding-top: 0.4rem;
+        border-top: 1px dashed var(--debts-row-color);
+        text-align: left !important;
+    }
+    .debtsAmountValue,
+    .debtsPendingValue {
+        text-align: right;
+    }
+    .debtsAmountCell {
+        text-align: right;
+    }
+    .debtsCellLabel {
+        display: inline;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--global-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+    .debtsDueDate span:last-child {
+        text-align: right;
+    }
+
+    .debtsActions {
+        gap: 0.3rem;
+    }
+    .debtsActions button {
+        width: 30px;
+        height: 30px;
+    }
+}

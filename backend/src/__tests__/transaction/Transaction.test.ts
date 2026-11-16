@@ -31,6 +31,16 @@ describe("Transaction Domain", () => {
         expect(transaction.category).toBe(category);
         expect(transaction.description).toBe(description);
     });
+
+    it("Should preserve the linked debt payment in the DTO.", () => {
+        const transaction = new Transaction(mockTranslator, new Date("2026-01-10T00:00:00Z"),
+            true, "Cash", 1250, "transaction-id", "user-id",
+            undefined, "Debt payment", undefined, false, undefined, "payment-id");
+
+        expect(transaction.debtPaymentId).toBe("payment-id");
+        expect(transaction.toDto().debtPaymentId).toBe("payment-id");
+        expect(Transaction.FromDto(mockTranslator, transaction.toDto()).debtPaymentId).toBe("payment-id");
+    });
     
     it("Should throw an error when creating transaction without account.", () => {
         const date = new Date(2025, 8, 12);

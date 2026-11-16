@@ -25,6 +25,36 @@
             "categoryDeleted": "Category deleted successfully."
         }
     }, 
+    "debts": {
+        "errors": {
+            "idRequired": "The id is required.",
+            "personRequired": "The person is required.",
+            "typeRequired": "The debt type is required.",
+            "amountRequired": "The amount must be greater than 0.",
+            "dateRequired": "The debt date is required.",
+            "dueDateInvalid": "The due date is not valid.",
+            "dueDateBeforeDate": "The due date cannot be earlier than the debt date.",
+            "paidAmountInvalid": "The paid amount is not valid.",
+            "amountBelowPaid": "The amount cannot be less than the amount already paid ({{paid}}).",
+            "notFound": "Debt not found.",
+            "paymentDebtRequired": "The debt is required.",
+            "paymentAmountRequired": "The payment amount must be greater than 0.",
+            "paymentDateRequired": "The payment date is required.",
+            "paymentExceedsPending": "The payment cannot exceed the pending amount of {{pending}}.",
+            "paymentAccountRequired": "Select an account for this payment.",
+            "paymentInsufficientBalance": "The selected account does not have enough balance.",
+            "typeCannotChangeAfterPayment": "The debt type cannot be changed after payments have been recorded.",
+            "paymentNotFound": "Payment not found."
+        },
+        "success": {
+            "debtAdded": "Debt added successfully.",
+            "debtUpdated": "Debt updated successfully.",
+            "debtDeleted": "Debt deleted successfully.",
+            "paymentAdded": "Payment added successfully.",
+            "paymentDeleted": "Payment deleted successfully."
+        },
+        "paymentTransactionDescription": "Debt payment with {{person}}"
+    },
     "transactions": {
       "errors": {
         "idRequired": "The date for transaction is required.",
@@ -33,6 +63,7 @@
         "accountRequired": "The account for transaction is required.",
         "valueRequired": "The value must be greater than 0.",
         "notFound": "Transaction not found or not exists.",
+        "debtPaymentLinked": "This transaction is linked to a debt payment. Manage it from the debt details.",
         "accountNotFound": "The account for the transaction was not found.",
         "invalidFormat": "Invalid transactions format.",
         "exceedLimit": "The number of transactions entered in chunks cannot exceed 500.",

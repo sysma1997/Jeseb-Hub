@@ -35,6 +35,10 @@ const hideAddButton = Astro.props?.hideAddButton || false;
             <Icon class="iIcon" name="solar:wallet-2-bold" />
             <span><b>{t("shared.menu.accounts")}</b></span>
         </a>
+        <a id="sbDebts" class="sidebar-nav-item" href={`/${locale}/debts`} data-tooltip={t("shared.menu.debts")}>
+            <Icon class="iIcon" name="solar:hand-money-bold" />
+            <span><b>{t("shared.menu.debts")}</b></span>
+        </a>
         <a id="sbCategories" class="sidebar-nav-item" href={`/${locale}/categories`} data-tooltip={t("shared.menu.categories")}>
             <Icon class="iIcon" name="solar:widget-4-bold" />
             <span><b>{t("shared.menu.categories")}</b></span>
@@ -80,6 +84,9 @@ const hideAddButton = Astro.props?.hideAddButton || false;
         <a id="sidebarMobileAccounts" class="sidebar-mobile-item" href={`/${locale}/accounts`}>
             <Icon class="iIcon" name="solar:wallet-2-bold" />
         </a>
+        <a id="sidebarMobileDebts" class="sidebar-mobile-item" href={`/${locale}/debts`}>
+            <Icon class="iIcon" name="solar:hand-money-bold" />
+        </a>
         <a id="sidebarMobileCategories" class="sidebar-mobile-item" href={`/${locale}/categories`}>
             <Icon class="iIcon" name="solar:widget-4-bold" />
         </a>
@@ -96,12 +103,14 @@ const hideAddButton = Astro.props?.hideAddButton || false;
     const homeLink = document.getElementById("sbHome") as HTMLAnchorElement | null;
     const transactionsLink = document.getElementById("sbTransactions") as HTMLAnchorElement | null;
     const accountsLink = document.getElementById("sbAccounts") as HTMLAnchorElement | null;
+    const debtsLink = document.getElementById("sbDebts") as HTMLAnchorElement | null;
     const categoriesLink = document.getElementById("sbCategories") as HTMLAnchorElement | null;
     const profileLink = document.getElementById("sbProfile") as HTMLAnchorElement | null;
     const reportsLink = document.getElementById("sbReports") as HTMLAnchorElement | null;
     
     if (path.includes("/transactions") && transactionsLink) transactionsLink.classList.add("active");
     else if (path.includes("/accounts") && accountsLink) accountsLink.classList.add("active");
+    else if (path.includes("/debts") && debtsLink) debtsLink.classList.add("active");
     else if (path.includes("/categories") && categoriesLink) categoriesLink.classList.add("active");
     else if (path.includes("/profile") && profileLink) profileLink.classList.add("active");
     else if (path.includes("/reports") && reportsLink) reportsLink.classList.add("active");
@@ -111,10 +120,12 @@ const hideAddButton = Astro.props?.hideAddButton || false;
     const mobileHome = document.getElementById("sidebarMobileHome") as HTMLAnchorElement | null;
     const mobileTransactions = document.getElementById("sidebarMobileTransactions") as HTMLAnchorElement | null;
     const mobileAccounts = document.getElementById("sidebarMobileAccounts") as HTMLAnchorElement | null;
+    const mobileDebts = document.getElementById("sidebarMobileDebts") as HTMLAnchorElement | null;
     const mobileCategories = document.getElementById("sidebarMobileCategories") as HTMLAnchorElement | null;
     
     if (path.includes("/transactions") && mobileTransactions) mobileTransactions.classList.add("active");
     else if (path.includes("/accounts") && mobileAccounts) mobileAccounts.classList.add("active");
+    else if (path.includes("/debts") && mobileDebts) mobileDebts.classList.add("active");
     else if (path.includes("/categories") && mobileCategories) mobileCategories.classList.add("active");
     else if (mobileHome) mobileHome.classList.add("active");
     

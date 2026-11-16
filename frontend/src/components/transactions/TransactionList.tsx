@@ -195,6 +195,8 @@ export const TransactionList = () => {
                                             ? `${transaction.account} → ${counterpart.account}`
                                             : transaction.account}
                                     </span>
+                                    {transaction.debtPaymentId &&
+                                        <span className="transactionDebtBadge">{t("transactions.debtPayment")}</span>}
                                 </div>
                             </td>
                             <td className="transactionDate">
@@ -208,12 +210,12 @@ export const TransactionList = () => {
                                     <button className="view" onClick={() => clickShow(transaction)}>
                                         <Icon icon="ic:baseline-remove-red-eye" />
                                     </button>
-                                    {!transaction.isTransfer && <button className="edit" onClick={() => clickUpdate(transaction)}>
+                                    {!transaction.isTransfer && !transaction.debtPaymentId && <button className="edit" onClick={() => clickUpdate(transaction)}>
                                         <Icon icon="material-symbols:edit-rounded" />
                                     </button>}
-                                    <button className="btnDelete" onClick={() => clickDelete(transaction)}>
+                                    {!transaction.debtPaymentId && <button className="btnDelete" onClick={() => clickDelete(transaction)}>
                                         <Icon icon="solar:trash-bin-2-bold" />
-                                    </button>
+                                    </button>}
                                 </div>
                             </td>
                         </tr>

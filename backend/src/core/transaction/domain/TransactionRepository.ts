@@ -11,6 +11,7 @@ export interface TransactionRepository {
     delete(idUser: string, id: string): Promise<void>;
 
     get(idUser: string, id: string): Promise<Transaction>;
+    getByDebtPaymentId(idUser: string, debtPaymentId: string): Promise<Transaction | undefined>;
     getByIds(idUser: string, ids: string[]): Promise<Transaction[]>;
     getByTransferId(idUser: string, transferId: string): Promise<Transaction[]>;
     deleteByIds(idUser: string, ids: string[]): Promise<void>;

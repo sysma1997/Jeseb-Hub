@@ -17,6 +17,7 @@ export class Transaction implements Base {
     public readonly description?: string | undefined;
     public readonly transferId?: string | undefined;
     public readonly isTransfer: boolean;
+    public readonly debtPaymentId?: string | undefined;
 
     public readonly user?: User | undefined;
 
@@ -25,7 +26,7 @@ export class Transaction implements Base {
         id?: string, idUser?: string, 
         category?: string, description?: string, 
         transferId?: string, isTransfer?: boolean, 
-        user?: User) {
+        user?: User, debtPaymentId?: string) {
         if (!account || 
             value <= 0) {
             let message: string = "";
@@ -53,6 +54,7 @@ export class Transaction implements Base {
 
         this.transferId = transferId;
         this.isTransfer = isTransfer ?? false;
+        this.debtPaymentId = debtPaymentId;
 
         this.user = user;
     }
@@ -86,7 +88,7 @@ export class Transaction implements Base {
             dto.id, dto.idUser, 
             dto.category, dto.description, 
             dto.transferId, dto.isTransfer, 
-            user);
+            user, dto.debtPaymentId);
     }
 
     toDto(): TransactionDto {
@@ -103,6 +105,7 @@ export class Transaction implements Base {
         if (this.category) transaction.category = this.category;
         if (this.description) transaction.description = this.description;
         if (this.transferId) transaction.transferId = this.transferId;
+        if (this.debtPaymentId) transaction.debtPaymentId = this.debtPaymentId;
 
         if (this.user) transaction.user = this.user.toDto();
 
@@ -124,6 +127,7 @@ export interface TransactionDto {
     description?: string;
     transferId?: string;
     isTransfer: boolean;
+    debtPaymentId?: string;
 
     user?: UserDto;
 }

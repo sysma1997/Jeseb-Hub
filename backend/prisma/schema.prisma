@@ -20,6 +20,8 @@ model User {
     transactions Transaction[]
     accounts Account[]
     categories Category[]
+    debts Debt[]
+    debtPayments DebtPayment[]
     sessions Session[]
 
     @@map("users")
@@ -55,8 +57,10 @@ model Transaction {
     description String?
     transferId String?
     isTransfer Boolean @default(false)
+    debtPaymentId String? @unique
 
     user User @relation(fields: [idUser], references: [id])
+    debtPayment DebtPayment? @relation(fields: [debtPaymentId], references: [id], onDelete: SetNull)
 
     // toda consulta de este usuario ordena por fecha, asi que el indice compuesto
     // cubre a la vez el filtro por idUser y el ORDER BY date
@@ -72,6 +76,7 @@ model Account {
     balance Decimal @storage.Decimal(65, 2)
 
     user User @relation(fields: [idUser], references: [id])
+    debtPayments DebtPayment[]
 
     // el primary key esta solo sobre id, pero el codigo siempre filtra por
     // idUser + id: sin este indice la busqueda no aprovecha ninguno
@@ -90,4 +95,50 @@ model Category {
     // search() busca por idUser + name y el listado filtra por nombre
     @@index([idUser, name])
     @@map("categories")
+}
+model Debt {
+    id String @id @default(uuid())
+    idUser String
+    person String
+    // true = le deben al usuario (cuenta por cobrar); false = el usuario debe
+    // (cuenta por pagar). Misma convencion que Transaction.type: true = entra dinero.
+    type Boolean
+    // monto original. El saldo pendiente se deriva de amount - abonos.
+    amount Decimal @storage.Decimal(65, 2)
+    date DateTime @default(now()) @storage.Timestamptz(3)
+    dueDate DateTime? @storage.Timestamptz(3)
+    description String?
+
+    user User @relation(fields: [idUser], references: [id])
+    payments DebtPayment[]
+
+    // el listado filtra por idUser y ordena por fecha; la busqueda usa person
+    @@index([idUser, date(sort: Desc)])
+    @@index([idUser, person])
+    // el resumen y el filtro de vencidas miran dueDate
+    @@index([idUser, dueDate])
+    @@map("debts")
+}
+model DebtPayment {
+    id String @id @default(uuid())
+    // se repite idUser para poder filtrar abonos por usuario sin depender del
+    // join con debts y para mantener el aislamiento de datos explicito
+    idUser String
+    idDebt String
+    idAccount String?
+    date DateTime @default(now()) @storage.Timestamptz(3)
+    amount Decimal @storage.Decimal(65, 2)
+    description String?
+    category String?
+
+    user User @relation(fields: [idUser], references: [id])
+    debt Debt @relation(fields: [idDebt], references: [id], onDelete: Cascade)
+    account Account? @relation(fields: [idAccount], references: [id], onDelete: SetNull)
+    transaction Transaction?
+
+    // el historial siempre consulta idUser + idDebt ordenando por fecha
+    @@index([idUser, idDebt, date(sort: Desc)])
+    @@index([idUser, date(sort: Desc)])
+    @@index([idAccount])
+    @@map("debt_payments")
 }

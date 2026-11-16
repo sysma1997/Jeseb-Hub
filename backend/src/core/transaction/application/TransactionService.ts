@@ -84,6 +84,8 @@ export class TransactionService {
         await this.unitOfWork.run(async ({ accounts, transactions }) => {
             const lastTransaction: Transaction = await transactions.get(transaction.idUser!, transaction.id!);
             if (!lastTransaction) throw new Error(this.translator.translate("transactions.errors.notFound"));
+            if (lastTransaction.debtPaymentId)
+                throw new Error(this.translator.translate("transactions.errors.debtPaymentLinked"));
 
             // primero se revierte el efecto del movimiento anterior y luego se aplica el
             // nuevo, dentro de la misma transaccion: entre medias el saldo nunca queda
@@ -108,6 +110,8 @@ export class TransactionService {
         await this.unitOfWork.run(async ({ accounts, transactions }) => {
             const lastTransaction: Transaction = await transactions.get(idUser, id);
             if (!lastTransaction) throw new Error(this.translator.translate("transactions.errors.notFound"));
+            if (lastTransaction.debtPaymentId)
+                throw new Error(this.translator.translate("transactions.errors.debtPaymentLinked"));
             const account: Account | undefined = await accounts.search(idUser, lastTransaction.account);
 
             await transactions.delete(idUser, id);

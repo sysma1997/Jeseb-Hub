@@ -110,6 +110,7 @@
         "valueInvalid": "Por favor, introduzca un valor válido para la transacción.",
         "date": "Fecha",
         "options": "Opciones",
+        "debtPayment": "Abono de deuda",
         "type": "Tipo",
         "ingress": "Entrada",
         "egress": "Salida",
@@ -158,7 +159,7 @@
             "confirm": "¿Actualizar el nombre de la cuenta con '{{name}}'?",
             "response": "Cuenta actualizada correctamente.",
             "balance": "Saldo",
-            "name": "Nombre", 
+            "name": "Nombre",
             "sameValues": "Los valores ingresados son los mismos que estás utilizando en esta cuenta."
         },
         "delete": {
@@ -190,8 +191,94 @@
             "response": "Categoria eliminada correctamente."
         }
     },
+    "debt": {
+        "title": "Deudas",
+        "noItems": "No hay deudas para mostrar.",
+        "search": "Buscar por persona",
+        "addButton": "Agregar deuda",
+        "view": "Ver detalles",
+        "person": "Persona",
+        "personRequired": "La persona es requerida.",
+        "type": "Tipo",
+        "typeReceivable": "Me deben",
+        "typePayable": "Debo",
+        "amount": "Monto",
+        "amountRequired": "El monto debe ser mayor que 0.",
+        "amountBelowPaid": "El monto no puede ser menor que lo ya abonado ({{paid}}).",
+        "date": "Fecha",
+        "dateRequired": "La fecha es requerida.",
+        "dueDate": "Fecha de vencimiento",
+        "dueDateBeforeDate": "La fecha de vencimiento no puede ser anterior a la fecha de la deuda.",
+        "description": "Descripción",
+        "mandatory": "Los campos con el simbolo (*) son obligatorios.",
+        "typeLockedAfterPayment": "No se puede cambiar el tipo de deuda después de registrar un abono.",
+        "paid": "Abonado",
+        "pending": "Pendiente",
+        "status": "Estado",
+        "statusPending": "Pendiente",
+        "statusOverdue": "Vencida",
+        "statusPaid": "Saldada",
+        "add": {
+            "title": "Agregar deuda",
+            "response": "Deuda agregada correctamente."
+        },
+        "update": {
+            "title": "Actualizar deuda",
+            "response": "Deuda actualizada correctamente."
+        },
+        "delete": {
+            "title": "Eliminar deuda",
+            "confirm": "¿Eliminar esta deuda con '{{person}}'? Se eliminarán sus abonos, pero las transacciones se conservarán.",
+            "response": "Deuda eliminada correctamente."
+        },
+        "summary": {
+            "receivable": "Me deben",
+            "payable": "Debo",
+            "net": "Balance neto",
+            "overdue": "Vencido: {{amount}}",
+            "status": "Estado",
+            "pendingCount": "Pendientes",
+            "overdueCount": "Vencidas",
+            "paidCount": "Saldadas",
+            "totalCount": "Total de deudas: {{count}}",
+            "netPositive": "A tu favor",
+            "netNegative": "Debes más de lo que te deben"
+        },
+        "detail": {
+            "title": "Detalle de la deuda",
+            "amount": "Monto original",
+            "paidAmount": "Monto abonado",
+            "pendingAmount": "Saldo pendiente",
+            "noDueDate": "Sin fecha de vencimiento",
+            "progress": "{{percent}}% abonado",
+            "payments": "Abonos",
+            "noPayments": "Aún no hay abonos registrados.",
+            "addPayment": "Registrar abono",
+            "paymentAmount": "Monto del abono",
+            "paymentAmountRequired": "El monto del abono debe ser mayor que 0.",
+            "paymentDate": "Fecha y hora del abono",
+            "paymentDateRequired": "La fecha del abono es requerida.",
+            "paymentAccount": "Cuenta",
+            "paymentAccountRequired": "Selecciona una cuenta para este abono.",
+            "selectAccount": "Selecciona una cuenta",
+            "loadingAccounts": "Cargando cuentas…",
+            "noAccounts": "Crea una cuenta antes de registrar un abono.",
+            "paymentInsufficientBalance": "La cuenta seleccionada no tiene saldo suficiente.",
+            "paymentCategory": "Categoría (opcional)",
+            "noCategory": "Sin categoría",
+            "legacyPayment": "Sin cuenta registrada",
+            "paymentDescription": "Descripción del abono",
+            "paymentAdded": "Abono registrado correctamente.",
+            "paymentExceedsPending": "El abono no puede superar el saldo pendiente de {{pending}}.",
+            "deletePayment": {
+                "title": "Eliminar abono",
+                "confirm": "¿Eliminar este abono?",
+                "response": "Abono eliminado correctamente."
+            }
+        }
+    },
     "reports": {
-        "title": "Generar reportes", 
+        "title": "Generar reportes",
         "noItems": "Escoja los filtros y genere el informe.",
         "emptyBlock": "Sin datos para este periodo.",
         "loading": "Generando reporte…",
@@ -252,13 +339,13 @@
             "year": "Año",
             "month": "Mes",
             "from": "Desde",
-            "to": "Hasta", 
-            "selectYear": "Seleccionar un año.", 
+            "to": "Hasta",
+            "selectYear": "Seleccionar un año.",
             "selectFrom": "Seleccionar fecha desde.",
             "selectTo": "Seleccionar fecha hasta.",
             "selectDateRangeValid": "La fecha inicial no puede ser posterior a la fecha final."
-        }, 
-        "generate": "Generar reporte", 
+        },
+        "generate": "Generar reporte",
         "table": {
             "date": "Fecha",
             "name": "Nombre",
@@ -282,16 +369,16 @@
             "expensePercentage": "Porcentaje del gasto"
         },
         "totals": {
-            "ingress": "Total ingresos", 
-            "egress": "Total egresos", 
+            "ingress": "Total ingresos",
+            "egress": "Total egresos",
             "diff": "Diferencia"
-        }, 
+        },
         "graphics": {
-            "balanceEvolution": "Evolución de balance", 
-            "accounts": "Cuentas", 
+            "balanceEvolution": "Evolución de balance",
+            "accounts": "Cuentas",
             "categories": "Categorías"
         }
-    }, 
+    },
     "profile": {
         "title": "Perfil",
         "menu": {
@@ -357,6 +444,8 @@
         "warning": "Advertencia",
         "accept": "Aceptar",
         "cancel": "Cancelar",
+        "close": "Cerrar",
+        "saving": "Guardando…",
         "no": "No",
         "yes": "Sí",
         "next": "Continuar",
@@ -392,9 +481,10 @@
             "home": "Inicio",
             "accounts": "Cuentas",
             "categories": "Categorías",
+            "debts": "Deudas",
             "profile": "Perfil",
             "logout": "Cerrar sesión",
-            "settings": "Configuración", 
+            "settings": "Configuración",
             "reports": "Reportes",
             "modules": "Módulos",
             "openModules": "Abrir menú de módulos",
@@ -405,7 +495,7 @@
         "page": "Página",
         "search": "Buscar",
         "filter": "Filtro",
-        "clear": "Limpiar", 
+        "clear": "Limpiar",
         "months": {
             "january": "Enero",
             "february": "Febrero",

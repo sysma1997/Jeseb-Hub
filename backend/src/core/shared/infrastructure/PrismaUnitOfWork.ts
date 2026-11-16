@@ -5,6 +5,7 @@ import type { TranslatorRepository } from "../domain/TranslatorRepository";
 
 import { AccountPrismaRepository } from "../../account/infrastructure/AccountPrismaRepository";
 import { TransactionPrismaRepository } from "../../transaction/infrastructure/TransactionPrismaRepository";
+import { DebtPrismaRepository } from "../../debt/infrastructure/DebtPrismaRepository";
 
 // Cada repositorio se construye con el cliente transaccional que entrega el callback
 // de $transaction, no con el cliente global. Por eso todo lo que hagan dentro del
@@ -22,7 +23,8 @@ export class PrismaUnitOfWork implements UnitOfWork {
         return await this.prisma.$transaction(async (tx) => {
             const context: UnitOfWorkContext = {
                 accounts: new AccountPrismaRepository(tx, this.translator),
-                transactions: new TransactionPrismaRepository(tx, this.translator)
+                transactions: new TransactionPrismaRepository(tx, this.translator),
+                debts: new DebtPrismaRepository(tx, this.translator)
             };
 
             return await work(context);

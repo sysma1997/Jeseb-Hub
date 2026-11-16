@@ -32,6 +32,10 @@ import { CategoryController } from "./core/category/infrastructure/CategoryContr
 import { ReportRepository } from "./core/reports/domain/ReportRepository";
 import { ReportPrismaRepository } from "./core/reports/infrastructure/ReportPrismaRepository";
 import { ReportController } from "./core/reports/infrastructure/ReportController";
+import { DebtRepository } from "./core/debt/domain/DebtRepository";
+import { DebtPrismaRepository } from "./core/debt/infrastructure/DebtPrismaRepository";
+import { DebtService } from "./core/debt/application/DebtService";
+import { DebtController } from "./core/debt/infrastructure/DebtController";
 
 import { TranslatorRepository } from "./core/shared/domain/TranslatorRepository";
 import { TranslatorI18nRepository } from "./core/shared/infrastructure/i18next/index";
@@ -80,12 +84,16 @@ const transferService: TransferService = new TransferService(unitOfWork, transla
 const transactionController: ControllerBase = new TransactionController(transactionRepository, transactionService, transferService, translator);
 const reportRepository: ReportRepository = new ReportPrismaRepository(prisma, translator);
 const reportController: ControllerBase = new ReportController(reportRepository, translator);
+const debtRepository: DebtRepository = new DebtPrismaRepository(prisma, translator);
+const debtService: DebtService = new DebtService(translator, unitOfWork);
+const debtController: ControllerBase = new DebtController(debtRepository, debtService, translator);
 
 userController.setup();
 transactionController.setup();
 accountController.setup();
 categoryController.setup();
 reportController.setup();
+debtController.setup();
 
 const app = express();
 
@@ -118,6 +126,7 @@ app.use("/api/transaction", transactionController.getRouter());
 app.use("/api/account", accountController.getRouter());
 app.use("/api/category", categoryController.getRouter());
 app.use("/api/report", reportController.getRouter());
+app.use("/api/debt", debtController.getRouter());
 
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (err instanceof multer.MulterError) {

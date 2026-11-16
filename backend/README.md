@@ -65,5 +65,14 @@ backend/
  ├── prisma/                     # Database Schema & Migrations
  └── __tests__/                  # Unit and Integration test suites
 ```
+
+##
+
+Para aplicar migraciones con prisma:
+
+``` bash
+pnpm exec prisma migrate deploy
+```
+
 ##
 Developed with engineering excellence by [SYSMA](https://sysma1997.github.io/).

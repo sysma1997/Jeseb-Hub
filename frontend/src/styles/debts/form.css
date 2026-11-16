@@ -1,0 +1,46 @@
+.debtForm {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    align-items: start;
+}
+
+.debtForm .field {
+    margin: 0;
+}
+
+.debtFormDates {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.debtFormTypeHint,
+.debtFormDescription,
+.debtFormMandatory {
+    grid-column: 1 / -1;
+}
+
+.debtFormHint {
+    margin-top: 0.1rem;
+    color: var(--global-text-muted);
+    font-size: 0.75rem;
+    line-height: 1.4;
+}
+
+@media screen and (max-width: 640px) {
+    .debtForm {
+        grid-template-columns: 1fr;
+    }
+    .debtFormTypeHint,
+    .debtFormDescription,
+    .debtFormMandatory {
+        grid-column: auto;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .debtFormDates {
+        grid-template-columns: 1fr;
+    }
+}

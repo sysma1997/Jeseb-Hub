@@ -1,0 +1,108 @@
+@import url("./badges.css");
+
+.debtsSummary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.debtSummaryCard {
+    background: var(--global-bg);
+    border-radius: 12px;
+    border: var(--global-border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    padding: 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+.debtSummaryLabel {
+    color: var(--global-text-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.debtSummaryValue {
+    color: var(--global-text);
+    font-size: 1.45rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+    word-break: break-word;
+}
+.debtSummaryValue.receivable {
+    color: var(--global-text-accept);
+}
+.debtSummaryValue.payable {
+    color: var(--global-text-reject);
+}
+.debtSummaryValue.net.positive {
+    color: var(--global-text-accept);
+}
+.debtSummaryValue.net.negative {
+    color: var(--global-text-reject);
+}
+
+.debtSummaryOverdue {
+    color: var(--global-text-reject);
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.debtSummaryHint {
+    color: var(--global-text-muted);
+    font-size: 0.75rem;
+    line-height: 1.35;
+}
+
+.debtSummaryCounts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.1rem;
+}
+
+.debtSummaryCount {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    border-radius: 999px;
+    padding: 0.2rem 0.55rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.debtSummaryCount b {
+    font-weight: 800;
+}
+.debtSummaryCount.pending {
+    background: var(--debt-pending-bg);
+    color: var(--debt-pending-text);
+}
+.debtSummaryCount.overdue {
+    background: var(--debt-overdue-bg);
+    color: var(--debt-overdue-text);
+}
+.debtSummaryCount.paid {
+    background: var(--debt-paid-bg);
+    color: var(--debt-paid-text);
+}
+
+@media screen and (max-width: 900px) {
+    .debtsSummary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .debtsSummary {
+        grid-template-columns: 1fr;
+    }
+    .debtSummaryValue {
+        font-size: 1.3rem;
+    }
+}

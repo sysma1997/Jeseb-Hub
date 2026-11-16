@@ -8,12 +8,17 @@ Este documento recoge las funcionalidades que se consideran para la evolución d
 
 Registrar el dinero que el usuario debe y el que otras personas le deben, con saldos e historial de abonos.
 
-- **MVP:** crear una deuda indicando si el usuario debe o le deben, la persona, el monto, la descripción y las fechas relevantes.
-- **Abonos:** registrar pagos parciales, consultar su historial y calcular el saldo pendiente.
-- **Seguimiento:** distinguir deudas pendientes, vencidas y saldadas; mostrar un resumen útil.
-- **Más adelante:** evaluar intereses, recordatorios y exportación.
+- **MVP [x]:** crear una deuda indicando si el usuario debe o le deben, la persona, el monto, la descripción y las fechas relevantes.
+- **Abonos [x]:** registrar pagos parciales, consultar su historial y calcular el saldo pendiente.
+- **Integración con cuentas y transacciones [x]:** cada abono registra una transacción en la cuenta elegida, con categoría opcional; los egresos requieren saldo suficiente.
+- **Seguimiento [x]:** distinguir deudas pendientes, vencidas y saldadas; mostrar un resumen útil.
+- **Más adelante [ ]:** evaluar intereses, recordatorios y exportación propia del módulo.
 
 Los saldos deben derivarse de los montos originales y los abonos registrados, conservando un historial claro de los movimientos.
+
+Al eliminar un abono también se elimina su transacción y se revierte el saldo de la cuenta. Al eliminar una deuda se eliminan sus abonos, pero se conservan las transacciones desvinculadas. Las transacciones asociadas a abonos no se pueden editar ni eliminar desde el módulo de transacciones.
+
+**Estado:** funcionalidad implementada en backend y frontend. Cada entorno debe tener aplicadas las migraciones Prisma `0006`–`0008`.
 
 ### 2. Presupuestos
 
