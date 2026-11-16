@@ -1,5 +1,6 @@
 import { FormatNumber } from "../../core/shared/domain/FormatNumber";
 import { Money } from "../../core/shared/domain/Money";
+import { t } from "../../core/shared/infrastructure/i18n";
 import { accordionControls, setReportBoxExpanded } from "./accordion";
 import { applyBlockVisibility } from "./blocks";
 import {
@@ -16,6 +17,7 @@ import {
     reportPdfExpenses,
     reportPdfDifference,
     reportPdfVersion,
+    reportPdfUserName,
     reportPdfChartsSection,
     reportPdfTablesSection,
     includeComparison,
@@ -49,9 +51,10 @@ const copyTableForPdf = (source: HTMLTableElement, target: HTMLDivElement): void
     target.replaceChildren(table);
 };
 
-export const preparePdfReport = (): void => {
+export const preparePdfReport = (userName = ""): void => {
     if (!state.lastReport) return;
 
+    reportPdfUserName.textContent = userName.trim() || t("reports.pdf.userUnavailable");
     document.body.classList.add("report-pdf-active");
     reportPdf.setAttribute("aria-hidden", "false");
     const previousTheme = state.theme;

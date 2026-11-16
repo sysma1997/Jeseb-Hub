@@ -229,6 +229,8 @@
         },
         "pdf": {
             "title": "Reporte financiero",
+            "preparedFor": "Preparado para:",
+            "userUnavailable": "Usuario no disponible",
             "chartsTitle": "Gráficos",
             "tablesTitle": "Detalle y comparación"
         },

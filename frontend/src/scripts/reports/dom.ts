@@ -35,6 +35,7 @@ export const reportPdfIncome = document.getElementById("reportPdfIncome") as HTM
 export const reportPdfExpenses = document.getElementById("reportPdfExpenses") as HTMLElement;
 export const reportPdfDifference = document.getElementById("reportPdfDifference") as HTMLElement;
 export const reportPdfVersion = document.getElementById("reportPdfVersion") as HTMLSpanElement;
+export const reportPdfUserName = document.getElementById("reportPdfUserName") as HTMLSpanElement;
 export const reportPdfChartsSection = document.querySelector(".report-pdf-charts") as HTMLElement;
 export const reportPdfTablesSection = document.querySelector(".report-pdf-tables") as HTMLElement;
 

@@ -15,13 +15,8 @@ export const setNumberTone = (element: HTMLElement, value: number): void => {
     element.classList.add(value > 0 ? "is-positive" : value < 0 ? "is-negative" : "is-neutral");
 };
 
-export const renderTable = (
-    table: HTMLTableElement,
-    totalCell: HTMLTableCellElement,
-    items: ReportItem[],
-    expenseTotalCents?: number,
-    totalPercentageCell?: HTMLTableCellElement
-): void => {
+export const renderTable = (table: HTMLTableElement, totalCell: HTMLTableCellElement, 
+    items: ReportItem[], expenseTotalCents?: number, totalPercentageCell?: HTMLTableCellElement): void => {
     const tbody = table.querySelector("tbody") as HTMLTableSectionElement;
     tbody.replaceChildren();
 

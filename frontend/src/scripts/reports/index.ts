@@ -15,6 +15,7 @@ import {
 } from "chart.js";
 
 import { Attach } from "../../core/shared/domain/Subject";
+import { UserApiRepository } from "../../core/user/infrastructure/UserApiRepository";
 import { initReportAccordions } from "./accordion";
 import { initBlockVisibility } from "./blocks";
 import { renderCharts, updateGraphicOptionsTheme } from "./charts";
@@ -40,6 +41,14 @@ Chart.register(
 );
 dayjs.extend(dayjsUtc);
 
+const reportUserNamePromise = new UserApiRepository().get()
+    .then(user => user?.name.trim() ?? "")
+    .catch(() => "");
+let reportUserName = "";
+void reportUserNamePromise.then(name => {
+    reportUserName = name;
+});
+
 initReportAccordions();
 initFilters();
 initQuickRanges();
@@ -48,7 +57,8 @@ initBlockVisibility();
 exportCsvButton.onclick = exportReportCsv;
 exportPdfButton.onclick = async () => {
     if (!state.lastReport || state.reportIsDirty) return;
-    preparePdfReport();
+    reportUserName = await reportUserNamePromise;
+    preparePdfReport(reportUserName);
     const images = Array.from(reportPdf.querySelectorAll<HTMLImageElement>("img"));
     await Promise.all(images.map(image => image.decode().catch(() => undefined)));
     window.print();
@@ -63,7 +73,7 @@ Attach("menu:theme", (newTheme: string) => {
 });
 
 window.addEventListener("beforeprint", () => {
-    if (!document.body.classList.contains("report-pdf-active")) preparePdfReport();
+    if (!document.body.classList.contains("report-pdf-active")) preparePdfReport(reportUserName);
 });
 window.addEventListener("afterprint", () => {
     document.body.classList.remove("report-pdf-active");

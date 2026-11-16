@@ -40,7 +40,7 @@
         break-inside: avoid;
     }
     .report-pdf-brand {
-        grid-row: span 2;
+        grid-row: span 3;
         display: flex;
         align-items: center;
         gap: 0.55rem;
@@ -69,6 +69,14 @@
         margin: 0;
         color: #475569;
         font-size: 9pt;
+    }
+    .report-pdf-header .report-pdf-owner {
+        display: flex;
+        gap: 0.3rem;
+    }
+    .report-pdf-owner strong {
+        color: #0f172a;
+        font-weight: 600;
     }
     .report-pdf-summary {
         display: grid;

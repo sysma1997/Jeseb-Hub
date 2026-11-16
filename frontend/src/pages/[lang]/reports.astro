@@ -26,19 +26,19 @@ const years = Array.from({ length: 27 }, (_, index) => {
     return { label: String(year), value: String(year) };
 });
 const dates = [
-    { label: t("shared.months.january"), value: "01" }, 
-    { label: t("shared.months.february"), value: "02" }, 
-    { label: t("shared.months.march"), value: "03" }, 
-    { label: t("shared.months.april"), value: "04" }, 
-    { label: t("shared.months.may"), value: "05" }, 
-    { label: t("shared.months.june"), value: "06" }, 
-    { label: t("shared.months.july"), value: "07" }, 
-    { label: t("shared.months.august"), value: "08" }, 
-    { label: t("shared.months.september"), value: "09" }, 
-    { label: t("shared.months.october"), value: "10" }, 
-    { label: t("shared.months.november"), value: "11" }, 
+    { label: t("shared.months.january"), value: "01" },
+    { label: t("shared.months.february"), value: "02" },
+    { label: t("shared.months.march"), value: "03" },
+    { label: t("shared.months.april"), value: "04" },
+    { label: t("shared.months.may"), value: "05" },
+    { label: t("shared.months.june"), value: "06" },
+    { label: t("shared.months.july"), value: "07" },
+    { label: t("shared.months.august"), value: "08" },
+    { label: t("shared.months.september"), value: "09" },
+    { label: t("shared.months.october"), value: "10" },
+    { label: t("shared.months.november"), value: "11" },
     { label: t("shared.months.december"), value: "12" },
-]
+];
 ---
 
 <Layout locale={locale} title={t("shared.menu.reports")}>
@@ -48,71 +48,213 @@ const dates = [
                 <h3 class="title">{t("reports.title")}</h3>
                 <div class="report-filter-section">
                     <p class="description">{t("reports.dateRange.title")}</p>
-                    <div class="quick-range-options" role="group" aria-label={t("reports.quickRanges.title")}>
-                        <button class="quick-range-button" type="button" data-range="thisMonth">{t("reports.quickRanges.thisMonth")}</button>
-                        <button class="quick-range-button" type="button" data-range="previousMonth">{t("reports.quickRanges.previousMonth")}</button>
-                        <button class="quick-range-button" type="button" data-range="lastThreeMonths">{t("reports.quickRanges.lastThreeMonths")}</button>
-                        <button class="quick-range-button" type="button" data-range="lastSixMonths">{t("reports.quickRanges.lastSixMonths")}</button>
-                        <button class="quick-range-button" type="button" data-range="yearToDate">{t("reports.quickRanges.yearToDate")}</button>
-                        <button class="quick-range-button" type="button" data-range="previousYear">{t("reports.quickRanges.previousYear")}</button>
+                    <div
+                        class="quick-range-options"
+                        role="group"
+                        aria-label={t("reports.quickRanges.title")}
+                    >
+                        <button
+                            class="quick-range-button"
+                            type="button"
+                            data-range="thisMonth"
+                        >
+                            {t("reports.quickRanges.thisMonth")}
+                        </button>
+                        <button
+                            class="quick-range-button"
+                            type="button"
+                            data-range="previousMonth"
+                        >
+                            {t("reports.quickRanges.previousMonth")}
+                        </button>
+                        <button
+                            class="quick-range-button"
+                            type="button"
+                            data-range="lastThreeMonths"
+                        >
+                            {t("reports.quickRanges.lastThreeMonths")}
+                        </button>
+                        <button
+                            class="quick-range-button"
+                            type="button"
+                            data-range="lastSixMonths"
+                        >
+                            {t("reports.quickRanges.lastSixMonths")}
+                        </button>
+                        <button
+                            class="quick-range-button"
+                            type="button"
+                            data-range="yearToDate"
+                        >
+                            {t("reports.quickRanges.yearToDate")}
+                        </button>
+                        <button
+                            class="quick-range-button"
+                            type="button"
+                            data-range="previousYear"
+                        >
+                            {t("reports.quickRanges.previousYear")}
+                        </button>
                     </div>
                     <div class="report-custom-range">
                         <div class="date-range-row">
-                            <span class="date-range-label">{t("reports.dateRange.from")}</span>
+                            <span class="date-range-label">
+                                {t("reports.dateRange.from")}
+                            </span>
                             <div class="item">
-                                <Dropdown id="dateInit" icon="material-symbols:calendar-month-outline"
-                                    label={t("reports.dateRange.month")} items={dates} />
-                                <Dropdown id="yearInit" icon="material-symbols:calendar-month-outline"
-                                    label={t("reports.dateRange.year")} items={years} />
+                                <Dropdown
+                                    id="dateInit"
+                                    icon="material-symbols:calendar-month-outline"
+                                    label={t("reports.dateRange.month")}
+                                    items={dates}
+                                />
+                                <Dropdown
+                                    id="yearInit"
+                                    icon="material-symbols:calendar-month-outline"
+                                    label={t("reports.dateRange.year")}
+                                    items={years}
+                                />
                             </div>
                         </div>
                         <div class="date-range-row">
-                            <span class="date-range-label">{t("reports.dateRange.to")}</span>
+                            <span class="date-range-label">
+                                {t("reports.dateRange.to")}
+                            </span>
                             <div class="item">
-                                <Dropdown id="dateEnd" icon="material-symbols:calendar-month-outline"
-                                    label={t("reports.dateRange.month")} items={dates} />
-                                <Dropdown id="yearEnd" icon="material-symbols:calendar-month-outline"
-                                    label={t("reports.dateRange.year")} items={years} />
+                                <Dropdown
+                                    id="dateEnd"
+                                    icon="material-symbols:calendar-month-outline"
+                                    label={t("reports.dateRange.month")}
+                                    items={dates}
+                                />
+                                <Dropdown
+                                    id="yearEnd"
+                                    icon="material-symbols:calendar-month-outline"
+                                    label={t("reports.dateRange.year")}
+                                    items={years}
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="report-filter-grid">
                     <div class="report-multi-filter" id="accountsFilter">
-                        <button id="accountsFilterToggle" class="report-multi-filter-toggle" type="button" aria-expanded="false" aria-controls="accountsFilterPanel">
+                        <button
+                            id="accountsFilterToggle"
+                            class="report-multi-filter-toggle"
+                            type="button"
+                            aria-expanded="false"
+                            aria-controls="accountsFilterPanel"
+                        >
                             <span>{t("reports.filters.accounts")}</span>
-                            <span id="accountsSelectionSummary" class="selection-summary">{t("reports.filters.all")}</span>
+                            <span
+                                id="accountsSelectionSummary"
+                                class="selection-summary"
+                            >
+                                {t("reports.filters.all")}
+                            </span>
                         </button>
-                        <div id="accountsFilterPanel" class="report-multi-filter-panel" hidden>
+                        <div
+                            id="accountsFilterPanel"
+                            class="report-multi-filter-panel"
+                            hidden
+                        >
                             <div class="filter-panel-actions">
-                                <button id="selectAllAccounts" type="button">{t("reports.filters.selectAll")}</button>
-                                <button id="clearAccounts" type="button">{t("reports.filters.clear")}</button>
+                                <button id="selectAllAccounts" type="button">
+                                    {t("reports.filters.selectAll")}
+                                </button>
+                                <button id="clearAccounts" type="button">
+                                    {t("reports.filters.clear")}
+                                </button>
                             </div>
-                            <input id="accountsSearch" class="filter-search" type="search" aria-label={t("reports.filters.searchAccounts")} placeholder={t("reports.filters.searchAccounts")} />
-                            <div id="accountFilterOptions" class="filter-options" role="group" aria-label={t("reports.filters.accounts")}></div>
+                            <input
+                                id="accountsSearch"
+                                class="filter-search"
+                                type="search"
+                                aria-label={t("reports.filters.searchAccounts")}
+                                placeholder={t(
+                                    "reports.filters.searchAccounts",
+                                )}
+                            />
+                            <div
+                                id="accountFilterOptions"
+                                class="filter-options"
+                                role="group"
+                                aria-label={t("reports.filters.accounts")}
+                            ></div>
                         </div>
                     </div>
                     <div class="report-multi-filter" id="categoriesFilter">
-                        <button id="categoriesFilterToggle" class="report-multi-filter-toggle" type="button" aria-expanded="false" aria-controls="categoriesFilterPanel">
+                        <button
+                            id="categoriesFilterToggle"
+                            class="report-multi-filter-toggle"
+                            type="button"
+                            aria-expanded="false"
+                            aria-controls="categoriesFilterPanel"
+                        >
                             <span>{t("reports.filters.categories")}</span>
-                            <span id="categoriesSelectionSummary" class="selection-summary">{t("reports.filters.all")}</span>
+                            <span
+                                id="categoriesSelectionSummary"
+                                class="selection-summary"
+                            >
+                                {t("reports.filters.all")}
+                            </span>
                         </button>
-                        <div id="categoriesFilterPanel" class="report-multi-filter-panel" hidden>
+                        <div
+                            id="categoriesFilterPanel"
+                            class="report-multi-filter-panel"
+                            hidden
+                        >
                             <div class="filter-panel-actions">
-                                <button id="selectAllCategories" type="button">{t("reports.filters.selectAll")}</button>
-                                <button id="clearCategories" type="button">{t("reports.filters.clear")}</button>
+                                <button id="selectAllCategories" type="button">
+                                    {t("reports.filters.selectAll")}
+                                </button>
+                                <button id="clearCategories" type="button">
+                                    {t("reports.filters.clear")}
+                                </button>
                             </div>
-                            <input id="categoriesSearch" class="filter-search" type="search" aria-label={t("reports.filters.searchCategories")} placeholder={t("reports.filters.searchCategories")} />
-                            <div id="categoryFilterOptions" class="filter-options" role="group" aria-label={t("reports.filters.categories")}></div>
+                            <input
+                                id="categoriesSearch"
+                                class="filter-search"
+                                type="search"
+                                aria-label={t(
+                                    "reports.filters.searchCategories",
+                                )}
+                                placeholder={t(
+                                    "reports.filters.searchCategories",
+                                )}
+                            />
+                            <div
+                                id="categoryFilterOptions"
+                                class="filter-options"
+                                role="group"
+                                aria-label={t("reports.filters.categories")}
+                            ></div>
                         </div>
                     </div>
                 </div>
                 <fieldset class="report-block-filters">
                     <legend>{t("reports.content.title")}</legend>
-                    <label><input id="includeComparison" type="checkbox" checked /> {t("reports.comparison.title")}</label>
-                    <label><input id="includeBalanceEvolution" type="checkbox" checked /> {t("reports.graphics.balanceEvolution")}</label>
-                    <label><input id="includeAccounts" type="checkbox" checked /> {t("reports.graphics.accounts")}</label>
-                    <label><input id="includeCategories" type="checkbox" checked /> {t("reports.graphics.categories")}</label>
+                    <label>
+                        <input id="includeComparison" type="checkbox" checked />{" "}
+                        {t("reports.comparison.title")}
+                    </label>
+                    <label>
+                        <input
+                            id="includeBalanceEvolution"
+                            type="checkbox"
+                            checked
+                        />{" "}
+                        {t("reports.graphics.balanceEvolution")}
+                    </label>
+                    <label>
+                        <input id="includeAccounts" type="checkbox" checked />{" "}
+                        {t("reports.graphics.accounts")}
+                    </label>
+                    <label>
+                        <input id="includeCategories" type="checkbox" checked />{" "}
+                        {t("reports.graphics.categories")}
+                    </label>
                 </fieldset>
                 <button id="btnGenerateReport" class="btn-primary">
                     <span class="button-label">{t("reports.generate")}</span>
@@ -122,8 +264,14 @@ const dates = [
             <div id="dNoItems">
                 <label>{t("reports.noItems")}</label>
             </div>
-            <p id="reportDateRange" class="report-date-range" aria-live="polite"></p>
-            <p id="reportDirtyNotice" class="report-dirty-notice" hidden>{t("reports.filters.changedNotice")}</p>
+            <p
+                id="reportDateRange"
+                class="report-date-range"
+                aria-live="polite"
+            ></p>
+            <p id="reportDirtyNotice" class="report-dirty-notice" hidden>
+                {t("reports.filters.changedNotice")}
+            </p>
             <div id="dTotals" class="totals">
                 <div class="box" data-no-collapse>
                     <h4 class="title">{t("reports.totals.ingress")}:</h4>
@@ -138,91 +286,135 @@ const dates = [
                     <label id="lblDiff">$ 0,00</label>
                 </div>
             </div>
-            <section id="reportComparison" class="box report-comparison" aria-labelledby="reportComparisonTitle">
-                <h4 id="reportComparisonTitle" class="title">{t("reports.comparison.title")}</h4>
+            <section
+                id="reportComparison"
+                class="box report-comparison"
+                aria-labelledby="reportComparisonTitle"
+            >
+                <h4 id="reportComparisonTitle" class="title">
+                    {t("reports.comparison.title")}
+                </h4>
                 <p id="reportComparisonPeriods" class="comparison-periods"></p>
                 <div class="table-wrapper">
                     <table class="report-table comparison-table">
-                        <thead><tr>
-                            <th>{t("reports.comparison.metric")}</th>
-                            <th>{t("reports.comparison.current")}</th>
-                            <th>{t("reports.comparison.previous")}</th>
-                            <th>{t("reports.comparison.absoluteChange")}</th>
-                            <th>{t("reports.comparison.percentageChange")}</th>
-                        </tr></thead>
+                        <thead>
+                            <tr>
+                                <th>{t("reports.comparison.metric")}</th>
+                                <th>{t("reports.comparison.current")}</th>
+                                <th>{t("reports.comparison.previous")}</th>
+                                <th>
+                                    {t("reports.comparison.absoluteChange")}
+                                </th>
+                                <th>
+                                    {t("reports.comparison.percentageChange")}
+                                </th>
+                            </tr>
+                        </thead>
                         <tbody id="reportComparisonRows"></tbody>
                     </table>
                 </div>
             </section>
             <div id="dGraphics" class="graphics">
                 <div id="dgBalanceEvolution" class="box">
-                    <h4 class="title">{t("reports.graphics.balanceEvolution")}</h4>
-                    <p id="emptyBalanceEvolution" class="block-empty" hidden>{t("reports.emptyBlock")}</p>
+                    <h4 class="title">
+                        {t("reports.graphics.balanceEvolution")}
+                    </h4>
+                    <p id="emptyBalanceEvolution" class="block-empty" hidden>
+                        {t("reports.emptyBlock")}
+                    </p>
                     <div class="chart-wrapper">
                         <canvas id="dgcBalanceEvolution" />
                     </div>
                     <div class="table-wrapper detail-table-wrapper">
                         <table id="tableBalanceEvolution" class="report-table">
-                            <thead><tr>
-                                <th>{t("reports.table.date")}</th>
-                                <th>{t("reports.table.name")}</th>
-                                <th>{t("reports.table.amount")}</th>
-                            </tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>{t("reports.table.date")}</th>
+                                    <th>{t("reports.table.name")}</th>
+                                    <th>{t("reports.table.amount")}</th>
+                                </tr>
+                            </thead>
                             <tbody></tbody>
-                            <tfoot><tr>
-                                <th colspan="2">{t("reports.table.total")}</th>
-                                <th id="totalBalanceEvolution"></th>
-                            </tr></tfoot>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="2">
+                                        {t("reports.table.total")}
+                                    </th>
+                                    <th id="totalBalanceEvolution"></th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
                 <div id="dgAccounts" class="box">
                     <h4 class="title">{t("reports.graphics.accounts")}</h4>
-                    <p id="emptyAccounts" class="block-empty" hidden>{t("reports.emptyBlock")}</p>
+                    <p id="emptyAccounts" class="block-empty" hidden>
+                        {t("reports.emptyBlock")}
+                    </p>
                     <div class="chart-wrapper">
                         <canvas id="dgcAccounts" />
                     </div>
                     <div class="table-wrapper detail-table-wrapper">
                         <table id="tableAccounts" class="report-table">
-                            <thead><tr>
-                                <th>{t("reports.table.date")}</th>
-                                <th>{t("reports.table.name")}</th>
-                                <th>{t("reports.table.amount")}</th>
-                            </tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>{t("reports.table.date")}</th>
+                                    <th>{t("reports.table.name")}</th>
+                                    <th>{t("reports.table.amount")}</th>
+                                </tr>
+                            </thead>
                             <tbody></tbody>
-                            <tfoot><tr>
-                                <th colspan="2">{t("reports.table.total")}</th>
-                                <th id="totalAccounts"></th>
-                            </tr></tfoot>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="2">
+                                        {t("reports.table.total")}
+                                    </th>
+                                    <th id="totalAccounts"></th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
                 <div id="dgCategories" class="box">
                     <h4 class="title">{t("reports.graphics.categories")}</h4>
-                    <p id="emptyCategories" class="block-empty" hidden>{t("reports.emptyBlock")}</p>
+                    <p id="emptyCategories" class="block-empty" hidden>
+                        {t("reports.emptyBlock")}
+                    </p>
                     <div class="chart-wrapper">
                         <canvas id="dgcCategories" />
                     </div>
                     <div class="table-wrapper detail-table-wrapper">
                         <table id="tableCategories" class="report-table">
-                            <thead><tr>
-                                <th>{t("reports.table.date")}</th>
-                                <th>{t("reports.table.name")}</th>
-                                <th>{t("reports.table.amount")}</th>
-                                <th>{t("reports.table.expensePercentage")}</th>
-                            </tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>{t("reports.table.date")}</th>
+                                    <th>{t("reports.table.name")}</th>
+                                    <th>{t("reports.table.amount")}</th>
+                                    <th>
+                                        {t("reports.table.expensePercentage")}
+                                    </th>
+                                </tr>
+                            </thead>
                             <tbody></tbody>
-                            <tfoot><tr>
-                                <th colspan="2">{t("reports.table.total")}</th>
-                                <th id="totalCategories"></th>
-                                <th id="totalPercentCategories"></th>
-                            </tr></tfoot>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="2">
+                                        {t("reports.table.total")}
+                                    </th>
+                                    <th id="totalCategories"></th>
+                                    <th id="totalPercentCategories"></th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
                 <div id="reportActions" class="report-actions">
-                    <button id="btnExportCsv" class="btn-primary" type="button">{t("reports.exportCsv")}</button>
-                    <button id="btnExportPdf" class="btn-info" type="button">{t("reports.exportPdf")}</button>
+                    <button id="btnExportCsv" class="btn-primary" type="button">
+                        {t("reports.exportCsv")}
+                    </button>
+                    <button id="btnExportPdf" class="btn-info" type="button">
+                        {t("reports.exportPdf")}
+                    </button>
                 </div>
             </div>
         </div>
@@ -232,32 +424,65 @@ const dates = [
         <header class="report-pdf-header">
             <div class="report-pdf-brand">
                 <img src="/favicon/icon.svg" alt="Jeseb Hub" />
-                <div><strong>Jeseb Hub</strong><span id="reportPdfVersion">v{packageInfo.version}</span></div>
+                <div>
+                    <strong>Jeseb Hub</strong>
+                    <span id="reportPdfVersion">v{packageInfo.version}</span>
+                </div>
             </div>
             <h1>{t("reports.pdf.title")}</h1>
+            <p class="report-pdf-owner">
+                <span>{t("reports.pdf.preparedFor")}</span>
+                <strong id="reportPdfUserName">
+                    {t("reports.pdf.userUnavailable")}
+                </strong>
+            </p>
             <p id="reportPdfFilters"></p>
         </header>
         <section class="report-pdf-summary">
-            <div><span>{t("reports.totals.ingress")}</span><strong id="reportPdfIncome"></strong></div>
-            <div><span>{t("reports.totals.egress")}</span><strong id="reportPdfExpenses"></strong></div>
-            <div><span>{t("reports.totals.diff")}</span><strong id="reportPdfDifference"></strong></div>
+            <div>
+                <span>{t("reports.totals.ingress")}</span>
+                <strong id="reportPdfIncome"></strong>
+            </div>
+            <div>
+                <span>{t("reports.totals.egress")}</span>
+                <strong id="reportPdfExpenses"></strong>
+            </div>
+            <div>
+                <span>{t("reports.totals.diff")}</span>
+                <strong id="reportPdfDifference"></strong>
+            </div>
         </section>
         <section class="report-pdf-charts">
             <h2>{t("reports.pdf.chartsTitle")}</h2>
             <div id="reportPdfBalanceBlock" class="report-pdf-block">
                 <h3>{t("reports.graphics.balanceEvolution")}</h3>
-                <img id="reportPdfBalanceImage" alt={t("reports.graphics.balanceEvolution")} />
-                <p id="reportPdfBalanceEmpty" hidden>{t("reports.emptyBlock")}</p>
+                <img
+                    id="reportPdfBalanceImage"
+                    alt={t("reports.graphics.balanceEvolution")}
+                />
+                <p id="reportPdfBalanceEmpty" hidden>
+                    {t("reports.emptyBlock")}
+                </p>
             </div>
             <div id="reportPdfAccountsBlock" class="report-pdf-block">
                 <h3>{t("reports.graphics.accounts")}</h3>
-                <img id="reportPdfAccountsImage" alt={t("reports.graphics.accounts")} />
-                <p id="reportPdfAccountsEmpty" hidden>{t("reports.emptyBlock")}</p>
+                <img
+                    id="reportPdfAccountsImage"
+                    alt={t("reports.graphics.accounts")}
+                />
+                <p id="reportPdfAccountsEmpty" hidden>
+                    {t("reports.emptyBlock")}
+                </p>
             </div>
             <div id="reportPdfCategoriesBlock" class="report-pdf-block">
                 <h3>{t("reports.graphics.categories")}</h3>
-                <img id="reportPdfCategoriesImage" alt={t("reports.graphics.categories")} />
-                <p id="reportPdfCategoriesEmpty" hidden>{t("reports.emptyBlock")}</p>
+                <img
+                    id="reportPdfCategoriesImage"
+                    alt={t("reports.graphics.categories")}
+                />
+                <p id="reportPdfCategoriesEmpty" hidden>
+                    {t("reports.emptyBlock")}
+                </p>
             </div>
         </section>
         <section class="report-pdf-tables">
@@ -270,11 +495,17 @@ const dates = [
                 <h3>{t("reports.graphics.balanceEvolution")}</h3>
                 <div id="reportPdfBalanceTable"></div>
             </div>
-            <div id="reportPdfAccountsTableBlock" class="report-pdf-table-block">
+            <div
+                id="reportPdfAccountsTableBlock"
+                class="report-pdf-table-block"
+            >
                 <h3>{t("reports.graphics.accounts")}</h3>
                 <div id="reportPdfAccountsTable"></div>
             </div>
-            <div id="reportPdfCategoriesTableBlock" class="report-pdf-table-block">
+            <div
+                id="reportPdfCategoriesTableBlock"
+                class="report-pdf-table-block"
+            >
                 <h3>{t("reports.graphics.categories")}</h3>
                 <div id="reportPdfCategoriesTable"></div>
             </div>
