@@ -21,18 +21,18 @@ export class TransactionPrismaRepository implements TransactionRepository {
         this.prisma = prisma;
         this.translator = translator;
     }
-    
+
     async add(transaction: Transaction): Promise<void> {
         await this.prisma.transaction.create({
             data: {
-                id: transaction.id ?? Uuid(), 
-                idUser: transaction.idUser!, 
-                date: transaction.date, 
-                type: transaction.type, 
-                account: transaction.account, 
+                id: transaction.id ?? Uuid(),
+                idUser: transaction.idUser!,
+                date: transaction.date,
+                type: transaction.type,
+                account: transaction.account,
                 value: Money.toDecimalString(transaction.value),
 
-                category: transaction.category ?? null, 
+                category: transaction.category ?? null,
                 description: transaction.description ?? null,
                 transferId: transaction.transferId ?? null,
                 isTransfer: transaction.isTransfer
@@ -42,14 +42,14 @@ export class TransactionPrismaRepository implements TransactionRepository {
     async addRange(transactions: Transaction[]): Promise<void> {
         await this.prisma.$transaction(transactions.map(transaction => this.prisma.transaction.create({
             data: {
-                id: transaction.id ?? Uuid(), 
-                idUser: transaction.idUser!, 
-                date: transaction.date, 
-                type: transaction.type, 
-                account: transaction.account, 
+                id: transaction.id ?? Uuid(),
+                idUser: transaction.idUser!,
+                date: transaction.date,
+                type: transaction.type,
+                account: transaction.account,
                 value: Money.toDecimalString(transaction.value),
 
-                category: transaction.category ?? null, 
+                category: transaction.category ?? null,
                 description: transaction.description ?? null,
                 transferId: transaction.transferId ?? null,
                 isTransfer: transaction.isTransfer
@@ -58,11 +58,11 @@ export class TransactionPrismaRepository implements TransactionRepository {
     }
     async update(transaction: Transaction): Promise<void> {
         await this.prisma.transaction.update({
-            where: { id: transaction.id!, idUser: transaction.idUser! }, 
+            where: { id: transaction.id!, idUser: transaction.idUser! },
             data: {
-                date: transaction.date, 
-                type: transaction.type, 
-                account: transaction.account, 
+                date: transaction.date,
+                type: transaction.type,
+                account: transaction.account,
                 value: Money.toDecimalString(transaction.value),
 
                 category: transaction.category ?? null,
@@ -73,36 +73,36 @@ export class TransactionPrismaRepository implements TransactionRepository {
         });
     }
     async delete(idUser: string, id: string): Promise<void> {
-        await this.prisma.transaction.delete({ 
-            where: { id: id, idUser: idUser } 
+        await this.prisma.transaction.delete({
+            where: { id: id, idUser: idUser }
         });
     }
     async getByIds(idUser: string, ids: string[]): Promise<Transaction[]> {
         const transactions = await this.prisma.transaction.findMany({
             where: { idUser, id: { in: ids } },
         });
-        return transactions.map(t => new Transaction(this.translator, t.date, t.type, t.account, 
-            Money.fromDecimal(t.value), 
-            t.id ?? undefined, 
-            t.idUser ?? undefined, 
-            t.category ?? undefined, 
-            t.description ?? undefined, 
-            t.transferId ?? undefined, 
-            t.isTransfer, 
+        return transactions.map(t => new Transaction(this.translator, t.date, t.type, t.account,
+            Money.fromDecimal(t.value),
+            t.id ?? undefined,
+            t.idUser ?? undefined,
+            t.category ?? undefined,
+            t.description ?? undefined,
+            t.transferId ?? undefined,
+            t.isTransfer,
             undefined));
     }
     async getByTransferId(idUser: string, transferId: string): Promise<Transaction[]> {
         const transactions = await this.prisma.transaction.findMany({
             where: { idUser, transferId },
         });
-        return transactions.map(t => new Transaction(this.translator, t.date, t.type, t.account, 
-            Money.fromDecimal(t.value), 
-            t.id ?? undefined, 
-            t.idUser ?? undefined, 
-            t.category ?? undefined, 
-            t.description ?? undefined, 
-            t.transferId ?? undefined, 
-            t.isTransfer, 
+        return transactions.map(t => new Transaction(this.translator, t.date, t.type, t.account,
+            Money.fromDecimal(t.value),
+            t.id ?? undefined,
+            t.idUser ?? undefined,
+            t.category ?? undefined,
+            t.description ?? undefined,
+            t.transferId ?? undefined,
+            t.isTransfer,
             undefined));
     }
     async deleteByIds(idUser: string, ids: string[]): Promise<void> {
@@ -117,14 +117,14 @@ export class TransactionPrismaRepository implements TransactionRepository {
         });
         if (!transaction) throw new Error(this.translator.translate("transactions.errors.notFound"));
 
-        return new Transaction(this.translator, transaction.date, transaction.type, transaction.account, 
-            Money.fromDecimal(transaction.value), 
-            transaction.id ?? undefined, 
-            transaction.idUser ?? undefined, 
-            transaction.category ?? undefined, 
-            transaction.description ?? undefined, 
-            transaction.transferId ?? undefined, 
-            transaction.isTransfer, 
+        return new Transaction(this.translator, transaction.date, transaction.type, transaction.account,
+            Money.fromDecimal(transaction.value),
+            transaction.id ?? undefined,
+            transaction.idUser ?? undefined,
+            transaction.category ?? undefined,
+            transaction.description ?? undefined,
+            transaction.transferId ?? undefined,
+            transaction.isTransfer,
             undefined);
     }
 
@@ -135,10 +135,10 @@ export class TransactionPrismaRepository implements TransactionRepository {
 
         const [transactions, total] = await Promise.all([
             this.prisma.transaction.findMany({
-                where: { idUser: idUser }, 
-                orderBy: { date: 'desc' }, 
+                where: { idUser: idUser },
+                orderBy: { date: 'desc' },
                 ...(shouldPaginate && {
-                    take: take, 
+                    take: take,
                     skip: (skip - 1) * take
                 })
             }),
@@ -146,14 +146,14 @@ export class TransactionPrismaRepository implements TransactionRepository {
         ]);
 
         const pagination = new Pagination<Transaction>();
-        pagination.list = transactions.map(t => new Transaction(this.translator, t.date, t.type, t.account, 
-            Money.fromDecimal(t.value), 
-            t.id ?? undefined, 
-            t.idUser ?? undefined, 
-            t.category ?? undefined, 
-            t.description ?? undefined, 
-            t.transferId ?? undefined, 
-            t.isTransfer, 
+        pagination.list = transactions.map(t => new Transaction(this.translator, t.date, t.type, t.account,
+            Money.fromDecimal(t.value),
+            t.id ?? undefined,
+            t.idUser ?? undefined,
+            t.category ?? undefined,
+            t.description ?? undefined,
+            t.transferId ?? undefined,
+            t.isTransfer,
             undefined
         ));
         pagination.pages = (limit) ? Pagination.PageLength(total, limit) : 1;
@@ -166,7 +166,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
         const take = limit ?? 30;
         const skip = page ?? 1;
         const shouldPaginate = (limit !== undefined || limit !== null);
-        
+
         const where: any = { idUser };
         if (filter.dateFrom) where.date = { gte: filter.dateFrom };
         if (filter.dateTo) {
@@ -185,10 +185,10 @@ export class TransactionPrismaRepository implements TransactionRepository {
 
         const [transactions, total] = await Promise.all([
             this.prisma.transaction.findMany({
-                where, 
-                orderBy: { date: 'desc' }, 
+                where,
+                orderBy: { date: 'desc' },
                 ...(shouldPaginate && {
-                    take, 
+                    take,
                     skip: (skip - 1) * take
                 })
             }),
@@ -196,14 +196,14 @@ export class TransactionPrismaRepository implements TransactionRepository {
         ]);
 
         const pagination = new Pagination<Transaction>();
-        pagination.list = transactions.map(t => new Transaction(this.translator, t.date, t.type, t.account, 
-            Money.fromDecimal(t.value), 
-            t.id ?? undefined, 
-            t.idUser ?? undefined, 
-            t.category ?? undefined, 
-            t.description ?? undefined, 
-            t.transferId ?? undefined, 
-            t.isTransfer, 
+        pagination.list = transactions.map(t => new Transaction(this.translator, t.date, t.type, t.account,
+            Money.fromDecimal(t.value),
+            t.id ?? undefined,
+            t.idUser ?? undefined,
+            t.category ?? undefined,
+            t.description ?? undefined,
+            t.transferId ?? undefined,
+            t.isTransfer,
             undefined
         ));
         pagination.pages = (limit) ? Pagination.PageLength(total, limit) : 1;
@@ -236,7 +236,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
         }
 
         const income = await this.prisma.transaction.aggregate({
-            where, 
+            where,
             _sum: {
                 value: true
             }
@@ -244,9 +244,9 @@ export class TransactionPrismaRepository implements TransactionRepository {
 
         const currentValue: number = Money.fromDecimal(income._sum.value);
         if (!compareLastMonth) return {
-            current: Money.fromCents(currentValue), 
+            current: Money.fromCents(currentValue),
             previous: 0,
-            difference: 0, 
+            difference: 0,
             percentageChange: 0
         };
 
@@ -277,27 +277,27 @@ export class TransactionPrismaRepository implements TransactionRepository {
         else {
             const previous = dayjs().subtract(1, "month");
 
-            previousWhere.date = { 
-                gte: previous.startOf("month").toDate(), 
-                lte: previous.endOf("month").toDate() 
+            previousWhere.date = {
+                gte: previous.startOf("month").toDate(),
+                lte: previous.endOf("month").toDate()
             };
         }
 
         const previousIncome = await this.prisma.transaction.aggregate({
-            where: previousWhere, 
+            where: previousWhere,
             _sum: {
                 value: true
             }
         });
-        
+
         const previousValue: number = Money.fromDecimal(previousIncome._sum.value);
         const difference = currentValue - previousValue;
         const percentageChange = (previousValue === 0) ? 0 : (difference / previousValue) * 100;
 
         return {
-            current: Money.fromCents(currentValue), 
+            current: Money.fromCents(currentValue),
             previous: Money.fromCents(previousValue),
-            difference: Money.fromCents(difference), 
+            difference: Money.fromCents(difference),
             percentageChange
         };
     }
@@ -327,7 +327,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
         }
 
         const expenses = await this.prisma.transaction.aggregate({
-            where, 
+            where,
             _sum: {
                 value: true
             }
@@ -335,9 +335,9 @@ export class TransactionPrismaRepository implements TransactionRepository {
 
         const currentValue: number = Money.fromDecimal(expenses._sum.value);
         if (!compareLastMonth) return {
-            current: Money.fromCents(currentValue), 
+            current: Money.fromCents(currentValue),
             previous: 0,
-            difference: 0, 
+            difference: 0,
             percentageChange: 0
         };
 
@@ -367,28 +367,28 @@ export class TransactionPrismaRepository implements TransactionRepository {
         }
         else {
             const previous = dayjs().subtract(1, "month");
-            
-            previousWhere.date = { 
-                gte: previous.startOf("month").toDate(), 
-                lte: previous.endOf("month").toDate() 
+
+            previousWhere.date = {
+                gte: previous.startOf("month").toDate(),
+                lte: previous.endOf("month").toDate()
             };
         }
 
         const previousExpenses = await this.prisma.transaction.aggregate({
-            where: previousWhere, 
+            where: previousWhere,
             _sum: {
                 value: true
             }
         });
-        
+
         const previousValue: number = Money.fromDecimal(previousExpenses._sum.value);
         const difference = currentValue - previousValue;
         const percentageChange = (previousValue === 0) ? 0 : (difference / previousValue) * 100;
 
         return {
-            current: Money.fromCents(currentValue), 
+            current: Money.fromCents(currentValue),
             previous: Money.fromCents(previousValue),
-            difference: Money.fromCents(difference), 
+            difference: Money.fromCents(difference),
             percentageChange
         };
     }
@@ -396,17 +396,17 @@ export class TransactionPrismaRepository implements TransactionRepository {
         const currentDate = dayjs();
         const transactions = await this.prisma.transaction.findMany({
             where: {
-                idUser, 
-                isTransfer: false, 
+                idUser,
+                isTransfer: false,
                 date: {
-                    gte: currentDate.startOf("month").toDate(), 
+                    gte: currentDate.startOf("month").toDate(),
                     lte: currentDate.endOf("month").toDate()
                 }
-            }, 
-            orderBy: { date: "asc" }, 
+            },
+            orderBy: { date: "asc" },
             select: {
-                date: true, 
-                type: true, 
+                date: true,
+                type: true,
                 value: true
             }
         });
@@ -424,8 +424,8 @@ export class TransactionPrismaRepository implements TransactionRepository {
             if (tx.type === true) current.income += Money.fromDecimal(tx.value);
             else current.expenses += Money.fromDecimal(tx.value);
 
-            current.income = Money.fromCents(current.income);
-            current.expenses = Money.fromCents(current.expenses);
+            //current.income = Money.fromCents(current.income);
+            //current.expenses = Money.fromCents(current.expenses);
             dailyMap.set(day, current);
         }
 
@@ -434,10 +434,10 @@ export class TransactionPrismaRepository implements TransactionRepository {
         for (const [date, values] of dailyMap) {
             acumulatedBalance += (values.income - values.expenses);
             evolution.push({
-                date, 
-                income: values.income, 
-                expenses: values.expenses, 
-                balance: acumulatedBalance
+                date,
+                income: Money.fromCents(values.income),
+                expenses: Money.fromCents(values.expenses),
+                balance: Money.fromCents(acumulatedBalance)
             });
         }
 
